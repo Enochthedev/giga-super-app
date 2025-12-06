@@ -1,0 +1,134 @@
+{
+    "name": "11. Taxi/Ride Service - Riders",
+    "description": "Taxi service endpoints for riders - request rides, get estimates, track rides",
+    "item": [
+        {
+            "name": "Get Ride Estimate",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "apikey",
+                        "value": "{{supabase_anon_key}}"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{supabase_auth_token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.4541,\n  \"dropoff_lng\": 3.3947,\n  \"vehicle_type\": \"standard\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/get-ride-estimate",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "get-ride-estimate"
+                    ]
+                },
+                "description": " Get fare estimate before requesting a ride. Includes distance, duration, surge pricing, and pricing breakdown.\n\n**Request Body:**\n```json\n{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.4541,\n  \"dropoff_lng\": 3.3947,\n  \"vehicle_type\": \"standard\"\n}\n```\n\n**Response:**\n```json\n{\n  \"success\": true,\n  \"data\": {\n    \"distance_km\": 10.5,\n    \"duration_minutes\": 25,\n    \"estimated_fare\": 1500,\n    \"surge_multiplier\": 1.0,\n    \"vehicle_options\": [...]\n  }\n}\n```"
+            }
+        },
+        {
+            "name": "Request Ride",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "apikey",
+                        "value": "{{supabase_anon_key}}"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{supabase_auth_token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"pickup_address\": \"1 Broad Street, Lagos\",\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_address\": \"Murtala Muhammed Airport\",\n  \"dropoff_lat\": 6.4541,\n  \"dropoff_lng\": 3.3947,\n  \"vehicle_type\": \"standard\",\n  \"payment_method_id\": \"pm_xxx\",\n  \"notes\": \"Please call when you arrive\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/request-ride",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "request-ride"
+                    ]
+                },
+                "description": "Request a new ride. Finds nearby drivers and sends notifications.\n\n**Request Body:**\n```json\n{\n  \"pickup_address\": \"1 Broad Street, Lagos\",\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_address\": \"Airport\",\n  \"dropoff_lat\": 6.4541,\n  \"dropoff_lng\": 3.3947,\n  \"vehicle_type\": \"standard\",\n  \"payment_method_id\": \"pm_xxx\",\n  \"scheduled_time\": \"2025-11-23T10:00:00Z\" // Optional\n}\n```"
+            }
+        },
+        {
+            "name": "Get Active Ride",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "apikey",
+                        "value": "{{supabase_anon_key}}"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{supabase_auth_token}}"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/get-active-ride",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "get-active-ride"
+                    ]
+                },
+                "description": "Get current active ride with real-time location and details.\n\n**Response:**\n```json\n{\n  \"success\": true,\n  \"data\": {\n    \"ride\": {...},\n    \"driver\": {\n      \"name\": \"John Doe\",\n      \"phone\": \"+234123\",\n      \"vehicle\": {...},\n      \"location\": {\"lat\": 6.5, \"lng\": 3.3}\n    }\n  }\n}\n```"
+            }
+        },
+        {
+            "name": "Cancel Ride",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "apikey",
+                        "value": "{{supabase_anon_key}}"
+                    },
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {{supabase_auth_token}}"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"ride_id\": \"uuid-here\",\n  \"reason\": \"Changed my mind\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/cancel-ride",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "cancel-ride"
+                    ]
+                },
+                "description": "Cancel an active or pending ride. Cancellation fees may apply after grace period (default 5 mins)."
+            }
+        }
+    ]
+}
