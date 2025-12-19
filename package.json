@@ -1,0 +1,152 @@
+{
+  "name": "giga-platform-architecture-split",
+  "version": "1.0.0",
+  "description": "Platform architecture split from monolithic Supabase to hybrid Supabase + Railway deployment",
+  "main": "dist/index.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rimraf dist coverage .nyc_output",
+    "lint": "eslint . --ext .ts,.js --max-warnings 0",
+    "lint:fix": "eslint . --ext .ts,.js --fix",
+    "lint:report": "eslint . --ext .ts,.js --format html --output-file reports/eslint-report.html",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "format:report": "prettier --check . --write-file reports/prettier-report.txt",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:migrations": "jest --testPathPattern=migrations",
+    "test:property": "cd tests && npm test",
+    "security:audit": "npm audit --audit-level=moderate",
+    "security:fix": "npm audit fix",
+    "security:snyk": "snyk test",
+    "security:scan": "npm run security:audit && npm run security:snyk",
+    "db:validate": "node scripts/validate-migrations.js",
+    "db:lint": "node scripts/lint-sql.js",
+    "db:test": "npm run db:validate && npm run test:migrations",
+    "quality:all": "npm run lint && npm run format:check && npm run type-check && npm run security:scan && npm run test:ci",
+    "quality:fix": "npm run lint:fix && npm run format && npm run security:fix",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install",
+    "docs:generate": "typedoc --out docs/api src",
+    "docs:serve": "http-server docs -p 8080",
+    "dev": "concurrently \"npm run dev:gateway\" \"npm run dev:social\" \"npm run dev:admin\"",
+    "dev:gateway": "tsx watch src/gateway/index.ts",
+    "dev:social": "tsx watch services/social/index.ts",
+    "dev:admin": "tsx watch services/admin/index.ts",
+    "dev:start": "docker-compose -f docker-compose.dev.yml up -d",
+    "dev:stop": "docker-compose -f docker-compose.dev.yml down",
+    "dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "dev:setup": "./scripts/dev-setup.sh",
+    "start": "node dist/index.js",
+    "env:validate": "node scripts/env-validate.js",
+    "env:check": "node scripts/env-validate.js",
+    "db:seed": "echo 'Database seeding - implement with actual seeding logic'",
+    "db:seed:test": "NODE_ENV=test npm run db:seed",
+    "db:migrate": "supabase db reset",
+    "db:check-compliance": "echo 'Database compliance check - implement with actual checks'",
+    "db:check-rls": "echo 'RLS policy check - implement with actual validation'",
+    "db:check-acid": "echo 'ACID compliance check - implement with actual tests'",
+    "db:monitor": "echo 'Database monitoring - implement with actual monitoring'",
+    "services:test": "echo 'External services test - implement with actual service tests'",
+    "logs": "echo 'Application logs - implement with actual log viewing'",
+    "monitor:memory": "echo 'Memory monitoring - implement with actual memory checks'",
+    "profile": "echo 'Application profiling - implement with actual profiling'",
+    "deploy:staging": "echo 'Deploy to staging - implement with actual deployment'",
+    "test:smoke:staging": "echo 'Staging smoke tests - implement with actual tests'",
+    "validate:staging": "echo 'Staging validation - implement with actual validation'",
+    "release": "semantic-release",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
+  },
+  "lint-staged": {
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ],
+    "*.sql": [
+      "node scripts/lint-sql.js"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run quality:all",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.3",
+    "@commitlint/config-conventional": "^18.4.3",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.8",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.12.0",
+    "@typescript-eslint/parser": "^6.12.0",
+    "audit-ci": "^6.6.1",
+    "conventional-changelog-cli": "^4.1.0",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-security": "^1.7.1",
+    "http-server": "^14.1.1",
+    "husky": "^8.0.3",
+    "jest": "^29.7.0",
+    "license-checker": "^25.0.1",
+    "lint-staged": "^15.1.0",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "semantic-release": "^22.0.8",
+    "snyk": "^1.1248.0",
+    "ts-jest": "^29.1.1",
+    "tsx": "^4.6.0",
+    "typedoc": "^0.25.4",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4",
+    "concurrently": "^8.2.2",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "redis": "^4.6.10",
+    "zod": "^3.22.4"
+  },
+  "keywords": [
+    "platform-architecture",
+    "supabase",
+    "railway",
+    "microservices",
+    "edge-functions",
+    "typescript",
+    "api-gateway"
+  ],
+  "author": "Giga Platform Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giga-platform/architecture-split.git"
+  },
+  "bugs": {
+    "url": "https://github.com/giga-platform/architecture-split/issues"
+  },
+  "homepage": "https://github.com/giga-platform/architecture-split#readme"
+}

@@ -1,0 +1,1517 @@
+openapi: 3.0.3
+info:
+  title: Giga Platform API
+  description: |
+    Comprehensive API documentation for the Giga platform's edge functions.
+    This API spans multiple modules including core services, social media, admin operations, and utilities.
+
+    ## Architecture Overview
+    The platform is split across Supabase and Railway:
+    - **Supabase**: Core services (auth, payments, bookings) - 65 functions
+    - **Railway**: Social, admin, media, and utility services - 29 functions
+
+    ## Authentication
+    All endpoints require JWT authentication via the Authorization header:
+    ```
+    Authorization: Bearer <jwt_token>
+    ```
+
+    ## Rate Limiting
+    - Anonymous: 100 requests/hour
+    - Authenticated: 1000 requests/hour
+    - Premium: 5000 requests/hour
+    - Admin: 10000 requests/hour
+
+    ## Error Handling
+    All endpoints return consistent error responses following the standard format.
+
+  version: 1.0.0
+  contact:
+    name: Giga Platform API Support
+    email: api-support@giga.com
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://api.giga.com/v1
+    description: Production API Gateway
+  - url: https://staging-api.giga.com/v1
+    description: Staging API Gateway
+  - url: https://dev-api.giga.com/v1
+    description: Development API Gateway
+
+security:
+  - BearerAuth: []
+
+paths:
+  # Core Module - Authentication & User Management
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: User login
+      description: Authenticate user with email and password
+      operationId: loginUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                  example: securePassword123
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '429':
+          $ref: '#/components/responses/RateLimitError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /auth/register:
+    post:
+      tags: [Authentication]
+      summary: User registration
+      description: Register a new user account
+      operationId: registerUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, first_name, last_name]
+              properties:
+                email:
+                  type: string
+                  format: email
+                first_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+                last_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 50
+                password:
+                  type: string
+                  format: password
+                  minLength: 8
+                phone:
+                  type: string
+                  pattern: '^\+[1-9]\d{1,14}$'
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /users/profile:
+    get:
+      tags: [User Management]
+      summary: Get user profile
+      description: Retrieve the authenticated user's profile information
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    put:
+      tags: [User Management]
+      summary: Update user profile
+      description: Update the authenticated user's profile information
+      operationId: updateUserProfile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileUpdate'
+      responses:
+        '200':
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # Core Module - Hotel Management
+  /hotels:
+    get:
+      tags: [Hotels]
+      summary: List hotels
+      description: Retrieve a paginated list of hotels with optional filtering
+      operationId: listHotels
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: city
+          in: query
+          description: Filter by city
+          schema:
+            type: string
+        - name: rating_min
+          in: query
+          description: Minimum rating filter
+          schema:
+            type: number
+            minimum: 1
+            maximum: 5
+        - name: price_max
+          in: query
+          description: Maximum price filter
+          schema:
+            type: number
+            minimum: 0
+      responses:
+        '200':
+          description: Hotels retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Hotel'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /hotels/{hotel_id}:
+    get:
+      tags: [Hotels]
+      summary: Get hotel details
+      description: Retrieve detailed information about a specific hotel
+      operationId: getHotel
+      parameters:
+        - name: hotel_id
+          in: path
+          required: true
+          description: Hotel ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Hotel details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/HotelDetails'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /hotels/{hotel_id}/bookings:
+    post:
+      tags: [Hotel Bookings]
+      summary: Create hotel booking
+      description: Create a new hotel booking with payment processing
+      operationId: createHotelBooking
+      parameters:
+        - name: hotel_id
+          in: path
+          required: true
+          description: Hotel ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+      responses:
+        '201':
+          description: Booking created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/BookingResponse'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '409':
+          $ref: '#/components/responses/ConflictError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # Core Module - Payment Processing
+  /payments/initialize:
+    post:
+      tags: [Payments]
+      summary: Initialize payment
+      description: Initialize a payment transaction with Paystack or Stripe
+      operationId: initializePayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitializePaymentRequest'
+      responses:
+        '200':
+          description: Payment initialized successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PaymentInitializationResponse'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /payments/webhook:
+    post:
+      tags: [Payments]
+      summary: Payment webhook
+      description: Handle payment provider webhooks (Paystack/Stripe)
+      operationId: handlePaymentWebhook
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Webhook payload from payment provider
+      responses:
+        '200':
+          description: Webhook processed successfully
+        '400':
+          description: Invalid webhook signature or payload
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # Social Module - Posts & Social Features
+  /social/posts:
+    get:
+      tags: [Social Media]
+      summary: Get social feed
+      description: Retrieve paginated social media posts for user's feed
+      operationId: getSocialFeed
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: filter
+          in: query
+          description: Filter posts by type
+          schema:
+            type: string
+            enum: [all, friends, public, following]
+            default: all
+      responses:
+        '200':
+          description: Social feed retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SocialPost'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags: [Social Media]
+      summary: Create social post
+      description: Create a new social media post
+      operationId: createSocialPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePostRequest'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/SocialPost'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /social/posts/{post_id}/like:
+    post:
+      tags: [Social Media]
+      summary: Like/unlike post
+      description: Toggle like status on a social media post
+      operationId: togglePostLike
+      parameters:
+        - name: post_id
+          in: path
+          required: true
+          description: Post ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Like status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      liked:
+                        type: boolean
+                      like_count:
+                        type: integer
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # Social Module - Messaging
+  /social/conversations:
+    get:
+      tags: [Messaging]
+      summary: List conversations
+      description: Retrieve user's conversations
+      operationId: listConversations
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Conversations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /social/conversations/{conversation_id}/messages:
+    get:
+      tags: [Messaging]
+      summary: Get conversation messages
+      description: Retrieve messages from a specific conversation
+      operationId: getConversationMessages
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          description: Conversation ID
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+    post:
+      tags: [Messaging]
+      summary: Send message
+      description: Send a message in a conversation
+      operationId: sendMessage
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          description: Conversation ID
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Message'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  # Admin Module - Dashboard & Analytics
+  /admin/dashboard/stats:
+    get:
+      tags: [Admin - Analytics]
+      summary: Get dashboard statistics
+      description: Retrieve comprehensive dashboard statistics for admin panel
+      operationId: getAdminDashboardStats
+      security:
+        - BearerAuth: [admin]
+      responses:
+        '200':
+          description: Dashboard statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/DashboardStats'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /admin/users:
+    get:
+      tags: [Admin - User Management]
+      summary: List users (Admin)
+      description: Retrieve paginated list of users for admin management
+      operationId: adminListUsers
+      security:
+        - BearerAuth: [admin, moderator]
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: status
+          in: query
+          description: Filter by user status
+          schema:
+            type: string
+            enum: [active, inactive, suspended, pending]
+        - name: role
+          in: query
+          description: Filter by user role
+          schema:
+            type: string
+            enum: [user, driver, hotel_manager, vendor, admin]
+      responses:
+        '200':
+          description: Users retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AdminUserView'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  metadata:
+                    $ref: '#/components/schemas/ResponseMetadata'
+        '401':
+          $ref: '#/components/responses/AuthenticationError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login endpoint
+
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number (1-based)
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    LimitParam:
+      name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+
+  schemas:
+    # Common Response Schemas
+    ResponseMetadata:
+      type: object
+      required: [timestamp, request_id, version]
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: '2023-12-18T10:00:00Z'
+        request_id:
+          type: string
+          example: 'req_123456'
+        version:
+          type: string
+          example: '1.0.0'
+
+    Pagination:
+      type: object
+      required: [page, limit, total, has_more]
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 150
+        total_pages:
+          type: integer
+          example: 8
+        has_more:
+          type: boolean
+          example: true
+        has_previous:
+          type: boolean
+          example: false
+
+    ErrorResponse:
+      type: object
+      required: [success, error, metadata]
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              example: 'VALIDATION_ERROR'
+            message:
+              type: string
+              example: 'Invalid input data'
+            details:
+              type: object
+              description: Additional error context
+        metadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+
+    # Authentication Schemas
+    AuthResponse:
+      type: object
+      required: [success, data, metadata]
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          required: [access_token, refresh_token, user, expires_in]
+          properties:
+            access_token:
+              type: string
+              description: JWT access token
+            refresh_token:
+              type: string
+              description: Refresh token for obtaining new access tokens
+            user:
+              $ref: '#/components/schemas/UserProfile'
+            expires_in:
+              type: integer
+              description: Token expiration time in seconds
+              example: 3600
+        metadata:
+          $ref: '#/components/schemas/ResponseMetadata'
+
+    # User Management Schemas
+    UserProfile:
+      type: object
+      required: [id, email, first_name, last_name, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        gender:
+          type: string
+          enum: [male, female, other, prefer_not_to_say]
+          nullable: true
+        address:
+          type: object
+          nullable: true
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            postal_code:
+              type: string
+        is_verified:
+          type: boolean
+        role:
+          type: string
+          enum: [user, driver, hotel_manager, vendor, admin]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    UserProfileUpdate:
+      type: object
+      properties:
+        first_name:
+          type: string
+          minLength: 1
+          maxLength: 50
+        last_name:
+          type: string
+          minLength: 1
+          maxLength: 50
+        phone:
+          type: string
+          pattern: '^\+[1-9]\d{1,14}$'
+        date_of_birth:
+          type: string
+          format: date
+        gender:
+          type: string
+          enum: [male, female, other, prefer_not_to_say]
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            country:
+              type: string
+            postal_code:
+              type: string
+
+    # Hotel Management Schemas
+    Hotel:
+      type: object
+      required: [id, name, city, rating, price_range]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        address:
+          type: string
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        rating:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 5
+        review_count:
+          type: integer
+        price_range:
+          type: object
+          properties:
+            min:
+              type: number
+            max:
+              type: number
+            currency:
+              type: string
+              example: 'NGN'
+        amenities:
+          type: array
+          items:
+            type: string
+        photos:
+          type: array
+          items:
+            type: string
+            format: uri
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    HotelDetails:
+      allOf:
+        - $ref: '#/components/schemas/Hotel'
+        - type: object
+          properties:
+            rooms:
+              type: array
+              items:
+                $ref: '#/components/schemas/Room'
+            policies:
+              type: object
+              properties:
+                check_in:
+                  type: string
+                  example: '14:00'
+                check_out:
+                  type: string
+                  example: '12:00'
+                cancellation:
+                  type: string
+                pets:
+                  type: boolean
+                smoking:
+                  type: boolean
+
+    Room:
+      type: object
+      required: [id, room_type, price_per_night, capacity]
+      properties:
+        id:
+          type: string
+          format: uuid
+        room_type:
+          type: string
+          example: 'Deluxe Suite'
+        description:
+          type: string
+        price_per_night:
+          type: number
+        currency:
+          type: string
+          example: 'NGN'
+        capacity:
+          type: integer
+        amenities:
+          type: array
+          items:
+            type: string
+        photos:
+          type: array
+          items:
+            type: string
+            format: uri
+        is_available:
+          type: boolean
+
+    CreateBookingRequest:
+      type: object
+      required: [room_id, check_in, check_out, guests]
+      properties:
+        room_id:
+          type: string
+          format: uuid
+        check_in:
+          type: string
+          format: date
+        check_out:
+          type: string
+          format: date
+        guests:
+          type: integer
+          minimum: 1
+        special_requests:
+          type: string
+          maxLength: 500
+
+    BookingResponse:
+      type: object
+      required: [id, hotel, room, check_in, check_out, total_amount, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        hotel:
+          $ref: '#/components/schemas/Hotel'
+        room:
+          $ref: '#/components/schemas/Room'
+        check_in:
+          type: string
+          format: date
+        check_out:
+          type: string
+          format: date
+        guests:
+          type: integer
+        total_amount:
+          type: number
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [pending, confirmed, cancelled, completed]
+        payment_status:
+          type: string
+          enum: [pending, paid, failed, refunded]
+        created_at:
+          type: string
+          format: date-time
+
+    # Payment Schemas
+    InitializePaymentRequest:
+      type: object
+      required: [amount, currency, reference, callback_url]
+      properties:
+        amount:
+          type: number
+          description: Amount in smallest currency unit (kobo for NGN, cents for USD)
+        currency:
+          type: string
+          enum: [NGN, USD, EUR, GBP]
+        reference:
+          type: string
+          description: Unique payment reference
+        callback_url:
+          type: string
+          format: uri
+        metadata:
+          type: object
+          description: Additional payment metadata
+
+    PaymentInitializationResponse:
+      type: object
+      required: [authorization_url, access_code, reference]
+      properties:
+        authorization_url:
+          type: string
+          format: uri
+          description: URL to redirect user for payment
+        access_code:
+          type: string
+          description: Payment access code
+        reference:
+          type: string
+          description: Payment reference
+
+    # Social Media Schemas
+    SocialPost:
+      type: object
+      required: [id, author, content, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        author:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            avatar_url:
+              type: string
+              format: uri
+        content:
+          type: string
+        media:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [image, video]
+              url:
+                type: string
+                format: uri
+              thumbnail_url:
+                type: string
+                format: uri
+        like_count:
+          type: integer
+        comment_count:
+          type: integer
+        is_liked:
+          type: boolean
+          description: Whether current user has liked this post
+        visibility:
+          type: string
+          enum: [public, friends, private]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    CreatePostRequest:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 5000
+        media:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+            format: uuid
+            description: Media file IDs
+        visibility:
+          type: string
+          enum: [public, friends, private]
+          default: public
+        tags:
+          type: array
+          maxItems: 10
+          items:
+            type: string
+
+    # Messaging Schemas
+    Conversation:
+      type: object
+      required: [id, participants, last_message, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        participants:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+              name:
+                type: string
+              avatar_url:
+                type: string
+                format: uri
+        last_message:
+          $ref: '#/components/schemas/Message'
+        unread_count:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Message:
+      type: object
+      required: [id, sender, content, created_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        sender:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+            avatar_url:
+              type: string
+              format: uri
+        content:
+          type: string
+        message_type:
+          type: string
+          enum: [text, image, video, file, location]
+        media:
+          type: object
+          nullable: true
+          properties:
+            type:
+              type: string
+            url:
+              type: string
+              format: uri
+            size:
+              type: integer
+            filename:
+              type: string
+        is_read:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+
+    SendMessageRequest:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+        message_type:
+          type: string
+          enum: [text, image, video, file, location]
+          default: text
+        media_id:
+          type: string
+          format: uuid
+          description: Media file ID for non-text messages
+
+    # Admin Schemas
+    DashboardStats:
+      type: object
+      properties:
+        users:
+          type: object
+          properties:
+            total:
+              type: integer
+            active:
+              type: integer
+            new_today:
+              type: integer
+            new_this_week:
+              type: integer
+        bookings:
+          type: object
+          properties:
+            total:
+              type: integer
+            pending:
+              type: integer
+            confirmed:
+              type: integer
+            revenue_today:
+              type: number
+            revenue_this_month:
+              type: number
+        payments:
+          type: object
+          properties:
+            total_processed:
+              type: number
+            successful_rate:
+              type: number
+            failed_count:
+              type: integer
+        system:
+          type: object
+          properties:
+            uptime:
+              type: number
+            response_time_avg:
+              type: number
+            error_rate:
+              type: number
+
+    AdminUserView:
+      allOf:
+        - $ref: '#/components/schemas/UserProfile'
+        - type: object
+          properties:
+            last_login:
+              type: string
+              format: date-time
+              nullable: true
+            login_count:
+              type: integer
+            status:
+              type: string
+              enum: [active, inactive, suspended, pending]
+            verification_status:
+              type: object
+              properties:
+                email:
+                  type: boolean
+                phone:
+                  type: boolean
+                identity:
+                  type: boolean
+            total_bookings:
+              type: integer
+            total_spent:
+              type: number
+            risk_score:
+              type: number
+              minimum: 0
+              maximum: 100
+
+  responses:
+    ValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'VALIDATION_ERROR'
+                      message:
+                        type: string
+                        example: 'Validation failed for one or more fields'
+                      details:
+                        type: object
+                        properties:
+                          fields:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                field:
+                                  type: string
+                                message:
+                                  type: string
+                                value:
+                                  type: string
+
+    AuthenticationError:
+      description: Authentication required or invalid
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'AUTHENTICATION_ERROR'
+                      message:
+                        type: string
+                        example: 'Authentication required'
+
+    ForbiddenError:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'INSUFFICIENT_PERMISSIONS'
+                      message:
+                        type: string
+                        example: 'Insufficient permissions to access this resource'
+
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'RESOURCE_NOT_FOUND'
+                      message:
+                        type: string
+                        example: 'The requested resource was not found'
+
+    ConflictError:
+      description: Resource conflict
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'RESOURCE_CONFLICT'
+                      message:
+                        type: string
+                        example: 'Resource already exists or conflicts with existing data'
+
+    RateLimitError:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'RATE_LIMIT_EXCEEDED'
+                      message:
+                        type: string
+                        example: 'Too many requests. Please try again later.'
+                      details:
+                        type: object
+                        properties:
+                          limit:
+                            type: integer
+                          window:
+                            type: integer
+                          reset_at:
+                            type: string
+                            format: date-time
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/ErrorResponse'
+              - type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: 'INTERNAL_SERVER_ERROR'
+                      message:
+                        type: string
+                        example: 'An unexpected error occurred'
+
+tags:
+  - name: Authentication
+    description: User authentication and authorization
+  - name: User Management
+    description: User profile and account management
+  - name: Hotels
+    description: Hotel listing and details
+  - name: Hotel Bookings
+    description: Hotel booking management
+  - name: Payments
+    description: Payment processing and transactions
+  - name: Social Media
+    description: Social posts, likes, and interactions
+  - name: Messaging
+    description: Direct messaging and conversations
+  - name: Admin - Analytics
+    description: Administrative analytics and reporting
+  - name: Admin - User Management
+    description: Administrative user management operations

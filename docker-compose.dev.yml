@@ -1,0 +1,108 @@
+version: '3.8'
+
+services:
+  # API Gateway (Railway simulation)
+  api-gateway:
+    build:
+      context: .
+      dockerfile: docker/gateway.Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+    depends_on:
+      - redis
+      - postgres
+    networks:
+      - giga-network
+
+  # Social Media Service (Railway simulation)
+  social-service:
+    build:
+      context: .
+      dockerfile: docker/social.Dockerfile
+    ports:
+      - '3001:3001'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./services/social:/app/src
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - giga-network
+
+  # Admin Service (Railway simulation)
+  admin-service:
+    build:
+      context: .
+      dockerfile: docker/admin.Dockerfile
+    ports:
+      - '3002:3002'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./services/admin:/app/src
+    depends_on:
+      - postgres
+    networks:
+      - giga-network
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - giga-network
+
+  # PostgreSQL for local development
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: giga_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    networks:
+      - giga-network
+
+  # Nginx for load balancing (optional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - '8080:80'
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - api-gateway
+      - social-service
+      - admin-service
+    networks:
+      - giga-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  giga-network:
+    driver: bridge

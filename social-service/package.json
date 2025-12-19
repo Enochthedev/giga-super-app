@@ -1,0 +1,56 @@
+{
+  "name": "giga-social-service",
+  "version": "1.0.0",
+  "description": "Social media service for Giga platform - handles posts, comments, likes, and social feed",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "build": "echo 'No build step required for Node.js'",
+    "docker:build": "docker build -t giga-social-service .",
+    "docker:run": "docker run -p 3001:3001 --env-file .env giga-social-service"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "@supabase/supabase-js": "^2.38.4",
+    "jsonwebtoken": "^9.0.2",
+    "winston": "^3.11.0",
+    "dotenv": "^16.3.1",
+    "node-cache": "^5.1.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "eslint": "^8.55.0",
+    "prettier": "^3.1.1",
+    "@types/jest": "^29.5.8"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "social-media",
+    "posts",
+    "comments",
+    "likes",
+    "feed",
+    "railway",
+    "supabase"
+  ],
+  "author": "Giga Platform Team",
+  "license": "MIT"
+}
