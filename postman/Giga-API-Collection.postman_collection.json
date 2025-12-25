@@ -63,12 +63,8 @@
             },
             "url": {
               "raw": "{{auth_url}}/signup",
-              "host": [
-                "{{auth_url}}"
-              ],
-              "path": [
-                "signup"
-              ]
+              "host": ["{{auth_url}}"],
+              "path": ["signup"]
             },
             "description": "Register a new user with email and password\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Sign Up (Email)', {\n  body: {\n  \"email\": \"user@example.com\",\n  \"password\": \"securepassword123\",\n  \"data\": {\n    \"full_name\": \"John Doe\"\n  }\n}\n});\n```\n"
           },
@@ -174,12 +170,8 @@
             },
             "url": {
               "raw": "{{auth_url}}/token?grant_type=password",
-              "host": [
-                "{{auth_url}}"
-              ],
-              "path": [
-                "token"
-              ],
+              "host": ["{{auth_url}}"],
+              "path": ["token"],
               "query": [
                 {
                   "key": "grant_type",
@@ -206,12 +198,8 @@
             ],
             "url": {
               "raw": "{{auth_url}}/logout",
-              "host": [
-                "{{auth_url}}"
-              ],
-              "path": [
-                "logout"
-              ]
+              "host": ["{{auth_url}}"],
+              "path": ["logout"]
             },
             "description": "Log out the current user\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Sign Out', {\n  body: {}\n});\n```\n"
           },
@@ -273,12 +261,8 @@
             },
             "url": {
               "raw": "{{auth_url}}/recover",
-              "host": [
-                "{{auth_url}}"
-              ],
-              "path": [
-                "recover"
-              ]
+              "host": ["{{auth_url}}"],
+              "path": ["recover"]
             },
             "description": "Send a password reset email\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Reset Password (Email)', {\n  body: {\n  \"email\": \"user@example.com\"\n}\n});\n```\n"
           },
@@ -336,12 +320,8 @@
             ],
             "url": {
               "raw": "{{auth_url}}/user",
-              "host": [
-                "{{auth_url}}"
-              ],
-              "path": [
-                "user"
-              ]
+              "host": ["{{auth_url}}"],
+              "path": ["user"]
             },
             "description": "Get details of the currently logged-in user\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get User Details', {\n  body: {}\n});\n```\n"
           },
@@ -406,16 +386,8 @@
             "url": {
               "raw": "https://your-project.supabase.co/rest/v1/hotels?select=*",
               "protocol": "https",
-              "host": [
-                "your-project",
-                "supabase",
-                "co"
-              ],
-              "path": [
-                "rest",
-                "v1",
-                "hotels"
-              ],
+              "host": ["your-project", "supabase", "co"],
+              "path": ["rest", "v1", "hotels"],
               "query": [
                 {
                   "key": "select",
@@ -480,16 +452,8 @@
             "url": {
               "raw": "https://your-project.supabase.co/rest/v1/hotel_bookings?select=*",
               "protocol": "https",
-              "host": [
-                "your-project",
-                "supabase",
-                "co"
-              ],
-              "path": [
-                "rest",
-                "v1",
-                "hotel_bookings"
-              ],
+              "host": ["your-project", "supabase", "co"],
+              "path": ["rest", "v1", "hotel_bookings"],
               "query": [
                 {
                   "key": "select",
@@ -568,17 +532,8 @@
             "url": {
               "raw": "https://your-project.supabase.co/rest/v1/rpc/get_available_room_count",
               "protocol": "https",
-              "host": [
-                "your-project",
-                "supabase",
-                "co"
-              ],
-              "path": [
-                "rest",
-                "v1",
-                "rpc",
-                "get_available_room_count"
-              ]
+              "host": ["your-project", "supabase", "co"],
+              "path": ["rest", "v1", "rpc", "get_available_room_count"]
             },
             "description": "Check room availability via RPC\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Available Room Count', {\n  body: {\n  \"p_room_type_id\": \"uuid\",\n  \"p_check_in\": \"2024-01-01\",\n  \"p_check_out\": \"2024-01-05\"\n}\n});\n```\n"
           },
@@ -637,17 +592,8 @@
             "url": {
               "raw": "https://your-project.supabase.co/rest/v1/rpc/get_order_stats",
               "protocol": "https",
-              "host": [
-                "your-project",
-                "supabase",
-                "co"
-              ],
-              "path": [
-                "rest",
-                "v1",
-                "rpc",
-                "get_order_stats"
-              ]
+              "host": ["your-project", "supabase", "co"],
+              "path": ["rest", "v1", "rpc", "get_order_stats"]
             },
             "description": "Get order statistics\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Order Stats (Admin)', {\n  body: {}\n});\n```\n"
           },
@@ -707,12 +653,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-current-profile",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-current-profile"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-current-profile"]
             },
             "description": "Get authenticated user's complete profile information\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Current Profile', {\n  body: {}\n});\n```\n"
           },
@@ -774,12 +716,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-user-profile",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-user-profile"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-user-profile"]
             },
             "description": "Get any user's public profile by user ID\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get User Profile', {\n  body: {\n  \"userId\": \"user-uuid-here\"\n}\n});\n```\n"
           },
@@ -841,12 +779,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-user-profile",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-user-profile"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-user-profile"]
             },
             "description": "Update authenticated user's profile information\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Update User Profile', {\n  body: {\n  \"full_name\": \"John Doe\",\n  \"phone\": \"+1234567890\",\n  \"bio\": \"Travel enthusiast\"\n}\n});\n```\n"
           },
@@ -910,12 +844,8 @@
             },
             "url": {
               "raw": "{{base_url}}/upload-profile-picture",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "upload-profile-picture"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["upload-profile-picture"]
             },
             "description": "Upload user profile picture\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Upload Profile Picture', {\n  body: {}\n});\n```\n"
           },
@@ -977,12 +907,8 @@
             },
             "url": {
               "raw": "{{base_url}}/add-user-address",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "add-user-address"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["add-user-address"]
             },
             "description": "Add a new address to user's account\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Add User Address', {\n  body: {\n  \"street\": \"123 Main St\",\n  \"city\": \"Lagos\",\n  \"state\": \"Lagos\",\n  \"country\": \"Nigeria\",\n  \"postal_code\": \"100001\",\n  \"is_default\": true\n}\n});\n```\n"
           },
@@ -1044,12 +970,8 @@
             },
             "url": {
               "raw": "{{base_url}}/apply-for-role",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "apply-for-role"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["apply-for-role"]
             },
             "description": "Apply for vendor or other special roles\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Apply for Role', {\n  body: {\n  \"role\": \"vendor\",\n  \"reason\": \"I want to list my hotel\"\n}\n});\n```\n"
           },
@@ -1111,12 +1033,8 @@
             },
             "url": {
               "raw": "{{base_url}}/switch-role",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "switch-role"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["switch-role"]
             },
             "description": "Switch between available user roles\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Switch Role', {\n  body: {\n  \"role\": \"vendor\"\n}\n});\n```\n"
           },
@@ -1182,12 +1100,8 @@
             },
             "url": {
               "raw": "{{base_url}}/apply-vendor",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "apply-vendor"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["apply-vendor"]
             },
             "description": "Auto-generated endpoint for apply-vendor\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Apply Vendor', {\n  body: {}\n});\n```\n"
           },
@@ -1255,12 +1169,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Search-hotels",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Search-hotels"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Search-hotels"]
             },
             "description": "Search hotels with filters (location, price, dates, amenities)\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Search Hotels', {\n  body: {\n  \"location\": \"Lagos\",\n  \"checkIn\": \"2024-12-01\",\n  \"checkOut\": \"2024-12-05\",\n  \"guests\": 2,\n  \"minPrice\": 50,\n  \"maxPrice\": 300,\n  \"amenities\": [\"wifi\", \"pool\"],\n  \"page\": 1,\n  \"limit\": 20\n}\n});\n```\n"
           },
@@ -1318,12 +1228,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Get-hotel-details?id=hotel-uuid-here",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Get-hotel-details"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["Get-hotel-details"],
               "query": [
                 {
                   "key": "id",
@@ -1410,12 +1316,8 @@
             },
             "url": {
               "raw": "{{base_url}}/check-room-availability",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "check-room-availability"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["check-room-availability"]
             },
             "description": "Check if rooms are available for specific dates\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Check Room Availability', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\",\n  \"roomTypeId\": \"room-type-uuid\",\n  \"checkIn\": \"2024-12-01\",\n  \"checkOut\": \"2024-12-05\"\n}\n});\n```\n"
           },
@@ -1477,12 +1379,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-hotel-reviews",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-hotel-reviews"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-hotel-reviews"]
             },
             "description": "Get paginated hotel reviews with filters and sorting\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Hotel Reviews', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\",\n  \"page\": 1,\n  \"limit\": 10,\n  \"sortBy\": \"recent\"\n}\n});\n```\n"
           },
@@ -1544,12 +1442,8 @@
             },
             "url": {
               "raw": "{{base_url}}/add-hotel-to-favorites",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "add-hotel-to-favorites"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["add-hotel-to-favorites"]
             },
             "description": "Add hotel to user's favorites list\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Add to Favorites', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\"\n}\n});\n```\n"
           },
@@ -1611,12 +1505,8 @@
             },
             "url": {
               "raw": "{{base_url}}/remove-hotel-from-favorites",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "remove-hotel-from-favorites"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["remove-hotel-from-favorites"]
             },
             "description": "Remove hotel from favorites\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Remove from Favorites', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\"\n}\n});\n```\n"
           },
@@ -1670,12 +1560,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-user-favorites",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-user-favorites"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-user-favorites"]
             },
             "description": "Get user's favorite hotels list\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get User Favorites', {\n  body: {}\n});\n```\n"
           },
@@ -1741,14 +1627,77 @@
             },
             "url": {
               "raw": "{{base_url}}/get-recommended-hotels",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-recommended-hotels"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-recommended-hotels"]
             },
             "description": "Auto-generated endpoint for get-recommended-hotels\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Recommended Hotels', {\n  body: {}\n});\n```\n"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Validate Status Code",
+                  "pm.test(\"Status code is 200 or 201\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "// 2. Validate JSON Structure",
+                  "pm.test(\"Response is valid JSON\", function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "// 3. Validate Success Flag (Standard Giga Response)",
+                  "pm.test(\"Response indicates success\", function () {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        // Only check if success property exists (some standard Supabase endpoints might not have it)",
+                  "        if (jsonData.hasOwnProperty('success')) {",
+                  "            pm.expect(jsonData.success).to.be.true;",
+                  "        }",
+                  "    } catch (e) {",
+                  "        // Ignore parsing errors for non-JSON responses",
+                  "    }",
+                  "});",
+                  "",
+                  "// 4. Performance Check",
+                  "pm.test(\"Response time is < 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "apikey",
+                "value": "{{supabase_anon_key}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{supabase_auth_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hotelId\": \"47acdc21-966c-42b3-828c-00fdf812696b\",\n  \"roomTypeId\": \"dd926d26-cffc-4a53-b061-92cb7a190df8\",\n  \"checkIn\": \"2025-12-14T16:43:00.000Z\",\n  \"checkOut\": \"2025-12-16T16:43:00.000Z\",\n  \"rooms\": \"1\",\n  \"guests\": \"1\",\n  \"guestName\": \"\",\n  \"guestEmail\": \"\",\n  \"guestPhone\": \"\",\n  \"specialRequests\": \"\",\n  \"promoCode\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/create-booking",
+              "host": ["{{base_url}}"],
+              "path": ["api", "create-booking"]
+            },
+            "description": "Create a new hotel booking"
           },
           "event": [
             {
@@ -1814,12 +1763,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-hotel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-hotel"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-hotel"]
             },
             "description": "Create a new hotel listing (requires vendor role)\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Hotel', {\n  body: {\n  \"name\": \"Grand Hotel Lagos\",\n  \"description\": \"Luxury hotel in the heart of Lagos\",\n  \"address\": \"123 Victoria Island\",\n  \"city\": \"Lagos\",\n  \"state\": \"Lagos\",\n  \"country\": \"Nigeria\",\n  \"postal_code\": \"100001\",\n  \"latitude\": 6.4281,\n  \"longitude\": 3.4219,\n  \"star_rating\": 5,\n  \"amenities\": [\"wifi\", \"pool\", \"gym\", \"restaurant\"],\n  \"check_in_time\": \"14:00\",\n  \"check_out_time\": \"11:00\",\n  \"cancellation_policy\": {\n    \"free_cancellation_hours\": 48,\n    \"partial_refund_hours\": 24\n  }\n}\n});\n```\n"
           },
@@ -1881,12 +1826,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-hotel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-hotel"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-hotel"]
             },
             "description": "Update hotel information (owner only)\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Update Hotel', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\",\n  \"name\": \"Updated Hotel Name\",\n  \"description\": \"Updated description\"\n}\n});\n```\n"
           },
@@ -1948,12 +1889,8 @@
             },
             "url": {
               "raw": "{{base_url}}/delete-hotel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "delete-hotel"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["delete-hotel"]
             },
             "description": "Soft delete hotel (owner only)\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Delete Hotel', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\"\n}\n});\n```\n"
           },
@@ -2015,12 +1952,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-room-type",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-room-type"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-room-type"]
             },
             "description": "Add room type to hotel\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Room Type', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\",\n  \"name\": \"Deluxe Suite\",\n  \"description\": \"Spacious room with ocean view\",\n  \"base_price\": 150,\n  \"max_occupancy\": 2,\n  \"total_rooms\": 10,\n  \"size_sqm\": 45,\n  \"bed_configuration\": \"1 King Bed\",\n  \"amenities\": [\"wifi\", \"minibar\", \"tv\"]\n}\n});\n```\n"
           },
@@ -2082,12 +2015,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-hotel-analytics",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-hotel-analytics"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-hotel-analytics"]
             },
             "description": "Get revenue, occupancy, and performance metrics\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Hotel Analytics', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\",\n  \"startDate\": \"2024-01-01\",\n  \"endDate\": \"2024-12-31\"\n}\n});\n```\n"
           },
@@ -2153,12 +2082,8 @@
             },
             "url": {
               "raw": "{{base_url}}/bulk-update-pricing",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "bulk-update-pricing"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["bulk-update-pricing"]
             },
             "description": "Auto-generated endpoint for bulk-update-pricing\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Bulk Update Pricing', {\n  body: {}\n});\n```\n"
           },
@@ -2224,12 +2149,8 @@
             },
             "url": {
               "raw": "{{base_url}}/calculate-dynamic-price",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "calculate-dynamic-price"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["calculate-dynamic-price"]
             },
             "description": "Auto-generated endpoint for calculate-dynamic-price\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Calculate Dynamic Price', {\n  body: {}\n});\n```\n"
           },
@@ -2295,12 +2216,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-hotel-promo-code",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-hotel-promo-code"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-hotel-promo-code"]
             },
             "description": "Auto-generated endpoint for create-hotel-promo-code\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Hotel Promo Code', {\n  body: {}\n});\n```\n"
           },
@@ -2366,12 +2283,8 @@
             },
             "url": {
               "raw": "{{base_url}}/delete-room-type",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "delete-room-type"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["delete-room-type"]
             },
             "description": "Auto-generated endpoint for delete-room-type\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Delete Room Type', {\n  body: {}\n});\n```\n"
           },
@@ -2437,12 +2350,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-room-availability",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-room-availability"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-room-availability"]
             },
             "description": "Auto-generated endpoint for update-room-availability\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Update Room Availability', {\n  body: {}\n});\n```\n"
           },
@@ -2508,12 +2417,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-room-type",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-room-type"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-room-type"]
             },
             "description": "Auto-generated endpoint for update-room-type\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Update Room Type', {\n  body: {}\n});\n```\n"
           },
@@ -2581,12 +2486,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Calculate-booking-price",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Calculate-booking-price"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Calculate-booking-price"]
             },
             "description": "Calculate total booking price with taxes and fees\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Calculate Booking Price', {\n  body: {\n  \"roomTypeId\": \"room-type-uuid\",\n  \"checkIn\": \"2024-12-01\",\n  \"checkOut\": \"2024-12-05\",\n  \"rooms\": 1,\n  \"promoCode\": \"SUMMER2024\"\n}\n});\n```\n"
           },
@@ -2648,12 +2549,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Create-booking",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Create-booking"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Create-booking"]
             },
             "description": "Create a new hotel booking\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Booking', {\n  body: {\n  \"hotelId\": \"hotel-uuid-here\",\n  \"roomTypeId\": \"room-type-uuid\",\n  \"checkIn\": \"2024-12-01\",\n  \"checkOut\": \"2024-12-05\",\n  \"rooms\": 1,\n  \"guests\": 2,\n  \"guestName\": \"John Doe\",\n  \"guestEmail\": \"john@example.com\",\n  \"guestPhone\": \"+1234567890\",\n  \"specialRequests\": \"Early check-in if possible\",\n  \"promoCode\": \"SUMMER2024\"\n}\n});\n```\n"
           },
@@ -2715,12 +2612,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Get-user-bookings",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Get-user-bookings"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Get-user-bookings"]
             },
             "description": "Get user's booking history with filters\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get User Bookings', {\n  body: {\n  \"status\": \"confirmed\",\n  \"page\": 1,\n  \"limit\": 10\n}\n});\n```\n"
           },
@@ -2782,12 +2675,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-booking-details",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-booking-details"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-booking-details"]
             },
             "description": "Get detailed booking information\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Booking Details', {\n  body: {\n  \"bookingId\": \"booking-uuid-here\"\n}\n});\n```\n"
           },
@@ -2849,12 +2738,8 @@
             },
             "url": {
               "raw": "{{base_url}}/cancel-booking",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "cancel-booking"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["cancel-booking"]
             },
             "description": "Cancel booking with automatic refund calculation\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Cancel Booking', {\n  body: {\n  \"bookingId\": \"booking-uuid-here\",\n  \"cancellationReason\": \"Change of plans\"\n}\n});\n```\n"
           },
@@ -2916,12 +2801,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-booking-status",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-booking-status"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-booking-status"]
             },
             "description": "Update booking status (hotel owner/admin)\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Update Booking Status', {\n  body: {\n  \"bookingId\": \"booking-uuid-here\",\n  \"status\": \"confirmed\",\n  \"notes\": \"Payment verified\"\n}\n});\n```\n"
           },
@@ -2983,12 +2864,8 @@
             },
             "url": {
               "raw": "{{base_url}}/check-in-guest",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "check-in-guest"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["check-in-guest"]
             },
             "description": "Check in guest at hotel\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Check In Guest', {\n  body: {\n  \"bookingId\": \"booking-uuid-here\",\n  \"roomNumber\": \"405\"\n}\n});\n```\n"
           },
@@ -3050,12 +2927,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Checkout-guest",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Checkout-guest"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Checkout-guest"]
             },
             "description": "Check out guest from hotel\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Check Out Guest', {\n  body: {\n  \"bookingId\": \"booking-uuid-here\"\n}\n});\n```\n"
           },
@@ -3117,12 +2990,8 @@
             },
             "url": {
               "raw": "{{base_url}}/validate-hotel-promo-code",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "validate-hotel-promo-code"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["validate-hotel-promo-code"]
             },
             "description": "Validate and calculate promo code discount\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Validate Promo Code', {\n  body: {\n  \"code\": \"SUMMER2024\",\n  \"hotelId\": \"hotel-uuid-here\",\n  \"bookingAmount\": 500\n}\n});\n```\n"
           },
@@ -3188,12 +3057,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-booking-calendar",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-booking-calendar"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-booking-calendar"]
             },
             "description": "Auto-generated endpoint for get-booking-calendar\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Booking Calendar', {\n  body: {}\n});\n```\n"
           },
@@ -3259,12 +3124,8 @@
             },
             "url": {
               "raw": "{{base_url}}/modify-booking",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "modify-booking"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["modify-booking"]
             },
             "description": "Auto-generated endpoint for modify-booking\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Modify Booking', {\n  body: {}\n});\n```\n"
           },
@@ -3332,12 +3193,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-hotel-review",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-hotel-review"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-hotel-review"]
             },
             "description": "Submit review after checkout (verified booking required)\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Hotel Review', {\n  body: {\n  \"bookingId\": \"booking-uuid-here\",\n  \"hotelId\": \"hotel-uuid-here\",\n  \"rating\": 5,\n  \"review_text\": \"Excellent stay! Highly recommended.\",\n  \"cleanliness_rating\": 5,\n  \"comfort_rating\": 5,\n  \"location_rating\": 4,\n  \"service_rating\": 5,\n  \"value_rating\": 4\n}\n});\n```\n"
           },
@@ -3399,12 +3256,8 @@
             },
             "url": {
               "raw": "{{base_url}}/respond-to-review",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "respond-to-review"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["respond-to-review"]
             },
             "description": "Hotel owner responds to review\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Respond to Review', {\n  body: {\n  \"reviewId\": \"review-uuid-here\",\n  \"response\": \"Thank you for your feedback! We're glad you enjoyed your stay.\"\n}\n});\n```\n"
           },
@@ -3470,12 +3323,8 @@
             },
             "url": {
               "raw": "{{base_url}}/mark-review-helpful",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "mark-review-helpful"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["mark-review-helpful"]
             },
             "description": "Auto-generated endpoint for mark-review-helpful\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Mark Review Helpful', {\n  body: {}\n});\n```\n"
           },
@@ -3543,12 +3392,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Initialize-payment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Initialize-payment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Initialize-payment"]
             },
             "description": "Initialize payment with payment provider\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Initialize Payment', {\n  body: {\n  \"amount\": 50000,\n  \"currency\": \"NGN\",\n  \"purpose\": \"booking\",\n  \"referenceId\": \"booking-uuid-here\"\n}\n});\n```\n"
           },
@@ -3610,12 +3455,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Verify-payment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Verify-payment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Verify-payment"]
             },
             "description": "Verify payment status\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Verify Payment', {\n  body: {\n  \"reference\": \"payment-reference-here\"\n}\n});\n```\n"
           },
@@ -3677,12 +3518,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Topup-wallet",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Topup-wallet"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Topup-wallet"]
             },
             "description": "Add funds to user wallet\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Top Up Wallet', {\n  body: {\n  \"amount\": 10000\n}\n});\n```\n"
           },
@@ -3744,12 +3581,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Pay-with-wallet",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Pay-with-wallet"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Pay-with-wallet"]
             },
             "description": "Pay using wallet balance\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Pay with Wallet', {\n  body: {\n  \"amount\": 5000,\n  \"purpose\": \"booking\",\n  \"referenceId\": \"booking-uuid-here\"\n}\n});\n```\n"
           },
@@ -3803,12 +3636,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Get-vendor-balance",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Get-vendor-balance"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Get-vendor-balance"]
             },
             "description": "Get vendor's earnings and balance\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get Vendor Balance', {\n  body: {}\n});\n```\n"
           },
@@ -3870,12 +3699,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Process-refund",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Process-refund"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Process-refund"]
             },
             "description": "Process payment refund\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Process Refund', {\n  body: {\n  \"paymentId\": \"payment-uuid-here\",\n  \"amount\": 5000,\n  \"reason\": \"Booking cancelled\"\n}\n});\n```\n"
           },
@@ -3937,12 +3762,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Create-payout-request",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Create-payout-request"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Create-payout-request"]
             },
             "description": "Vendor requests payout of earnings\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Payout Request', {\n  body: {\n  \"amount\": 100000,\n  \"bankDetails\": {\n    \"accountNumber\": \"1234567890\",\n    \"bankCode\": \"058\"\n  }\n}\n});\n```\n"
           },
@@ -4008,12 +3829,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Initialize-payment-with-mock",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Initialize-payment-with-mock"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Initialize-payment-with-mock"]
             },
             "description": "Auto-generated endpoint for Initialize-payment-with-mock\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Initialize Payment With Mock', {\n  body: {}\n});\n```\n"
           },
@@ -4079,12 +3896,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Release-escrow",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Release-escrow"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Release-escrow"]
             },
             "description": "Auto-generated endpoint for Release-escrow\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Release Escrow', {\n  body: {}\n});\n```\n"
           },
@@ -4150,12 +3963,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-payment-intent",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-payment-intent"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-payment-intent"]
             },
             "description": "Auto-generated endpoint for create-payment-intent\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Create Payment Intent', {\n  body: {}\n});\n```\n"
           },
@@ -4223,12 +4032,8 @@
             },
             "url": {
               "raw": "{{base_url}}/send-notification",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-notification"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-notification"]
             },
             "description": "Send push notification to user\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Send Notification', {\n  body: {\n  \"userId\": \"user-uuid-here\",\n  \"title\": \"Booking Confirmed\",\n  \"message\": \"Your booking has been confirmed\",\n  \"type\": \"booking\",\n  \"data\": {\n    \"bookingId\": \"booking-uuid-here\"\n  }\n}\n});\n```\n"
           },
@@ -4282,12 +4087,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-notification-history?page=1&limit=20",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-notification-history"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-notification-history"],
               "query": [
                 {
                   "key": "page",
@@ -4359,12 +4160,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-notification-preferences",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-notification-preferences"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-notification-preferences"]
             },
             "description": "Update user notification preferences\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Update Notification Preferences', {\n  body: {\n  \"emailNotifications\": true,\n  \"pushNotifications\": true,\n  \"smsNotifications\": false,\n  \"bookingUpdates\": true,\n  \"promotions\": false\n}\n});\n```\n"
           },
@@ -4426,12 +4223,8 @@
             },
             "url": {
               "raw": "{{base_url}}/send-sms",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-sms"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-sms"]
             },
             "description": "Send SMS notification\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Send SMS', {\n  body: {\n  \"phone\": \"+1234567890\",\n  \"message\": \"Your booking confirmation code is: ABC123\"\n}\n});\n```\n"
           },
@@ -4497,12 +4290,8 @@
             },
             "url": {
               "raw": "{{base_url}}/batch-queue-notifications",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "batch-queue-notifications"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["batch-queue-notifications"]
             },
             "description": "Auto-generated endpoint for batch-queue-notifications\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Batch Queue Notifications', {\n  body: {}\n});\n```\n"
           },
@@ -4568,12 +4357,8 @@
             },
             "url": {
               "raw": "{{base_url}}/process-notification-queue",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "process-notification-queue"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["process-notification-queue"]
             },
             "description": "Auto-generated endpoint for process-notification-queue\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Process Notification Queue', {\n  body: {}\n});\n```\n"
           },
@@ -4639,12 +4424,8 @@
             },
             "url": {
               "raw": "{{base_url}}/queue-notification",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "queue-notification"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["queue-notification"]
             },
             "description": "Auto-generated endpoint for queue-notification\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Queue Notification', {\n  body: {}\n});\n```\n"
           },
@@ -4708,12 +4489,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/check-hotel-integrity",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "check-hotel-integrity"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["check-hotel-integrity"]
             },
             "description": "Checks for data integrity issues in hotel records, specifically mismatched host_id references.\n\n**Returns:**\n- `stats`: Counts of correct, incorrect, and orphaned hotels.\n- `issues`: Detailed list of problematic hotels with fix suggestions.\n- `recommendations`: Actionable steps.\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('check-hotel-integrity', {\n  method: 'POST',\n});\n```"
           },
@@ -4763,12 +4540,8 @@
             },
             "url": {
               "raw": "{{base_url}}/review-role-application",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "review-role-application"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["review-role-application"]
             },
             "description": "Admin reviews role applications\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Review Role Application', {\n  body: {\n  \"applicationId\": \"app-uuid-here\",\n  \"status\": \"approved\",\n  \"notes\": \"Application looks good\"\n}\n});\n```\n"
           },
@@ -4830,12 +4603,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Admin-process-payout",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Admin-process-payout"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Admin-process-payout"]
             },
             "description": "Admin processes vendor payout request\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Process Payout (Admin)', {\n  body: {\n  \"payoutId\": \"payout-uuid-here\",\n  \"status\": \"approved\"\n}\n});\n```\n"
           },
@@ -4901,12 +4670,8 @@
             },
             "url": {
               "raw": "{{base_url}}/analyze-booking-risk",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "analyze-booking-risk"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["analyze-booking-risk"]
             },
             "description": "Auto-generated endpoint for analyze-booking-risk\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Analyze Booking Risk', {\n  body: {}\n});\n```\n"
           },
@@ -4974,12 +4739,8 @@
             },
             "url": {
               "raw": "{{base_url}}/add-to-cart",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "add-to-cart"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["add-to-cart"]
             },
             "description": "Add product to shopping cart\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Add to Cart', {\n  body: {\n  \"productId\": \"product-uuid-here\",\n  \"quantity\": 2\n}\n});\n```\n"
           },
@@ -5033,12 +4794,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-user-cart",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-user-cart"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-user-cart"]
             },
             "description": "Get user's shopping cart\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Get User Cart', {\n  body: {}\n});\n```\n"
           },
@@ -5100,12 +4857,8 @@
             },
             "url": {
               "raw": "{{base_url}}/checkout-cart",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "checkout-cart"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["checkout-cart"]
             },
             "description": "Checkout shopping cart\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Checkout Cart', {\n  body: {\n  \"shippingAddress\": {\n    \"street\": \"123 Main St\",\n    \"city\": \"Lagos\",\n    \"state\": \"Lagos\",\n    \"country\": \"Nigeria\"\n  },\n  \"paymentMethod\": \"card\"\n}\n});\n```\n"
           },
@@ -5171,12 +4924,8 @@
             },
             "url": {
               "raw": "{{base_url}}/send-order-confirmation",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-order-confirmation"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-order-confirmation"]
             },
             "description": "Auto-generated endpoint for send-order-confirmation\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Send Order Confirmation', {\n  body: {}\n});\n```\n"
           },
@@ -5242,12 +4991,8 @@
             },
             "url": {
               "raw": "{{base_url}}/sync-products-to-algolia",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "sync-products-to-algolia"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["sync-products-to-algolia"]
             },
             "description": "Auto-generated endpoint for sync-products-to-algolia\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Sync Products To Algolia', {\n  body: {}\n});\n```\n"
           },
@@ -5315,12 +5060,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Paystack-webhook",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Paystack-webhook"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Paystack-webhook"]
             },
             "description": "Paystack webhook endpoint\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Paystack Webhook', {\n  body: {\n  \"event\": \"charge.success\",\n  \"data\": {}\n}\n});\n```\n"
           },
@@ -5382,12 +5123,8 @@
             },
             "url": {
               "raw": "{{base_url}}/stripe-webhook",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "stripe-webhook"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["stripe-webhook"]
             },
             "description": "Stripe webhook endpoint\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Stripe Webhook', {\n  body: {\n  \"type\": \"payment_intent.succeeded\",\n  \"data\": {}\n}\n});\n```\n"
           },
@@ -5453,12 +5190,8 @@
             },
             "url": {
               "raw": "{{base_url}}/Mock-payment-webhook",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Mock-payment-webhook"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Mock-payment-webhook"]
             },
             "description": "Auto-generated endpoint for Mock-payment-webhook\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Mock Payment Webhook', {\n  body: {}\n});\n```\n"
           },
@@ -5530,12 +5263,8 @@
             },
             "url": {
               "raw": "{{base_url}}/process-image",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "process-image"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["process-image"]
             },
             "description": "Auto-generated endpoint for process-image\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Process Image', {\n  body: {}\n});\n```\n"
           },
@@ -5601,12 +5330,8 @@
             },
             "url": {
               "raw": "{{base_url}}/upload-file",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "upload-file"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["upload-file"]
             },
             "description": "Auto-generated endpoint for upload-file\n\n**Frontend Usage:**\n```javascript\nconst response = await supabase.functions.invoke('Upload File', {\n  body: {}\n});\n```\n"
           },
@@ -5678,12 +5403,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-ride-estimate",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-ride-estimate"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-ride-estimate"]
             },
             "description": "Get fare estimate with Google Maps integration, surge pricing, and vehicle options"
           }
@@ -5712,12 +5433,8 @@
             },
             "url": {
               "raw": "{{base_url}}/request-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "request-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["request-ride"]
             },
             "description": "Request a new ride - finds nearby drivers and sends notifications"
           }
@@ -5738,12 +5455,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-active-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-active-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-active-ride"]
             },
             "description": "Get current active ride with real-time driver location"
           }
@@ -5772,12 +5485,8 @@
             },
             "url": {
               "raw": "{{base_url}}/cancel-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "cancel-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["cancel-ride"]
             },
             "description": "Cancel ride - fees may apply after grace period (5 mins default)"
           }
@@ -5798,12 +5507,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-ride-history?page=1&limit=10&role=rider",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-ride-history"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-ride-history"],
               "query": [
                 {
                   "key": "page",
@@ -5846,12 +5551,8 @@
             },
             "url": {
               "raw": "{{base_url}}/rate-driver",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "rate-driver"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["rate-driver"]
             },
             "description": "Submit rating for a completed ride"
           }
@@ -5880,12 +5581,8 @@
             },
             "url": {
               "raw": "{{base_url}}/get-nearby-drivers",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-nearby-drivers"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-nearby-drivers"]
             },
             "description": "Find available drivers nearby (PostGIS)"
           }
@@ -5920,12 +5617,8 @@
             },
             "url": {
               "raw": "{{base_url}}/toggle-availability",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "toggle-availability"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["toggle-availability"]
             },
             "description": "Go online/offline - set driver availability status"
           }
@@ -5954,12 +5647,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-location",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-location"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-location"]
             },
             "description": "Update driver's real-time GPS location"
           }
@@ -5988,12 +5677,8 @@
             },
             "url": {
               "raw": "{{base_url}}/accept-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "accept-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["accept-ride"]
             },
             "description": "Accept a ride request - includes driver verification and ETA calculation"
           }
@@ -6022,12 +5707,8 @@
             },
             "url": {
               "raw": "{{base_url}}/start-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "start-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["start-ride"]
             },
             "description": "Start the ride once rider is picked up"
           }
@@ -6056,12 +5737,8 @@
             },
             "url": {
               "raw": "{{base_url}}/complete-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "complete-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["complete-ride"]
             },
             "description": "Complete ride - calculates final fare, processes payment, records earnings"
           }
@@ -6082,12 +5759,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-ride-requests",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-ride-requests"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-ride-requests"]
             },
             "description": "List pending ride requests for drivers"
           }
@@ -6108,12 +5781,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-earnings",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-earnings"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-earnings"]
             },
             "description": "View driver earnings history"
           }
@@ -6142,12 +5811,8 @@
             },
             "url": {
               "raw": "{{base_url}}/reject-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "reject-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["reject-ride"]
             },
             "description": "Reject a ride request"
           }
@@ -6174,12 +5839,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-platform-settings?category=taxi_pricing",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-platform-settings"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-platform-settings"],
               "query": [
                 {
                   "key": "category",
@@ -6215,12 +5876,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-platform-setting",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-platform-setting"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-platform-setting"]
             },
             "description": "Update a platform setting (requires admin clearance level 4+). Available settings:\n\n**taxi_pricing:**\n- base_fare (default: 500)\n- cost_per_km (default: 100)\n- cost_per_minute (default: 20)\n- min_fare (default: 300)\n- cancellation_fee (default: 200)\n- cancellation_grace_period_minutes (default: 5)\n\n**taxi_commission:**\n- driver_commission_rate (default: 0.80)\n- platform_commission_rate (default: 0.20)\n\n**taxi_settings:**\n- driver_search_radius_km (default: 10)\n- max_drivers_to_notify (default: 5)"
           }
@@ -6255,12 +5912,8 @@
             },
             "url": {
               "raw": "{{base_url}}/verify-driver",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "verify-driver"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["verify-driver"]
             },
             "description": "Approve or verify a driver"
           }
@@ -6281,12 +5934,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-ride-analytics",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-ride-analytics"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-ride-analytics"]
             },
             "description": "Get platform statistics for rides and drivers"
           }
@@ -6324,12 +5973,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/create-advertiser-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-advertiser-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-advertiser-profile"]
                 },
                 "description": "Register as an advertiser"
               }
@@ -6350,12 +5995,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-advertiser-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-advertiser-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-advertiser-profile"]
                 },
                 "description": "Get current user's advertiser profile"
               }
@@ -6384,12 +6025,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/create-ad-campaign",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-ad-campaign"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-ad-campaign"]
                 },
                 "description": "Create a new ad campaign"
               }
@@ -6418,12 +6055,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/update-ad-campaign",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-ad-campaign"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-ad-campaign"]
                 },
                 "description": "Update campaign details"
               }
@@ -6444,12 +6077,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-ad-campaigns?page=1&limit=10&status=active",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-ad-campaigns"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-ad-campaigns"],
                   "query": [
                     {
                       "key": "page",
@@ -6484,12 +6113,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-ad-analytics?campaign_id=optional-uuid",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-ad-analytics"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-ad-analytics"],
                   "query": [
                     {
                       "key": "campaign_id",
@@ -6525,12 +6150,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/fetch-ads",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "fetch-ads"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["fetch-ads"]
                 },
                 "description": "Get ads for display"
               }
@@ -6555,12 +6176,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/track-ad-event",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "track-ad-event"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["track-ad-event"]
                 },
                 "description": "Track impressions, clicks, and conversions"
               }
@@ -6594,12 +6211,8 @@
                 },
                 "url": {
                   "raw": "{{base_url}}/approve-ad-campaign",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "approve-ad-campaign"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["approve-ad-campaign"]
                 },
                 "description": "Admin approval for campaigns"
               }
@@ -6636,12 +6249,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-social-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-social-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-social-post"]
             },
             "description": "Create a new social media post with optional media and location"
           }
@@ -6662,12 +6271,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-social-feed?page=1&limit=20",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-social-feed"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-social-feed"],
               "query": [
                 {
                   "key": "page",
@@ -6698,12 +6303,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-post-details?postId=uuid-here",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-post-details"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-post-details"],
               "query": [
                 {
                   "key": "postId",
@@ -6730,12 +6331,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-user-posts?userId=uuid-here&page=1&limit=20",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-user-posts"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-user-posts"],
               "query": [
                 {
                   "key": "userId",
@@ -6778,12 +6375,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-post"]
             },
             "description": "Update an existing post"
           }
@@ -6812,12 +6405,8 @@
             },
             "url": {
               "raw": "{{base_url}}/delete-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "delete-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["delete-post"]
             },
             "description": "Delete a post"
           }
@@ -6846,12 +6435,8 @@
             },
             "url": {
               "raw": "{{base_url}}/share-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "share-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["share-post"]
             },
             "description": "Share a post to your timeline"
           }
@@ -6880,12 +6465,8 @@
             },
             "url": {
               "raw": "{{base_url}}/like-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "like-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["like-post"]
             },
             "description": "Like or unlike a post (toggle)"
           }
@@ -6914,12 +6495,8 @@
             },
             "url": {
               "raw": "{{base_url}}/comment-on-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comment-on-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["comment-on-post"]
             },
             "description": "Add a comment to a post (supports nested replies)"
           }
@@ -6948,12 +6525,8 @@
             },
             "url": {
               "raw": "{{base_url}}/update-comment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-comment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-comment"]
             },
             "description": "Update a comment"
           }
@@ -6982,12 +6555,8 @@
             },
             "url": {
               "raw": "{{base_url}}/delete-comment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "delete-comment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["delete-comment"]
             },
             "description": "Delete a comment"
           }
@@ -7016,12 +6585,8 @@
             },
             "url": {
               "raw": "{{base_url}}/like-comment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "like-comment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["like-comment"]
             },
             "description": "Like or unlike a comment (toggle)"
           }
@@ -7056,12 +6621,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-story",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-story"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-story"]
             },
             "description": "Create a new story (expires after 24 hours)"
           }
@@ -7082,12 +6643,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-stories",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-stories"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-stories"]
             },
             "description": "Get active stories from friends and followed users"
           }
@@ -7116,12 +6673,8 @@
             },
             "url": {
               "raw": "{{base_url}}/view-story",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "view-story"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["view-story"]
             },
             "description": "Mark a story as viewed and record view timestamp"
           }
@@ -7142,12 +6695,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-story-viewers?storyId=uuid-here",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-story-viewers"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-story-viewers"],
               "query": [
                 {
                   "key": "storyId",
@@ -7188,12 +6737,8 @@
             },
             "url": {
               "raw": "{{base_url}}/send-friend-request",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-friend-request"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-friend-request"]
             },
             "description": "Send a friend request to another user"
           }
@@ -7222,12 +6767,8 @@
             },
             "url": {
               "raw": "{{base_url}}/respond-to-friend-request",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "respond-to-friend-request"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["respond-to-friend-request"]
             },
             "description": "Accept or reject a friend request (action: 'accept' or 'reject')"
           }
@@ -7248,12 +6789,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-friends?userId=optional-uuid",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-friends"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-friends"],
               "query": [
                 {
                   "key": "userId",
@@ -7281,12 +6818,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-friend-requests",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-friend-requests"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-friend-requests"]
             },
             "description": "Get pending friend requests"
           }
@@ -7315,12 +6848,8 @@
             },
             "url": {
               "raw": "{{base_url}}/unfriend",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "unfriend"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["unfriend"]
             },
             "description": "Remove a friend connection"
           }
@@ -7349,12 +6878,8 @@
             },
             "url": {
               "raw": "{{base_url}}/block-user",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "block-user"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["block-user"]
             },
             "description": "Block a user from interacting with you"
           }
@@ -7383,12 +6908,8 @@
             },
             "url": {
               "raw": "{{base_url}}/unblock-user",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "unblock-user"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["unblock-user"]
             },
             "description": "Unblock a previously blocked user"
           }
@@ -7409,12 +6930,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/search-users?query=john&page=1&limit=20",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "search-users"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["search-users"],
               "query": [
                 {
                   "key": "query",
@@ -7463,12 +6980,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-conversation",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-conversation"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-conversation"]
             },
             "description": "Create a new conversation (direct or group)"
           }
@@ -7489,12 +7002,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-conversations?page=1&limit=20",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-conversations"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-conversations"],
               "query": [
                 {
                   "key": "page",
@@ -7533,12 +7042,8 @@
             },
             "url": {
               "raw": "{{base_url}}/send-message",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-message"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-message"]
             },
             "description": "Send a message in a conversation"
           }
@@ -7559,12 +7064,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-messages?conversationId=uuid-here&page=1&limit=50",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-messages"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-messages"],
               "query": [
                 {
                   "key": "conversationId",
@@ -7613,12 +7114,8 @@
             },
             "url": {
               "raw": "{{base_url}}/initiate-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "initiate-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["initiate-call"]
             },
             "description": "Start a voice or video call. Returns Agora channel name and token.\n\n**Call Types:**\n- voice: Audio only\n- video: Audio + Video\n\n**Response includes:**\n- call.id: Call UUID\n- call.agora_channel: Channel name for Agora SDK\n- call.agora_token: Authentication token for Agora\n- call.status: 'initiated'\n\n**Next Steps:**\n1. Use Agora Web SDK to join the channel\n2. Participants receive notifications via notification_queue\n3. Use Supabase Realtime to listen for call status changes"
           }
@@ -7647,12 +7144,8 @@
             },
             "url": {
               "raw": "{{base_url}}/answer-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "answer-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["answer-call"]
             },
             "description": "Accept an incoming call. Updates call status to 'active' when first participant joins.\n\n**Behavior:**\n- Records joined_at timestamp for participant\n- If first to join (after initiator), sets call.status = 'active'\n- Returns updated call details with Agora credentials"
           }
@@ -7681,12 +7174,8 @@
             },
             "url": {
               "raw": "{{base_url}}/decline-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "decline-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["decline-call"]
             },
             "description": "Reject an incoming call. Sets call status to 'declined' and notifies the initiator."
           }
@@ -7715,12 +7204,8 @@
             },
             "url": {
               "raw": "{{base_url}}/end-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "end-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["end-call"]
             },
             "description": "End an active call for all participants.\n\n**Actions:**\n- Calculates call duration\n- Sets call.status = 'ended'\n- Updates all participants' left_at timestamps\n- Creates call summary message in conversation\n\n**Returns:**\n- success: true\n- duration: Call duration in seconds"
           }
@@ -7749,12 +7234,8 @@
             },
             "url": {
               "raw": "{{base_url}}/leave-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "leave-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["leave-call"]
             },
             "description": "Leave a group call without ending it for others.\n\n**Behavior:**\n- Updates participant's left_at timestamp\n- If all participants have left, automatically ends the call\n- Other participants can continue the call"
           }
@@ -7789,12 +7270,8 @@
             },
             "url": {
               "raw": "{{base_url}}/create-support-ticket",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-support-ticket"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-support-ticket"]
             },
             "description": "Create a new support ticket"
           }
@@ -7823,12 +7300,8 @@
             },
             "url": {
               "raw": "{{base_url}}/reply-to-ticket",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "reply-to-ticket"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["reply-to-ticket"]
             },
             "description": "Add a reply to a support ticket"
           }
@@ -7849,12 +7322,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-my-tickets?status=open",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-my-tickets"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-my-tickets"],
               "query": [
                 {
                   "key": "status",
@@ -7890,12 +7359,8 @@
             },
             "url": {
               "raw": "{{base_url}}/report-content",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "report-content"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["report-content"]
             },
             "description": "Report inappropriate content (post, comment, user, etc.)"
           }
@@ -7930,12 +7395,8 @@
             },
             "url": {
               "raw": "{{base_url}}/admin-manage-users",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-manage-users"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["admin-manage-users"]
             },
             "description": "Admin actions: suspend, unsuspend, ban, unban users"
           }
@@ -7964,12 +7425,8 @@
             },
             "url": {
               "raw": "{{base_url}}/admin-manage-content",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-manage-content"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["admin-manage-content"]
             },
             "description": "Admin content moderation: remove, restore, flag content"
           }
@@ -7990,12 +7447,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin-get-dashboard-stats",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-get-dashboard-stats"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["admin-get-dashboard-stats"]
             },
             "description": "Get comprehensive platform statistics for admin dashboard"
           }
@@ -8024,12 +7477,8 @@
             },
             "url": {
               "raw": "{{base_url}}/admin-manage-vendors",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-manage-vendors"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["admin-manage-vendors"]
             },
             "description": "Admin vendor management: approve, reject, suspend vendors"
           }
@@ -8050,12 +7499,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin-financial-reports?startDate=2024-01-01&endDate=2024-12-31",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-financial-reports"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["admin-financial-reports"],
               "query": [
                 {
                   "key": "startDate",

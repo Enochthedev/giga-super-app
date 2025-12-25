@@ -1,53 +1,56 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 Deno.serve(async (req: Request) => {
   try {
-    const authHeader = req.headers.get("Authorization")!;
+    const authHeader = req.headers.get('Authorization')!;
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
     const { postId, content, media_urls, visibility } = await req.json();
 
     if (!postId) {
-      return new Response(JSON.stringify({ error: "Post ID required" }), { status: 400 });
+      return new Response(JSON.stringify({ error: 'Post ID required' }), { status: 400 });
     }
 
     // Verify ownership
     const { data: post } = await supabase
-      .from("social_posts")
-      .select("user_id")
-      .eq("id", postId)
+      .from('social_posts')
+      .select('user_id')
+      .eq('id', postId)
       .single();
 
     if (!post || post.user_id !== user.id) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
+      return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }
 
     const { data: updated, error } = await supabase
-      .from("social_posts")
+      .from('social_posts')
       .update({
         content,
         media_urls,
         visibility,
         updated_at: new Date().toISOString(),
       })
-      .eq("id", postId)
+      .eq('id', postId)
       .select()
       .single();
 
     if (error) throw error;
 
     return new Response(JSON.stringify({ success: true, post: updated }), {
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });

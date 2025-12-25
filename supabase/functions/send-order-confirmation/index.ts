@@ -1,21 +1,30 @@
 // supabase/functions/send-order-confirmation/index.ts
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { Resend } from 'https://esm.sh/resend@2.0.0';
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
-serve(async (req)=>{
+serve(async req => {
   try {
     const { order_id } = await req.json();
-    const supabaseAdmin = createClient(Deno.env.get('SUPABASE_URL') ?? '', Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '');
+    const supabaseAdmin = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
     // Get order details
-    const { data: order } = await supabaseAdmin.from('ecommerce_orders').select(`
+    const { data: order } = await supabaseAdmin
+      .from('ecommerce_orders')
+      .select(
+        `
         *,
         user:user_profiles(email, first_name, last_name),
         items:ecommerce_order_items(
           *,
           product:ecommerce_products(name, thumbnail)
         )
-      `).eq('id', order_id).single();
+      `
+      )
+      .eq('id', order_id)
+      .single();
     if (!order) throw new Error('Order not found');
     const html = `
       <!DOCTYPE html>
@@ -43,7 +52,9 @@ serve(async (req)=>{
           
           <div class="order-details">
             <h2>Order Details</h2>
-            ${order.items.map((item)=>`
+            ${order.items
+              .map(
+                item => `
               <div class="item">
                 <img src="${item.product.thumbnail}" alt="${item.product.name}">
                 <div>
@@ -52,7 +63,9 @@ serve(async (req)=>{
                   <strong>₦${item.subtotal.toLocaleString()}</strong>
                 </div>
               </div>
-            `).join('')}
+            `
+              )
+              .join('')}
             
             <div class="total">
               Total: ₦${order.total_amount.toLocaleString()}
@@ -75,37 +88,43 @@ serve(async (req)=>{
       from: 'Giga <orders@giga.app>',
       to: order.user.email,
       subject: `Order Confirmed - ${order.order_number}`,
-      html
+      html,
     });
     // Also send SMS
     await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/send-sms`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         to: order.user.phone,
         type: 'order_confirmed',
-        message: order.order_number
-      })
+        message: order.order_number,
+      }),
     });
-    return new Response(JSON.stringify({
-      success: true
-    }), {
-      headers: {
-        'Content-Type': 'application/json'
+    return new Response(
+      JSON.stringify({
+        success: true,
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
-    });
+    );
   } catch (error) {
     console.error('Email error:', error);
-    return new Response(JSON.stringify({
-      error: error.message
-    }), {
-      status: 500,
-      headers: {
-        'Content-Type': 'application/json'
+    return new Response(
+      JSON.stringify({
+        error: error.message,
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       }
-    });
+    );
   }
 });

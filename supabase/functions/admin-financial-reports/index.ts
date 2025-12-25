@@ -1,41 +1,42 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 Deno.serve(async (req: Request) => {
   try {
-    const authHeader = req.headers.get("Authorization")!;
+    const authHeader = req.headers.get('Authorization')!;
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
     const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role_name")
-      .eq("user_id", user.id);
+      .from('user_roles')
+      .select('role_name')
+      .eq('user_id', user.id);
 
-    if (!roles?.some(r => r.role_name === "ADMIN")) {
-      return new Response(JSON.stringify({ error: "Forbidden" }), { status: 403 });
+    if (!roles?.some(r => r.role_name === 'ADMIN')) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }
 
     const url = new URL(req.url);
-    const startDate = url.searchParams.get("start_date");
-    const endDate = url.searchParams.get("end_date");
-    const module = url.searchParams.get("module");
+    const startDate = url.searchParams.get('start_date');
+    const endDate = url.searchParams.get('end_date');
+    const module = url.searchParams.get('module');
 
-    let query = supabase
-      .from("platform_revenue")
-      .select("*");
+    let query = supabase.from('platform_revenue').select('*');
 
-    if (startDate) query = query.gte("revenue_date", startDate);
-    if (endDate) query = query.lte("revenue_date", endDate);
-    if (module) query = query.eq("module_name", module);
+    if (startDate) query = query.gte('revenue_date', startDate);
+    if (endDate) query = query.lte('revenue_date', endDate);
+    if (module) query = query.eq('module_name', module);
 
     const { data: revenue, error } = await query;
     if (error) throw error;
@@ -54,18 +55,21 @@ Deno.serve(async (req: Request) => {
       return acc;
     }, {});
 
-    return new Response(JSON.stringify({
-      summary: {
-        totalRevenue,
-        totalGross,
-        totalTax,
-        transactionCount: revenue.length,
-      },
-      byModule,
-      transactions: revenue,
-    }), {
-      headers: { "Content-Type": "application/json" },
-    });
+    return new Response(
+      JSON.stringify({
+        summary: {
+          totalRevenue,
+          totalGross,
+          totalTax,
+          transactionCount: revenue.length,
+        },
+        byModule,
+        transactions: revenue,
+      }),
+      {
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }

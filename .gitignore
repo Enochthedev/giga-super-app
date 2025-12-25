@@ -44,10 +44,25 @@ run-seed.js
 run_seed.sh
 run-*.js
 
-# Deployment summaries (may contain project URLs)
-DEPLOYMENT_SUMMARY*.md
-SEEDING_*.md
-*_SUMMARY.md
+# Prevent scattered documentation files in root
+/*_PLAN.md
+/*_SUMMARY.md
+/*_FUNCTIONS.md
+/*_GUIDE.md
+/*_SETUP.md
+/*_UPDATE*.md
+/*_ANALYSIS.md
+/*_PATTERNS.md
+/*_INTEGRATION.md
+/*_DEPLOYMENT.md
+/*_FLOWS.md
+/*_ORGANIZATION.md
+
+# Keep only essential root files
+!README.md
+!CHANGELOG.md
+!LICENSE.md
+!CONTRIBUTING.md
 
 # Postman production environments (with real keys)
 postman/Giga-Environment.postman_environment.json

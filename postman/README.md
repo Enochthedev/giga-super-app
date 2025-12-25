@@ -2,13 +2,17 @@
 
 ## 📚 Postman Collection
 
-This directory contains the complete Postman collection for the Giga Platform API.
+This directory contains the complete Postman collection for the Giga Platform
+API.
 
 ### Files
 
-- **`Giga-API-Collection.postman_collection.json`** - Main API collection with all endpoints
-- **`Giga-Environment.postman_environment.json`** - Production environment variables
-- **`Giga-Environment-Local.postman_environment.json`** - Local development environment
+- **`Giga-API-Collection.postman_collection.json`** - Main API collection with
+  all endpoints
+- **`Giga-Environment.postman_environment.json`** - Production environment
+  variables
+- **`Giga-Environment-Local.postman_environment.json`** - Local development
+  environment
 
 ## 🚀 Getting Started
 
@@ -32,8 +36,10 @@ This directory contains the complete Postman collection for the Giga Platform AP
 To get your auth token, login to your app and run this in the browser console:
 
 ```javascript
-const { data: { session } } = await supabase.auth.getSession()
-console.log(session.access_token)
+const {
+  data: { session },
+} = await supabase.auth.getSession();
+console.log(session.access_token);
 ```
 
 Copy the token and paste it into the `supabase_auth_token` variable.
@@ -57,18 +63,18 @@ The collection is organized into modules:
 
 ### Module Overview
 
-| Module | Endpoints | Purpose |
-|--------|-----------|---------|
-| Auth & User | 7 | User management, profiles, roles |
-| Hotel Discovery | 7 | Search, browse, favorites |
-| Hotel Management | 5 | Vendor operations |
-| Booking | 9 | Booking lifecycle |
-| Reviews | 3 | Review system |
-| Payments | 12 | Payments, wallet, payouts |
-| Notifications | 7 | Messaging system |
-| Admin | 3 | Admin operations |
-| Shopping | 5 | E-commerce features |
-| Webhooks | 2 | Payment webhooks |
+| Module           | Endpoints | Purpose                          |
+| ---------------- | --------- | -------------------------------- |
+| Auth & User      | 7         | User management, profiles, roles |
+| Hotel Discovery  | 7         | Search, browse, favorites        |
+| Hotel Management | 5         | Vendor operations                |
+| Booking          | 9         | Booking lifecycle                |
+| Reviews          | 3         | Review system                    |
+| Payments         | 12        | Payments, wallet, payouts        |
+| Notifications    | 7         | Messaging system                 |
+| Admin            | 3         | Admin operations                 |
+| Shopping         | 5         | E-commerce features              |
+| Webhooks         | 2         | Payment webhooks                 |
 
 ## 🔐 Authentication
 
@@ -172,6 +178,7 @@ deno run --allow-read --allow-write scripts/generate-api-docs.ts
 ## 📞 Support
 
 For issues or questions:
+
 - Check function logs in Supabase Dashboard
 - Review function implementation in `/supabase/functions/`
 - Test locally with `supabase functions serve`

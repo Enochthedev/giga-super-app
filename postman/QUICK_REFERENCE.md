@@ -3,6 +3,7 @@
 ## 🏨 Hotel Booking Flow
 
 ### 1. Search for Hotels
+
 ```http
 POST /Search-hotels
 {
@@ -16,6 +17,7 @@ POST /Search-hotels
 ```
 
 ### 2. Get Hotel Details
+
 ```http
 POST /Get-hotel-details
 {
@@ -24,6 +26,7 @@ POST /Get-hotel-details
 ```
 
 ### 3. Check Room Availability
+
 ```http
 POST /check-room-availability
 {
@@ -35,6 +38,7 @@ POST /check-room-availability
 ```
 
 ### 4. Calculate Price (with Promo)
+
 ```http
 POST /Calculate-booking-price
 {
@@ -47,6 +51,7 @@ POST /Calculate-booking-price
 ```
 
 ### 5. Create Booking
+
 ```http
 POST /Create-booking
 {
@@ -62,9 +67,11 @@ POST /Create-booking
   "promoCode": "SUMMER2024"
 }
 ```
+
 **Response:** Save `bookingId` and `totalAmount`
 
 ### 6. Initialize Payment
+
 ```http
 POST /Initialize-payment
 {
@@ -74,9 +81,11 @@ POST /Initialize-payment
   "referenceId": "{{booking_id}}"
 }
 ```
+
 **Response:** Redirect user to `authorization_url`
 
 ### 7. Verify Payment
+
 ```http
 POST /Verify-payment
 {
@@ -85,6 +94,7 @@ POST /Verify-payment
 ```
 
 ### 8. Get Booking Details
+
 ```http
 POST /get-booking-details
 {
@@ -97,11 +107,13 @@ POST /get-booking-details
 ## 👤 User Setup Flow
 
 ### 1. Get Current Profile
+
 ```http
 GET /get-current-profile
 ```
 
 ### 2. Update Profile
+
 ```http
 POST /update-user-profile
 {
@@ -112,12 +124,14 @@ POST /update-user-profile
 ```
 
 ### 3. Upload Profile Picture
+
 ```http
 POST /upload-profile-picture
 [Form Data with file]
 ```
 
 ### 4. Add Address
+
 ```http
 POST /add-user-address
 {
@@ -131,6 +145,7 @@ POST /add-user-address
 ```
 
 ### 5. Apply for Vendor Role
+
 ```http
 POST /apply-for-role
 {
@@ -144,6 +159,7 @@ POST /apply-for-role
 ## 🏢 Vendor Flow - Create Hotel
 
 ### 1. Create Hotel
+
 ```http
 POST /create-hotel
 {
@@ -162,9 +178,11 @@ POST /create-hotel
   "check_out_time": "11:00"
 }
 ```
+
 **Response:** Save `hotelId`
 
 ### 2. Add Room Types
+
 ```http
 POST /create-room-type
 {
@@ -181,6 +199,7 @@ POST /create-room-type
 ```
 
 ### 3. Get Analytics
+
 ```http
 POST /get-hotel-analytics
 {
@@ -195,6 +214,7 @@ POST /get-hotel-analytics
 ## 💰 Payment & Wallet Flow
 
 ### Top Up Wallet
+
 ```http
 POST /Topup-wallet
 {
@@ -203,6 +223,7 @@ POST /Topup-wallet
 ```
 
 ### Pay with Wallet
+
 ```http
 POST /Pay-with-wallet
 {
@@ -213,11 +234,13 @@ POST /Pay-with-wallet
 ```
 
 ### Get Vendor Balance
+
 ```http
 GET /Get-vendor-balance
 ```
 
 ### Request Payout
+
 ```http
 POST /Create-payout-request
 {
@@ -234,6 +257,7 @@ POST /Create-payout-request
 ## ⭐ Review Flow
 
 ### 1. Create Review (After Checkout)
+
 ```http
 POST /create-hotel-review
 {
@@ -250,6 +274,7 @@ POST /create-hotel-review
 ```
 
 ### 2. Get Hotel Reviews
+
 ```http
 POST /get-hotel-reviews
 {
@@ -261,6 +286,7 @@ POST /get-hotel-reviews
 ```
 
 ### 3. Hotel Owner Responds
+
 ```http
 POST /respond-to-review
 {
@@ -274,6 +300,7 @@ POST /respond-to-review
 ## 📝 Common Test Data
 
 ### Test Credentials
+
 ```javascript
 // Production - Get from your Supabase dashboard
 SUPABASE_URL=https://your-project.supabase.co
@@ -285,6 +312,7 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### Sample Hotel Data
+
 ```json
 {
   "name": "Test Hotel",
@@ -295,6 +323,7 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 ### Sample Booking Dates
+
 ```json
 {
   "checkIn": "2024-12-01",
@@ -308,17 +337,20 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ## 🛠️ Workflow Scripts
 
 ### Run Documentation Generator
+
 ```bash
 cd /Users/user/Dev/giga
 deno run --allow-read --allow-write scripts/generate-api-docs.ts
 ```
 
 ### Test Local Functions
+
 ```bash
 supabase functions serve
 ```
 
 ### Deploy Function
+
 ```bash
 supabase functions deploy function-name
 ```
@@ -327,14 +359,14 @@ supabase functions deploy function-name
 
 ## 🐛 Common Error Codes
 
-| Code | Meaning | Solution |
-|------|---------|----------|
-| 401 | Unauthorized | Check auth token is valid and not expired |
-| 403 | Forbidden | User lacks required role/permission |
-| 404 | Not Found | Check endpoint name and base URL |
-| 409 | Conflict | Resource already exists or constraint violated |
-| 422 | Validation Error | Check request body matches schema |
-| 500 | Server Error | Check function logs in Supabase |
+| Code | Meaning          | Solution                                       |
+| ---- | ---------------- | ---------------------------------------------- |
+| 401  | Unauthorized     | Check auth token is valid and not expired      |
+| 403  | Forbidden        | User lacks required role/permission            |
+| 404  | Not Found        | Check endpoint name and base URL               |
+| 409  | Conflict         | Resource already exists or constraint violated |
+| 422  | Validation Error | Check request body matches schema              |
+| 500  | Server Error     | Check function logs in Supabase                |
 
 ---
 

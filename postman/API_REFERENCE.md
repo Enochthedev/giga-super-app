@@ -495,4 +495,3 @@
 - **Method:** `POST`
 - **Endpoint:** `{{base_url}}/upload-file`
 - **Auth Required:** Yes
-

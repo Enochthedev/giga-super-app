@@ -1,29 +1,34 @@
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 Deno.serve(async (req: Request) => {
   try {
-    const authHeader = req.headers.get("Authorization")!;
+    const authHeader = req.headers.get('Authorization')!;
     const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_ANON_KEY')!,
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
     }
 
     // Check if user is advertiser
     const { data: advertiser } = await supabase
-      .from("advertiser_profiles")
-      .select("user_id")
-      .eq("user_id", user.id)
+      .from('advertiser_profiles')
+      .select('user_id')
+      .eq('user_id', user.id)
       .single();
 
     if (!advertiser) {
-      return new Response(JSON.stringify({ error: "Not an advertiser" }), { status: 403 });
+      return new Response(JSON.stringify({ error: 'Not an advertiser' }), {
+        status: 403,
+      });
     }
 
     const {
@@ -40,18 +45,20 @@ Deno.serve(async (req: Request) => {
     } = await req.json();
 
     if (!campaignName || !budget || !startDate || !endDate) {
-      return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
+      return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+        status: 400,
+      });
     }
 
     const campaignNumber = `AD-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
 
     const { data: campaign, error } = await supabase
-      .from("ad_campaigns")
+      .from('ad_campaigns')
       .insert({
         campaign_number: campaignNumber,
         advertiser_id: user.id,
         campaign_name: campaignName,
-        campaign_type: campaignType || "banner",
+        campaign_type: campaignType || 'banner',
         description,
         budget,
         daily_budget: dailyBudget,
@@ -60,7 +67,7 @@ Deno.serve(async (req: Request) => {
         target_audience: targetAudience || {},
         creative_assets: creativeAssets || {},
         landing_url: landingUrl,
-        status: "pending_approval",
+        status: 'pending_approval',
       })
       .select()
       .single();
@@ -68,7 +75,7 @@ Deno.serve(async (req: Request) => {
     if (error) throw error;
 
     return new Response(JSON.stringify({ success: true, campaign }), {
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });

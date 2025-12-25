@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(async req => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -104,9 +104,10 @@ serve(async (req) => {
           status: 'cancelled',
           refundAmount,
           refundPercentage,
-          message: refundAmount > 0 
-            ? `Booking cancelled. Refund of $${refundAmount.toFixed(2)} (${refundPercentage}%) will be processed.`
-            : 'Booking cancelled. No refund available due to cancellation policy.',
+          message:
+            refundAmount > 0
+              ? `Booking cancelled. Refund of $${refundAmount.toFixed(2)} (${refundPercentage}%) will be processed.`
+              : 'Booking cancelled. No refund available due to cancellation policy.',
         },
       }),
       {
