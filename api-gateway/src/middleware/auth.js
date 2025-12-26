@@ -1,16 +1,23 @@
 import { createClient } from '@supabase/supabase-js';
 import jwt from 'jsonwebtoken';
+import NodeCache from 'node-cache';
 
 import { logger } from '../utils/logger.js';
-
-// Initialize Supabase client
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 // Token validation cache (5 minute TTL)
 const tokenCache = new NodeCache({ stdTTL: 300, checkperiod: 60 });
 
 // Rate limiting for auth attempts per IP
 const authAttempts = new NodeCache({ stdTTL: 900 }); // 15 minutes
+
+// Lazy initialization of Supabase client
+let supabase = null;
+const getSupabaseClient = () => {
+  if (!supabase) {
+    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  }
+  return supabase;
+};
 
 export const authMiddleware = async (req, res, next) => {
   try {
@@ -83,7 +90,7 @@ export const authMiddleware = async (req, res, next) => {
       const {
         data: { user: supabaseUser },
         error,
-      } = await supabase.auth.getUser(token);
+      } = await getSupabaseClient().auth.getUser(token);
 
       if (error || !supabaseUser) {
         // Increment failed attempts
@@ -149,29 +156,17 @@ export const authMiddleware = async (req, res, next) => {
       });
     }
 
-    // Get user roles from database for enhanced authorization
-    let userRoles = [];
-    try {
-      const { data: roles } = await supabase
-        .from('user_active_roles')
-        .select('role_name')
-        .eq('user_id', user.id);
-
-      userRoles = roles ? roles.map(r => r.role_name) : [];
-    } catch (roleError) {
-      logger.warn('Failed to fetch user roles', {
-        requestId: req.id,
-        userId: user.id,
-        error: roleError.message,
-      });
-    }
+    // PERFORMANCE FIX: Get roles from JWT claims instead of database query
+    // Roles should be included in token during authentication via Supabase Auth hooks
+    // This avoids a database query on every request
+    const userRoles = tokenClaims.user_metadata?.roles || user.app_metadata?.roles || [];
 
     // Add comprehensive user context to request
     req.user = {
       id: user.id,
       email: user.email,
-      role: user.app_metadata?.role || 'user',
-      roles: userRoles,
+      role: user.app_metadata?.role || tokenClaims.user_metadata?.role || 'user',
+      roles: Array.isArray(userRoles) ? userRoles : [],
       claims: tokenClaims,
       raw: user,
       authenticatedAt: new Date().toISOString(),

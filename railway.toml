@@ -1,0 +1,22 @@
+# Railway configuration for Giga Platform
+# https://docs.railway.app/deploy/config-as-code
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# Service-specific configurations can be set via environment variables
+# or in the Railway dashboard
+
+[env]
+# These will be set in Railway dashboard with actual secrets
+# SUPABASE_URL = ""
+# SUPABASE_ANON_KEY = ""
+# SUPABASE_SERVICE_ROLE_KEY = ""
