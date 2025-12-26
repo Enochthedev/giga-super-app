@@ -1,11 +1,32 @@
 import axios from 'axios';
+import CircuitBreaker from 'opossum';
 import NodeCache from 'node-cache';
 import { logger } from '../utils/logger.js';
+
+// Simple path matcher utility
+const pathMatcher = {
+  findBestMatch(path, patterns) {
+    for (const pattern of patterns) {
+      if (this.matchPattern(path, pattern)) {
+        return { pattern, params: {} };
+      }
+    }
+    return null;
+  },
+
+  matchPattern(path, pattern) {
+    // Simple pattern matching - convert pattern to regex
+    const regexPattern = pattern.replace(/\*/g, '.*').replace(/\//g, '\\/');
+    const regex = new RegExp(`^${regexPattern}$`);
+    return regex.test(path);
+  },
+};
 
 class ServiceRegistry {
   constructor() {
     this.services = new Map();
     this.healthCache = new NodeCache({ stdTTL: 30 }); // Cache health status for 30 seconds
+    this.circuitBreakers = new Map(); // Circuit breakers for each service
     this.initialized = false;
   }
 
@@ -80,7 +101,15 @@ class ServiceRegistry {
         baseUrl: process.env.SOCIAL_SERVICE_URL,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/social/*', '/api/v1/posts/*', '/api/v1/messages/*'],
+        patterns: [
+          '/api/v1/social/*',
+          '/api/v1/posts/*',
+          '/api/v1/comments/*',
+          '/api/v1/likes/*',
+          '/api/v1/feed/*',
+          '/api/v1/stories/*',
+          '/api/v1/shares/*',
+        ],
       });
     }
 
@@ -290,29 +319,111 @@ class ServiceRegistry {
   getUnhealthyServices() {
     return Array.from(this.services.values()).filter(service => !service.healthy);
   }
-}
 
-export const serviceRegistry = new ServiceRegistry();
+  /**
+   * Get or create circuit breaker for a service
+   */
+  getCircuitBreaker(serviceId) {
+    if (!this.circuitBreakers.has(serviceId)) {
+      const service = this.services.get(serviceId);
+
+      const breaker = new CircuitBreaker(async operation => operation(), {
+        timeout: parseInt(process.env.SERVICE_TIMEOUT_MS) || 5000,
+        errorThresholdPercentage: 50, // Open circuit if 50% of requests fail
+        resetTimeout: 30000, // Try again after 30 seconds
+        rollingCountTimeout: 10000, // 10 second window for error calculation
+        rollingCountBuckets: 10,
+        name: serviceId,
+      });
+
+      // Circuit breaker event handlers
+      breaker.on('open', () => {
+        logger.error(`Circuit breaker opened for service: ${serviceId}`, {
+          serviceId,
+          serviceName: service?.name,
+        });
+        // Mark service as unhealthy
+        if (service) {
+          service.healthy = false;
+        }
+      });
+
+      breaker.on('halfOpen', () => {
+        logger.warn(`Circuit breaker half-open for service: ${serviceId}`, {
+          serviceId,
+          serviceName: service?.name,
+        });
+      });
+
+      breaker.on('close', () => {
+        logger.info(`Circuit breaker closed for service: ${serviceId}`, {
+          serviceId,
+          serviceName: service?.name,
+        });
+        // Mark service as healthy
+        if (service) {
+          service.healthy = true;
+        }
+      });
+
+      breaker.on('failure', error => {
+        logger.warn(`Circuit breaker recorded failure for ${serviceId}`, {
+          serviceId,
+          error: error.message,
+        });
+      });
+
+      breaker.fallback(() => {
+        logger.warn(`Circuit breaker fallback triggered for ${serviceId}`, {
+          serviceId,
+        });
+        throw new Error(`Service ${serviceId} is currently unavailable`);
+      });
+
+      this.circuitBreakers.set(serviceId, breaker);
+    }
+
+    return this.circuitBreakers.get(serviceId);
+  }
 
   /**
    * Execute a request with circuit breaker protection
    */
   async executeWithCircuitBreaker(serviceId, operation) {
-    return circuitBreakerManager.executeWithBreaker(serviceId, operation);
+    const breaker = this.getCircuitBreaker(serviceId);
+    return breaker.fire(operation);
   }
 
   /**
    * Get circuit breaker statistics for all services
    */
   getCircuitBreakerStats() {
-    return circuitBreakerManager.getAllStats();
+    const stats = {};
+
+    for (const [serviceId, breaker] of this.circuitBreakers) {
+      const breakerStats = breaker.stats;
+      stats[serviceId] = {
+        state: breaker.opened ? 'open' : breaker.halfOpen ? 'half-open' : 'closed',
+        failures: breakerStats.failures || 0,
+        successes: breakerStats.successes || 0,
+        fallbacks: breakerStats.fallbacks || 0,
+        timeouts: breakerStats.timeouts || 0,
+        fires: breakerStats.fires || 0,
+        rejects: breakerStats.rejects || 0,
+        latencyMean: breakerStats.latencyMean || 0,
+        percentiles: breakerStats.percentiles || {},
+      };
+    }
+
+    return stats;
   }
 
   /**
    * Get load balancer statistics
    */
   getLoadBalancerStats() {
-    return loadBalancer.getStats();
+    // Load balancer stats to be implemented later
+    return {};
   }
 
   /**
@@ -320,7 +431,7 @@ export const serviceRegistry = new ServiceRegistry();
    */
   async getServiceStats() {
     const services = {};
-    
+
     for (const [id, service] of this.services) {
       const health = await this.checkServiceHealth(id);
       services[id] = {
@@ -342,3 +453,5 @@ export const serviceRegistry = new ServiceRegistry();
     };
   }
 }
+
+export const serviceRegistry = new ServiceRegistry();

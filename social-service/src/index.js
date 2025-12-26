@@ -16,14 +16,27 @@ import feedRoutes from './routes/feed.js';
 import healthRoutes from './routes/health.js';
 import likesRoutes from './routes/likes.js';
 import postsRoutes from './routes/posts.js';
+import sharesRoutes from './routes/shares.js';
+import storiesRoutes from './routes/stories.js';
 
 // Load environment variables
 dotenv.config();
+
+// Validate environment variables at startup
+logger.info('Service initializing', {
+  supabaseConfigured: !!process.env.SUPABASE_URL,
+  serviceRoleConfigured: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+  port: process.env.PORT || 3001,
+  environment: process.env.NODE_ENV || 'development',
+});
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Initialize Supabase client with connection pooling
+// SECURITY: Using service role key for server-side operations only
+// This client has full database access, bypassing RLS
+// Use with caution and ensure proper authorization checks in route handlers
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
   db: {
     schema: 'public',
@@ -40,6 +53,9 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SER
     },
   },
 });
+
+// TODO: Consider creating a separate anon-key client for user-scoped operations
+// to leverage Row Level Security policies for additional security layer
 
 // Make supabase client available to routes
 app.locals.supabase = supabase;
@@ -126,6 +142,8 @@ app.use('/api/v1/posts', postsRoutes);
 app.use('/api/v1/comments', commentsRoutes);
 app.use('/api/v1/feed', feedRoutes);
 app.use('/api/v1/likes', likesRoutes);
+app.use('/api/v1/stories', storiesRoutes);
+app.use('/api/v1/shares', sharesRoutes);
 
 // 404 handler
 app.use(notFoundHandler);
@@ -161,13 +179,30 @@ process.on('SIGINT', () => {
 
 // Handle uncaught exceptions
 process.on('uncaughtException', error => {
-  logger.error('Uncaught exception', { error: error.message, stack: error.stack });
+  logger.error('Uncaught exception - this is a fatal error', {
+    error: error.message,
+    stack: error.stack,
+  });
+  // Uncaught exceptions are true code errors - exit to restart
   process.exit(1);
 });
 
+// Handle unhandled promise rejections
 process.on('unhandledRejection', (reason, promise) => {
-  logger.error('Unhandled rejection', { reason, promise });
-  process.exit(1);
+  logger.error('Unhandled promise rejection detected', {
+    reason: reason instanceof Error ? reason.message : reason,
+    stack: reason instanceof Error ? reason.stack : undefined,
+    promise: promise,
+  });
+
+  // Send to error tracking if configured
+  if (process.env.SENTRY_DSN) {
+    // Sentry.captureException(reason);
+  }
+
+  // Log but don't crash - let health checks detect issues
+  // Only uncaughtException should crash the process
+  // This prevents cascade failures from async errors
 });
 
 export default app;
