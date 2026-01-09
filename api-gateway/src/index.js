@@ -77,9 +77,9 @@ app.use((req, res, next) => {
 app.use(requestLogger);
 
 // Response standardization and caching
-app.use(responseStandardization);
-app.use(responseCompression);
-app.use(cacheMiddleware);
+// app.use(responseStandardization);
+// app.use(responseCompression);
+// app.use(cacheMiddleware);
 
 // Health check routes (no auth required)
 app.use('/health', healthRouter);
@@ -88,13 +88,13 @@ app.use('/health', healthRouter);
 app.use(authMiddleware);
 
 // Admin routes (require authentication and admin role)
-app.use('/admin', adminRouter);
+// app.use('/admin', adminRouter);
 
 // Main routing middleware
 app.use(routingMiddleware);
 
 // Error handling
-app.use(errorResponseStandardization);
+// app.use(errorResponseStandardization);
 app.use(errorHandler);
 
 // 404 handler

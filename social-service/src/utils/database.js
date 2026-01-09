@@ -160,7 +160,7 @@ export const sanitizeInput = input => {
   return input
     .replace(/[<>]/g, '') // Remove HTML tags
     .replace(/['"]/g, '') // Remove quotes
-    .replace(/[;--]/g, '') // Remove SQL injection patterns
+    .replace(/[;\-]/g, '') // Remove SQL injection patterns
     .trim();
 };
 

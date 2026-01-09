@@ -59,6 +59,34 @@ services:
     networks:
       - giga-network
 
+  # Delivery Service (Railway simulation)
+  delivery-service:
+    build:
+      context: .
+      dockerfile: docker/delivery.Dockerfile
+    ports:
+      - '3003:3002'
+    environment:
+      - NODE_ENV=development
+      - PORT=3002
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - DB_POOL_SIZE=10
+      - RATE_LIMIT_WINDOW_MS=900000
+      - RATE_LIMIT_MAX_REQUESTS=100
+      - LOG_LEVEL=info
+      - API_GATEWAY_URL=http://api-gateway:3000
+      - DEFAULT_DELIVERY_RADIUS_KM=50
+      - MAX_COURIER_ASSIGNMENTS=5
+      - ASSIGNMENT_TIMEOUT_MINUTES=15
+    volumes:
+      - ./delivery-service:/app
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - giga-network
+
   # Redis for caching and sessions
   redis:
     image: redis:7-alpine
@@ -96,6 +124,7 @@ services:
       - api-gateway
       - social-service
       - admin-service
+      - delivery-service
     networks:
       - giga-network
 

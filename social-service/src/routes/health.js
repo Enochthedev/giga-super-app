@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     // Test database connection
     const { data: dbTest, error: dbError } = await supabase
       .from('user_profiles')
-      .select('count')
+      .select('id')
       .limit(1);
 
     const dbStatus = dbError ? 'unhealthy' : 'healthy';

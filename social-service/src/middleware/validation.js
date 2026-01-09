@@ -207,3 +207,54 @@ export const validateReportContent = [
 
   validateRequest,
 ];
+
+/**
+ * Validation rules for stories
+ */
+export const validateCreateStory = [
+  body('content')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 500 })
+    .withMessage('Story content must be between 1 and 500 characters'),
+
+  body('media_url').optional().isURL().withMessage('Media URL must be a valid URL'),
+
+  body('media_type')
+    .optional()
+    .isIn(['image', 'video'])
+    .withMessage('Media type must be image or video'),
+
+  body('duration')
+    .optional()
+    .isInt({ min: 1, max: 168 })
+    .withMessage('Duration must be between 1 and 168 hours'),
+
+  validateRequest,
+];
+
+export const validateViewStory = [
+  param('storyId').isUUID().withMessage('Story ID must be a valid UUID'),
+
+  validateRequest,
+];
+
+/**
+ * Validation rules for shares
+ */
+export const validateSharePost = [
+  param('postId').isUUID().withMessage('Post ID must be a valid UUID'),
+
+  body('content')
+    .optional()
+    .trim()
+    .isLength({ max: 1000 })
+    .withMessage('Share content must be less than 1000 characters'),
+
+  body('visibility')
+    .optional()
+    .isIn(['public', 'friends', 'private'])
+    .withMessage('Visibility must be public, friends, or private'),
+
+  validateRequest,
+];
