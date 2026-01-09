@@ -1,0 +1,57 @@
+import { Router, Request, Response } from 'express';
+import { testConnection } from '@/utils/database';
+import logger from '@/utils/logger';
+
+const router = Router();
+
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const dbHealthy = await testConnection();
+
+    const health = {
+      status: dbHealthy ? 'healthy' : 'degraded',
+      timestamp: new Date().toISOString(),
+      service: 'payment-queue-service',
+      version: process.env.npm_package_version || '1.0.0',
+      uptime: process.uptime(),
+      checks: {
+        database: dbHealthy ? 'up' : 'down',
+        memory: {
+          used: Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100,
+          total: Math.round((process.memoryUsage().heapTotal / 1024 / 1024) * 100) / 100,
+          unit: 'MB',
+        },
+      },
+    };
+
+    const statusCode = dbHealthy ? 200 : 503;
+    res.status(statusCode).json(health);
+  } catch (error: any) {
+    logger.error('Health check failed', { error: error.message });
+    res.status(503).json({
+      status: 'unhealthy',
+      timestamp: new Date().toISOString(),
+      error: error.message,
+    });
+  }
+});
+
+router.get('/ready', async (req: Request, res: Response) => {
+  try {
+    const dbHealthy = await testConnection();
+
+    if (dbHealthy) {
+      res.status(200).json({ status: 'ready' });
+    } else {
+      res.status(503).json({ status: 'not ready' });
+    }
+  } catch (error: any) {
+    res.status(503).json({ status: 'not ready', error: error.message });
+  }
+});
+
+router.get('/live', (req: Request, res: Response) => {
+  res.status(200).json({ status: 'alive' });
+});
+
+export default router;

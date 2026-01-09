@@ -1,0 +1,373 @@
+openapi: 3.0.3
+info:
+  title: Giga Payment Queue Service API
+  description: |
+    Centralized payment queue service handling all payment requests from hotel, taxi, and ecommerce modules.
+    Supports Paystack and Stripe payment processors with retry logic and settlement reporting.
+  version: 1.0.0
+  contact:
+    name: Giga Platform Team
+    email: support@giga.com
+
+servers:
+  - url: https://payment-service.railway.app/api
+    description: Production server
+  - url: http://localhost:3004/api
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: Payments
+    description: Payment processing operations
+  - name: Refunds
+    description: Refund operations
+  - name: Queue
+    description: Queue management and monitoring
+  - name: Health
+    description: Service health checks
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /payments:
+    post:
+      tags:
+        - Payments
+      summary: Create payment request
+      description: Queue a payment request for processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '202':
+          description: Payment request queued successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentQueuedResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /payments/{paymentId}/status:
+    get:
+      tags:
+        - Payments
+      summary: Get payment status
+      description: Retrieve the status of a queued payment
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment status retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatusResponse'
+        '404':
+          description: Payment not found
+
+  /payments/refund:
+    post:
+      tags:
+        - Refunds
+      summary: Request refund
+      description: Queue a refund request for a completed transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '202':
+          description: Refund request queued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundQueuedResponse'
+        '400':
+          description: Invalid request
+        '404':
+          description: Transaction not found
+
+  /payments/queue/stats:
+    get:
+      tags:
+        - Queue
+      summary: Get queue statistics
+      description: Retrieve statistics about the payment processing queue
+      responses:
+        '200':
+          description: Queue statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueStatsResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PaymentRequest:
+      type: object
+      required:
+        - module
+        - amount
+        - currency
+        - userId
+        - branchId
+        - stateId
+        - metadata
+      properties:
+        module:
+          type: string
+          enum: [hotel, taxi, ecommerce]
+          example: hotel
+        amount:
+          type: number
+          format: float
+          minimum: 0.01
+          example: 15000.50
+        currency:
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: NGN
+        userId:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        branchId:
+          type: string
+          example: LA-IKJ
+        stateId:
+          type: string
+          example: LA
+        metadata:
+          type: object
+          required:
+            - moduleTransactionId
+          properties:
+            moduleTransactionId:
+              type: string
+              format: uuid
+            customerEmail:
+              type: string
+              format: email
+            customerPhone:
+              type: string
+            description:
+              type: string
+        paymentMethod:
+          type: string
+          enum: [paystack, stripe]
+          default: paystack
+
+    PaymentQueuedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Payment request queued for processing
+        data:
+          type: object
+          properties:
+            paymentId:
+              type: string
+              format: uuid
+            jobId:
+              type: string
+            status:
+              type: string
+              example: queued
+
+    PaymentStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            paymentId:
+              type: string
+              format: uuid
+            jobId:
+              type: string
+            state:
+              type: string
+              enum: [waiting, active, completed, failed, delayed]
+            progress:
+              type: number
+            result:
+              $ref: '#/components/schemas/PaymentResult'
+            attemptsMade:
+              type: integer
+            timestamp:
+              type: integer
+
+    PaymentResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+        transactionId:
+          type: string
+        paymentReference:
+          type: string
+        status:
+          type: string
+          enum: [pending, processing, completed, failed, refunded]
+        amount:
+          type: number
+        commissionAmount:
+          type: number
+        netAmount:
+          type: number
+        message:
+          type: string
+
+    RefundRequest:
+      type: object
+      required:
+        - transactionId
+        - reason
+      properties:
+        transactionId:
+          type: string
+          example: TXN-1234567890-abcd1234
+        reason:
+          type: string
+          example: Customer cancellation
+        amount:
+          type: number
+          format: float
+          description: Optional partial refund amount
+        userId:
+          type: string
+          format: uuid
+
+    RefundQueuedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            transactionId:
+              type: string
+            jobId:
+              type: string
+            status:
+              type: string
+
+    QueueStatsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            queue:
+              type: string
+            stats:
+              type: object
+              properties:
+                waiting:
+                  type: integer
+                active:
+                  type: integer
+                completed:
+                  type: integer
+                failed:
+                  type: integer
+                delayed:
+                  type: integer
+                total:
+                  type: integer
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        service:
+          type: string
+        version:
+          type: string
+        uptime:
+          type: number
+        checks:
+          type: object
+          properties:
+            database:
+              type: string
+              enum: [up, down]
+            memory:
+              type: object
+              properties:
+                used:
+                  type: number
+                total:
+                  type: number
+                unit:
+                  type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+            statusCode:
+              type: integer
