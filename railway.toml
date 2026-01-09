@@ -1,22 +1,170 @@
 # Railway configuration for Giga Platform
 # https://docs.railway.app/deploy/config-as-code
 
-[build]
+# ============================================
+# API GATEWAY SERVICE
+# ============================================
+[[services]]
+name = "api-gateway"
+source = "api-gateway"
+
+[services.build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
-[deploy]
+[services.deploy]
 numReplicas = 1
 healthcheckPath = "/health"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
 
-# Service-specific configurations can be set via environment variables
-# or in the Railway dashboard
+# ============================================
+# SOCIAL SERVICE
+# ============================================
+[[services]]
+name = "social-service"
+source = "social-service"
 
-[env]
-# These will be set in Railway dashboard with actual secrets
-# SUPABASE_URL = ""
-# SUPABASE_ANON_KEY = ""
-# SUPABASE_SERVICE_ROLE_KEY = ""
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# DELIVERY SERVICE
+# ============================================
+[[services]]
+name = "delivery-service"
+source = "delivery-service"
+
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# PAYMENT QUEUE SERVICE
+# ============================================
+[[services]]
+name = "payment-queue-service"
+source = "payment-queue-service"
+
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# TAXI REALTIME SERVICE
+# ============================================
+[[services]]
+name = "taxi-realtime-service"
+source = "taxi-realtime-service"
+
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# ADMIN SERVICE
+# ============================================
+[[services]]
+name = "admin-service"
+source = "admin-service"
+
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# NOTIFICATIONS SERVICE
+# ============================================
+[[services]]
+name = "notifications-service"
+source = "notifications-service"
+
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# SEARCH SERVICE
+# ============================================
+[[services]]
+name = "search-service"
+source = "search-service"
+
+[services.build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[services.deploy]
+numReplicas = 1
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# ============================================
+# SHARED ENVIRONMENT VARIABLES
+# Set these in Railway dashboard for each service
+# ============================================
+# SUPABASE_URL
+# SUPABASE_SERVICE_ROLE_KEY
+# REDIS_URL
+# JWT_SECRET
+# 
+# Payment Service specific:
+# PAYSTACK_SECRET_KEY
+# PAYSTACK_PUBLIC_KEY
+# STRIPE_SECRET_KEY
+# STRIPE_PUBLIC_KEY
+#
+# Notifications Service specific:
+# SMTP_HOST
+# SMTP_PORT
+# SMTP_USER
+# SMTP_PASS
+# TWILIO_ACCOUNT_SID
+# TWILIO_AUTH_TOKEN
+# TWILIO_PHONE_NUMBER
