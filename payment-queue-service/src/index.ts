@@ -7,12 +7,13 @@ import helmet from 'helmet';
 import { config } from './config/index';
 import { errorHandler } from './middleware/errorHandler';
 import healthRoutes from './routes/health';
-import paymentRoutes from './routes/payments';
+import metricsRoutes from './routes/metrics';
+import v1Routes from './routes/v1';
 import { testConnection } from './utils/database';
 import logger from './utils/logger';
 
-// Import queues to initialize workers
-import './queues/paymentQueue';
+// Import workers to initialize all queues
+import './queues/workers';
 
 const app: Application = express();
 
@@ -52,7 +53,8 @@ app.use('/api', limiter);
 
 // Routes
 app.use('/health', healthRoutes);
-app.use('/api/payments', paymentRoutes);
+app.use('/metrics', metricsRoutes);
+app.use('/api/v1', v1Routes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -61,6 +63,11 @@ app.get('/', (req, res) => {
     version: '1.0.0',
     status: 'running',
     timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/health',
+      metrics: '/metrics',
+      api: '/api/v1',
+    },
   });
 });
 
@@ -104,7 +111,24 @@ const startServer = async () => {
 const gracefulShutdown = async (signal: string) => {
   logger.info(`${signal} received, starting graceful shutdown`);
 
-  // Close queues (handled in paymentQueue.ts)
+  // Close all workers
+  const { closeAllWorkers } = await import('./queues/workers');
+  await closeAllWorkers();
+
+  // Close all queues
+  const { closePaymentQueue } = await import('./queues/payment.queue');
+  const { closeWebhookQueue } = await import('./queues/webhook.queue');
+  const { closeRefundQueue } = await import('./queues/refund.queue');
+  const { closeSettlementQueue } = await import('./queues/settlement.queue');
+  const { closeNotificationQueue } = await import('./queues/notification.queue');
+
+  await Promise.all([
+    closePaymentQueue(),
+    closeWebhookQueue(),
+    closeRefundQueue(),
+    closeSettlementQueue(),
+    closeNotificationQueue(),
+  ]);
 
   process.exit(0);
 };
