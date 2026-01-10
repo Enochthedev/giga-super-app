@@ -1,0 +1,531 @@
+openapi: 3.0.3
+info:
+  title: Giga Payment Queue Service API
+  description: |
+    Centralized payment queue service for Giga platform.
+    Handles all payment requests using BullMQ with support for Paystack and Stripe.
+  version: 1.0.0
+  contact:
+    name: Giga Platform Team
+    email: support@giga.ng
+
+servers:
+  - url: http://localhost:3004
+    description: Local development
+  - url: https://payment-queue.giga.ng
+    description: Production
+
+tags:
+  - name: Payments
+    description: Payment request and status operations
+  - name: Webhooks
+    description: Payment provider webhook handlers
+  - name: Admin
+    description: Admin reporting endpoints
+  - name: Health
+    description: Health check and metrics
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags: [Health]
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Service is degraded or unhealthy
+
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      tags: [Health]
+      responses:
+        '200':
+          description: Metrics in Prometheus format
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /api/v1/payments/request:
+    post:
+      summary: Create payment request
+      description: Create a new payment request and receive checkout URL
+      tags: [Payments]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '201':
+          description: Payment request created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+        '400':
+          description: Invalid request data
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /api/v1/payments/{paymentId}/status:
+    get:
+      summary: Get payment status
+      description: Retrieve the current status of a payment
+      tags: [Payments]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Payment status retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentStatusResponse'
+        '404':
+          description: Payment not found
+        '401':
+          description: Unauthorized
+
+  /api/v1/payments/{paymentId}/refund:
+    post:
+      summary: Request payment refund
+      description: Request a full or partial refund for a completed payment
+      tags: [Payments]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequest'
+      responses:
+        '202':
+          description: Refund request accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefundResponse'
+        '400':
+          description: Invalid refund request
+        '404':
+          description: Payment not found
+
+  /api/v1/webhooks/paystack:
+    post:
+      summary: Paystack webhook handler
+      description: Handle incoming webhooks from Paystack with signature verification
+      tags: [Webhooks]
+      parameters:
+        - name: x-paystack-signature
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                event:
+                  type: string
+                data:
+                  type: object
+      responses:
+        '200':
+          description: Webhook received and queued
+        '401':
+          description: Invalid signature
+
+  /api/v1/admin/payments/branch:
+    get:
+      summary: Branch-level payment report
+      description: Get payment reporting at branch level (requires branch_admin or higher)
+      tags: [Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: branchId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: module
+          in: query
+          schema:
+            type: string
+            enum: [hotel, taxi, ecommerce]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Branch report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminReportResponse'
+        '403':
+          description: Insufficient permissions
+
+  /api/v1/admin/payments/state:
+    get:
+      summary: State-level payment report
+      description: Get payment reporting at state level (requires state_admin or higher)
+      tags: [Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: stateId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: module
+          in: query
+          schema:
+            type: string
+            enum: [hotel, taxi, ecommerce]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: State report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminReportResponse'
+        '403':
+          description: Insufficient permissions
+
+  /api/v1/admin/payments/national:
+    get:
+      summary: National-level payment report
+      description: Get payment reporting at national level (requires national_admin or higher)
+      tags: [Admin]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: module
+          in: query
+          schema:
+            type: string
+            enum: [hotel, taxi, ecommerce]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: National report
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminReportResponse'
+        '403':
+          description: Insufficient permissions
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    PaymentRequest:
+      type: object
+      required:
+        - module
+        - amount
+        - currency
+        - userId
+        - branchId
+        - stateId
+        - metadata
+      properties:
+        module:
+          type: string
+          enum: [hotel, taxi, ecommerce]
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+        currency:
+          type: string
+          enum: [NGN, USD, EUR, GBP]
+        userId:
+          type: string
+          format: uuid
+        branchId:
+          type: string
+          format: uuid
+        stateId:
+          type: string
+          format: uuid
+        metadata:
+          type: object
+          required:
+            - moduleTransactionId
+          properties:
+            moduleTransactionId:
+              type: string
+            customerEmail:
+              type: string
+              format: email
+            customerPhone:
+              type: string
+            description:
+              type: string
+        paymentMethod:
+          type: string
+          enum: [paystack, stripe]
+          default: paystack
+
+    PaymentResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            paymentId:
+              type: string
+              format: uuid
+            checkoutUrl:
+              type: string
+              format: uri
+            amount:
+              type: number
+            currency:
+              type: string
+            commissionAmount:
+              type: number
+            netAmount:
+              type: number
+            status:
+              type: string
+            expiresAt:
+              type: string
+              format: date-time
+
+    PaymentStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            paymentId:
+              type: string
+              format: uuid
+            status:
+              type: string
+            amount:
+              type: number
+            currency:
+              type: string
+            module:
+              type: string
+            commissionAmount:
+              type: number
+            netAmount:
+              type: number
+            paymentMethod:
+              type: string
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    RefundRequest:
+      type: object
+      required:
+        - reason
+      properties:
+        reason:
+          type: string
+          minLength: 10
+        amount:
+          type: number
+          format: double
+          minimum: 0.01
+
+    RefundResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            refundId:
+              type: string
+              format: uuid
+            transactionId:
+              type: string
+              format: uuid
+            amount:
+              type: number
+            reason:
+              type: string
+            status:
+              type: string
+            message:
+              type: string
+
+    AdminReportResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          type: object
+          properties:
+            summary:
+              type: object
+              properties:
+                totalTransactions:
+                  type: integer
+                totalAmount:
+                  type: number
+                totalCommission:
+                  type: number
+                netAmount:
+                  type: number
+                byModule:
+                  type: object
+            transactions:
+              type: array
+              items:
+                type: object
+            pagination:
+              type: object
+              properties:
+                page:
+                  type: integer
+                limit:
+                  type: integer
+                total:
+                  type: integer
+                totalPages:
+                  type: integer
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+        uptime:
+          type: number
+        service:
+          type: string
+        version:
+          type: string
+        checks:
+          type: object
+          properties:
+            database:
+              type: string
+            queues:
+              type: string
+            memory:
+              type: object
+        queues:
+          type: object
