@@ -1,0 +1,15 @@
+{
+  "workspace_id": "19dd9cc4-a6f7-4755-8b82-e12f70ef776e",
+  "collection_id": "22671702-c5dd7ad1-bc70-4144-96a6-d98831c9fff8",
+  "environment_ids": {
+    "production": "22671702-bc5791c8-6063-48b5-b9af-be609a6ad963",
+    "local": "22671702-ecf06e92-d425-4bba-acdc-5a461dd51714"
+  },
+  "last_run": null,
+  "auto_run_enabled": true,
+  "collection_name": "Giga Platform API",
+  "environments": {
+    "production": "Giga - Production",
+    "local": "Giga - Local"
+  }
+}

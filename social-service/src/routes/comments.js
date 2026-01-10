@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { cacheMiddleware, clearCache } from '../middleware/cache.js';
 import { ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { validateCreateComment, validateUpdateComment } from '../middleware/validation.js';
@@ -19,7 +20,7 @@ const router = express.Router();
  */
 router.post('/', validateCreateComment, async (req, res) => {
   const { post_id, content, parent_comment_id } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if post exists and is accessible
@@ -166,7 +167,7 @@ router.post('/', validateCreateComment, async (req, res) => {
 router.get('/post/:postId', cacheMiddleware(180), async (req, res) => {
   const { postId } = req.params;
   const { page = 1, limit = 20, sort = 'newest' } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);
@@ -294,7 +295,7 @@ router.get('/post/:postId', cacheMiddleware(180), async (req, res) => {
 router.get('/:commentId/replies', cacheMiddleware(180), async (req, res) => {
   const { commentId } = req.params;
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);
@@ -399,7 +400,7 @@ router.get('/:commentId/replies', cacheMiddleware(180), async (req, res) => {
 router.put('/:commentId', validateUpdateComment, async (req, res) => {
   const { commentId } = req.params;
   const { content } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the comment
@@ -477,7 +478,7 @@ router.put('/:commentId', validateUpdateComment, async (req, res) => {
  */
 router.delete('/:commentId', async (req, res) => {
   const { commentId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the comment or is admin

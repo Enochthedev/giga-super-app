@@ -1,4 +1,5 @@
 import request from 'supertest';
+
 import app from '../index.js';
 import { optionalAuth, requireRole } from '../middleware/auth.js';
 

@@ -1,12 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
-import logger from '@/utils/logger';
-import supabase from '@/utils/database';
+
 import {
   SettlementReport,
   ModuleSettlement,
   StateSettlement,
   BranchSettlement,
 } from '@/types';
+import supabase from '@/utils/database';
+import logger from '@/utils/logger';
 
 export const generateSettlementReport = async (period: {
   start: Date;

@@ -1,10 +1,10 @@
-import express from 'express';
 import { Queue, Worker, Job } from 'bullmq';
+import dotenv from 'dotenv';
+import express from 'express';
 import IORedis from 'ioredis';
 import nodemailer from 'nodemailer';
 import { Twilio } from 'twilio';
 import winston from 'winston';
-import dotenv from 'dotenv';
 
 dotenv.config();
 

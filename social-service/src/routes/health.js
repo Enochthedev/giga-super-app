@@ -1,4 +1,5 @@
 import express from 'express';
+
 import { getCacheStats } from '../middleware/cache.js';
 import logger from '../utils/logger.js';
 
@@ -12,7 +13,7 @@ router.get('/', async (req, res) => {
   const startTime = Date.now();
 
   try {
-    const supabase = req.app.locals.supabase;
+    const {supabase} = req.app.locals;
 
     // Test database connection
     const { data: dbTest, error: dbError } = await supabase
@@ -102,7 +103,7 @@ router.get('/', async (req, res) => {
  */
 router.get('/ready', async (req, res) => {
   try {
-    const supabase = req.app.locals.supabase;
+    const {supabase} = req.app.locals;
 
     // Test database connection with a simple query
     const { error } = await supabase.from('user_profiles').select('id').limit(1);

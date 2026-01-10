@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { clearCache } from '../middleware/cache.js';
 import { NotFoundError } from '../middleware/errorHandler.js';
 import { validateLikeComment, validateLikePost } from '../middleware/validation.js';
@@ -14,7 +15,7 @@ const router = express.Router();
  */
 router.post('/posts/:postId', validateLikePost, async (req, res) => {
   const { postId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if post exists and is accessible
@@ -155,7 +156,7 @@ router.post('/posts/:postId', validateLikePost, async (req, res) => {
  */
 router.post('/comments/:commentId', validateLikeComment, async (req, res) => {
   const { commentId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if comment exists
@@ -292,7 +293,7 @@ router.post('/comments/:commentId', validateLikeComment, async (req, res) => {
 router.get('/posts/:postId/users', validateLikePost, async (req, res) => {
   const { postId } = req.params;
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if post exists and is accessible
@@ -391,7 +392,7 @@ router.get('/posts/:postId/users', validateLikePost, async (req, res) => {
 router.get('/comments/:commentId/users', validateLikeComment, async (req, res) => {
   const { commentId } = req.params;
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if comment exists

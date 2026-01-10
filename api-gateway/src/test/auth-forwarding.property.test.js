@@ -9,6 +9,7 @@
  */
 
 import fc from 'fast-check';
+
 import { requireRole } from '../middleware/auth.js';
 
 describe('Property-Based Tests: Authentication Context Forwarding', () => {
@@ -84,8 +85,8 @@ describe('Property-Based Tests: Authentication Context Forwarding', () => {
             // This would be set by the actual middleware
             const mockUser = {
               id: userId,
-              email: email,
-              role: role,
+              email,
+              role,
               roles: additionalRoles,
               claims: {},
               raw: {},

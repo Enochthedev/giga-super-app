@@ -5,12 +5,12 @@ module.exports = {
     es2022: true,
     jest: true,
   },
-  extends: ['eslint:recommended', 'prettier'],
+  extends: ['eslint:recommended'],
   parserOptions: {
     ecmaVersion: 2022,
     sourceType: 'module',
   },
-  plugins: ['security', 'import', 'node', 'promise'],
+  plugins: ['security', 'import', 'promise'],
   rules: {
     // Security rules
     'security/detect-object-injection': 'warn',
@@ -54,7 +54,8 @@ module.exports = {
     'promise/valid-params': 'warn',
 
     // General code quality rules
-    'no-console': 'warn',
+    // Allow console in services that use structured logging
+    'no-console': ['warn', { allow: ['warn', 'error'] }],
     'no-debugger': 'error',
     'no-alert': 'error',
     'no-var': 'error',
@@ -85,23 +86,34 @@ module.exports = {
   },
   overrides: [
     {
-      // TypeScript files
-      files: ['**/*.ts'],
+      // TypeScript files in services - each service has its own tsconfig
+      files: [
+        'admin-service/src/**/*.ts',
+        'search-service/src/**/*.ts',
+        'payment-queue-service/src/**/*.ts',
+        'social-service/src/**/*.ts',
+        'api-gateway/src/**/*.ts',
+        'delivery-service/src/**/*.ts',
+        'notifications-service/src/**/*.ts',
+        'taxi-realtime-service/src/**/*.ts',
+        'shared/**/*.ts',
+      ],
       parser: '@typescript-eslint/parser',
       parserOptions: {
         ecmaVersion: 2022,
         sourceType: 'module',
-        project: ['./tsconfig.json', './tests/tsconfig.json'],
-        tsconfigRootDir: __dirname,
+        // Use each service's own tsconfig
+        project: null,
       },
       plugins: ['@typescript-eslint'],
-      extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+      extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
       rules: {
         '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/no-explicit-any': 'warn',
-        '@typescript-eslint/prefer-nullish-coalescing': 'error',
-        '@typescript-eslint/prefer-optional-chain': 'error',
+        // Disable rules that require type information when project is null
+        '@typescript-eslint/prefer-nullish-coalescing': 'off',
+        '@typescript-eslint/prefer-optional-chain': 'off',
       },
     },
     {
@@ -131,6 +143,10 @@ module.exports = {
     'coverage/',
     '*.min.js',
     'supabase/migrations/',
+    'supabase/functions/',
+    'supabase/types.ts',
     'docs/',
+    '**/*.d.ts',
+    'tests/',
   ],
 };

@@ -74,7 +74,7 @@ serve(async req => {
       })
       .eq('id', params.bookingId);
     if (updateError) {
-      throw new Error(`Failed to update booking: ${  updateError.message}`);
+      throw new Error(`Failed to update booking: ${updateError.message}`);
     }
     // Add status history
     await supabaseClient.from('hotel_booking_status_history').insert({

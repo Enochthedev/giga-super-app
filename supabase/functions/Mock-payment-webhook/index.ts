@@ -60,7 +60,7 @@ async function handleMockSuccess(supabase, params) {
     .eq('transaction_id', transaction_id)
     .single();
   if (paymentError || !payment) {
-    throw new Error(`Payment record not found: ${  transaction_id}`);
+    throw new Error(`Payment record not found: ${transaction_id}`);
   }
   console.log('Processing mock success for:', transaction_id, 'Amount:', payment.amount);
   // Update payment record
@@ -69,7 +69,7 @@ async function handleMockSuccess(supabase, params) {
     .update({
       payment_status: 'completed',
       paid_at: new Date().toISOString(),
-      provider_transaction_id: `MOCK_${  Date.now()}`,
+      provider_transaction_id: `MOCK_${Date.now()}`,
       card_last4: card_last4 || '4242',
       card_brand: card_brand || 'Visa',
       card_type: 'debit',
@@ -191,7 +191,7 @@ async function handleMockFailure(supabase, params) {
     .eq('transaction_id', transaction_id)
     .single();
   if (!payment) {
-    throw new Error(`Payment record not found: ${  transaction_id}`);
+    throw new Error(`Payment record not found: ${transaction_id}`);
   }
   await supabase
     .from('payments')

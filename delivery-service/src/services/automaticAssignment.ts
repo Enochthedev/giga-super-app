@@ -1,7 +1,9 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+
+import { DeliveryAssignmentService } from './deliveryAssignment';
+
 import { database } from '@/utils/database';
 import logger from '@/utils/logger';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { DeliveryAssignmentService } from './deliveryAssignment';
 
 export interface AutoAssignmentRule {
   id: string;

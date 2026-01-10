@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { cacheMiddleware, clearCache } from '../middleware/cache.js';
 import { ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { validateCreateStory, validateViewStory } from '../middleware/validation.js';
@@ -19,7 +20,7 @@ const router = express.Router();
  */
 router.post('/', validateCreateStory, async (req, res) => {
   const { content, media_url, media_type = 'image', duration = 24 } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     if (!content && !media_url) {
@@ -101,7 +102,7 @@ router.post('/', validateCreateStory, async (req, res) => {
  */
 router.get('/', cacheMiddleware(120), async (req, res) => {
   const { page = 1, limit = 20, user_id } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);
@@ -193,7 +194,7 @@ router.get('/', cacheMiddleware(120), async (req, res) => {
  */
 router.post('/:storyId/view', validateViewStory, async (req, res) => {
   const { storyId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if story exists and is active
@@ -311,7 +312,7 @@ router.post('/:storyId/view', validateViewStory, async (req, res) => {
 router.get('/:storyId/viewers', async (req, res) => {
   const { storyId } = req.params;
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the story
@@ -399,7 +400,7 @@ router.get('/:storyId/viewers', async (req, res) => {
  */
 router.delete('/:storyId', async (req, res) => {
   const { storyId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the story

@@ -57,7 +57,7 @@ serve(async req => {
     );
     if (txError) {
       console.error('Transaction error:', txError);
-      throw new Error(`Refund processing failed: ${  txError.message}`);
+      throw new Error(`Refund processing failed: ${txError.message}`);
     }
     // If using mock provider, no actual refund to process
     if (result.payment_provider === 'mock') {
@@ -85,7 +85,7 @@ serve(async req => {
         result.refund_amount
       );
       if (!refundResult.success) {
-        throw new Error(`Paystack refund failed: ${  refundResult.message}`);
+        throw new Error(`Paystack refund failed: ${refundResult.message}`);
       }
     }
     console.log('✅ Refund completed:', result.refund_amount);

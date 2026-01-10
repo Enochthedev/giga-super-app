@@ -1,20 +1,21 @@
-import express, { Application } from 'express';
 import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+
 import { createAdapter } from '@socket.io/redis-adapter';
-import Redis from 'ioredis';
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
-import jwt from 'jsonwebtoken';
 import { createClient } from '@supabase/supabase-js';
+import compression from 'compression';
+import cors from 'cors';
 import dotenv from 'dotenv';
+import express, { Application } from 'express';
+import helmet from 'helmet';
+import Redis from 'ioredis';
+import jwt from 'jsonwebtoken';
+import { Server, Socket } from 'socket.io';
 import winston from 'winston';
 
 dotenv.config();
 
 // Configuration
-const PORT = parseInt(process.env.PORT || '3005', 10);
+const PORT = parseInt(process.env.PORT ?? process.env.TAXI_REALTIME_SERVICE_PORT ?? '3006', 10);
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -30,10 +31,7 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-      ),
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
     }),
   ],
 });
@@ -82,7 +80,8 @@ const driverLocations = new Map<string, { lat: number; lng: number; timestamp: n
 // Socket.IO authentication middleware
 io.use(async (socket: Socket, next) => {
   try {
-    const token = socket.handshake.auth.token || socket.handshake.headers.authorization?.split(' ')[1];
+    const token =
+      socket.handshake.auth.token || socket.handshake.headers.authorization?.split(' ')[1];
 
     if (!token) {
       return next(new Error('Authentication required'));
@@ -113,7 +112,7 @@ const RATE_LIMIT_MAX = 100;
 const checkRateLimit = (socketId: string): boolean => {
   const now = Date.now();
   const requests = rateLimitMap.get(socketId) || [];
-  const recentRequests = requests.filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW);
+  const recentRequests = requests.filter(timestamp => now - timestamp < RATE_LIMIT_WINDOW);
 
   if (recentRequests.length >= RATE_LIMIT_MAX) {
     return false;
@@ -126,8 +125,8 @@ const checkRateLimit = (socketId: string): boolean => {
 
 // Socket.IO connection handler
 io.on('connection', (socket: Socket) => {
-  const userId = socket.data.userId;
-  const role = socket.data.role;
+  const { userId } = socket.data;
+  const { role } = socket.data;
 
   logger.info('Client connected', { socketId: socket.id, userId, role });
 
@@ -185,89 +184,100 @@ io.on('connection', (socket: Socket) => {
   });
 
   // Rider requests nearby drivers
-  socket.on('rider:request:nearby-drivers', async (data: { lat: number; lng: number; radius: number }) => {
-    if (role !== 'rider') {
-      socket.emit('error', { message: 'Only riders can request nearby drivers' });
-      return;
-    }
-
-    try {
-      // Calculate nearby drivers (simplified - in production use PostGIS)
-      const nearbyDrivers = Array.from(driverLocations.entries())
-        .filter(([driverId, location]) => {
-          const distance = calculateDistance(
-            data.lat,
-            data.lng,
-            location.lat,
-            location.lng
-          );
-          return distance <= data.radius && Date.now() - location.timestamp < 60000; // Active in last minute
-        })
-        .map(([driverId, location]) => ({
-          driverId,
-          lat: location.lat,
-          lng: location.lng,
-          distance: calculateDistance(data.lat, data.lng, location.lat, location.lng),
-        }))
-        .sort((a, b) => a.distance - b.distance)
-        .slice(0, 10); // Return top 10 nearest
-
-      socket.emit('rider:nearby-drivers', { drivers: nearbyDrivers });
-
-      logger.info('Nearby drivers sent', { riderId: userId, count: nearbyDrivers.length });
-    } catch (error: any) {
-      logger.error('Failed to find nearby drivers', { error: error.message });
-      socket.emit('error', { message: 'Failed to find nearby drivers' });
-    }
-  });
-
-  // Trip request
-  socket.on('trip:request', async (data: { driverId: string; pickupLat: number; pickupLng: number; dropoffLat: number; dropoffLng: number }) => {
-    if (role !== 'rider') {
-      socket.emit('error', { message: 'Only riders can request trips' });
-      return;
-    }
-
-    try {
-      // Create trip in database
-      const { data: trip, error } = await supabase
-        .from('taxi_trips')
-        .insert({
-          rider_id: userId,
-          driver_id: data.driverId,
-          pickup_lat: data.pickupLat,
-          pickup_lng: data.pickupLng,
-          dropoff_lat: data.dropoffLat,
-          dropoff_lng: data.dropoffLng,
-          status: 'requested',
-          created_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      // Notify driver
-      const driverSocketId = activeDrivers.get(data.driverId);
-      if (driverSocketId) {
-        io.to(driverSocketId).emit('trip:new-request', {
-          tripId: trip.id,
-          riderId: userId,
-          pickupLat: data.pickupLat,
-          pickupLng: data.pickupLng,
-          dropoffLat: data.dropoffLat,
-          dropoffLng: data.dropoffLng,
-        });
+  socket.on(
+    'rider:request:nearby-drivers',
+    async (data: { lat: number; lng: number; radius: number }) => {
+      if (role !== 'rider') {
+        socket.emit('error', { message: 'Only riders can request nearby drivers' });
+        return;
       }
 
-      socket.emit('trip:request:sent', { tripId: trip.id });
+      try {
+        // Calculate nearby drivers (simplified - in production use PostGIS)
+        const nearbyDrivers = Array.from(driverLocations.entries())
+          .filter(([driverId, location]) => {
+            const distance = calculateDistance(data.lat, data.lng, location.lat, location.lng);
+            return distance <= data.radius && Date.now() - location.timestamp < 60000; // Active in last minute
+          })
+          .map(([driverId, location]) => ({
+            driverId,
+            lat: location.lat,
+            lng: location.lng,
+            distance: calculateDistance(data.lat, data.lng, location.lat, location.lng),
+          }))
+          .sort((a, b) => a.distance - b.distance)
+          .slice(0, 10); // Return top 10 nearest
 
-      logger.info('Trip requested', { tripId: trip.id, riderId: userId, driverId: data.driverId });
-    } catch (error: any) {
-      logger.error('Failed to create trip request', { error: error.message });
-      socket.emit('error', { message: 'Failed to create trip request' });
+        socket.emit('rider:nearby-drivers', { drivers: nearbyDrivers });
+
+        logger.info('Nearby drivers sent', { riderId: userId, count: nearbyDrivers.length });
+      } catch (error: any) {
+        logger.error('Failed to find nearby drivers', { error: error.message });
+        socket.emit('error', { message: 'Failed to find nearby drivers' });
+      }
     }
-  });
+  );
+
+  // Trip request
+  socket.on(
+    'trip:request',
+    async (data: {
+      driverId: string;
+      pickupLat: number;
+      pickupLng: number;
+      dropoffLat: number;
+      dropoffLng: number;
+    }) => {
+      if (role !== 'rider') {
+        socket.emit('error', { message: 'Only riders can request trips' });
+        return;
+      }
+
+      try {
+        // Create trip in database
+        const { data: trip, error } = await supabase
+          .from('taxi_trips')
+          .insert({
+            rider_id: userId,
+            driver_id: data.driverId,
+            pickup_lat: data.pickupLat,
+            pickup_lng: data.pickupLng,
+            dropoff_lat: data.dropoffLat,
+            dropoff_lng: data.dropoffLng,
+            status: 'requested',
+            created_at: new Date().toISOString(),
+          })
+          .select()
+          .single();
+
+        if (error) throw error;
+
+        // Notify driver
+        const driverSocketId = activeDrivers.get(data.driverId);
+        if (driverSocketId) {
+          io.to(driverSocketId).emit('trip:new-request', {
+            tripId: trip.id,
+            riderId: userId,
+            pickupLat: data.pickupLat,
+            pickupLng: data.pickupLng,
+            dropoffLat: data.dropoffLat,
+            dropoffLng: data.dropoffLng,
+          });
+        }
+
+        socket.emit('trip:request:sent', { tripId: trip.id });
+
+        logger.info('Trip requested', {
+          tripId: trip.id,
+          riderId: userId,
+          driverId: data.driverId,
+        });
+      } catch (error: any) {
+        logger.error('Failed to create trip request', { error: error.message });
+        socket.emit('error', { message: 'Failed to create trip request' });
+      }
+    }
+  );
 
   // Trip accept
   socket.on('trip:accept', async (data: { tripId: string }) => {
@@ -378,8 +388,7 @@ function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: numbe
   const dLng = toRad(lng2 - lng1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
@@ -399,12 +408,12 @@ httpServer.listen(PORT, () => {
 // Graceful shutdown
 const gracefulShutdown = async () => {
   logger.info('Starting graceful shutdown');
-  
+
   io.close();
   httpServer.close();
   await pubClient.quit();
   await subClient.quit();
-  
+
   process.exit(0);
 };
 

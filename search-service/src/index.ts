@@ -1,17 +1,16 @@
-import express, { Application, Request, Response } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
-import rateLimit from 'express-rate-limit';
 import { createClient } from '@supabase/supabase-js';
-import Redis from 'ioredis';
-import jwt from 'jsonwebtoken';
-import winston from 'winston';
+import compression from 'compression';
+import cors from 'cors';
 import dotenv from 'dotenv';
+import express, { Application, Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import Redis from 'ioredis';
+import winston from 'winston';
 
 dotenv.config();
 
-const PORT = parseInt(process.env.PORT || '3008', 10);
+const PORT = parseInt(process.env.PORT ?? process.env.SEARCH_SERVICE_PORT ?? '3007', 10);
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
@@ -178,7 +177,12 @@ app.get('/api/search/hotels', async (req: Request, res: Response) => {
     res.json({
       success: true,
       data,
-      pagination: { page: +page, limit: +limit, total: count, pages: Math.ceil((count || 0) / +limit) },
+      pagination: {
+        page: +page,
+        limit: +limit,
+        total: count,
+        pages: Math.ceil((count || 0) / +limit),
+      },
     });
   } catch (error: any) {
     logger.error('Hotel search failed', { error: error.message });
@@ -207,7 +211,12 @@ app.get('/api/search/products', async (req: Request, res: Response) => {
     res.json({
       success: true,
       data,
-      pagination: { page: +page, limit: +limit, total: count, pages: Math.ceil((count || 0) / +limit) },
+      pagination: {
+        page: +page,
+        limit: +limit,
+        total: count,
+        pages: Math.ceil((count || 0) / +limit),
+      },
     });
   } catch (error: any) {
     logger.error('Product search failed', { error: error.message });
@@ -220,7 +229,10 @@ app.get('/api/search/drivers', async (req: Request, res: Response) => {
   try {
     const { q, lat, lng, radius = 10, page = 1, limit = 20 } = req.query as any;
 
-    let query = supabase.from('taxi_drivers').select('*', { count: 'exact' }).eq('is_available', true);
+    let query = supabase
+      .from('taxi_drivers')
+      .select('*', { count: 'exact' })
+      .eq('is_available', true);
 
     if (q) query = query.or(`name.ilike.%${q}%,vehicle_type.ilike.%${q}%`);
 
@@ -235,7 +247,12 @@ app.get('/api/search/drivers', async (req: Request, res: Response) => {
     res.json({
       success: true,
       data,
-      pagination: { page: +page, limit: +limit, total: count, pages: Math.ceil((count || 0) / +limit) },
+      pagination: {
+        page: +page,
+        limit: +limit,
+        total: count,
+        pages: Math.ceil((count || 0) / +limit),
+      },
     });
   } catch (error: any) {
     logger.error('Driver search failed', { error: error.message });

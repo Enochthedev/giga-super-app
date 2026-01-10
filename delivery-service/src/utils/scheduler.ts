@@ -1,7 +1,8 @@
+import { createClient } from '@supabase/supabase-js';
+
 import config from '@/config';
 import { webSocketService } from '@/services/websocket';
 import logger from '@/utils/logger';
-import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
 const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey);

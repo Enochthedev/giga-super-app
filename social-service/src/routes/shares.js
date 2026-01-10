@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { clearCache } from '../middleware/cache.js';
 import { ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import { validateSharePost } from '../middleware/validation.js';
@@ -15,7 +16,7 @@ const router = express.Router();
 router.post('/posts/:postId', validateSharePost, async (req, res) => {
   const { postId } = req.params;
   const { content, visibility = 'public' } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if post exists and is accessible
@@ -164,7 +165,7 @@ router.post('/posts/:postId', validateSharePost, async (req, res) => {
 router.get('/posts/:postId/users', async (req, res) => {
   const { postId } = req.params;
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if post exists and is accessible
@@ -266,7 +267,7 @@ router.get('/posts/:postId/users', async (req, res) => {
  */
 router.delete('/posts/:sharedPostId', async (req, res) => {
   const { sharedPostId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the shared post

@@ -1,9 +1,11 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
+
 import { ERROR_CODES, LocationCoordinates, RouteWaypoint } from '../types';
 import { cache } from '../utils/cache';
 import { ServiceError } from '../utils/errors';
 import { logger } from '../utils/logger';
+
 import { googleMapsService } from './googleMaps';
 
 export interface TimeWindow {

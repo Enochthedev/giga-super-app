@@ -64,7 +64,7 @@ serve(async req => {
     );
     if (txError) {
       console.error('Transaction error:', txError);
-      throw new Error(`Escrow release failed: ${  txError.message}`);
+      throw new Error(`Escrow release failed: ${txError.message}`);
     }
     console.log('✅ Escrow released:', result);
     return new Response(

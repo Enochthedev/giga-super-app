@@ -47,7 +47,7 @@ serve(async req => {
       }
     );
     if (balanceError) {
-      throw new Error(`Failed to fetch balance: ${  balanceError.message}`);
+      throw new Error(`Failed to fetch balance: ${balanceError.message}`);
     }
     // Get dashboard stats
     const { data: stats, error: statsError } = await supabaseClient.rpc(
