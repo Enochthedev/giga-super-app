@@ -157,6 +157,13 @@ app.use((req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
   next();
 });
 
+// Import SaaS Builder middleware and routes
+import { tenantAuthMiddleware } from './middleware/tenant-auth';
+import tenantPostsRouter from './routes/tenant-posts';
+
+// Apply tenant authentication middleware to tenant routes
+app.use('/api/v1/tenant', tenantAuthMiddleware, tenantPostsRouter);
+
 // Health check routes
 app.get('/health', (_req: Request, res: Response) => {
   res.json({
@@ -198,7 +205,7 @@ app.get('/api/v1/posts', async (req: AuthenticatedRequest, res: Response) => {
     const { limit = '20', offset = '0' } = req.query;
 
     const { data: posts, error } = await supabase
-      .from('social_posts')
+      .from('social_posts_with_profiles')
       .select(
         `
         id,
@@ -207,7 +214,9 @@ app.get('/api/v1/posts', async (req: AuthenticatedRequest, res: Response) => {
         visibility,
         created_at,
         user_id,
-        user_profiles(first_name, last_name, avatar_url)
+        first_name,
+        last_name,
+        avatar_url
       `
       )
       .is('deleted_at', null)
@@ -231,6 +240,8 @@ app.get('/api/v1/posts', async (req: AuthenticatedRequest, res: Response) => {
   } catch (error) {
     logger.error('Get posts error', {
       error: error instanceof Error ? error.message : 'Unknown error',
+      errorDetails: error,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     res.status(500).json({
       success: false,
@@ -268,18 +279,21 @@ app.post('/api/v1/posts', async (req: AuthenticatedRequest, res: Response) => {
       return;
     }
 
-    const { data: post, error } = await supabase
-      .from('social_posts')
-      .insert({
-        user_id: req.user.id,
-        content,
-        media_urls: media_urls ?? [],
-        visibility,
-      })
-      .select()
-      .single();
+    // Use the database function to create the post
+    const { data: posts, error } = await supabase.rpc('create_social_post', {
+      p_user_id: req.user.id,
+      p_content: content,
+      p_media_urls: media_urls ?? [],
+      p_visibility: visibility,
+      p_tenant_id: null, // For now, we'll set tenant_id to null
+    });
 
     if (error) throw error;
+
+    const post = posts?.[0];
+    if (!post) {
+      throw new Error('Failed to create post');
+    }
 
     res.status(201).json({
       success: true,
@@ -292,6 +306,8 @@ app.post('/api/v1/posts', async (req: AuthenticatedRequest, res: Response) => {
   } catch (error) {
     logger.error('Create post error', {
       error: error instanceof Error ? error.message : 'Unknown error',
+      errorDetails: error,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     res.status(500).json({
       success: false,
@@ -308,13 +324,8 @@ app.get('/api/v1/posts/:postId', async (req: AuthenticatedRequest, res: Response
     const { postId } = req.params;
 
     const { data: post, error } = await supabase
-      .from('social_posts')
-      .select(
-        `
-        *,
-        user_profiles(first_name, last_name, avatar_url)
-      `
-      )
+      .from('social_posts_with_profiles')
+      .select('*')
       .eq('id', postId)
       .is('deleted_at', null)
       .single();
@@ -358,7 +369,7 @@ app.get('/api/v1/feed', async (req: AuthenticatedRequest, res: Response) => {
     const { limit = '20', offset = '0' } = req.query;
 
     const { data: posts, error } = await supabase
-      .from('social_posts')
+      .from('social_posts_with_profiles')
       .select(
         `
         id,
@@ -367,9 +378,9 @@ app.get('/api/v1/feed', async (req: AuthenticatedRequest, res: Response) => {
         visibility,
         created_at,
         user_id,
-        user_profiles(first_name, last_name, avatar_url),
-        post_likes(count),
-        post_comments(count)
+        first_name,
+        last_name,
+        avatar_url
       `
       )
       .is('deleted_at', null)
@@ -411,18 +422,19 @@ app.get('/api/v1/posts/:postId/comments', async (req: AuthenticatedRequest, res:
     const { limit = '20', offset = '0' } = req.query;
 
     const { data: comments, error } = await supabase
-      .from('post_comments')
+      .from('post_comments_with_profiles')
       .select(
         `
         id,
         content,
         created_at,
         user_id,
-        user_profiles(first_name, last_name, avatar_url)
+        first_name,
+        last_name,
+        avatar_url
       `
       )
       .eq('post_id', postId)
-      .is('deleted_at', null)
       .order('created_at', { ascending: true })
       .range(
         parseInt(offset as string, 10),
@@ -442,6 +454,8 @@ app.get('/api/v1/posts/:postId/comments', async (req: AuthenticatedRequest, res:
   } catch (error) {
     logger.error('Get comments error', {
       error: error instanceof Error ? error.message : 'Unknown error',
+      errorDetails: error,
+      stack: error instanceof Error ? error.stack : undefined,
     });
     res.status(500).json({
       success: false,
@@ -480,17 +494,20 @@ app.post('/api/v1/posts/:postId/comments', async (req: AuthenticatedRequest, res
       return;
     }
 
-    const { data: comment, error } = await supabase
-      .from('post_comments')
-      .insert({
-        post_id: postId,
-        user_id: req.user.id,
-        content,
-      })
-      .select()
-      .single();
+    // Use the database function to create the comment
+    const { data: comments, error } = await supabase.rpc('create_post_comment', {
+      p_post_id: postId,
+      p_user_id: req.user.id,
+      p_content: content,
+      p_tenant_id: null,
+    });
 
     if (error) throw error;
+
+    const comment = comments?.[0];
+    if (!comment) {
+      throw new Error('Failed to create comment');
+    }
 
     res.status(201).json({
       success: true,
@@ -530,35 +547,34 @@ app.post('/api/v1/posts/:postId/like', async (req: AuthenticatedRequest, res: Re
 
     const { postId } = req.params;
 
-    const { error } = await supabase.from('post_likes').upsert(
-      {
-        post_id: postId,
-        user_id: req.user.id,
-      },
-      {
-        onConflict: 'post_id,user_id',
-      }
-    );
+    // Use the database function to toggle like
+    const { data: result, error } = await supabase.rpc('toggle_post_like', {
+      p_post_id: postId,
+      p_user_id: req.user.id,
+      p_tenant_id: null,
+    });
 
     if (error) throw error;
 
+    const liked = result?.[0]?.liked ?? false;
+
     res.json({
       success: true,
-      data: { liked: true },
+      data: { liked },
       metadata: {
         timestamp: new Date().toISOString(),
         service: 'social-service',
       },
     });
   } catch (error) {
-    logger.error('Like post error', {
+    logger.error('Toggle like error', {
       error: error instanceof Error ? error.message : 'Unknown error',
     });
     res.status(500).json({
       success: false,
       error: {
-        code: 'LIKE_POST_ERROR',
-        message: 'Failed to like post',
+        code: 'TOGGLE_LIKE_ERROR',
+        message: 'Failed to toggle like',
       },
     });
   }
@@ -579,31 +595,34 @@ app.delete('/api/v1/posts/:postId/like', async (req: AuthenticatedRequest, res: 
 
     const { postId } = req.params;
 
-    const { error } = await supabase
-      .from('post_likes')
-      .delete()
-      .eq('post_id', postId)
-      .eq('user_id', req.user.id);
+    // Use the same toggle function for unlike
+    const { data: result, error } = await supabase.rpc('toggle_post_like', {
+      p_post_id: postId,
+      p_user_id: req.user.id,
+      p_tenant_id: null,
+    });
 
     if (error) throw error;
 
+    const liked = result?.[0]?.liked ?? false;
+
     res.json({
       success: true,
-      data: { liked: false },
+      data: { liked },
       metadata: {
         timestamp: new Date().toISOString(),
         service: 'social-service',
       },
     });
   } catch (error) {
-    logger.error('Unlike post error', {
+    logger.error('Toggle like error', {
       error: error instanceof Error ? error.message : 'Unknown error',
     });
     res.status(500).json({
       success: false,
       error: {
-        code: 'UNLIKE_POST_ERROR',
-        message: 'Failed to unlike post',
+        code: 'TOGGLE_LIKE_ERROR',
+        message: 'Failed to toggle like',
       },
     });
   }
