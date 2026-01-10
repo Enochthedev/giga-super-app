@@ -20,7 +20,10 @@ export const config = {
   stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
   stripePublicKey: process.env.STRIPE_PUBLIC_KEY || '',
   
-  // Commission Rates (percentage)
+  // Encryption
+  encryptionKey: process.env.ENCRYPTION_KEY || '',
+  
+  // Commission Rates (percentage) - fallback defaults
   commissionRates: {
     hotel: parseFloat(process.env.HOTEL_COMMISSION_RATE || '10'),
     taxi: parseFloat(process.env.TAXI_COMMISSION_RATE || '15'),
