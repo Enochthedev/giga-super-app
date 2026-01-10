@@ -1,81 +1,158 @@
 # Giga Social Media Service
 
-Social media service for the Giga platform, handling posts, comments, likes, and
-social feed generation. This service is deployed on Railway and connects to the
-Supabase PostgreSQL database.
+Production-ready social media service for the Giga platform, built with TypeScript and following microservices best practices. Handles posts, comments, likes, stories, social feeds, user connections, and content moderation.
 
 ## Features
 
-- **Social Posts**: Create, read, update, and delete social media posts
-- **Comments**: Comment on posts with nested reply support
-- **Likes**: Like/unlike posts and comments
-- **Social Feed**: Personalized feed with trending and recommended posts
-- **Content Moderation**: Report inappropriate content
-- **Real-time Updates**: Optimized for high-frequency social interactions
+- **Social Posts**: Create, read, update, and delete posts with media support, visibility controls, and tagging
+- **Comments**: Nested comment system with unlimited reply depth
+- **Reactions**: Multi-reaction system (like, love, haha, wow, sad, angry)
+- **Stories**: 24-hour expiring content with view tracking
+- **Shares**: Repost, quote, and direct send functionality
+- **Social Feed**: Personalized, trending, recommended, and explore feeds
+- **Connections**: Follow/unfollow system with follower/following management
+- **Blocking**: User blocking and privacy controls
+- **Content Moderation**: Report system for inappropriate content
+- **Real-time Analytics**: Engagement metrics and trending algorithms
 
 ## Architecture
 
-- **Platform**: Railway (Docker container)
-- **Database**: Supabase PostgreSQL (secure connection pooling)
+### Technology Stack
+- **Language**: TypeScript (100% type-safe)
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js with production middleware
+- **Database**: Supabase PostgreSQL with RLS policies
 - **Authentication**: JWT token validation via Supabase Auth
-- **Caching**: In-memory caching with NodeCache
-- **Logging**: Structured logging with Winston
+- **Logging**: Structured JSON logging with Winston
+- **Validation**: express-validator with custom error handling
+- **Rate Limiting**: Tiered rate limiting (general, write, strict)
+- **Security**: Helmet, CORS, input sanitization
+
+### Service Layer Architecture
+```
+src/
+├── config/           # Centralized configuration with validation
+├── middleware/       # Auth, rate limiting, validation, error handling
+├── services/         # Business logic layer
+│   ├── postService.ts
+│   ├── commentService.ts
+│   ├── likeService.ts
+│   ├── feedService.ts
+│   ├── storyService.ts
+│   ├── shareService.ts
+│   ├── connectionService.ts
+│   └── reportService.ts
+├── routes/           # HTTP route handlers
+├── types/            # TypeScript interfaces and types
+├── utils/            # Error handling, logging, database utilities
+└── app.ts            # Application entry point
+```
 
 ## API Endpoints
 
 ### Health Checks
-
 - `GET /health` - Service health status
-- `GET /health/ready` - Readiness check
-- `GET /health/live` - Liveness check
+- `GET /health/ready` - Readiness check (includes database connection)
 
 ### Posts
-
-- `POST /api/v1/posts` - Create a new post
-- `GET /api/v1/posts/user/:userId` - Get user's posts
-- `GET /api/v1/posts/:postId` - Get post details
-- `PUT /api/v1/posts/:postId` - Update a post
-- `DELETE /api/v1/posts/:postId` - Delete a post (soft delete)
-- `POST /api/v1/posts/:postId/report` - Report a post
+- `POST /api/v1/posts` - Create a new post (auth required)
+- `GET /api/v1/posts/:postId` - Get post details with user info
+- `GET /api/v1/posts/user/:userId` - Get user's posts (paginated)
+- `PUT /api/v1/posts/:postId` - Update a post (owner only)
+- `DELETE /api/v1/posts/:postId` - Soft delete a post (owner only)
 
 ### Comments
+- `POST /api/v1/comments` - Create a comment (auth required)
+- `GET /api/v1/comments/post/:postId` - Get post comments (paginated)
+- `GET /api/v1/comments/:commentId/replies` - Get comment replies (paginated)
+- `PUT /api/v1/comments/:commentId` - Update a comment (owner only)
+- `DELETE /api/v1/comments/:commentId` - Delete a comment (owner only)
 
-- `POST /api/v1/comments` - Create a comment
-- `GET /api/v1/comments/post/:postId` - Get post comments
-- `GET /api/v1/comments/:commentId/replies` - Get comment replies
-- `PUT /api/v1/comments/:commentId` - Update a comment
-- `DELETE /api/v1/comments/:commentId` - Delete a comment (soft delete)
-
-### Likes
-
-- `POST /api/v1/likes/posts/:postId` - Like/unlike a post
-- `POST /api/v1/likes/comments/:commentId` - Like/unlike a comment
+### Likes & Reactions
+- `POST /api/v1/likes/posts/:postId` - Toggle like/reaction on a post
+- `POST /api/v1/likes/comments/:commentId` - Toggle like/reaction on a comment
 - `GET /api/v1/likes/posts/:postId/users` - Get users who liked a post
-- `GET /api/v1/likes/comments/:commentId/users` - Get users who liked a comment
+- `GET /api/v1/likes/posts/:postId/breakdown` - Get reaction breakdown
 
 ### Feed
+- `GET /api/v1/feed` - Personalized feed (auth required, filter: all/friends/following)
+- `GET /api/v1/feed/trending` - Trending posts (optional auth, timeframe: 24h/7d/30d)
+- `GET /api/v1/feed/recommended` - Recommended posts (auth required)
+- `GET /api/v1/feed/explore` - Explore feed (popular public posts)
 
-- `GET /api/v1/feed` - Get personalized social feed
-- `GET /api/v1/feed/trending` - Get trending posts
-- `GET /api/v1/feed/recommended` - Get recommended posts
+### Stories
+- `POST /api/v1/stories` - Create a story (auth required)
+- `GET /api/v1/stories` - Get network stories (auth required)
+- `GET /api/v1/stories/my` - Get own stories (auth required)
+- `GET /api/v1/stories/:storyId` - Get specific story
+- `POST /api/v1/stories/:storyId/view` - Record story view
+- `GET /api/v1/stories/:storyId/viewers` - Get story viewers (owner only)
+- `DELETE /api/v1/stories/:storyId` - Delete story (owner only)
+
+### Shares
+- `POST /api/v1/shares` - Share a post (types: repost, quote, send)
+- `GET /api/v1/shares/post/:postId` - Get users who shared a post
+
+### Connections
+- `POST /api/v1/connections/follow` - Follow a user
+- `DELETE /api/v1/connections/unfollow/:userId` - Unfollow a user
+- `GET /api/v1/connections/followers/:userId` - Get user's followers
+- `GET /api/v1/connections/following/:userId` - Get users being followed
+- `GET /api/v1/connections/is-following/:userId` - Check if following
+- `POST /api/v1/connections/block` - Block a user
+- `DELETE /api/v1/connections/unblock/:userId` - Unblock a user
+- `GET /api/v1/connections/blocked` - Get blocked users
+- `GET /api/v1/connections/is-blocked/:userId` - Check if blocked
+
+### Reports
+- `POST /api/v1/reports` - Report content (auth required)
+- `GET /api/v1/reports` - Get reports (moderator/admin only)
+- `PUT /api/v1/reports/:reportId/status` - Update report status (moderator/admin only)
 
 ## Environment Variables
 
-See `.env.example` for all required environment variables:
+```bash
+# Server Configuration
+PORT=3001
+NODE_ENV=production
 
-- `SUPABASE_URL` - Supabase project URL
-- `SUPABASE_SERVICE_ROLE_KEY` - Service role key for database access
-- `DB_POOL_SIZE` - Database connection pool size (default: 10)
-- `PORT` - Service port (default: 3001)
-- `JWT_SECRET` - JWT secret for token validation
-- `CACHE_TTL` - Cache time-to-live in seconds (default: 300)
-- `RATE_LIMIT_MAX_REQUESTS` - Max requests per window (default: 100)
+# Supabase Configuration
+SUPABASE_URL=your-supabase-url
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_ANON_KEY=your-anon-key
+
+# Authentication
+JWT_SECRET=your-jwt-secret
+
+# Caching
+CACHE_TTL=300
+CACHE_MAX_KEYS=1000
+
+# Rate Limiting
+RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_MAX_REQUESTS=100
+
+# Pagination
+PAGINATION_DEFAULT_LIMIT=20
+PAGINATION_MAX_LIMIT=100
+
+# Logging
+LOG_LEVEL=info
+LOG_FORMAT=json
+
+# Social Features
+MAX_MEDIA_UPLOADS=10
+MAX_CONTENT_LENGTH=5000
+MAX_COMMENT_LENGTH=2000
+STORY_EXPIRATION_HOURS=24
+TRENDING_TIMEFRAME_HOURS=24
+```
 
 ## Development
 
 ### Prerequisites
-
 - Node.js 18+
+- TypeScript 5.3+
 - Docker (for containerized deployment)
 - Access to Supabase database
 
@@ -85,83 +162,189 @@ See `.env.example` for all required environment variables:
 # Install dependencies
 npm install
 
-# Copy environment variables
-cp .env.example .env
-# Edit .env with your configuration
+# Run database migrations
+npm run migrate
 
-# Run in development mode
+# Run in development mode (with hot reload)
 npm run dev
 
-# Run tests
-npm test
+# Type checking
+npm run type-check
 
-# Run with coverage
-npm test:coverage
+# Linting
+npm run lint
+npm run lint:fix
+
+# Build for production
+npm run build
+
+# Run production build
+npm start
 ```
 
 ### Docker Deployment
 
 ```bash
 # Build Docker image
-npm run docker:build
+docker build -t giga-social-service .
 
 # Run Docker container
+docker run -p 3001:3001 --env-file .env giga-social-service
+
+# Or use npm scripts
+npm run docker:build
 npm run docker:run
 ```
 
 ### Railway Deployment
 
-1. Connect your repository to Railway
-2. Set environment variables in Railway dashboard
-3. Railway will automatically build and deploy using `railway.json`
+This service is configured for Railway deployment with:
+- Multi-stage Docker build for optimized image size
+- Health check endpoints for container orchestration
+- Graceful shutdown handling
+- Production-ready logging
 
 ## Database Schema
 
-### Tables Used
+### Main Tables
+- `social_posts` - Posts with visibility controls, media, tagging
+- `post_comments` - Nested comments with reply tracking
+- `post_likes` - Post reactions (6 types)
+- `comment_likes` - Comment reactions
+- `stories` - 24-hour expiring content
+- `story_views` - Story view tracking
+- `post_shares` - Share tracking
+- `user_connections` - Follow/friend relationships
+- `blocked_users` - User blocking
+- `content_reports` - Content moderation
 
-- `social_posts` - Social media posts
-- `post_comments` - Comments on posts
-- `post_likes` - Likes on posts
-- `comment_likes` - Likes on comments
-- `user_profiles` - User information
-- `content_reports` - Content moderation reports
+### Database Functions
 
-### Required Database Functions
+All database functions are defined in `/supabase/migrations/20260110_social_service_functions.sql`:
 
-The service expects these PostgreSQL functions to exist:
+**Counter Functions:**
+- `increment_post_likes/comments/shares/views`
+- `decrement_post_likes/comments/shares`
+- `increment_comment_likes/replies`
+- `decrement_comment_likes/replies`
+- `increment_story_views`
 
-- `increment_comment_replies(comment_id UUID)` - Increment reply count
-- `decrement_comment_replies(comment_id UUID)` - Decrement reply count
-- `decrement_post_comments(post_id UUID)` - Decrement comment count
-- `get_trending_posts(time_threshold TIMESTAMPTZ, page_limit INT, page_offset INT)` -
-  Get trending posts
-- `count_trending_posts(time_threshold TIMESTAMPTZ)` - Count trending posts
+**Analytics Functions:**
+- `get_trending_posts(time_threshold, page_offset, page_limit)` - Weighted trending algorithm
+- `count_trending_posts(time_threshold)` - Count trending posts
+- `get_user_social_stats(user_id)` - User engagement metrics
+- `calculate_post_engagement_rate(post_id)` - Engagement percentage
+
+**Cleanup Functions:**
+- `cleanup_expired_stories()` - Remove expired stories
+- `archive_old_posts(days_threshold)` - Archive inactive posts
 
 ## Security
 
-- **Authentication**: All endpoints (except health checks) require valid JWT
-  tokens
-- **Authorization**: Role-based access control for admin operations
-- **Rate Limiting**: 100 requests per 15 minutes per IP
-- **Input Validation**: Comprehensive validation using express-validator
-- **SQL Injection Prevention**: Parameterized queries via Supabase client
-- **CORS**: Configured for API gateway and frontend origins
-- **Helmet**: Security headers enabled
+### Authentication & Authorization
+- JWT token validation on all protected endpoints
+- Role-based access control (RBAC) for admin/moderator operations
+- Row-Level Security (RLS) policies on all tables
+- User profile validation and activity checking
+
+### Rate Limiting
+- **General**: 100 requests/minute
+- **Write Operations**: 50 requests/minute
+- **Reports**: 10 requests/15 minutes
+- IP-based with configurable windows
+
+### Input Validation
+- Comprehensive validation using express-validator
+- Content length limits (posts: 5000, comments: 2000)
+- Media upload limits (10 files max)
+- UUID validation for all IDs
+- Enum validation for types and statuses
+
+### Security Headers
+- Helmet.js for secure HTTP headers
+- CORS with configurable origins
+- Request ID tracking for audit trails
+- SQL injection prevention via parameterized queries
 
 ## Performance
 
-- **Connection Pooling**: 10 concurrent database connections
-- **Caching**: 5-minute TTL for GET requests
-- **Compression**: Response compression enabled
-- **Pagination**: All list endpoints support pagination (max 100 items)
-- **Indexes**: Database indexes on frequently queried columns
+### Optimization Strategies
+- Service layer architecture for business logic separation
+- Efficient database queries with proper indexing
+- Pagination on all list endpoints (configurable limits)
+- View count increments are non-blocking
+- Trending algorithm uses weighted engagement scores
 
-## Monitoring
+### Caching Strategy
+- 5-minute TTL for frequently accessed data
+- Configurable cache size (default: 1000 keys)
+- Cache invalidation on updates
 
-- **Health Checks**: Kubernetes-compatible health endpoints
-- **Structured Logging**: JSON logs with request tracing
-- **Error Tracking**: Comprehensive error logging with stack traces
-- **Performance Metrics**: Response time and database query duration tracking
+### Database Optimization
+- Proper indexes on frequently queried columns
+- Counter columns for likes/comments/shares (avoid COUNT queries)
+- Soft deletes for data retention
+- Connection pooling for high concurrency
+
+## Monitoring & Observability
+
+### Logging
+- Structured JSON logs with Winston
+- Request ID tracking across all logs
+- Log levels: error, warn, info, debug
+- Operational vs system error classification
+
+### Health Checks
+- `/health` - Basic health status
+- `/health/ready` - Database connection verification
+- Docker healthcheck integration
+
+### Error Handling
+- Custom error classes with status codes
+- Consistent error response format
+- Stack traces in development only
+- Graceful error recovery
+
+## API Response Format
+
+All endpoints follow a consistent response format:
+
+### Success Response
+```json
+{
+  "success": true,
+  "data": { ... },
+  "metadata": {
+    "timestamp": "2026-01-10T12:00:00.000Z",
+    "request_id": "uuid-v4",
+    "version": "v1"
+  },
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "total_pages": 5,
+    "has_more": true
+  }
+}
+```
+
+### Error Response
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed",
+    "details": { ... }
+  },
+  "metadata": {
+    "timestamp": "2026-01-10T12:00:00.000Z",
+    "request_id": "uuid-v4",
+    "version": "v1"
+  }
+}
+```
 
 ## Testing
 
@@ -179,29 +362,35 @@ npm run test:coverage
 ## Troubleshooting
 
 ### Database Connection Issues
-
-- Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are correct
-- Check database connection pool size (increase if needed)
-- Ensure SSL is enabled for database connections
+- Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
+- Check network connectivity to Supabase
+- Review RLS policies for service role access
 
 ### Authentication Failures
-
-- Verify JWT tokens are valid and not expired
-- Check that user profiles exist and are active
-- Ensure RLS policies allow service role access
+- Ensure JWT tokens are valid and not expired
+- Verify user profiles exist and `is_active = true`
+- Check that `deleted_at IS NULL`
 
 ### Performance Issues
+- Monitor slow query logs
+- Increase cache TTL for frequently accessed data
+- Review trending algorithm performance
+- Check database connection pool size
 
-- Increase `DB_POOL_SIZE` for high traffic
-- Adjust `CACHE_TTL` for better cache hit rates
-- Monitor slow queries and add database indexes
+### Rate Limiting
+- Adjust `RATE_LIMIT_MAX_REQUESTS` for your traffic
+- Use different rate limiters for different endpoint types
+- Monitor rate limit metrics in logs
 
 ## Contributing
 
-1. Follow the coding standards in `.kiro/steering/`
-2. Write tests for new features
-3. Update API documentation
-4. Ensure all tests pass before submitting PR
+1. Follow TypeScript best practices
+2. Maintain 100% type coverage
+3. Follow the service layer pattern
+4. Write comprehensive tests for new features
+5. Update API documentation
+6. Ensure all tests pass before submitting PR
+7. Follow coding standards in `.kiro/steering/`
 
 ## License
 
