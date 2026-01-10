@@ -18,7 +18,7 @@ Deno.serve(async req => {
             },
             obj
           )
-        )  }\n`;
+        )}\n`;
       await Deno.writeTextFile('/tmp/checkout_cart_logs.log', line, {
         append: true,
       });
@@ -417,7 +417,7 @@ Deno.serve(async req => {
             event: 'exception',
             request_id: requestId,
             error: String(err),
-          })  }\n`;
+          })}\n`;
         await Deno.writeTextFile('/tmp/checkout_cart_logs.log', line, {
           append: true,
         });

@@ -1,5 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
+
 import { cacheMiddleware, clearCache } from '../middleware/cache.js';
 import { ForbiddenError, NotFoundError } from '../middleware/errorHandler.js';
 import {
@@ -25,7 +26,7 @@ const router = express.Router();
  */
 router.post('/', validateCreatePost, async (req, res) => {
   const { content, visibility = 'public', media_urls = [], tags = [] } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const postData = {
@@ -98,7 +99,7 @@ router.post('/', validateCreatePost, async (req, res) => {
 router.get('/user/:userId', validateGetUserPosts, cacheMiddleware(300), async (req, res) => {
   const { userId } = req.params;
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);
@@ -193,7 +194,7 @@ router.get('/user/:userId', validateGetUserPosts, cacheMiddleware(300), async (r
 router.get('/:postId', validateGetPostDetails, cacheMiddleware(180), async (req, res) => {
   const { postId } = req.params;
   const { include_comments = false, comments_limit = 10 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Get post with user info
@@ -299,7 +300,7 @@ router.get('/:postId', validateGetPostDetails, cacheMiddleware(180), async (req,
 router.put('/:postId', validateUpdatePost, async (req, res) => {
   const { postId } = req.params;
   const { content, visibility, media_urls, tags } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the post
@@ -384,7 +385,7 @@ router.put('/:postId', validateUpdatePost, async (req, res) => {
  */
 router.delete('/:postId', async (req, res) => {
   const { postId } = req.params;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if user owns the post or is admin
@@ -463,7 +464,7 @@ router.delete('/:postId', async (req, res) => {
 router.post('/:postId/report', validateReportContent, async (req, res) => {
   const { postId } = req.params;
   const { reason, description } = req.body;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     // Check if post exists

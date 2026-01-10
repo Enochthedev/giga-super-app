@@ -65,7 +65,7 @@ serve(async req => {
     );
     if (txError) {
       console.error('Wallet payment error:', txError);
-      throw new Error(`Wallet payment failed: ${  txError.message}`);
+      throw new Error(`Wallet payment failed: ${txError.message}`);
     }
     console.log('✅ Wallet payment successful:', result.transaction_id);
     return new Response(

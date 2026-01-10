@@ -14,8 +14,8 @@ import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const {SUPABASE_URL} = process.env;
+const {SUPABASE_SERVICE_ROLE_KEY} = process.env;
 const SOCIAL_SERVICE_URL = process.env.SOCIAL_SERVICE_URL || 'http://localhost:3001';
 const API_GATEWAY_URL = process.env.API_GATEWAY_URL || 'http://localhost:3000';
 

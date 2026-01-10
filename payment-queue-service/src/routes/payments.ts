@@ -1,12 +1,13 @@
 import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
+
+import { config } from '@/config';
 import { authenticate, AuthRequest } from '@/middleware/auth';
 import { paymentQueue, refundQueue } from '@/queues/paymentQueue';
 import { PaymentRequest, RefundRequest } from '@/types';
 import { BadRequestError } from '@/utils/errors';
 import logger from '@/utils/logger';
-import { config } from '@/config';
 
 const router = Router();
 
@@ -106,7 +107,7 @@ router.get('/:paymentId/status', authenticate, async (req: AuthRequest, res: Res
     }
 
     const state = await job.getState();
-    const progress = job.progress;
+    const {progress} = job;
     const result = job.returnvalue;
 
     res.json({

@@ -1,8 +1,9 @@
+import { createClient } from '@supabase/supabase-js';
+import { NextFunction, Response } from 'express';
+
 import config from '@/config';
 import { AuthenticatedRequest } from '@/types';
 import logger from '@/utils/logger';
-import { createClient } from '@supabase/supabase-js';
-import { NextFunction, Response } from 'express';
 
 const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey);
 

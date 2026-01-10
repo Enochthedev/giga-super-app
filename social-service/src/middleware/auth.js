@@ -30,7 +30,7 @@ export const authMiddleware = async (req, res, next) => {
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
     // Verify JWT token using Supabase client
-    const supabase = req.app.locals.supabase;
+    const {supabase} = req.app.locals;
     const {
       data: { user },
       error: authError,

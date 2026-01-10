@@ -1,4 +1,5 @@
 import express from 'express';
+
 import { cacheMiddleware } from '../middleware/cache.js';
 import { validateGetFeed } from '../middleware/validation.js';
 import { buildPaginatedResponse, buildPagination, executeQuery } from '../utils/database.js';
@@ -12,7 +13,7 @@ const router = express.Router();
  */
 router.get('/', validateGetFeed, cacheMiddleware(120), async (req, res) => {
   const { page = 1, limit = 20, type = 'all', since } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);
@@ -161,13 +162,13 @@ router.get('/', validateGetFeed, cacheMiddleware(120), async (req, res) => {
  */
 router.get('/trending', cacheMiddleware(300), async (req, res) => {
   const { page = 1, limit = 20, timeframe = '24h' } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);
 
     // Calculate time threshold based on timeframe
-    let timeThreshold = new Date();
+    const timeThreshold = new Date();
     switch (timeframe) {
       case '1h':
         timeThreshold.setHours(timeThreshold.getHours() - 1);
@@ -258,7 +259,7 @@ router.get('/trending', cacheMiddleware(300), async (req, res) => {
  */
 router.get('/recommended', cacheMiddleware(180), async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
-  const supabase = req.app.locals.supabase;
+  const {supabase} = req.app.locals;
 
   try {
     const pagination = buildPagination(page, limit);

@@ -1,4 +1,5 @@
 import NodeCache from 'node-cache';
+
 import logger from './logger';
 
 class CacheManager {

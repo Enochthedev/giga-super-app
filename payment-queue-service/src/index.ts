@@ -1,14 +1,15 @@
-import express, { Application } from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
 import compression from 'compression';
+import cors from 'cors';
+import express, { Application } from 'express';
 import rateLimit from 'express-rate-limit';
-import { config } from './config';
-import logger, { loggerStream } from './utils/logger';
+import helmet from 'helmet';
+
+import { config } from './config/index';
 import { errorHandler } from './middleware/errorHandler';
 import healthRoutes from './routes/health';
 import paymentRoutes from './routes/payments';
 import { testConnection } from './utils/database';
+import logger from './utils/logger';
 
 // Import queues to initialize workers
 import './queues/paymentQueue';
@@ -102,9 +103,9 @@ const startServer = async () => {
 // Graceful shutdown
 const gracefulShutdown = async (signal: string) => {
   logger.info(`${signal} received, starting graceful shutdown`);
-  
+
   // Close queues (handled in paymentQueue.ts)
-  
+
   process.exit(0);
 };
 
@@ -112,7 +113,7 @@ process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 // Handle uncaught errors
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', error => {
   logger.error('Uncaught Exception', { error: error.message, stack: error.stack });
   process.exit(1);
 });

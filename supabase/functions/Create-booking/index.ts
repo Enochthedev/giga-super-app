@@ -196,7 +196,7 @@ serve(async req => {
 
     if (bookingError) {
       console.error('Booking creation error:', bookingError);
-      throw new Error(`Failed to create booking: ${  bookingError.message}`);
+      throw new Error(`Failed to create booking: ${bookingError.message}`);
     }
 
     console.log('✅ Booking created:', booking.id);
@@ -223,7 +223,7 @@ serve(async req => {
       if (walletError) {
         // Rollback booking
         await supabaseClient.from('hotel_bookings').delete().eq('id', booking.id);
-        throw new Error(`Wallet payment failed: ${  walletError.message}`);
+        throw new Error(`Wallet payment failed: ${walletError.message}`);
       }
 
       paymentResponse = {
@@ -271,7 +271,7 @@ serve(async req => {
         console.error('Payment initialization failed:', errorText);
         // Rollback booking
         await supabaseClient.from('hotel_bookings').delete().eq('id', booking.id);
-        throw new Error(`Payment initialization failed: ${  errorText}`);
+        throw new Error(`Payment initialization failed: ${errorText}`);
       }
 
       const paymentData = await initPaymentResponse.json();
@@ -280,7 +280,7 @@ serve(async req => {
         // Rollback booking
         await supabaseClient.from('hotel_bookings').delete().eq('id', booking.id);
         throw new Error(
-          `Payment initialization failed: ${  paymentData.error || 'Unknown error'}`
+          `Payment initialization failed: ${paymentData.error || 'Unknown error'}`
         );
       }
 

@@ -79,7 +79,7 @@ serve(async req => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (checkInDate > today) {
-      throw new Error(`Cannot check in before check-in date: ${  booking.check_in_date}`);
+      throw new Error(`Cannot check in before check-in date: ${booking.check_in_date}`);
     }
     // Assign room if not already assigned
     let assignedRoomId = booking.room_id || params.roomId;
@@ -106,7 +106,7 @@ serve(async req => {
       })
       .eq('id', assignedRoomId);
     if (roomUpdateError) {
-      throw new Error(`Failed to update room status: ${  roomUpdateError.message}`);
+      throw new Error(`Failed to update room status: ${roomUpdateError.message}`);
     }
     // Update booking status
     const { error: updateError } = await supabaseClient
@@ -125,7 +125,7 @@ serve(async req => {
           status: 'available',
         })
         .eq('id', assignedRoomId);
-      throw new Error(`Failed to update booking: ${  updateError.message}`);
+      throw new Error(`Failed to update booking: ${updateError.message}`);
     }
     // Add status history
     await supabaseClient.from('hotel_booking_status_history').insert({

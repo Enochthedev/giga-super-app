@@ -38,7 +38,7 @@ serve(async req => {
       }
     );
     if (txError) {
-      throw new Error(`Payout processing failed: ${  txError.message}`);
+      throw new Error(`Payout processing failed: ${txError.message}`);
     }
     // Check if mock payment (auto-complete)
     const { data: payout } = await supabaseClient
@@ -59,8 +59,8 @@ serve(async req => {
       console.log('🧪 Mock payout detected - completing immediately');
       await supabaseClient.rpc('complete_payout_atomic', {
         p_payout_id: params.payoutId,
-        p_provider_reference: `MOCK_PAYOUT_${  Date.now()}`,
-        p_transaction_id: `MOCK_TX_${  Date.now()}`,
+        p_provider_reference: `MOCK_PAYOUT_${Date.now()}`,
+        p_transaction_id: `MOCK_TX_${Date.now()}`,
       });
       return new Response(
         JSON.stringify({
@@ -101,7 +101,7 @@ serve(async req => {
         currency: 'NGN',
       });
       if (!recipientResponse.status) {
-        throw new Error(`Failed to create recipient: ${  recipientResponse.message}`);
+        throw new Error(`Failed to create recipient: ${recipientResponse.message}`);
       }
       // 2. Initiate transfer
       const transferResponse = await initiatePaystackTransfer(config.secret_key, {
@@ -112,7 +112,7 @@ serve(async req => {
         reference: `PAYOUT_${params.payoutId}_${Date.now()}`,
       });
       if (!transferResponse.status) {
-        throw new Error(`Transfer failed: ${  transferResponse.message}`);
+        throw new Error(`Transfer failed: ${transferResponse.message}`);
       }
       // 3. Complete payout
       await supabaseClient.rpc('complete_payout_atomic', {

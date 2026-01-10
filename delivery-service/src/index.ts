@@ -1,3 +1,10 @@
+import { createServer } from 'http';
+
+import compression from 'compression';
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+
 import config from '@/config';
 import assignmentRoutes from '@/routes/assignments';
 import healthRoutes from '@/routes/health';
@@ -7,11 +14,7 @@ import websocketRoutes from '@/routes/websocket';
 import { webSocketService } from '@/services/websocket';
 import logger from '@/utils/logger';
 import { schedulerService } from '@/utils/scheduler';
-import compression from 'compression';
-import cors from 'cors';
-import express from 'express';
-import helmet from 'helmet';
-import { createServer } from 'http';
+
 
 // Create Express application
 const app = express();

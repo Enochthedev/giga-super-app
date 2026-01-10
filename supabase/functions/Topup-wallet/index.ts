@@ -53,7 +53,7 @@ serve(async req => {
         },
       });
       if (topupError) {
-        throw new Error(`Wallet top-up failed: ${  topupError.message}`);
+        throw new Error(`Wallet top-up failed: ${topupError.message}`);
       }
       const frontendUrl = Deno.env.get('FRONTEND_URL') || 'http://localhost:3000';
       paymentUrl = `${frontendUrl}/wallet/topup-success?transaction_id=${transactionId}&amount=${params.amount}`;

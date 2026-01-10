@@ -1,10 +1,11 @@
+import { Router } from 'express';
+import { body } from 'express-validator';
+
 import { requireAuth } from '@/middleware/auth';
 import { handleValidationErrors } from '@/middleware/validation';
 import { APIResponse, AuthenticatedRequest, ERROR_CODES } from '@/types';
 import logger from '@/utils/logger';
 import { schedulerService } from '@/utils/scheduler';
-import { Router } from 'express';
-import { body } from 'express-validator';
 
 const router = Router();
 

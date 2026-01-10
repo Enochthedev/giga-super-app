@@ -1,9 +1,10 @@
+import { Request, Response } from 'express';
+import rateLimit from 'express-rate-limit';
+
 import config from '@/config';
 import { AuthenticatedRequest } from '@/types';
 import { ERROR_CODES } from '@/utils/errors';
 import logger from '@/utils/logger';
-import { Request, Response } from 'express';
-import rateLimit from 'express-rate-limit';
 
 // Key generator function for rate limiting
 const keyGenerator = (req: Request): string => {

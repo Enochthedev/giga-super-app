@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Centralized payment queue service for Giga platform - handles all payment requests using BullMQ",
   "main": "dist/index.js",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc && tsc-alias",
@@ -36,7 +37,7 @@
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.8",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/node": "^20.10.5",
+    "@types/node": "^20.19.27",
     "@types/supertest": "^6.0.3",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
@@ -46,8 +47,8 @@
     "supertest": "^7.1.4",
     "ts-jest": "^29.1.1",
     "tsc-alias": "^1.8.16",
-    "tsx": "^4.6.2",
-    "typescript": "^5.3.3"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   },
   "engines": {
     "node": ">=18.0.0"

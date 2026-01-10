@@ -1,6 +1,7 @@
+import { Request, Response, Router } from 'express';
+
 import { database } from '@/utils/database';
 import logger from '@/utils/logger';
-import { Request, Response, Router } from 'express';
 
 const router = Router();
 

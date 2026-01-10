@@ -15,7 +15,7 @@ dotenv.config();
 
 const API_GATEWAY_URL = process.env.API_GATEWAY_URL || 'http://localhost:3000';
 const SOCIAL_SERVICE_URL = process.env.SOCIAL_SERVICE_URL || 'http://localhost:3001';
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+const {SUPABASE_ANON_KEY} = process.env;
 
 class MigrationSuccessTester {
   constructor() {

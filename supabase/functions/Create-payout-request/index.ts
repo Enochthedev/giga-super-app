@@ -47,7 +47,7 @@ serve(async req => {
     );
     if (txError) {
       console.error('Transaction error:', txError);
-      throw new Error(`Payout request failed: ${  txError.message}`);
+      throw new Error(`Payout request failed: ${txError.message}`);
     }
     console.log('✅ Payout request created:', result.payout_id);
     // For mock payments, auto-process immediately

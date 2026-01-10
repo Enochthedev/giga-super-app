@@ -1,9 +1,10 @@
 import { Queue, Worker, QueueEvents, Job } from 'bullmq';
 import IORedis from 'ioredis';
+
 import { config } from '@/config';
-import logger from '@/utils/logger';
-import { PaymentRequest, PaymentResponse } from '@/types';
 import { processPayment } from '@/services/paymentProcessor';
+import { PaymentRequest, PaymentResponse } from '@/types';
+import logger from '@/utils/logger';
 
 // Redis connection
 const connection = new IORedis(config.redisUrl, {
