@@ -56,6 +56,21 @@ app.use('/health', healthRoutes);
 app.use('/metrics', metricsRoutes);
 app.use('/api/v1', v1Routes);
 
+// Swagger documentation
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Payment Queue Service API Docs',
+  })
+);
+
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
 // Root route
 app.get('/', (req, res) => {
   res.json({
