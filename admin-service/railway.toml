@@ -1,10 +1,10 @@
-# Railway configuration for payment-queue-service
+# Railway configuration for admin-service
 # https://docs.railway.app/deploy/config-as-code
 
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "payment-queue-service/Dockerfile"
-watchPaths = ["payment-queue-service/**", "shared/**"]
+dockerfilePath = "admin-service/Dockerfile"
+watchPaths = ["admin-service/**", "shared/**"]
 
 [deploy]
 numReplicas = 1
