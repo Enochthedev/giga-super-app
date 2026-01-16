@@ -65,7 +65,21 @@
     "test:smoke:staging": "echo 'Staging smoke tests - implement with actual tests'",
     "validate:staging": "echo 'Staging validation - implement with actual validation'",
     "release": "semantic-release",
-    "version": "conventional-changelog -p angular -i CHANGELOG.md -s"
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "ci:build": "npm run build",
+    "ci:test": "npm run test:ci",
+    "ci:lint": "npm run lint",
+    "ci:type-check": "npm run type-check",
+    "ci:security": "npm run security:audit",
+    "ci:all": "npm run ci:lint && npm run ci:type-check && npm run ci:build && npm run ci:test && npm run ci:security",
+    "docker:build": "docker build -t giga-api-gateway .",
+    "docker:build:social": "docker build -f social-service/Dockerfile -t giga-social-service .",
+    "docker:build:admin": "docker build -f admin-service/Dockerfile -t giga-admin-service .",
+    "docker:build:all": "npm run docker:build && npm run docker:build:social && npm run docker:build:admin",
+    "railway:link": "railway link",
+    "railway:status": "railway status",
+    "railway:logs": "railway logs",
+    "railway:env": "./scripts/set-all-railway-env.sh"
   },
   "lint-staged": {
     "*.{ts,js}": [
