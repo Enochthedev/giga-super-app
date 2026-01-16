@@ -81,6 +81,21 @@ app.use(requestSizeLimit(1024 * 1024)); // 1MB limit
 // Health check middleware (before other routes)
 app.use(healthCheck);
 
+// Swagger documentation
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Search Service API Docs',
+  })
+);
+
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
 // API routes
 app.use('/api/v1/search', searchRoutes);
 app.use('/api/v1/search/hotels', hotelRoutes);

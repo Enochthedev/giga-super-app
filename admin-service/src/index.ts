@@ -123,6 +123,21 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Swagger documentation
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Admin Service API Docs',
+  })
+);
+
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
 // ============================================
 // NATIONAL LEVEL ENDPOINTS (National HQ)
 // ============================================

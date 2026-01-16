@@ -640,6 +640,21 @@ app.get('/live', (req, res) => {
   res.json({ status: 'alive' });
 });
 
+// Swagger documentation
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Notifications Service API Docs',
+  })
+);
+
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
 // Import route modules
 import analyticsRouter from './routes/analytics.js';
 import campaignsRouter from './routes/campaigns.js';

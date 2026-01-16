@@ -39,8 +39,14 @@ export const authMiddleware = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Skip auth for health checks and public endpoints
-    if (req.path.startsWith('/health') || req.path.startsWith('/public')) {
+    // Skip auth for health checks, public endpoints, and API documentation
+    if (
+      req.path.startsWith('/health') ||
+      req.path.startsWith('/public') ||
+      req.path.includes('/api-docs') ||
+      req.path.includes('/swagger') ||
+      req.path.endsWith('/docs')
+    ) {
       next();
       return;
     }

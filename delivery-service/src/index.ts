@@ -17,7 +17,6 @@ import { webSocketService } from './services/websocket';
 import logger from './utils/logger';
 import { schedulerService } from './utils/scheduler';
 
-
 // Create Express application
 const app = express();
 const server = createServer(app);
@@ -51,6 +50,21 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Health check routes (no authentication required)
 app.use('/', healthRoutes);
+
+// Swagger documentation
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Delivery Service API Docs',
+  })
+);
+
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 // API routes
 app.use('/api/v1', trackingRoutes);
