@@ -19,9 +19,12 @@ RUN npm ci --include=dev --ignore-scripts
 COPY shared ./shared
 COPY taxi-realtime-service ./taxi-realtime-service
 
-# Build TypeScript from root (continue despite type errors)
-WORKDIR /app
-RUN cd taxi-realtime-service && (npx tsc -p tsconfig.json || true)
+# Build TypeScript
+WORKDIR /app/taxi-realtime-service
+RUN npx tsc -p tsconfig.json || echo "TypeScript compilation had errors (continuing anyway)"
+
+# Verify build output exists
+RUN ls -la /app/dist/taxi-realtime-service/src/ && test -f /app/dist/taxi-realtime-service/src/index.js || (echo "ERROR: Build failed - index.js not found" && exit 1)
 
 # Production stage
 FROM node:20-alpine

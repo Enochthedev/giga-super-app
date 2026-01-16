@@ -19,9 +19,12 @@ RUN npm ci --include=dev --ignore-scripts
 COPY shared ./shared
 COPY api-gateway ./api-gateway
 
-# Build TypeScript from root (continue despite type errors)
-WORKDIR /app
-RUN cd api-gateway && (npx tsc -p tsconfig.json || true)
+# Build TypeScript
+WORKDIR /app/api-gateway
+RUN npx tsc -p tsconfig.json || echo "TypeScript compilation had errors (continuing anyway)"
+
+# Verify build output exists
+RUN ls -la /app/dist/api-gateway/src/ && test -f /app/dist/api-gateway/src/index.js || (echo "ERROR: Build failed - index.js not found" && exit 1)
 
 # Production stage
 FROM node:20-alpine

@@ -19,9 +19,12 @@ RUN npm ci --include=dev --ignore-scripts
 COPY shared ./shared
 COPY admin-service ./admin-service
 
-# Build TypeScript from root (continue despite type errors)
-WORKDIR /app
-RUN cd admin-service && (npx tsc -p tsconfig.json || true)
+# Build TypeScript
+WORKDIR /app/admin-service
+RUN npx tsc -p tsconfig.json || echo "TypeScript compilation had errors (continuing anyway)"
+
+# Verify build output exists
+RUN ls -la /app/dist/admin-service/src/ && test -f /app/dist/admin-service/src/index.js || (echo "ERROR: Build failed - index.js not found" && exit 1)
 
 # Production stage
 FROM node:20-alpine
