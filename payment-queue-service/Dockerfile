@@ -19,12 +19,20 @@ RUN npm ci --include=dev --ignore-scripts
 COPY shared ./shared
 COPY payment-queue-service ./payment-queue-service
 
-# Build TypeScript
+# Build TypeScript - show errors but continue to verification step
 WORKDIR /app/payment-queue-service
-RUN npx tsc -p tsconfig.json || echo "TypeScript compilation had errors (continuing anyway)"
+RUN npx tsc -p tsconfig.json 2>&1 || true
 
-# Verify build output exists
-RUN ls -la /app/dist/payment-queue-service/src/ && test -f /app/dist/payment-queue-service/src/index.js || (echo "ERROR: Build failed - index.js not found" && exit 1)
+# Verify build output exists - fail with clear message if compilation failed
+RUN if [ ! -f /app/dist/payment-queue-service/src/index.js ]; then \
+      echo "=== BUILD FAILED ===" && \
+      echo "TypeScript compilation did not produce output." && \
+      echo "Re-running tsc to show errors:" && \
+      npx tsc -p tsconfig.json 2>&1 || true && \
+      exit 1; \
+    fi && \
+    echo "Build successful - index.js found" && \
+    ls -la /app/dist/payment-queue-service/src/
 
 # Production stage
 FROM node:20-alpine
