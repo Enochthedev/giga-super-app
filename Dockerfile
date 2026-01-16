@@ -1,5 +1,5 @@
 # Multi-stage build for API Gateway
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -9,7 +9,8 @@ COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 
 # Install ALL dependencies (including devDependencies for build)
-RUN npm ci
+# Skip prepare script (husky) in Docker
+RUN npm ci --ignore-scripts
 
 # Copy source code
 COPY api-gateway ./api-gateway
@@ -19,7 +20,7 @@ COPY shared ./shared
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
@@ -27,7 +28,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --only=production
+# Skip prepare script (husky) in Docker
+RUN npm ci --only=production --ignore-scripts
 
 # Copy built files from builder
 COPY --from=builder /app/dist ./dist
