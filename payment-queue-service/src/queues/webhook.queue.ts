@@ -11,7 +11,7 @@ const connection = new IORedis(config.redisUrl, {
 
 // Queue options
 const queueOptions: QueueOptions = {
-  connection,
+  connection: connection as any,
   defaultJobOptions: {
     attempts: 5,
     backoff: {

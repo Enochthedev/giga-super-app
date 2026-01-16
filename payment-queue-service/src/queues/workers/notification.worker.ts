@@ -95,7 +95,7 @@ export const notificationWorker = new Worker(
     }
   },
   {
-    connection,
+    connection: connection as any,
     concurrency: 10,
     limiter: {
       max: 20,

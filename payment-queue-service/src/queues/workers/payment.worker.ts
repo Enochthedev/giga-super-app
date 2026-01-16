@@ -22,7 +22,7 @@ const getStripe = () => {
       throw new Error('STRIPE_SECRET_KEY is required for payment processing');
     }
     stripe = new Stripe(config.stripeSecretKey, {
-      apiVersion: '2024-12-18.acacia',
+      apiVersion: '2025-12-15.clover' as any,
     });
   }
   return stripe;
@@ -189,7 +189,7 @@ export const paymentWorker = new Worker(
     }
   },
   {
-    connection,
+    connection: connection as any,
     concurrency: 5,
     limiter: {
       max: 10,

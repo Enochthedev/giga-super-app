@@ -75,6 +75,7 @@ const authenticate = async (req: AuthRequest, res: Response, next: NextFunction)
 
     req.user = {
       id: userId,
+      email: '', // Email not available from permissions, set empty
       accessLevel: permissions.access_level,
       branchId: permissions.branch_id,
       stateId: permissions.state_id,

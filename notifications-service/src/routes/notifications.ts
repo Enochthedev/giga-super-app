@@ -26,11 +26,11 @@ const connection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379'
 });
 
 // Initialize queues
-const emailQueue = new Queue('email-notifications', { connection });
-const smsQueue = new Queue('sms-notifications', { connection });
-const pushQueue = new Queue('push-notifications', { connection });
-const scheduledQueue = new Queue('scheduled-notifications', { connection });
-const bulkQueue = new Queue('bulk-notifications', { connection });
+const emailQueue = new Queue('email-notifications', { connection: connection as any });
+const smsQueue = new Queue('sms-notifications', { connection: connection as any });
+const pushQueue = new Queue('push-notifications', { connection: connection as any });
+const scheduledQueue = new Queue('scheduled-notifications', { connection: connection as any });
+const bulkQueue = new Queue('bulk-notifications', { connection: connection as any });
 
 interface AuthenticatedRequest extends Request {
   user?: {

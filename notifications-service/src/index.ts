@@ -102,13 +102,15 @@ const twilioClient =
     : null;
 
 // Enhanced Notification Queues
-export const emailQueue = new Queue('email-notifications', { connection });
-export const smsQueue = new Queue('sms-notifications', { connection });
-export const pushQueue = new Queue('push-notifications', { connection });
-export const scheduledQueue = new Queue('scheduled-notifications', { connection });
-export const bulkQueue = new Queue('bulk-notifications', { connection });
-export const retryQueue = new Queue('retry-notifications', { connection });
-export const campaignQueue = new Queue('campaign-notifications', { connection });
+export const emailQueue = new Queue('email-notifications', { connection: connection as any });
+export const smsQueue = new Queue('sms-notifications', { connection: connection as any });
+export const pushQueue = new Queue('push-notifications', { connection: connection as any });
+export const scheduledQueue = new Queue('scheduled-notifications', {
+  connection: connection as any,
+});
+export const bulkQueue = new Queue('bulk-notifications', { connection: connection as any });
+export const retryQueue = new Queue('retry-notifications', { connection: connection as any });
+export const campaignQueue = new Queue('campaign-notifications', { connection: connection as any });
 
 // Interfaces
 interface NotificationJob {
@@ -388,7 +390,7 @@ const enhancedEmailWorker = new Worker(
       throw error;
     }
   },
-  { connection, concurrency: 5 }
+  { connection: connection as any, concurrency: 5 }
 );
 
 // Enhanced SMS Worker
@@ -475,7 +477,7 @@ const enhancedSmsWorker = new Worker(
       throw error;
     }
   },
-  { connection, concurrency: 10 }
+  { connection: connection as any, concurrency: 10 }
 );
 
 // Bulk notification worker
@@ -582,7 +584,7 @@ const bulkWorker = new Worker(
       throw error;
     }
   },
-  { connection, concurrency: 2 }
+  { connection: connection as any, concurrency: 2 }
 );
 
 // Express app setup
