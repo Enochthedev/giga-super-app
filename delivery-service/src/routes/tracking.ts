@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 
-import { requireAuth } from '@/middleware/auth';
-import { handleValidationErrors } from '@/middleware/validation';
-import { trackingService } from '@/services/tracking';
-import { APIResponse, AuthenticatedRequest, ERROR_CODES, TrackDeliveryRequest } from '@/types';
-import logger from '@/utils/logger';
+import { requireAuth } from '../middleware/auth';
+import { handleValidationErrors } from '../middleware/validation';
+import { trackingService } from '../services/tracking';
+import { APIResponse, AuthenticatedRequest, ERROR_CODES, TrackDeliveryRequest } from '../types';
+import logger from '../utils/logger';
 
 const router = Router();
 

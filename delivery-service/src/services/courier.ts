@@ -1,9 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
-import { CourierProfile, CreateCourierRequest, UpdateCourierRequest } from '@/types';
-import { ServiceError } from '@/utils/errors';
-import logger from '@/utils/logger';
+import { CourierProfile, CreateCourierRequest, UpdateCourierRequest } from '../types';
+import { ServiceError } from '../utils/errors';
+import logger from '../utils/logger';
 
 /**
  * Courier management service for onboarding and profile management

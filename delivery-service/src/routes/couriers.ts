@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { body, param, query } from 'express-validator';
 
-import config from '@/config';
-import { requireAuth, requireRole } from '@/middleware/auth';
-import { handleValidationErrors } from '@/middleware/validation';
-import { CourierService } from '@/services/courier';
-import { APIResponse, AuthenticatedRequest, CreateCourierRequest, ERROR_CODES } from '@/types';
-import { db } from '@/utils/database';
-import logger from '@/utils/logger';
+import config from '../config';
+import { requireAuth, requireRole } from '../middleware/auth';
+import { handleValidationErrors } from '../middleware/validation';
+import { CourierService } from '../services/courier';
+import { APIResponse, AuthenticatedRequest, CreateCourierRequest, ERROR_CODES } from '../types';
+import { db } from '../utils/database';
+import logger from '../utils/logger';
 
 const router = Router();
 const courierService = new CourierService(db);

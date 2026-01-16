@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { asyncHandler } from '../utils/asyncHandler';
-import { auth } from '../middleware/auth';
-import {
-  validatePaymentRequest,
-  validatePaymentStatus,
-  validateRefundRequest,
-} from '../middleware/validation.middleware';
-import { encryptSensitiveFields } from '../middleware/encryption.middleware';
 import {
   createPaymentRequest,
   getPaymentStatus,
   requestRefund,
-} from '../controllers/payment.controller';
+} from '../../controllers/payment.controller';
+import { authenticate as auth } from '../../middleware/auth';
+import { encryptSensitiveFields } from '../../middleware/encryption.middleware';
+import {
+  validatePaymentRequest,
+  validatePaymentStatus,
+  validateRefundRequest,
+} from '../../middleware/validation.middleware';
+import { asyncHandler } from '../../utils/asyncHandler';
 
 const router = Router();
 
@@ -31,22 +31,12 @@ router.post(
  * GET /api/v1/payments/:paymentId/status
  * Get payment status
  */
-router.get(
-  '/:paymentId/status',
-  auth,
-  validatePaymentStatus,
-  asyncHandler(getPaymentStatus)
-);
+router.get('/:paymentId/status', auth, validatePaymentStatus, asyncHandler(getPaymentStatus));
 
 /**
  * POST /api/v1/payments/:paymentId/refund
  * Request payment refund
  */
-router.post(
-  '/:paymentId/refund',
-  auth,
-  validateRefundRequest,
-  asyncHandler(requestRefund)
-);
+router.post('/:paymentId/refund', auth, validateRefundRequest, asyncHandler(requestRefund));
 
 export default router;

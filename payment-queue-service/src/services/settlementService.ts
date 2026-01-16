@@ -5,9 +5,9 @@ import {
   ModuleSettlement,
   StateSettlement,
   BranchSettlement,
-} from '@/types';
-import supabase from '@/utils/database';
-import logger from '@/utils/logger';
+} from '../types';
+import supabase from '../utils/database';
+import logger from '../utils/logger';
 
 export const generateSettlementReport = async (period: {
   start: Date;

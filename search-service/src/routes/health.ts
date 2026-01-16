@@ -14,8 +14,25 @@ const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
-const databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-const cacheService = new CacheService(REDIS_URL);
+let databaseService: DatabaseService | null = null;
+let cacheService: CacheService | null = null;
+
+const getDatabase = () => {
+  if (!databaseService) {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    }
+    databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  }
+  return databaseService;
+};
+
+const getCache = () => {
+  if (!cacheService) {
+    cacheService = new CacheService(REDIS_URL);
+  }
+  return cacheService;
+};
 
 /**
  * @route GET /api/v1/health
@@ -144,7 +161,7 @@ router.get('/ready', async (req: Request, res: Response): Promise<void> => {
   try {
     // Check if service is ready to handle requests
     const [cacheReady, databaseReady] = await Promise.allSettled([
-      cacheService.healthCheck(),
+      getCache().healthCheck(),
       checkDatabaseConnection(),
     ]);
 
@@ -232,7 +249,7 @@ router.get('/metrics', async (req: Request, res: Response): Promise<void> => {
   const requestId = req.headers['x-request-id'] as string;
 
   try {
-    const [cacheStats] = await Promise.allSettled([cacheService.getCacheStats()]);
+    const [cacheStats] = await Promise.allSettled([getCache().getCacheStats()]);
 
     const metrics = {
       service: {
@@ -272,12 +289,12 @@ router.get('/metrics', async (req: Request, res: Response): Promise<void> => {
 
 // Helper functions
 async function checkCacheHealth(): Promise<any> {
-  const isHealthy = await cacheService.healthCheck();
+  const isHealthy = await getCache().healthCheck();
   if (!isHealthy) {
     throw new Error('Cache connection failed');
   }
 
-  const stats = await cacheService.getCacheStats();
+  const stats = await getCache().getCacheStats();
   return {
     connected: true,
     ...stats,

@@ -2,12 +2,12 @@ import { Router, Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 
-import { config } from '@/config';
-import { authenticate, AuthRequest } from '@/middleware/auth';
-import { paymentQueue, refundQueue } from '@/queues/paymentQueue';
-import { PaymentRequest, RefundRequest } from '@/types';
-import { BadRequestError } from '@/utils/errors';
-import logger from '@/utils/logger';
+import { config } from '../config';
+import { authenticate, AuthRequest } from '../middleware/auth';
+import { paymentQueue, refundQueue } from '../queues/paymentQueue';
+import { PaymentRequest, RefundRequest } from '../types';
+import { BadRequestError } from '../utils/errors';
+import logger from '../utils/logger';
 
 const router = Router();
 
