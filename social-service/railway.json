@@ -2,7 +2,11 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile"
+    "dockerfilePath": "social-service/Dockerfile",
+    "watchPatterns": [
+      "social-service/**",
+      "shared/**"
+    ]
   },
   "deploy": {
     "numReplicas": 1,
