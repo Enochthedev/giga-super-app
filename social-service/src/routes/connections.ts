@@ -1,252 +1,386 @@
-/**
- * Connections Routes
- * Endpoints for managing user connections (following, followers, blocking)
- */
+import { SupabaseClient } from '@supabase/supabase-js';
+import { Request, Response, Router } from 'express';
+import { ZodError } from 'zod';
 
-import { Router } from 'express';
-import { AuthenticatedRequest } from '../types';
-import { ConnectionService } from '../services/connectionService';
-import { authMiddleware } from '../middleware/auth';
+import { logger } from '../utils/logger';
 import {
-  validateFollowUser,
-  validateUnfollowUser,
-  validateBlockUser,
-  validateUnblockUser,
-  validateGetFollowers,
-  validatePagination,
-} from '../middleware/validation';
-import { writeLimiter } from '../middleware/rateLimiter';
-import { asyncHandler } from '../utils/errors';
-import { sendSuccess, sendCreated, sendPaginated } from '../utils/response';
-import config from '../config';
+  ErrorCodes,
+  calculatePagination,
+  sendAuthError,
+  sendConflict,
+  sendCreated,
+  sendForbidden,
+  sendInternalError,
+  sendNotFound,
+  sendSuccess,
+  sendValidationError,
+} from '../utils/response';
+import {
+  createConnectionSchema,
+  paginationSchema,
+  updateConnectionSchema,
+} from '../validation/schemas';
 
 const router = Router();
 
-// ============================================================================
-// Following Endpoints
-// ============================================================================
+const getSupabase = (req: Request): SupabaseClient => req.app.locals.supabase;
 
 /**
- * @route POST /api/v1/connections/follow
- * @desc Follow a user
- * @access Private
+ * @swagger
+ * /connections:
+ *   get:
+ *     summary: Get user connections
+ *     description: Retrieve list of user's connections (friends, followers, etc.)
+ *     tags: [Connections]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, accepted, blocked]
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           enum: [friend, follower, family, colleague]
+ *     responses:
+ *       200:
+ *         description: Connections retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
  */
-router.post(
-  '/follow',
-  authMiddleware,
-  writeLimiter,
-  validateFollowUser,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      sendAuthError(res, 'Authentication required', req.requestId);
+      return;
+    }
 
-    const connection = await connectionService.followUser(
-      req.user!.id,
-      req.body,
-      req.requestId!
-    );
+    const { page, limit } = paginationSchema.parse(req.query);
+    const status = req.query.status as string;
+    const type = req.query.type as string;
+    const offset = (page - 1) * limit;
+    const supabase = getSupabase(req);
 
-    sendCreated(res, connection, req.requestId!);
-  })
-);
+    let query = supabase
+      .from('user_connections')
+      .select(
+        `
+        id,
+        connected_user_id,
+        status,
+        connection_type,
+        created_at,
+        user_profiles!user_connections_connected_user_id_fkey(id, first_name, last_name, avatar_url)
+      `,
+        { count: 'exact' }
+      )
+      .eq('user_id', req.user.id);
+
+    if (status) query = query.eq('status', status);
+    if (type) query = query.eq('connection_type', type);
+
+    const {
+      data: connections,
+      count,
+      error,
+    } = await query.order('created_at', { ascending: false }).range(offset, offset + limit - 1);
+
+    if (error) throw error;
+
+    const pagination = calculatePagination(page, limit, count ?? 0);
+    sendSuccess(res, { data: connections ?? [], pagination, requestId: req.requestId });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      sendValidationError(res, 'Invalid query parameters', error.issues, req.requestId);
+      return;
+    }
+    logger.error('Error fetching connections', { error });
+    sendInternalError(res, 'Failed to fetch connections', req.requestId);
+  }
+});
 
 /**
- * @route DELETE /api/v1/connections/unfollow/:userId
- * @desc Unfollow a user
- * @access Private
+ * @swagger
+ * /connections/requests:
+ *   get:
+ *     summary: Get pending connection requests
+ *     description: Retrieve pending connection requests received by the user
+ *     tags: [Connections]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Requests retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
  */
-router.delete(
-  '/unfollow/:userId',
-  authMiddleware,
-  writeLimiter,
-  validateUnfollowUser,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
+router.get('/requests', async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      sendAuthError(res, 'Authentication required', req.requestId);
+      return;
+    }
 
-    await connectionService.unfollowUser(
-      req.user!.id,
-      req.params.userId,
-      req.requestId!
-    );
+    const supabase = getSupabase(req);
 
-    sendSuccess(res, { message: 'User unfollowed successfully' }, req.requestId!);
-  })
-);
+    const { data: requests, error } = await supabase
+      .from('user_connections')
+      .select(
+        `
+        id,
+        user_id,
+        connection_type,
+        created_at,
+        user_profiles!user_connections_user_id_fkey(id, first_name, last_name, avatar_url)
+      `
+      )
+      .eq('connected_user_id', req.user.id)
+      .eq('status', 'pending')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    sendSuccess(res, { data: requests ?? [], requestId: req.requestId });
+  } catch (error) {
+    logger.error('Error fetching connection requests', { error });
+    sendInternalError(res, 'Failed to fetch connection requests', req.requestId);
+  }
+});
 
 /**
- * @route GET /api/v1/connections/followers/:userId
- * @desc Get user's followers
- * @access Public
+ * @swagger
+ * /connections:
+ *   post:
+ *     summary: Send connection request
+ *     description: Send a friend/follow request to another user
+ *     tags: [Connections]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - connected_user_id
+ *             properties:
+ *               connected_user_id:
+ *                 type: string
+ *                 format: uuid
+ *               connection_type:
+ *                 type: string
+ *                 enum: [friend, follower, family, colleague]
+ *                 default: friend
+ *     responses:
+ *       201:
+ *         description: Connection request sent
+ *       400:
+ *         $ref: '#/components/responses/BadRequest'
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       409:
+ *         description: Connection already exists
  */
-router.get(
-  '/followers/:userId',
-  validateGetFollowers,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
+router.post('/', async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      sendAuthError(res, 'Authentication required', req.requestId);
+      return;
+    }
 
-    const page = parseInt(req.query.page as string) || 1;
-    const limit =
-      parseInt(req.query.limit as string) || config.pagination.defaultLimit;
+    const input = createConnectionSchema.parse(req.body);
+    const supabase = getSupabase(req);
 
-    const { connections, metadata } = await connectionService.getFollowers(
-      req.params.userId,
-      { page, limit },
-      req.requestId!
-    );
+    // Check if connection already exists
+    const { data: existing } = await supabase
+      .from('user_connections')
+      .select('id, status')
+      .eq('user_id', req.user.id)
+      .eq('connected_user_id', input.connected_user_id)
+      .single();
 
-    sendPaginated(res, connections, metadata, req.requestId!);
-  })
-);
+    if (existing) {
+      sendConflict(res, ErrorCodes.CONNECTION_EXISTS, 'Connection already exists', req.requestId);
+      return;
+    }
+
+    const { data: connection, error } = await supabase
+      .from('user_connections')
+      .insert({
+        user_id: req.user.id,
+        connected_user_id: input.connected_user_id,
+        connection_type: input.connection_type,
+        status: 'pending',
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    logger.info('Connection request sent', { from: req.user.id, to: input.connected_user_id });
+    sendCreated(res, { data: connection, requestId: req.requestId });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      sendValidationError(res, 'Invalid connection data', error.issues, req.requestId);
+      return;
+    }
+    logger.error('Error creating connection', { error });
+    sendInternalError(res, 'Failed to create connection', req.requestId);
+  }
+});
 
 /**
- * @route GET /api/v1/connections/following/:userId
- * @desc Get users that the user is following
- * @access Public
+ * @swagger
+ * /connections/{connectionId}:
+ *   put:
+ *     summary: Update connection status
+ *     description: Accept, decline, or block a connection request
+ *     tags: [Connections]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: connectionId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [accepted, declined, blocked]
+ *     responses:
+ *       200:
+ *         description: Connection updated
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       403:
+ *         $ref: '#/components/responses/Forbidden'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
-router.get(
-  '/following/:userId',
-  validateGetFollowers,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
+router.put('/:connectionId', async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      sendAuthError(res, 'Authentication required', req.requestId);
+      return;
+    }
 
-    const page = parseInt(req.query.page as string) || 1;
-    const limit =
-      parseInt(req.query.limit as string) || config.pagination.defaultLimit;
+    const { connectionId } = req.params;
+    const input = updateConnectionSchema.parse(req.body);
+    const supabase = getSupabase(req);
 
-    const { connections, metadata } = await connectionService.getFollowing(
-      req.params.userId,
-      { page, limit },
-      req.requestId!
-    );
+    // Verify the user is the recipient of the connection request
+    const { data: existing, error: fetchError } = await supabase
+      .from('user_connections')
+      .select('connected_user_id')
+      .eq('id', connectionId)
+      .single();
 
-    sendPaginated(res, connections, metadata, req.requestId!);
-  })
-);
+    if (fetchError || !existing) {
+      sendNotFound(res, ErrorCodes.CONNECTION_NOT_FOUND, 'Connection not found', req.requestId);
+      return;
+    }
+
+    if (existing.connected_user_id !== req.user.id) {
+      sendForbidden(res, 'You can only respond to requests sent to you', req.requestId);
+      return;
+    }
+
+    const { data: connection, error } = await supabase
+      .from('user_connections')
+      .update({ status: input.status, updated_at: new Date().toISOString() })
+      .eq('id', connectionId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    logger.info('Connection updated', { connectionId, status: input.status });
+    sendSuccess(res, { data: connection, requestId: req.requestId });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      sendValidationError(res, 'Invalid status', error.issues, req.requestId);
+      return;
+    }
+    logger.error('Error updating connection', { error });
+    sendInternalError(res, 'Failed to update connection', req.requestId);
+  }
+});
 
 /**
- * @route GET /api/v1/connections/is-following/:userId
- * @desc Check if current user is following another user
- * @access Private
+ * @swagger
+ * /connections/{connectionId}:
+ *   delete:
+ *     summary: Remove connection
+ *     description: Remove an existing connection or cancel a pending request
+ *     tags: [Connections]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: connectionId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Connection removed
+ *       401:
+ *         $ref: '#/components/responses/Unauthorized'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
  */
-router.get(
-  '/is-following/:userId',
-  authMiddleware,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
+router.delete('/:connectionId', async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      sendAuthError(res, 'Authentication required', req.requestId);
+      return;
+    }
 
-    const isFollowing = await connectionService.isFollowing(
-      req.user!.id,
-      req.params.userId,
-      req.requestId!
-    );
+    const { connectionId } = req.params;
+    const supabase = getSupabase(req);
 
-    sendSuccess(res, { is_following: isFollowing }, req.requestId!);
-  })
-);
+    // Verify ownership (either sender or recipient can delete)
+    const { data: existing } = await supabase
+      .from('user_connections')
+      .select('user_id, connected_user_id')
+      .eq('id', connectionId)
+      .single();
 
-// ============================================================================
-// Blocking Endpoints
-// ============================================================================
+    if (!existing) {
+      sendNotFound(res, ErrorCodes.CONNECTION_NOT_FOUND, 'Connection not found', req.requestId);
+      return;
+    }
 
-/**
- * @route POST /api/v1/connections/block
- * @desc Block a user
- * @access Private
- */
-router.post(
-  '/block',
-  authMiddleware,
-  writeLimiter,
-  validateBlockUser,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
+    if (existing.user_id !== req.user.id && existing.connected_user_id !== req.user.id) {
+      sendForbidden(res, 'You can only remove your own connections', req.requestId);
+      return;
+    }
 
-    const block = await connectionService.blockUser(
-      req.user!.id,
-      req.body,
-      req.requestId!
-    );
+    const { error } = await supabase.from('user_connections').delete().eq('id', connectionId);
 
-    sendCreated(res, block, req.requestId!);
-  })
-);
+    if (error) throw error;
 
-/**
- * @route DELETE /api/v1/connections/unblock/:userId
- * @desc Unblock a user
- * @access Private
- */
-router.delete(
-  '/unblock/:userId',
-  authMiddleware,
-  writeLimiter,
-  validateUnblockUser,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
-
-    await connectionService.unblockUser(
-      req.user!.id,
-      req.params.userId,
-      req.requestId!
-    );
-
-    sendSuccess(res, { message: 'User unblocked successfully' }, req.requestId!);
-  })
-);
-
-/**
- * @route GET /api/v1/connections/blocked
- * @desc Get blocked users
- * @access Private
- */
-router.get(
-  '/blocked',
-  authMiddleware,
-  validatePagination,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
-
-    const page = parseInt(req.query.page as string) || 1;
-    const limit =
-      parseInt(req.query.limit as string) || config.pagination.defaultLimit;
-
-    const { blocks, metadata } = await connectionService.getBlockedUsers(
-      req.user!.id,
-      { page, limit },
-      req.requestId!
-    );
-
-    sendPaginated(res, blocks, metadata, req.requestId!);
-  })
-);
-
-/**
- * @route GET /api/v1/connections/is-blocked/:userId
- * @desc Check if a user is blocked
- * @access Private
- */
-router.get(
-  '/is-blocked/:userId',
-  authMiddleware,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { supabase } = req.app.locals;
-    const connectionService = new ConnectionService(supabase);
-
-    const isBlocked = await connectionService.isBlocked(
-      req.user!.id,
-      req.params.userId,
-      req.requestId!
-    );
-
-    sendSuccess(res, { is_blocked: isBlocked }, req.requestId!);
-  })
-);
+    logger.info('Connection removed', { connectionId, userId: req.user.id });
+    sendSuccess(res, { data: { deleted: true }, requestId: req.requestId });
+  } catch (error) {
+    logger.error('Error removing connection', { error });
+    sendInternalError(res, 'Failed to remove connection', req.requestId);
+  }
+});
 
 export default router;
