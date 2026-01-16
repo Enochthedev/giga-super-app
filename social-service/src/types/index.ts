@@ -11,10 +11,8 @@ export interface AuthUser {
   roles?: string[];
 }
 
-export interface AuthenticatedRequest extends Request {
-  user?: AuthUser;
-  requestId?: string;
-}
+// Use the extended Express.Request type from modules.d.ts
+export type AuthenticatedRequest = Request;
 
 // ============================================================================
 // Post Types
@@ -416,13 +414,7 @@ export interface PostAnalytics {
 // Notification Types
 // ============================================================================
 
-export type NotificationType =
-  | 'like'
-  | 'comment'
-  | 'share'
-  | 'follow'
-  | 'mention'
-  | 'reply';
+export type NotificationType = 'like' | 'comment' | 'share' | 'follow' | 'mention' | 'reply';
 
 export interface NotificationPayload {
   type: NotificationType;

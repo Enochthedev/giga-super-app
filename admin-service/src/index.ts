@@ -45,16 +45,8 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Auth middleware
-interface AuthRequest extends Request {
-  user?: {
-    id: string;
-    accessLevel: string;
-    branchId?: string;
-    stateId?: string;
-    role: string;
-  };
-}
+// Auth middleware - use extended Express.Request type
+type AuthRequest = Request;
 
 const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
   try {

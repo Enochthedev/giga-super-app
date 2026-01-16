@@ -4,7 +4,7 @@
  */
 
 import { Response } from 'express';
-import { APIResponse, APIError } from '../types';
+import { APIError, APIResponse } from '../types';
 import logger from './logger';
 
 // ============================================================================
@@ -98,40 +98,25 @@ export class ValidationError extends AppError {
 
 export class AuthenticationError extends AppError {
   constructor(message: string = 'Authentication required', code?: string) {
-    super(
-      code || ERROR_CODES.AUTHENTICATION_REQUIRED,
-      401,
-      message
-    );
+    super(code || ERROR_CODES.AUTHENTICATION_REQUIRED, 401, message);
   }
 }
 
 export class AuthorizationError extends AppError {
   constructor(message: string = 'Insufficient permissions', code?: string) {
-    super(
-      code || ERROR_CODES.INSUFFICIENT_PERMISSIONS,
-      403,
-      message
-    );
+    super(code || ERROR_CODES.INSUFFICIENT_PERMISSIONS, 403, message);
   }
 }
 
 export class NotFoundError extends AppError {
-  constructor(
-    resource: string = 'Resource',
-    code: string = ERROR_CODES.RESOURCE_NOT_FOUND
-  ) {
+  constructor(resource: string = 'Resource', code: string = ERROR_CODES.RESOURCE_NOT_FOUND) {
     super(code, 404, `${resource} not found`);
   }
 }
 
 export class ConflictError extends AppError {
   constructor(message: string = 'Resource already exists', code?: string) {
-    super(
-      code || ERROR_CODES.RESOURCE_ALREADY_EXISTS,
-      409,
-      message
-    );
+    super(code || ERROR_CODES.RESOURCE_ALREADY_EXISTS, 409, message);
   }
 }
 
@@ -154,18 +139,8 @@ export class DatabaseError extends AppError {
 }
 
 export class ExternalServiceError extends AppError {
-  constructor(
-    service: string,
-    message: string = 'External service error',
-    details?: any
-  ) {
-    super(
-      ERROR_CODES.EXTERNAL_SERVICE_ERROR,
-      500,
-      `${service}: ${message}`,
-      details,
-      false
-    );
+  constructor(service: string, message: string = 'External service error', details?: any) {
+    super(ERROR_CODES.EXTERNAL_SERVICE_ERROR, 500, `${service}: ${message}`, details, false);
   }
 }
 
@@ -181,7 +156,7 @@ export function formatErrorResponse(
   requestId: string = 'unknown'
 ): APIResponse {
   let statusCode = 500;
-  let errorCode = ERROR_CODES.INTERNAL_SERVER_ERROR;
+  let errorCode: string = ERROR_CODES.INTERNAL_SERVER_ERROR;
   let message = 'An unexpected error occurred';
   let details: any = undefined;
 
@@ -290,10 +265,7 @@ export function asyncHandler(fn: Function) {
 /**
  * Asserts that a value is truthy, throws error otherwise
  */
-export function assert(
-  condition: any,
-  error: AppError
-): asserts condition {
+export function assert(condition: any, error: AppError): asserts condition {
   if (!condition) {
     throw error;
   }
