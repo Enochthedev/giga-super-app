@@ -8,9 +8,12 @@ import helmet from 'helmet';
 import IORedis from 'ioredis';
 import NodeCache from 'node-cache';
 import * as nodemailer from 'nodemailer';
+import swaggerUi from 'swagger-ui-express';
 import { Twilio } from 'twilio';
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
+
+import { swaggerSpec } from './config/swagger';
 
 dotenv.config();
 
@@ -656,12 +659,12 @@ app.get('/api-docs.json', (req, res) => {
 });
 
 // Import route modules
-import analyticsRouter from './routes/analytics.js';
-import campaignsRouter from './routes/campaigns.js';
-import notificationsRouter from './routes/notifications.js';
-import preferencesRouter from './routes/preferences.js';
-import templatesRouter from './routes/templates.js';
-import trackingRouter from './routes/tracking.js';
+import analyticsRouter from './routes/analytics';
+import campaignsRouter from './routes/campaigns';
+import notificationsRouter from './routes/notifications';
+import preferencesRouter from './routes/preferences';
+import templatesRouter from './routes/templates';
+import trackingRouter from './routes/tracking';
 
 // Authentication middleware (placeholder - integrate with your auth system)
 app.use((req, res, next) => {

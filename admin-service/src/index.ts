@@ -6,7 +6,10 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import jwt from 'jsonwebtoken';
+import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
+
+import { swaggerSpec } from './config/swagger';
 
 dotenv.config();
 
