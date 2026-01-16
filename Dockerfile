@@ -10,7 +10,7 @@ COPY tsconfig.build.json ./
 
 # Install ALL dependencies (including devDependencies for build)
 # Skip prepare script (husky) in Docker
-RUN npm ci --ignore-scripts
+RUN npm ci --include=dev --ignore-scripts
 
 # Copy source code
 COPY api-gateway ./api-gateway
