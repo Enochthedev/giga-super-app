@@ -2,11 +2,8 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "DOCKERFILE",
-    "dockerfilePath": "payment-queue-service/Dockerfile",
-    "watchPatterns": [
-      "payment-queue-service/**",
-      "shared/**"
-    ]
+    "dockerfilePath": "Dockerfile",
+    "watchPatterns": ["**/*"]
   },
   "deploy": {
     "numReplicas": 1,
