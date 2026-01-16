@@ -98,3 +98,54 @@ export const requireAuth = async (
     });
   }
 };
+
+/**
+ * Role-based authorization middleware
+ */
+export const requireRole = (allowedRoles: string[]) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+    if (!req.user) {
+      res.status(401).json({
+        success: false,
+        error: {
+          code: 'AUTHENTICATION_REQUIRED',
+          message: 'Authentication is required',
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          request_id: req.requestId || 'unknown',
+          version: '1.0.0',
+        },
+      });
+      return;
+    }
+
+    const userRoles = req.user.roles || [req.user.role];
+    const hasRole = allowedRoles.some(role => userRoles.includes(role));
+
+    if (!hasRole) {
+      logger.warn('Insufficient permissions', {
+        user_id: req.user.id,
+        user_roles: userRoles,
+        required_roles: allowedRoles,
+        request_id: req.requestId,
+      });
+
+      res.status(403).json({
+        success: false,
+        error: {
+          code: 'INSUFFICIENT_PERMISSIONS',
+          message: 'You do not have permission to access this resource',
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          request_id: req.requestId || 'unknown',
+          version: '1.0.0',
+        },
+      });
+      return;
+    }
+
+    next();
+  };
+};

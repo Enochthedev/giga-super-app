@@ -7,7 +7,9 @@ import helmet from 'helmet';
 
 import config from '@/config';
 import assignmentRoutes from '@/routes/assignments';
+import courierRoutes from '@/routes/couriers';
 import healthRoutes from '@/routes/health';
+import packageRoutes from '@/routes/packages';
 import schedulerRoutes from '@/routes/scheduler';
 import trackingRoutes from '@/routes/tracking';
 import websocketRoutes from '@/routes/websocket';
@@ -53,6 +55,8 @@ app.use('/', healthRoutes);
 // API routes
 app.use('/api/v1', trackingRoutes);
 app.use('/api/v1', assignmentRoutes);
+app.use('/api/v1', packageRoutes);
+app.use('/api/v1', courierRoutes);
 app.use('/api/v1', websocketRoutes);
 app.use('/api/v1', schedulerRoutes);
 

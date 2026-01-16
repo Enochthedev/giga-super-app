@@ -66,7 +66,7 @@
     "types": ["node", "jest"],
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": ["src/**/*", "supabase/functions/**/*", "tests/**/*", "scripts/**/*", "*.ts", "*.js"],
+  "include": ["api-gateway/src/**/*", "shared/**/*"],
   "exclude": [
     "node_modules",
     "dist",
@@ -74,8 +74,11 @@
     "coverage",
     "**/*.min.js",
     "**/*.bundle.js",
-    "supabase/migrations",
-    "docs"
+    "supabase",
+    "tests",
+    "scripts",
+    "docs",
+    "postman"
   ],
   "ts-node": {
     "esm": true,
