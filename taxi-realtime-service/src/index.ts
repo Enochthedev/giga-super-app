@@ -40,21 +40,145 @@ const logger = winston.createLogger({
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Redis clients for Socket.IO adapter
-const pubClient = new Redis(REDIS_URL);
-const subClient = pubClient.duplicate();
+let pubClient: Redis | null = null;
+let subClient: Redis | null = null;
+let redisConnected = false;
+
+const initRedis = async (): Promise<boolean> => {
+  try {
+    // Parse Redis URL to ensure it has the correct format
+    let redisUrl = REDIS_URL;
+    if (!redisUrl.startsWith('redis://') && !redisUrl.startsWith('rediss://')) {
+      // If it's just host:port, assume no auth needed for local dev
+      redisUrl = `redis://${redisUrl}`;
+    }
+
+    logger.info('Connecting to Redis...', { url: redisUrl.replace(/:[^:@]+@/, ':***@') });
+
+    pubClient = new Redis(redisUrl, {
+      maxRetriesPerRequest: 3,
+      retryStrategy: (times: number) => {
+        if (times > 10) {
+          logger.error('Redis connection failed after 10 retries');
+          return null; // Stop retrying
+        }
+        const delay = Math.min(times * 200, 2000);
+        logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
+        return delay;
+      },
+      lazyConnect: false,
+      enableReadyCheck: true,
+      connectTimeout: 10000,
+    });
+
+    pubClient.on('error', err => {
+      logger.error('Redis pub client error', { error: err.message });
+      redisConnected = false;
+    });
+
+    pubClient.on('connect', () => {
+      logger.info('Redis pub client connected');
+    });
+
+    pubClient.on('ready', () => {
+      logger.info('Redis pub client ready');
+      redisConnected = true;
+    });
+
+    pubClient.on('close', () => {
+      logger.warn('Redis pub client connection closed');
+      redisConnected = false;
+    });
+
+    // Wait for connection
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Redis connection timeout'));
+      }, 15000);
+
+      pubClient!.once('ready', () => {
+        clearTimeout(timeout);
+        resolve();
+      });
+
+      pubClient!.once('error', err => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+
+    subClient = pubClient.duplicate();
+
+    subClient.on('error', err => {
+      logger.error('Redis sub client error', { error: err.message });
+    });
+
+    subClient.on('connect', () => {
+      logger.info('Redis sub client connected');
+    });
+
+    subClient.on('ready', () => {
+      logger.info('Redis sub client ready');
+    });
+
+    // Wait for sub client to be ready
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Redis sub client connection timeout'));
+      }, 15000);
+
+      subClient!.once('ready', () => {
+        clearTimeout(timeout);
+        resolve();
+      });
+
+      subClient!.once('error', err => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+
+    logger.info('Redis clients initialized successfully');
+    return true;
+  } catch (error: any) {
+    logger.error('Failed to initialize Redis', { error: error.message });
+    return false;
+  }
+};
 
 // Express app
 const app: Application = express();
 const httpServer = createServer(app);
 
-// Socket.IO server with Redis adapter
+// Socket.IO server - adapter will be set after Redis connects
 const io = new Server(httpServer, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],
   },
-  adapter: createAdapter(pubClient, subClient),
 });
+
+// Initialize Redis and set up Socket.IO adapter
+const startServer = async () => {
+  const redisInitialized = await initRedis();
+
+  if (redisInitialized && pubClient && subClient) {
+    // Set Redis adapter for Socket.IO
+    io.adapter(createAdapter(pubClient, subClient));
+    logger.info('Socket.IO Redis adapter configured');
+  } else {
+    logger.warn('Running without Redis adapter - Socket.IO will work in single-instance mode only');
+  }
+
+  // Start HTTP server
+  httpServer.listen(PORT, () => {
+    logger.info(`Taxi Real-Time Service started`, {
+      port: PORT,
+      env: process.env.NODE_ENV || 'development',
+      redisConnected: redisInitialized,
+    });
+  });
+};
 
 // Middleware
 app.use(helmet());
@@ -398,11 +522,9 @@ function toRad(degrees: number): number {
 }
 
 // Start server
-httpServer.listen(PORT, () => {
-  logger.info(`Taxi Real-Time Service started`, {
-    port: PORT,
-    env: process.env.NODE_ENV || 'development',
-  });
+startServer().catch(error => {
+  logger.error('Failed to start server', { error: error.message });
+  process.exit(1);
 });
 
 // Graceful shutdown
@@ -411,8 +533,22 @@ const gracefulShutdown = async () => {
 
   io.close();
   httpServer.close();
-  await pubClient.quit();
-  await subClient.quit();
+
+  if (pubClient) {
+    try {
+      await pubClient.quit();
+    } catch (e) {
+      logger.warn('Error closing pub client', { error: (e as Error).message });
+    }
+  }
+
+  if (subClient) {
+    try {
+      await subClient.quit();
+    } catch (e) {
+      logger.warn('Error closing sub client', { error: (e as Error).message });
+    }
+  }
 
   process.exit(0);
 };

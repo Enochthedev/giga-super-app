@@ -1,4 +1,4 @@
-import { Queue, Worker, QueueEvents, Job } from 'bullmq';
+import { Job, Queue, QueueEvents, Worker } from 'bullmq';
 import IORedis from 'ioredis';
 
 import { config } from '../config';
@@ -6,10 +6,36 @@ import { processPayment } from '../services/paymentProcessor';
 import { PaymentRequest, PaymentResponse } from '../types';
 import logger from '../utils/logger';
 
-// Redis connection
+// Redis connection with error handling
 const connection = new IORedis(config.redisUrl, {
   maxRetriesPerRequest: null,
-  enableReadyCheck: false,
+  enableReadyCheck: true,
+  connectTimeout: 10000,
+  retryStrategy: (times: number) => {
+    if (times > 10) {
+      logger.error('Redis connection failed after 10 retries');
+      return null;
+    }
+    const delay = Math.min(times * 200, 2000);
+    logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
+    return delay;
+  },
+});
+
+connection.on('error', err => {
+  logger.error('Redis connection error', { error: err.message });
+});
+
+connection.on('connect', () => {
+  logger.info('Redis connected');
+});
+
+connection.on('ready', () => {
+  logger.info('Redis ready');
+});
+
+connection.on('close', () => {
+  logger.warn('Redis connection closed');
 });
 
 // Payment Queue
@@ -65,7 +91,7 @@ export const paymentWorker = new Worker<PaymentRequest, PaymentResponse>(
   'payment-processing',
   async (job: Job<PaymentRequest>) => {
     const { data } = job;
-    
+
     logger.info('Processing payment job', {
       jobId: job.id,
       paymentId: data.id,
@@ -77,7 +103,7 @@ export const paymentWorker = new Worker<PaymentRequest, PaymentResponse>(
     try {
       // Process payment
       const result = await processPayment(data);
-      
+
       logger.info('Payment processed successfully', {
         jobId: job.id,
         paymentId: data.id,
@@ -99,7 +125,7 @@ export const paymentWorker = new Worker<PaymentRequest, PaymentResponse>(
         await deadLetterQueue.add('failed-payment', data, {
           priority: 1,
         });
-        
+
         logger.warn('Payment moved to dead letter queue', {
           jobId: job.id,
           paymentId: data.id,
@@ -124,7 +150,7 @@ export const refundWorker = new Worker(
   'payment-refunds',
   async (job: Job) => {
     const { data } = job;
-    
+
     logger.info('Processing refund job', {
       jobId: job.id,
       transactionId: data.transactionId,
@@ -132,10 +158,10 @@ export const refundWorker = new Worker(
 
     // Import refund service
     const { processRefund } = await import('@/services/refundService');
-    
+
     try {
       const result = await processRefund(data);
-      
+
       logger.info('Refund processed successfully', {
         jobId: job.id,
         transactionId: data.transactionId,
@@ -166,10 +192,10 @@ export const settlementWorker = new Worker(
 
     // Import settlement service
     const { generateSettlementReport } = await import('@/services/settlementService');
-    
+
     try {
       const report = await generateSettlementReport(job.data.period);
-      
+
       logger.info('Settlement report generated', {
         jobId: job.id,
         reportId: report.reportId,
@@ -214,11 +240,11 @@ paymentWorker.on('failed', (job, error) => {
   });
 });
 
-paymentWorker.on('error', (error) => {
+paymentWorker.on('error', error => {
   logger.error('Payment worker error', { error: error.message });
 });
 
-refundWorker.on('completed', (job) => {
+refundWorker.on('completed', job => {
   logger.info('Refund job completed', { jobId: job.id });
 });
 
@@ -229,7 +255,7 @@ refundWorker.on('failed', (job, error) => {
   });
 });
 
-settlementWorker.on('completed', (job) => {
+settlementWorker.on('completed', job => {
   logger.info('Settlement job completed', { jobId: job.id });
 });
 
@@ -243,18 +269,18 @@ settlementWorker.on('failed', (job, error) => {
 // Graceful shutdown
 export const closeQueues = async () => {
   logger.info('Closing queues...');
-  
+
   await paymentWorker.close();
   await refundWorker.close();
   await settlementWorker.close();
-  
+
   await paymentQueue.close();
   await refundQueue.close();
   await settlementQueue.close();
   await deadLetterQueue.close();
-  
+
   await connection.quit();
-  
+
   logger.info('All queues closed');
 };
 

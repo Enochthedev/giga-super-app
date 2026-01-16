@@ -8,20 +8,42 @@ import { AutocompleteResponse, SearchQuery, SearchResponse } from '../types/inde
 export class CacheService {
   private redis: Redis;
   private defaultTTL: number = 300; // 5 minutes
+  private isConnected: boolean = false;
 
   constructor(redisUrl: string) {
     this.redis = new Redis(redisUrl, {
-      retryDelayOnFailover: 100,
       maxRetriesPerRequest: 3,
-      lazyConnect: true,
+      lazyConnect: false,
+      enableReadyCheck: true,
+      connectTimeout: 10000,
+      retryStrategy: (times: number) => {
+        if (times > 10) {
+          console.error('Redis connection failed after 10 retries');
+          return null;
+        }
+        const delay = Math.min(times * 200, 2000);
+        console.log(`Redis retry attempt ${times}, waiting ${delay}ms`);
+        return delay;
+      },
     });
 
     this.redis.on('error', error => {
-      console.error('Redis connection error:', error);
+      console.error('Redis connection error:', error.message);
+      this.isConnected = false;
     });
 
     this.redis.on('connect', () => {
-      console.log('Redis connected successfully');
+      console.log('Redis connected');
+    });
+
+    this.redis.on('ready', () => {
+      console.log('Redis ready');
+      this.isConnected = true;
+    });
+
+    this.redis.on('close', () => {
+      console.warn('Redis connection closed');
+      this.isConnected = false;
     });
   }
 

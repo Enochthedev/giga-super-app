@@ -31,12 +31,37 @@ const logger = winston.createLogger({
   ],
 });
 
-// Redis connection with connection pooling
+// Redis connection with connection pooling and error handling
 const connection = new IORedis(REDIS_URL, {
   maxRetriesPerRequest: null,
-  lazyConnect: true,
-  retryDelayOnFailover: 100,
-  enableReadyCheck: false,
+  lazyConnect: false,
+  enableReadyCheck: true,
+  connectTimeout: 10000,
+  retryStrategy: (times: number) => {
+    if (times > 10) {
+      logger.error('Redis connection failed after 10 retries');
+      return null;
+    }
+    const delay = Math.min(times * 200, 2000);
+    logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
+    return delay;
+  },
+});
+
+connection.on('error', err => {
+  logger.error('Redis connection error', { error: err.message });
+});
+
+connection.on('connect', () => {
+  logger.info('Redis connected');
+});
+
+connection.on('ready', () => {
+  logger.info('Redis ready');
+});
+
+connection.on('close', () => {
+  logger.warn('Redis connection closed');
 });
 
 // Supabase client for database operations
