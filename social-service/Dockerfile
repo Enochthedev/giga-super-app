@@ -34,10 +34,10 @@ LABEL port="3001"
 WORKDIR /app
 
 # Copy service-specific package files (not root)
-COPY social-service/package.json ./
+COPY social-service/package.json social-service/package-lock.json ./
 
 # Install production dependencies from social-service package.json
-RUN npm install --omit=dev --ignore-scripts
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
