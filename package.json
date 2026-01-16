@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Platform architecture split from monolithic Supabase to hybrid Supabase + Railway deployment",
   "main": "dist/index.js",
-  "type": "module",
   "engines": {
     "node": ">=20.0.0",
     "npm": ">=8.0.0"
