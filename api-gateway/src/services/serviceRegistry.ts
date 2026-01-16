@@ -172,6 +172,39 @@ class ServiceRegistry {
       });
     }
 
+    if (config.services.delivery) {
+      this.registerService('railway-delivery', {
+        id: 'railway-delivery',
+        name: 'Delivery Service',
+        baseUrl: config.services.delivery,
+        healthEndpoint: '/health',
+        platform: 'railway',
+        patterns: ['/api/v1/delivery/*', '/api/v1/courier/*', '/api/v1/tracking/*'],
+      });
+    }
+
+    if (config.services.notifications) {
+      this.registerService('railway-notifications', {
+        id: 'railway-notifications',
+        name: 'Notifications Service',
+        baseUrl: config.services.notifications,
+        healthEndpoint: '/health',
+        platform: 'railway',
+        patterns: ['/api/v1/notifications/*', '/api/v1/push/*', '/api/v1/alerts/*'],
+      });
+    }
+
+    if (config.services.taxiRealtime) {
+      this.registerService('railway-taxi-realtime', {
+        id: 'railway-taxi-realtime',
+        name: 'Taxi Realtime Service',
+        baseUrl: config.services.taxiRealtime,
+        healthEndpoint: '/health',
+        platform: 'railway',
+        patterns: ['/api/v1/taxi-realtime/*', '/api/v1/driver-location/*'],
+      });
+    }
+
     this.initialized = true;
     logger.info(`Service registry initialized with ${this.services.size} services`);
   }
