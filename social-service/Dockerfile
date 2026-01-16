@@ -1,6 +1,11 @@
 # Multi-stage build for social-service (Monorepo)
 FROM node:20-alpine AS builder
 
+# Labels for identification
+LABEL service="social-service"
+LABEL version="1.0.0"
+LABEL description="Social media service for Giga platform"
+
 WORKDIR /app
 
 # Copy package files
@@ -21,6 +26,11 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine
 
+# Labels for identification
+LABEL service="social-service"
+LABEL version="1.0.0"
+LABEL port="3001"
+
 WORKDIR /app
 
 # Copy package files
@@ -36,6 +46,8 @@ COPY --from=builder /app/shared ./shared
 # Set environment
 ENV NODE_ENV=production
 ENV PORT=3001
+ENV SERVICE_NAME=social-service
+ENV SERVICE_VERSION=1.0.0
 
 # Expose port
 EXPOSE 3001
