@@ -212,21 +212,34 @@ export interface EcommerceProduct {
   updated_at: string;
 }
 
-export interface TaxiDriver {
+export interface DriverProfile {
   id: string;
   user_id: string;
-  name: string;
-  phone: string;
-  vehicle_type: string;
-  vehicle_model: string;
-  license_plate: string;
+  license_number: string;
+  vehicle_info?: {
+    type?: string;
+    model?: string;
+    plate?: string;
+    color?: string;
+  };
+  vehicle_type?: string;
+  is_online: boolean;
+  is_verified: boolean;
+  current_location?: {
+    latitude?: number;
+    longitude?: number;
+  };
   rating: number;
-  is_available: boolean;
-  current_latitude?: number;
-  current_longitude?: number;
+  total_rides: number;
+  subscription_tier?: string;
+  heading?: number;
+  speed?: number;
   created_at: string;
   updated_at: string;
 }
+
+// Alias for backward compatibility
+export type TaxiDriver = DriverProfile;
 
 export interface SocialPost {
   id: string;

@@ -3,14 +3,15 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+
 import {
+  DriverProfile,
   EcommerceProduct,
   Hotel,
   SearchCategory,
   SearchQuery,
   SearchResult,
   SocialPost,
-  TaxiDriver,
   UserProfile,
 } from '../types/index.js';
 
@@ -96,7 +97,7 @@ export class DatabaseService {
       location: hotel.location,
       relevance_score: this.calculateRelevanceScore(
         query.q || '',
-        hotel.name + ' ' + hotel.description
+        `${hotel.name} ${hotel.description}`
       ),
       data: hotel,
       created_at: hotel.created_at,
@@ -172,7 +173,7 @@ export class DatabaseService {
         location: undefined,
         relevance_score: this.calculateRelevanceScore(
           query.q || '',
-          product.name + ' ' + product.description
+          `${product.name} ${product.description}`
         ),
         data: product,
         created_at: product.created_at,
@@ -188,18 +189,47 @@ export class DatabaseService {
    */
   async searchDrivers(
     query: SearchQuery
-  ): Promise<{ results: SearchResult<TaxiDriver>[]; total: number }> {
-    let dbQuery = this.supabase
-      .from('taxi_drivers')
-      .select('*', { count: 'exact' })
-      .eq('is_available', true)
-      .is('deleted_at', null);
+  ): Promise<{ results: SearchResult<DriverProfile>[]; total: number }> {
+    // If location-based search is requested, use RPC function
+    if (query.filters?.latitude && query.filters?.longitude) {
+      const radius = query.filters.radius || 10;
+      const { data, error } = await this.supabase.rpc('drivers_within_radius', {
+        lat: query.filters.latitude,
+        lng: query.filters.longitude,
+        radius_km: radius,
+      });
 
-    // Text search
+      if (error) {
+        // Fall back to regular query if RPC doesn't exist
+        console.warn('drivers_within_radius RPC not available, using standard query');
+      } else if (data) {
+        const results: SearchResult<DriverProfile>[] = (data || []).map((driver: any) => ({
+          id: driver.id,
+          type: 'drivers' as SearchCategory,
+          title: driver.name || 'Driver',
+          description: `${driver.vehicle_type || 'Vehicle'}`,
+          rating: driver.rating,
+          location: undefined,
+          distance: driver.distance,
+          relevance_score: 1.0,
+          data: driver as DriverProfile,
+          created_at: driver.created_at,
+          updated_at: driver.updated_at,
+        }));
+        return { results, total: data.length };
+      }
+    }
+
+    // Standard query without location
+    let dbQuery = this.supabase
+      .from('driver_profiles')
+      .select('*', { count: 'exact' })
+      .eq('is_online', true)
+      .eq('is_verified', true);
+
+    // Text search on vehicle info
     if (query.q) {
-      dbQuery = dbQuery.or(
-        `name.ilike.%${query.q}%,vehicle_type.ilike.%${query.q}%,vehicle_model.ilike.%${query.q}%`
-      );
+      dbQuery = dbQuery.or(`vehicle_type.ilike.%${query.q}%,license_number.ilike.%${query.q}%`);
     }
 
     // Vehicle type filter
@@ -210,17 +240,6 @@ export class DatabaseService {
     // Rating filter
     if (query.filters?.rating_min) {
       dbQuery = dbQuery.gte('rating', query.filters.rating_min);
-    }
-
-    // Location-based search (if coordinates provided)
-    if (query.filters?.latitude && query.filters?.longitude) {
-      // Use PostGIS for distance calculation
-      const radius = query.filters.radius || 10;
-      dbQuery = dbQuery.rpc('drivers_within_radius', {
-        lat: query.filters.latitude,
-        lng: query.filters.longitude,
-        radius_km: radius,
-      });
     }
 
     // Sorting
@@ -237,27 +256,32 @@ export class DatabaseService {
       throw new Error(`Driver search failed: ${error.message}`);
     }
 
-    const results: SearchResult<TaxiDriver>[] = (data || []).map((driver: TaxiDriver) => ({
-      id: driver.id,
-      type: 'drivers' as SearchCategory,
-      title: driver.name,
-      description: `${driver.vehicle_type} - ${driver.vehicle_model}`,
-      rating: driver.rating,
-      location: undefined,
-      distance: this.calculateDistance(
-        query.filters?.latitude,
-        query.filters?.longitude,
-        driver.current_latitude,
-        driver.current_longitude
-      ),
-      relevance_score: this.calculateRelevanceScore(
-        query.q || '',
-        driver.name + ' ' + driver.vehicle_type
-      ),
-      data: driver,
-      created_at: driver.created_at,
-      updated_at: driver.updated_at,
-    }));
+    const results: SearchResult<DriverProfile>[] = (data || []).map((driver: any) => {
+      const vehicleInfo = driver.vehicle_info || {};
+      const currentLocation = driver.current_location || {};
+
+      return {
+        id: driver.id,
+        type: 'drivers' as SearchCategory,
+        title: 'Driver',
+        description: `${driver.vehicle_type || vehicleInfo.type || 'Vehicle'} - ${vehicleInfo.model || 'Unknown'}`,
+        rating: driver.rating,
+        location: undefined,
+        distance: this.calculateDistance(
+          query.filters?.latitude,
+          query.filters?.longitude,
+          currentLocation.latitude,
+          currentLocation.longitude
+        ),
+        relevance_score: this.calculateRelevanceScore(
+          query.q || '',
+          `${driver.vehicle_type || ''}`
+        ),
+        data: driver as DriverProfile,
+        created_at: driver.created_at,
+        updated_at: driver.updated_at,
+      };
+    });
 
     return { results, total: count || 0 };
   }
