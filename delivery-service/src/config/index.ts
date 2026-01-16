@@ -111,22 +111,27 @@ const config: ServiceConfig = {
 };
 
 // Validate required configuration (warn but don't crash in development)
-const requiredEnvVars = [
-  'SUPABASE_URL',
-  'SUPABASE_SERVICE_ROLE_KEY',
-  'JWT_SECRET',
-  'GOOGLE_MAPS_API_KEY',
-];
+const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'JWT_SECRET'];
+
+// Optional but recommended env vars
+const recommendedEnvVars = ['GOOGLE_MAPS_API_KEY'];
 
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+const missingRecommended = recommendedEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  const message = `Missing environment variables: ${missingEnvVars.join(', ')}`;
+  const message = `Missing required environment variables: ${missingEnvVars.join(', ')}`;
   if (config.nodeEnv === 'production') {
     throw new Error(message);
   } else {
     console.warn(`[WARNING] ${message}`);
   }
+}
+
+if (missingRecommended.length > 0) {
+  console.warn(
+    `[WARNING] Missing recommended environment variables: ${missingRecommended.join(', ')}. Some features may be disabled.`
+  );
 }
 
 export default config;
