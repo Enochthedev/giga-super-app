@@ -1,52 +1,48 @@
-# Multi-stage Docker build for payment queue service
-FROM node:18-alpine AS builder
+# Multi-stage build for payment-queue-service (Monorepo)
+FROM node:20-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 COPY tsconfig.json ./
+COPY tsconfig.build.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --include=dev --ignore-scripts
 
-# Copy source code
-COPY src ./src
+# Copy shared code and service code
+COPY shared ./shared
+COPY payment-queue-service ./payment-queue-service
 
 # Build TypeScript
 RUN npm run build
 
 # Production stage
-FROM node:18-alpine AS production
+FROM node:20-alpine
 
-# Install dumb-init for proper signal handling
-RUN apk add --no-cache dumb-init
-
-# Create app user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S payment -u 1001
-
-# Set working directory
 WORKDIR /app
 
-# Copy built application
-COPY --from=builder --chown=payment:nodejs /app/dist ./dist
-COPY --from=builder --chown=payment:nodejs /app/package*.json ./
+# Copy package files
+COPY package*.json ./
 
 # Install production dependencies only
-RUN npm ci --only=production && npm cache clean --force
+RUN npm ci --only=production --ignore-scripts
 
-# Switch to non-root user
-USER payment
+# Copy built files and shared code
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/shared ./shared
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3003
 
 # Expose port
-EXPOSE 3004
+EXPOSE 3003
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3004/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3003/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start application with dumb-init
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "dist/index.js"]
+# Start service
+CMD ["node", "dist/payment-queue-service/src/index.js"]

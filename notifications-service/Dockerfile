@@ -1,20 +1,48 @@
-FROM node:18-alpine AS builder
+# Multi-stage build for notifications-service (Monorepo)
+FROM node:20-alpine AS builder
+
 WORKDIR /app
-COPY package*.json tsconfig.json ./
-RUN npm ci
-COPY src ./src
+
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY tsconfig.build.json ./
+
+# Install dependencies
+RUN npm ci --include=dev --ignore-scripts
+
+# Copy shared code and service code
+COPY shared ./shared
+COPY notifications-service ./notifications-service
+
+# Build TypeScript
 RUN npm run build
 
-FROM node:18-alpine AS production
-RUN apk add --no-cache dumb-init
-RUN addgroup -g 1001 -S nodejs && adduser -S appuser -u 1001
+# Production stage
+FROM node:20-alpine
+
 WORKDIR /app
-COPY --from=builder --chown=appuser:nodejs /app/dist ./dist
-COPY --from=builder --chown=appuser:nodejs /app/package*.json ./
-RUN npm ci --only=production && npm cache clean --force
-USER appuser
+
+# Copy package files
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm ci --only=production --ignore-scripts
+
+# Copy built files and shared code
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/shared ./shared
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3007
+
+# Expose port
 EXPOSE 3007
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3007/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
-ENTRYPOINT ["dumb-init", "--"]
-CMD ["node", "dist/index.js"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3007/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
+# Start service
+CMD ["node", "dist/notifications-service/src/index.js"]
