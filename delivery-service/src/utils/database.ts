@@ -106,3 +106,4 @@ class DatabaseConnection {
 // Export singleton instance
 export const database = DatabaseConnection.getInstance();
 export const supabase = database.getClient();
+export const db = supabase; // Alias for consistency

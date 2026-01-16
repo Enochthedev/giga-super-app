@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { config } from '../config';
-import logger from '../utils/logger';
 import { InternalServerError } from '../utils/errors';
+import logger from '../utils/logger';
 
 interface CommissionRule {
   id: string;
@@ -26,6 +26,8 @@ interface CommissionCalculation {
   module: string;
   transactionType: string;
 }
+
+export type { CommissionCalculation };
 
 export class CommissionService {
   private supabase: SupabaseClient;

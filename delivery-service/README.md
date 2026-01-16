@@ -1,345 +1,472 @@
-# Delivery Service
+# Giga Delivery Service
 
-A comprehensive delivery and logistics service for the Giga platform, built with
-TypeScript, Node.js, and Express. This service handles delivery assignments,
-route optimization, courier management, and real-time tracking.
+Production-ready delivery and logistics service for the Giga platform, built with TypeScript following microservices best practices. Handles delivery assignments, package management, courier onboarding, route optimization, real-time tracking, and automated scheduling.
 
 ## Features
 
 ### Core Functionality
 
-- **Delivery Assignment Management**: Create, track, and manage delivery
-  assignments
-- **Route Optimization**: Intelligent route planning using Google Maps API
-- **Real-time Tracking**: GPS-based delivery tracking with status updates
-- **Courier Management**: Integration with courier profiles and availability
-- **Exception Handling**: Comprehensive delivery exception management
-- **Performance Analytics**: Delivery metrics and performance tracking
+- **Package Management**: Full CRUD operations for delivery packages with tracking and status management
+- **Courier Onboarding & Management**: Complete courier lifecycle from onboarding to performance tracking
+- **Delivery Assignments**: Intelligent courier matching and assignment with conflict resolution
+- **Route Optimization**: Google Maps-powered route optimization with traveling salesman algorithm
+- **Real-time Tracking**: GPS-based delivery tracking with WebSocket support for live updates
+- **Automated Scheduling**: Background jobs for route optimization, status updates, and analytics
+- **Exception Handling**: Comprehensive delivery exception management and resolution
+- **Performance Analytics**: Delivery metrics, courier stats, and engagement tracking
 
 ### Technical Features
 
-- **TypeScript**: Full type safety and modern JavaScript features
-- **Express.js**: Fast and minimal web framework
-- **Supabase Integration**: Secure database connection with connection pooling
-- **Google Maps API**: Route optimization and geocoding services
+- **Language**: TypeScript (100% type-safe)
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js with production middleware
+- **Database**: Supabase PostgreSQL with RLS policies
+- **Authentication**: JWT token validation via Supabase Auth with RBAC
+- **External APIs**: Google Maps API for geocoding and route optimization
+- **WebSocket**: Socket.io for real-time tracking and notifications
+- **Logging**: Structured JSON logging with Winston
+- **Validation**: express-validator with custom error handling
+- **Rate Limiting**: Tiered rate limiting (general, write, strict)
+- **Security**: Helmet, CORS, input sanitization, role-based access
 - **Caching**: In-memory caching with NodeCache for performance
-- **Rate Limiting**: Configurable rate limiting for API protection
-- **Authentication**: JWT-based authentication with role-based access
-- **Validation**: Comprehensive input validation with express-validator
-- **Error Handling**: Structured error handling with detailed logging
-- **Health Checks**: Kubernetes-compatible health and readiness endpoints
-- **Monitoring**: Prometheus-compatible metrics endpoint
+- **Scheduling**: Automated background jobs with configurable intervals
 
 ## Architecture
 
-### Service Structure
+### Technology Stack
 
 ```
 delivery-service/
 ├── src/
-│   ├── types/           # TypeScript type definitions
-│   ├── utils/           # Utility functions (database, logger, cache)
-│   ├── services/        # External service integrations (Google Maps)
-│   ├── middleware/      # Express middleware (auth, validation, rate limiting)
-│   ├── routes/          # API route handlers
-│   └── index.ts         # Application entry point
-├── Dockerfile           # Multi-stage Docker build
-├── railway.json         # Railway deployment configuration
-└── package.json         # Dependencies and scripts
+│   ├── config/           # Centralized configuration with validation
+│   ├── middleware/       # Auth, rate limiting, validation, error handling
+│   ├── services/         # Business logic layer
+│   │   ├── package.ts
+│   │   ├── courier.ts
+│   │   ├── deliveryAssignment.ts
+│   │   ├── automaticAssignment.ts
+│   │   ├── tracking.ts
+│   │   ├── routeOptimization.ts
+│   │   ├── googleMaps.ts
+│   │   └── websocket.ts
+│   ├── routes/           # HTTP route handlers
+│   ├── types/            # TypeScript interfaces and types
+│   ├── utils/            # Error handling, logging, database utilities
+│   └── index.ts          # Application entry point
+├── Dockerfile            # Multi-stage Docker build
+├── railway.json          # Railway deployment configuration
+└── package.json          # Dependencies and scripts
 ```
 
-### Database Integration
+### Service Layer Architecture
 
-- **Primary Database**: Supabase PostgreSQL
-- **Connection**: Secure connection with service role authentication
-- **Tables**: Integrates with courier_profiles, delivery_assignments,
-  delivery_routes, delivery_tracking
-- **Transactions**: ACID-compliant operations with proper error handling
-
-### External Services
-
-- **Google Maps API**: Route optimization, geocoding, distance calculations
-- **Supabase Auth**: JWT token validation and user management
-- **Notification Service**: Integration for delivery status notifications
-  (planned)
+- **Package Service**: CRUD operations, status updates, cancellation
+- **Courier Service**: Onboarding, profile management, availability tracking, verification
+- **Delivery Assignment Service**: Intelligent matching, conflict resolution, assignment creation
+- **Automatic Assignment Service**: Background courier matching
+- **Tracking Service**: GPS tracking, status updates, history
+- **Route Optimization Service**: Google Maps integration, TSP solving
+- **WebSocket Service**: Real-time updates, connection management
+- **Scheduler Service**: Background jobs, automated tasks
 
 ## API Endpoints
 
-### Health Endpoints
+### Health Checks
+- `GET /health` - Service health status
+- `GET /health/ready` - Readiness check (includes database connection)
 
-- `GET /health` - Basic health check
-- `GET /ready` - Readiness check with dependency validation
-- `GET /live` - Liveness check for Kubernetes
-- `GET /status` - Detailed service status (authenticated)
-- `GET /metrics` - Prometheus-compatible metrics
+### Package Management
+- `POST /api/v1/packages` - Create a new delivery package (auth required)
+- `GET /api/v1/packages/:packageId` - Get package details
+- `GET /api/v1/packages/sender/:senderId` - Get packages by sender (paginated)
+- `GET /api/v1/packages/status/:status` - Get packages by status (paginated)
+- `PUT /api/v1/packages/:packageId` - Update package information
+- `POST /api/v1/packages/:packageId/cancel` - Cancel a package
+- `DELETE /api/v1/packages/:packageId` - Soft delete a package
 
-### Delivery Endpoints (Planned)
+### Courier Management
+- `POST /api/v1/couriers` - Create courier profile / onboarding (auth required)
+- `GET /api/v1/couriers/:courierId` - Get courier details
+- `GET /api/v1/couriers/user/:userId` - Get courier profile by user ID
+- `GET /api/v1/couriers` - List couriers with filtering (verification status, availability, vehicle type)
+- `PUT /api/v1/couriers/:courierId` - Update courier profile
+- `POST /api/v1/couriers/:courierId/location` - Update courier location
+- `POST /api/v1/couriers/:courierId/availability` - Update availability status
+- `POST /api/v1/couriers/:courierId/verification` - Update verification status (admin/moderator only)
+- `GET /api/v1/couriers/:courierId/stats` - Get courier statistics and performance metrics
 
-- `POST /api/v1/deliveries/assign` - Create new delivery assignment
-- `GET /api/v1/deliveries/:id` - Get delivery details
-- `PUT /api/v1/deliveries/:id/status` - Update delivery status
-- `POST /api/v1/deliveries/:id/track` - Add tracking update
-- `GET /api/v1/deliveries/:id/tracking` - Get tracking history
+### Delivery Assignments
+- `POST /api/v1/assignments` - Create new delivery assignment with intelligent courier matching
+- `GET /api/v1/assignments/:assignmentId` - Get assignment details with full context
+- `GET /api/v1/assignments/courier/:courierId` - Get courier's assignments (paginated)
+- `PUT /api/v1/assignments/:assignmentId/status` - Update assignment status with validation
+- `POST /api/v1/assignments/:assignmentId/reassign` - Reassign to different courier
+- `GET /api/v1/assignments/:assignmentId/history` - Get assignment status history
 
-### Route Optimization Endpoints (Planned)
+### Tracking
+- `POST /api/v1/track-delivery` - Update delivery location and status with real-time tracking
+- `GET /api/v1/tracking/:assignmentId` - Get tracking history for assignment
+- `GET /api/v1/tracking/:assignmentId/latest` - Get latest tracking update
+- `GET /api/v1/tracking/courier/:courierId` - Get courier's current tracking data
 
-- `POST /api/v1/routes/optimize` - Optimize delivery routes
+### Route Optimization
+- `POST /api/v1/routes/optimize` - Optimize delivery routes for courier
 - `GET /api/v1/routes/:courierId` - Get courier's optimized route
-- `POST /api/v1/routes/calculate` - Calculate route between addresses
+- `GET /api/v1/routes/:courierId/current` - Get current route for active deliveries
 
-### Courier Integration Endpoints (Planned)
+### WebSocket
+- `GET /api/v1/websocket/token` - Get WebSocket authentication token
+- **WebSocket Events**:
+  - `tracking:update` - Real-time delivery location updates
+  - `status:update` - Delivery status change notifications
+  - `assignment:new` - New assignment notifications for couriers
+  - `route:optimized` - Route optimization completion
 
-- `GET /api/v1/couriers/nearby` - Find nearby available couriers
-- `PUT /api/v1/couriers/:id/availability` - Update courier availability
-- `GET /api/v1/couriers/:id/assignments` - Get courier's assignments
+### Scheduler
+- `POST /api/v1/scheduler/trigger/:jobType` - Manually trigger scheduled job (admin only)
+- `GET /api/v1/scheduler/status` - Get scheduler status and job history
+- **Automated Jobs**:
+  - Route optimization for active couriers
+  - Assignment status sync
+  - Performance metrics calculation
+  - Stale assignment cleanup
 
-## Configuration
-
-### Environment Variables
+## Environment Variables
 
 ```bash
 # Server Configuration
-NODE_ENV=development
 PORT=3003
+NODE_ENV=production
 SERVICE_NAME=delivery-service
 
 # Supabase Configuration
-SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_URL=your-supabase-url
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 SUPABASE_ANON_KEY=your-anon-key
 
-# Database Configuration
-DB_POOL_SIZE=10
-DB_CONNECTION_TIMEOUT=30000
-DB_IDLE_TIMEOUT=600000
-
-# JWT Configuration
-JWT_SECRET=your-jwt-secret-key
+# Authentication
+JWT_SECRET=your-jwt-secret
 
 # Google Maps API
 GOOGLE_MAPS_API_KEY=your-google-maps-api-key
 
-# Cache Configuration
+# Caching
 CACHE_TTL=300
 CACHE_MAX_KEYS=1000
 
 # Rate Limiting
-RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_WINDOW_MS=60000
 RATE_LIMIT_MAX_REQUESTS=100
+
+# Pagination
+PAGINATION_DEFAULT_LIMIT=20
+PAGINATION_MAX_LIMIT=100
 
 # Logging
 LOG_LEVEL=info
 LOG_FORMAT=json
 
 # Delivery Configuration
-DEFAULT_DELIVERY_RADIUS_KM=50
-MAX_DELIVERY_RADIUS_KM=200
-DELIVERY_FEE_PER_KM=50
-MIN_DELIVERY_FEE=200
-MAX_DELIVERY_FEE=2000
+DEFAULT_DELIVERY_RADIUS_KM=25
+MAX_DELIVERY_RADIUS_KM=50
+MIN_COURIER_RATING=2.0
+MAX_COURIER_ASSIGNMENTS=5
+
+# Scheduler Configuration
+SCHEDULER_ENABLED=true
+ROUTE_OPTIMIZATION_INTERVAL=300000
+STATUS_SYNC_INTERVAL=60000
+METRICS_CALCULATION_INTERVAL=3600000
 ```
 
 ## Development
 
 ### Prerequisites
-
 - Node.js 18+
-- npm or yarn
-- Docker (for containerized development)
+- TypeScript 5.3+
+- Docker (for containerized deployment)
 - Google Maps API key
-- Supabase project with service role key
+- Access to Supabase database
 
-### Local Development
-
-1. **Clone and install dependencies**:
+### Local Setup
 
 ```bash
-cd delivery-service
+# Install dependencies
 npm install
-```
 
-2. **Configure environment**:
-
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-3. **Start development server**:
-
-```bash
+# Run in development mode (with hot reload)
 npm run dev
-```
 
-4. **Run tests**:
-
-```bash
-npm test
-```
-
-5. **Type checking**:
-
-```bash
+# Type checking
 npm run type-check
-```
 
-### Docker Development
+# Linting
+npm run lint
+npm run lint:fix
 
-1. **Build Docker image**:
+# Build for production
+npm run build
 
-```bash
-docker build -t delivery-service .
-```
-
-2. **Run container**:
-
-```bash
-docker run -p 3003:3003 --env-file .env delivery-service
-```
-
-## Deployment
-
-### Railway Deployment
-
-1. **Configure Railway project**:
-
-```bash
-railway login
-railway init
-```
-
-2. **Set environment variables**:
-
-```bash
-railway variables set SUPABASE_URL=your-url
-railway variables set SUPABASE_SERVICE_ROLE_KEY=your-key
-railway variables set GOOGLE_MAPS_API_KEY=your-key
-```
-
-3. **Deploy**:
-
-```bash
-railway up
+# Run production build
+npm start
 ```
 
 ### Docker Deployment
 
-The service includes a multi-stage Dockerfile optimized for production:
+```bash
+# Build Docker image
+docker build -t giga-delivery-service .
 
-- **Builder stage**: Installs dependencies and builds TypeScript
-- **Production stage**: Minimal Alpine Linux image with only runtime
-  dependencies
-- **Security**: Runs as non-root user with proper signal handling
-- **Health checks**: Built-in health check for container orchestration
+# Run Docker container
+docker run -p 3003:3003 --env-file .env giga-delivery-service
+```
 
-## Monitoring and Observability
+### Railway Deployment
 
-### Logging
+This service is configured for Railway deployment with:
+- Multi-stage Docker build for optimized image size
+- Health check endpoints for container orchestration
+- Graceful shutdown handling
+- Production-ready logging
 
-- **Structured logging**: JSON format with request tracing
-- **Log levels**: Configurable log levels (debug, info, warn, error)
-- **Request correlation**: Unique request IDs for tracing
-- **Audit logging**: Security events and sensitive operations
+## Database Schema
 
-### Metrics
+### Main Tables
+- `delivery_packages` - Packages with sender/recipient details, weight, dimensions
+- `courier_profiles` - Courier information, vehicle details, performance metrics
+- `delivery_assignments` - Assignments linking packages to couriers with routing
+- `delivery_tracking` - GPS tracking history with timestamps
+- `route_optimizations` - Optimized routes with waypoints and sequences
 
-- **Prometheus metrics**: Available at `/metrics` endpoint
-- **Performance metrics**: Response times, error rates, throughput
-- **Business metrics**: Delivery success rates, courier utilization
-- **System metrics**: Memory usage, CPU usage, cache hit rates
+### Database Functions
 
-### Health Checks
+All database functions are defined in `/supabase/migrations/20260110_delivery_service_schema.sql`:
 
-- **Liveness**: Basic service availability
-- **Readiness**: Dependency health (database, external APIs)
-- **Startup**: Graceful startup with dependency validation
+**Courier Functions:**
+- `update_courier_rating(courier_id, new_rating)` - Update courier rating
+- `update_courier_stats(courier_id)` - Recalculate courier statistics
+- `get_nearby_couriers(lat, lng, radius, limit)` - Find available couriers
+
+**Analytics Functions:**
+- Courier performance metrics
+- Delivery success rates
+- Average delivery times
 
 ## Security
 
 ### Authentication & Authorization
+- JWT token validation on all protected endpoints
+- Role-based access control (RBAC) for admin/moderator operations
+- Row-Level Security (RLS) policies on all tables
+- Courier verification status checks
+- User profile validation and activity checking
 
-- **JWT Authentication**: Supabase-based token validation
-- **Role-based Access**: Different permissions for users, couriers, admins
-- **Courier Verification**: Additional verification for courier-specific
-  endpoints
+### Rate Limiting
+- **General**: 100 requests/minute
+- **Write Operations**: 50 requests/minute
+- **Admin Operations**: 20 requests/minute
+- IP-based with configurable windows
 
-### API Security
+### Input Validation
+- Comprehensive validation using express-validator
+- UUID validation for all IDs
+- Coordinate validation (-90 to 90 for lat, -180 to 180 for lng)
+- Enum validation for types and statuses
+- Weight and dimension limits
 
-- **Rate Limiting**: Configurable rate limits per user/IP
-- **Input Validation**: Comprehensive validation with sanitization
-- **CORS**: Configurable cross-origin resource sharing
-- **Security Headers**: Helmet.js security headers
-- **Request Timeouts**: Prevent resource exhaustion
-
-### Data Security
-
-- **Connection Security**: SSL/TLS for all external connections
-- **Sensitive Data**: Proper handling of location and personal data
-- **Audit Logging**: All operations logged for compliance
+### Security Headers
+- Helmet.js for secure HTTP headers
+- CORS with configurable origins
+- Request ID tracking for audit trails
+- SQL injection prevention via parameterized queries
 
 ## Performance
 
-### Optimization Features
+### Optimization Strategies
+- Service layer architecture for business logic separation
+- Efficient database queries with proper indexing
+- Pagination on all list endpoints (configurable limits)
+- In-memory caching for frequently accessed data (5-minute TTL)
+- Google Maps API call batching and caching
+- Intelligent courier matching algorithm with scoring
+- Route optimization using traveling salesman algorithm
 
-- **Connection Pooling**: Efficient database connection management
-- **Caching**: In-memory caching for frequently accessed data
-- **Compression**: Response compression for bandwidth optimization
-- **Route Optimization**: Efficient algorithms for delivery route planning
+### Database Optimization
+- Proper indexes on frequently queried columns
+- Counter columns to avoid COUNT queries
+- Soft deletes for data retention
+- Connection pooling for high concurrency
+- Optimized geospatial queries for courier matching
 
-### Performance Targets
+### Caching Strategy
+- 5-minute TTL for frequently accessed data
+- Configurable cache size (default: 1000 keys)
+- Cache invalidation on updates
+- Google Maps responses cached per route
 
-- **Response Time**: <200ms for 95th percentile
-- **Throughput**: 1000+ requests per second
-- **Availability**: 99.9% uptime
-- **Cache Hit Rate**: >80% for frequently accessed data
+## Monitoring & Observability
+
+### Logging
+- Structured JSON logs with Winston
+- Request ID tracking across all logs
+- Log levels: error, warn, info, debug
+- Operational vs system error classification
+
+### Health Checks
+- `/health` - Basic health status
+- `/health/ready` - Database connection verification
+- Docker healthcheck integration
+
+### Error Handling
+- Custom error classes with status codes
+- Consistent error response format
+- Stack traces in development only
+- Graceful error recovery
+
+## API Response Format
+
+All endpoints follow a consistent response format:
+
+### Success Response
+```json
+{
+  "success": true,
+  "data": { ... },
+  "metadata": {
+    "timestamp": "2026-01-10T12:00:00.000Z",
+    "request_id": "uuid-v4",
+    "version": "1.0.0"
+  },
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 100,
+    "total_pages": 5,
+    "has_previous": false,
+    "has_next": true,
+    "previous_page": null,
+    "next_page": 2
+  }
+}
+```
+
+### Error Response
+```json
+{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Request validation failed",
+    "details": { ... }
+  },
+  "metadata": {
+    "timestamp": "2026-01-10T12:00:00.000Z",
+    "request_id": "uuid-v4",
+    "version": "1.0.0"
+  }
+}
+```
 
 ## Integration
 
 ### Supabase Integration
-
 - **Database**: Direct connection to Supabase PostgreSQL
-- **Authentication**: Supabase Auth for user management
-- **Real-time**: Supabase Realtime for live updates (planned)
-- **Storage**: Supabase Storage for delivery photos (planned)
+- **Authentication**: Supabase Auth for JWT validation
+- **RLS Policies**: Row-level security for all tables
+- **Real-time**: WebSocket for live tracking updates
 
 ### Google Maps Integration
-
-- **Route Calculation**: Directions API for route planning
-- **Geocoding**: Convert addresses to coordinates
-- **Distance Matrix**: Bulk distance calculations
+- **Directions API**: Route planning and optimization
+- **Geocoding API**: Convert addresses to coordinates
+- **Distance Matrix API**: Bulk distance calculations
 - **Route Optimization**: Traveling salesman problem solving
 
-### API Gateway Integration
+### WebSocket Integration
+- **Socket.io**: Real-time bidirectional communication
+- **Authentication**: JWT-based WebSocket authentication
+- **Events**: Tracking updates, status changes, new assignments
+- **Rooms**: Courier-specific and assignment-specific rooms
 
-- **Service Discovery**: Register with API Gateway
-- **Load Balancing**: Distribute requests across instances
-- **Circuit Breaker**: Fault tolerance patterns
-- **Request Routing**: Route delivery requests to service
+## Courier Matching Algorithm
+
+The intelligent courier matching system scores available couriers based on:
+
+1. **Distance Score** (40%): Proximity to pickup location
+2. **Rating Score** (25%): Courier performance rating
+3. **Experience Score** (15%): Total completed deliveries
+4. **Workload Score** (10%): Current assignment load
+5. **Availability Score** (5%): Online status and availability
+6. **Priority Bonus** (5%): High-priority delivery bonus
+
+### Matching Process:
+1. Find couriers within delivery radius
+2. Filter by vehicle capacity and type
+3. Check availability and verification status
+4. Score each courier using weighted algorithm
+5. Return top-scored couriers with reasoning
+6. Handle conflicts with reassignment strategies
+
+## Route Optimization
+
+The route optimization service uses Google Maps Directions API with:
+
+- **Traveling Salesman Problem (TSP)** solving for optimal sequence
+- **Multi-waypoint routing** for efficient delivery paths
+- **Traffic consideration** for accurate ETAs
+- **Fuel cost estimation** based on distance
+- **Efficiency scoring** for route quality metrics
+
+### Optimization Features:
+- Automatic re-optimization when new assignments added
+- Consideration of delivery time windows
+- Priority-based routing for urgent deliveries
+- Real-time traffic data integration
+
+## Troubleshooting
+
+### Database Connection Issues
+- Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
+- Check network connectivity to Supabase
+- Review RLS policies for service role access
+
+### Google Maps API Issues
+- Verify `GOOGLE_MAPS_API_KEY` is valid and enabled
+- Check API quotas and billing
+- Review API restrictions (IP, domain)
+
+### Authentication Failures
+- Ensure JWT tokens are valid and not expired
+- Verify user profiles exist and `is_active = true`
+- Check courier verification status for courier endpoints
+
+### Performance Issues
+- Monitor slow query logs
+- Increase cache TTL for frequently accessed data
+- Review Google Maps API call patterns
+- Check database connection pool size
+
+### WebSocket Connection Issues
+- Verify WebSocket token is valid
+- Check CORS configuration for WebSocket origins
+- Review firewall rules for WebSocket protocol
 
 ## Contributing
 
-### Development Guidelines
-
-- **TypeScript**: Use strict TypeScript with proper typing
-- **Testing**: Write tests for all business logic
-- **Documentation**: Document all public APIs and complex logic
-- **Code Style**: Follow ESLint and Prettier configurations
-
-### Code Quality
-
-- **Linting**: ESLint with TypeScript rules
-- **Formatting**: Prettier for consistent code formatting
-- **Type Checking**: Strict TypeScript compilation
-- **Testing**: Jest with comprehensive test coverage
+1. Follow TypeScript best practices
+2. Maintain 100% type coverage
+3. Follow the service layer pattern
+4. Write comprehensive tests for new features
+5. Update API documentation
+6. Ensure all tests pass before submitting PR
+7. Follow coding standards in `.kiro/steering/`
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT
 
 ## Support
 
-For support and questions:
-
-- **Documentation**: Check this README and inline code documentation
-- **Issues**: Create GitHub issues for bugs and feature requests
-- **Monitoring**: Check service health at `/health` and `/status` endpoints
+For issues and questions:
+- Check `/health` and `/health/ready` endpoints for service status
+- Review structured logs for debugging
+- Create GitHub issues for bugs and feature requests

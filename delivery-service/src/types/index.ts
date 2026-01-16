@@ -364,11 +364,14 @@ export const ERROR_CODES = {
   ASSIGNMENT_NOT_FOUND: 'ASSIGNMENT_NOT_FOUND',
   COURIER_NOT_FOUND: 'COURIER_NOT_FOUND',
   ORDER_NOT_FOUND: 'ORDER_NOT_FOUND',
+  PACKAGE_NOT_FOUND: 'PACKAGE_NOT_FOUND',
 
   // Conflict errors (409)
   ASSIGNMENT_ALREADY_EXISTS: 'ASSIGNMENT_ALREADY_EXISTS',
   COURIER_ALREADY_ASSIGNED: 'COURIER_ALREADY_ASSIGNED',
+  COURIER_ALREADY_EXISTS: 'COURIER_ALREADY_EXISTS',
   INVALID_DELIVERY_STATUS: 'INVALID_DELIVERY_STATUS',
+  INVALID_PACKAGE_STATUS: 'INVALID_PACKAGE_STATUS',
 
   // External service errors (502)
   GOOGLE_MAPS_ERROR: 'GOOGLE_MAPS_ERROR',
@@ -381,3 +384,136 @@ export const ERROR_CODES = {
 } as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];
+
+// Package Types
+export interface DeliveryPackage {
+  id: string;
+  sender_id?: string;
+  recipient_id?: string;
+  sender_name: string;
+  sender_phone: string;
+  sender_address: string;
+  sender_lat?: number;
+  sender_lng?: number;
+  recipient_name: string;
+  recipient_phone: string;
+  recipient_address: string;
+  recipient_lat?: number;
+  recipient_lng?: number;
+  package_description?: string;
+  package_weight?: number;
+  package_dimensions?: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  delivery_fee: number;
+  status: PackageStatus;
+  priority: PackagePriority;
+  delivery_instructions?: string;
+  estimated_delivery?: string;
+  actual_delivery?: string;
+  proof_of_delivery?: {
+    signature?: string;
+    photo_url?: string;
+    notes?: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+export type PackageStatus =
+  | 'pending'
+  | 'assigned'
+  | 'picked_up'
+  | 'in_transit'
+  | 'delivered'
+  | 'cancelled'
+  | 'failed';
+
+export type PackagePriority = 'low' | 'normal' | 'high' | 'urgent';
+
+export interface CreatePackageRequest {
+  sender_id?: string;
+  sender_name: string;
+  sender_phone: string;
+  sender_address: string;
+  sender_lat?: number;
+  sender_lng?: number;
+  recipient_name: string;
+  recipient_phone: string;
+  recipient_address: string;
+  recipient_lat?: number;
+  recipient_lng?: number;
+  package_description?: string;
+  package_weight?: number;
+  package_dimensions?: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  delivery_fee: number;
+  priority?: PackagePriority;
+  delivery_instructions?: string;
+  estimated_delivery?: string;
+}
+
+export interface UpdatePackageRequest {
+  sender_name?: string;
+  sender_phone?: string;
+  sender_address?: string;
+  recipient_name?: string;
+  recipient_phone?: string;
+  recipient_address?: string;
+  package_description?: string;
+  package_weight?: number;
+  package_dimensions?: {
+    length: number;
+    width: number;
+    height: number;
+  };
+  delivery_fee?: number;
+  priority?: PackagePriority;
+  delivery_instructions?: string;
+  status?: PackageStatus;
+}
+
+// Courier Management Types
+export interface CreateCourierRequest {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  email?: string;
+  vehicle_type: VehicleType;
+  vehicle_registration?: string;
+  vehicle_capacity_kg?: number;
+  max_delivery_radius_km?: number;
+  license_number?: string;
+  license_expiry?: string;
+  verification_documents?: {
+    id_card?: string;
+    license_photo?: string;
+    vehicle_registration_photo?: string;
+  };
+}
+
+export interface UpdateCourierRequest {
+  first_name?: string;
+  last_name?: string;
+  phone_number?: string;
+  email?: string;
+  vehicle_type?: VehicleType;
+  vehicle_registration?: string;
+  vehicle_capacity_kg?: number;
+  max_delivery_radius_km?: number;
+  license_number?: string;
+  license_expiry?: string;
+  is_online?: boolean;
+  is_available?: boolean;
+  availability_status?: CourierAvailabilityStatus;
+  current_lat?: number;
+  current_lng?: number;
+}
+
+export type VehicleType = 'bicycle' | 'motorcycle' | 'car' | 'van' | 'truck';

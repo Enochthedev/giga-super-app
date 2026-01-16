@@ -72,54 +72,50 @@ export const routingMiddleware = (
       service.platform === 'supabase'
         ? path => `/functions/v1${path.replace('/api/v1', '')}`
         : { '^/api/v1': '' },
-    on: {
-      proxyReq: (proxyReq, clientReq) => {
-        const authReq = clientReq as AuthenticatedRequest;
+    onProxyReq: (proxyReq, clientReq) => {
+      const authReq = clientReq as AuthenticatedRequest;
 
-        // Add service headers
-        if (service.headers) {
-          Object.entries(service.headers).forEach(([key, value]) => {
-            proxyReq.setHeader(key, value);
-          });
-        }
-
-        // Forward authentication token
-        if (authReq.authToken) {
-          proxyReq.setHeader('Authorization', `Bearer ${authReq.authToken}`);
-        }
-
-        // Forward user context for Railway services
-        if (service.platform === 'railway' && authReq.user) {
-          proxyReq.setHeader('X-User-ID', authReq.user.id);
-          proxyReq.setHeader('X-User-Email', authReq.user.email);
-          proxyReq.setHeader('X-User-Role', authReq.user.role);
-        }
-
-        // Add request ID for tracing
-        if (authReq.id) {
-          proxyReq.setHeader('X-Request-ID', authReq.id);
-        }
-      },
-      proxyRes: (_proxyRes, _clientReq, clientRes) => {
-        clientRes.setHeader('X-Service-ID', service.id);
-        clientRes.setHeader('X-Service-Platform', service.platform);
-      },
-      error: (err, clientReq, clientRes) => {
-        const authReq = clientReq as AuthenticatedRequest;
-        logger.error('Proxy error', {
-          requestId: authReq.id,
-          serviceId: service.id,
-          error: err.message,
+      // Add service headers
+      if (service.headers) {
+        Object.entries(service.headers).forEach(([key, value]) => {
+          proxyReq.setHeader(key, value);
         });
+      }
 
-        if (clientRes && 'headersSent' in clientRes && !clientRes.headersSent) {
-          (clientRes as Response)
-            .status(502)
-            .json(
-              createErrorResponse('PROXY_ERROR', 'Error communicating with service', authReq.id)
-            );
-        }
-      },
+      // Forward authentication token
+      if (authReq.authToken) {
+        proxyReq.setHeader('Authorization', `Bearer ${authReq.authToken}`);
+      }
+
+      // Forward user context for Railway services
+      if (service.platform === 'railway' && authReq.user) {
+        proxyReq.setHeader('X-User-ID', authReq.user.id);
+        proxyReq.setHeader('X-User-Email', authReq.user.email);
+        proxyReq.setHeader('X-User-Role', authReq.user.role);
+      }
+
+      // Add request ID for tracing
+      if (authReq.id) {
+        proxyReq.setHeader('X-Request-ID', authReq.id);
+      }
+    },
+    onProxyRes: (_proxyRes, _clientReq, clientRes) => {
+      (clientRes as Response).setHeader('X-Service-ID', service.id);
+      (clientRes as Response).setHeader('X-Service-Platform', service.platform);
+    },
+    onError: (err, clientReq, clientRes) => {
+      const authReq = clientReq as AuthenticatedRequest;
+      logger.error('Proxy error', {
+        requestId: authReq.id,
+        serviceId: service.id,
+        error: (err as Error).message,
+      });
+
+      if (clientRes && 'headersSent' in clientRes && !(clientRes as Response).headersSent) {
+        (clientRes as Response)
+          .status(502)
+          .json(createErrorResponse('PROXY_ERROR', 'Error communicating with service', authReq.id));
+      }
     },
   };
 

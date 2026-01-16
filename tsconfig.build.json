@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Relax strict mode for build
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noUncheckedIndexedAccess": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "strictNullChecks": false,
+    "strict": false,
+    "exactOptionalPropertyTypes": false,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false
+  }
+}

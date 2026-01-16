@@ -75,6 +75,10 @@ app.use('/health', healthRouter);
 // Authentication middleware for all other routes
 app.use(authMiddleware);
 
+// Supabase proxy middleware (for endpoints not yet migrated to Railway)
+import { supabaseProxy } from './middleware/supabaseProxy.js';
+app.use(supabaseProxy);
+
 // Main routing middleware
 app.use(routingMiddleware);
 
