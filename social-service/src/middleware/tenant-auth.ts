@@ -2,12 +2,6 @@ import { NextFunction, Request, Response } from 'express';
 
 // Extended Request interface with tenant context
 export interface TenantRequest extends Request {
-  requestId?: string;
-  user?: {
-    id: string;
-    email: string;
-    role: string;
-  };
   tenant?: {
     id: string;
     name: string;
