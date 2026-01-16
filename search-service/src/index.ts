@@ -6,8 +6,10 @@
 import compression from 'compression';
 import express, { Application } from 'express';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 
 import { SERVICE_PORTS } from './config/ports.js';
+import { swaggerSpec } from './config/swagger.js';
 
 // Import middleware
 import {

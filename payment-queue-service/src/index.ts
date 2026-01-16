@@ -3,8 +3,10 @@ import cors from 'cors';
 import express, { Application } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 
 import { config } from './config/index';
+import { swaggerSpec } from './config/swagger';
 import { errorHandler } from './middleware/errorHandler';
 import healthRoutes from './routes/health';
 import metricsRoutes from './routes/metrics';

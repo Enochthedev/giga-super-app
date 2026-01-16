@@ -4,8 +4,10 @@ import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 
 import config from './config';
+import { swaggerSpec } from './config/swagger';
 import assignmentRoutes from './routes/assignments';
 import courierRoutes from './routes/couriers';
 import healthRoutes from './routes/health';
