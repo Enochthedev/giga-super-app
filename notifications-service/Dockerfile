@@ -34,10 +34,10 @@ LABEL port="3007"
 WORKDIR /app
 
 # Copy service package files (not root package.json)
-COPY notifications-service/package.json ./
+COPY notifications-service/package.json notifications-service/package-lock.json ./
 
 # Install production dependencies only
-RUN npm install --omit=dev --ignore-scripts
+RUN npm ci --omit=dev --ignore-scripts
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
