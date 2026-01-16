@@ -23,7 +23,7 @@ const connection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379'
   lazyConnect: true,
 });
 
-const campaignQueue = new Queue('campaign-notifications', { connection });
+const campaignQueue = new Queue('campaign-notifications', { connection: connection as any });
 
 interface AuthenticatedRequest extends Request {
   user?: {

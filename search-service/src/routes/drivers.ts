@@ -55,46 +55,35 @@ router.post(
 
       req.logger?.info('Driver search initiated', {
         pickup_location:
-          queryParams.pickup_latitude && queryParams.pickup_longitude
+          queryParams.latitude && queryParams.longitude
             ? {
-                latitude: queryParams.pickup_latitude,
-                longitude: queryParams.pickup_longitude,
-                radius: queryParams.radius_km,
-              }
-            : null,
-        destination_location:
-          queryParams.destination_latitude && queryParams.destination_longitude
-            ? {
-                latitude: queryParams.destination_latitude,
-                longitude: queryParams.destination_longitude,
+                latitude: queryParams.latitude,
+                longitude: queryParams.longitude,
+                radius: queryParams.radius,
               }
             : null,
         filters: {
           vehicle_type: queryParams.vehicle_type,
-          min_rating: queryParams.filters?.min_rating,
-          verified_only: queryParams.filters?.verified_only,
-          available_only: queryParams.filters?.available_only,
+          min_rating: queryParams.rating_min,
+          available_only: queryParams.available_only,
         },
       });
 
       // Convert to SearchQuery format
       const searchQuery = {
-        q: '',
+        q: queryParams.q || '',
         category: 'drivers' as const,
-        page: 1,
-        limit: queryParams.max_drivers || 5,
+        page: queryParams.page || 1,
+        limit: queryParams.limit || 5,
         sort: queryParams.sort || 'distance',
-        order: 'asc' as const,
+        order: queryParams.order || ('asc' as const),
         filters: {
-          pickup_latitude: queryParams.pickup_latitude,
-          pickup_longitude: queryParams.pickup_longitude,
-          destination_latitude: queryParams.destination_latitude,
-          destination_longitude: queryParams.destination_longitude,
-          radius: queryParams.radius_km,
+          latitude: queryParams.latitude,
+          longitude: queryParams.longitude,
+          radius: queryParams.radius,
           vehicle_type: queryParams.vehicle_type,
-          min_rating: queryParams.filters?.min_rating,
-          verified_only: queryParams.filters?.verified_only,
-          available_only: queryParams.filters?.available_only,
+          rating_min: queryParams.rating_min,
+          available_only: queryParams.available_only,
         },
       };
 
@@ -107,63 +96,46 @@ router.post(
       const response = {
         success: true,
         data: {
-          pickup_location: {
-            latitude: queryParams.pickup_latitude,
-            longitude: queryParams.pickup_longitude,
-          },
+          pickup_location:
+            queryParams.latitude && queryParams.longitude
+              ? {
+                  latitude: queryParams.latitude,
+                  longitude: queryParams.longitude,
+                }
+              : null,
           total_results: total,
           results: results.map(result => ({
             id: result.id,
             name: result.title,
-            phone: result.data.phone,
+            phone: result.data?.phone || '',
             rating: result.rating || 0,
-            total_trips: result.data.total_trips || 0,
+            total_trips: result.data?.total_rides || 0,
             profile_image: result.image_url,
             vehicle: {
-              type: result.data.vehicle_type || queryParams.vehicle_type,
-              make: result.data.vehicle_make || 'Toyota',
-              model: result.data.vehicle_model || 'Camry',
-              year: result.data.vehicle_year || 2020,
-              color: result.data.vehicle_color || 'Silver',
-              plate_number: result.data.license_plate || 'ABC-123-XY',
-              image: result.data.vehicle_image,
+              type: result.data?.vehicle_type || queryParams.vehicle_type,
+              make: result.data?.vehicle_make || 'Toyota',
+              model: result.data?.vehicle_model || 'Camry',
+              year: result.data?.vehicle_year || 2020,
+              color: result.data?.vehicle_color || 'Silver',
+              plate_number: result.data?.license_plate || 'ABC-123-XY',
+              image: result.data?.vehicle_image,
             },
             location: {
-              latitude: result.data.current_latitude || queryParams.pickup_latitude,
-              longitude: result.data.current_longitude || queryParams.pickup_longitude,
-              address: result.data.current_address || 'Lagos, Nigeria',
+              latitude: result.data?.current_latitude || queryParams.latitude,
+              longitude: result.data?.current_longitude || queryParams.longitude,
+              address: result.data?.current_address || 'Lagos, Nigeria',
               last_updated: new Date().toISOString(),
             },
             distance_km: result.distance || Math.random() * 5,
             eta_minutes: Math.ceil((result.distance || Math.random() * 5) * 2),
-            status: result.data.is_available ? 'available' : 'busy',
-            verified: result.data.verified || false,
+            status: result.data?.is_available ? 'available' : 'busy',
+            verified: result.data?.verified || false,
             fare_estimate: {
               base_fare: 500,
               estimated_total: Math.round(500 + (result.distance || 5) * 100),
               currency: 'NGN',
               surge_multiplier: 1.0,
             },
-            trip_estimate:
-              queryParams.destination_latitude && queryParams.destination_longitude
-                ? {
-                    distance_km: calculateDistance(
-                      queryParams.pickup_latitude,
-                      queryParams.pickup_longitude,
-                      queryParams.destination_latitude,
-                      queryParams.destination_longitude
-                    ),
-                    duration_minutes: Math.ceil(
-                      calculateDistance(
-                        queryParams.pickup_latitude,
-                        queryParams.pickup_longitude,
-                        queryParams.destination_latitude,
-                        queryParams.destination_longitude
-                      ) * 2
-                    ),
-                    route_preview: 'Via main roads',
-                  }
-                : undefined,
           })),
           facets: {
             vehicle_types: await getVehicleTypeFacets(searchQuery),

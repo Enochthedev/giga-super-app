@@ -116,7 +116,7 @@ export const settlementWorker = new Worker(
     }
   },
   {
-    connection,
+    connection: connection as any,
     concurrency: 2,
   }
 );

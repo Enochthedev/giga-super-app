@@ -128,7 +128,7 @@ export const refundWorker = new Worker(
     }
   },
   {
-    connection,
+    connection: connection as any,
     concurrency: 3,
   }
 );

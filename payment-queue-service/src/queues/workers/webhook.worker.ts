@@ -83,7 +83,7 @@ export const webhookWorker = new Worker(
     }
   },
   {
-    connection,
+    connection: connection as any,
     concurrency: 3,
   }
 );

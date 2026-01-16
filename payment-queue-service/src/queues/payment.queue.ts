@@ -13,13 +13,13 @@ connection.on('connect', () => {
   logger.info('Redis connected for payment queue');
 });
 
-connection.on('error', (error) => {
+connection.on('error', error => {
   logger.error('Redis connection error', { error: error.message });
 });
 
 // Queue options
 const queueOptions: QueueOptions = {
-  connection,
+  connection: connection as any,
   defaultJobOptions: {
     attempts: config.queue.maxRetries,
     backoff: {
@@ -40,7 +40,7 @@ const queueOptions: QueueOptions = {
 // Create payment queue
 export const paymentQueue = new Queue('payment-queue', queueOptions);
 
-paymentQueue.on('error', (error) => {
+paymentQueue.on('error', error => {
   logger.error('Payment queue error', { error: error.message });
 });
 
@@ -67,15 +67,11 @@ export async function addPaymentJob(
   }
 ) {
   try {
-    const job = await paymentQueue.add(
-      'process-payment',
-      jobData,
-      {
-        jobId: jobData.paymentId,
-        priority: options?.priority || 0,
-        delay: options?.delay || 0,
-      }
-    );
+    const job = await paymentQueue.add('process-payment', jobData, {
+      jobId: jobData.paymentId,
+      priority: options?.priority || 0,
+      delay: options?.delay || 0,
+    });
 
     logger.info('Payment job added to queue', {
       jobId: job.id,
@@ -100,7 +96,7 @@ export async function addPaymentJob(
 export async function getPaymentJobStatus(jobId: string) {
   try {
     const job = await paymentQueue.getJob(jobId);
-    
+
     if (!job) {
       return null;
     }
@@ -137,13 +133,13 @@ export async function getPaymentJobStatus(jobId: string) {
 export async function removePaymentJob(jobId: string) {
   try {
     const job = await paymentQueue.getJob(jobId);
-    
+
     if (job) {
       await job.remove();
       logger.info('Payment job removed from queue', { jobId });
       return true;
     }
-    
+
     return false;
   } catch (error: any) {
     logger.error('Failed to remove payment job', {
