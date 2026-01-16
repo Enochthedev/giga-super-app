@@ -39,8 +39,8 @@ COPY social-service/package*.json ./
 # Install production dependencies from social-service package.json
 RUN npm ci --only=production --ignore-scripts
 
-# Copy built files (includes both service and shared code)
-COPY --from=builder /app/dist/social-service ./dist
+# Copy built files
+COPY --from=builder /app/dist ./dist
 
 # Set environment
 ENV NODE_ENV=production

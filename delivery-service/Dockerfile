@@ -33,14 +33,14 @@ LABEL port="3005"
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy service package files (not root package.json)
+COPY delivery-service/package*.json ./
 
 # Install production dependencies only
 RUN npm ci --only=production --ignore-scripts
 
-# Copy built files (includes both service and shared code)
-COPY --from=builder /app/dist/delivery-service ./dist
+# Copy built files
+COPY --from=builder /app/dist ./dist
 
 # Set environment
 ENV NODE_ENV=production
