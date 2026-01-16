@@ -34,10 +34,10 @@ LABEL port="3000"
 WORKDIR /app
 
 # Copy service package files (not root package.json)
-COPY api-gateway/package*.json ./
+COPY api-gateway/package.json ./
 
 # Install production dependencies only
-RUN npm ci --only=production --ignore-scripts
+RUN npm install --omit=dev --ignore-scripts
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
