@@ -1,10 +1,10 @@
-import { Worker, Job } from 'bullmq';
-import IORedis from 'ioredis';
-import { config } from '../../config';
-import logger from '../../utils/logger';
-import { commissionService } from '../../services/commission.service';
 import { createClient } from '@supabase/supabase-js';
+import { Job, Worker } from 'bullmq';
+import IORedis from 'ioredis';
 import Stripe from 'stripe';
+import { config } from '../../config';
+import { commissionService } from '../../services/commission.service';
+import logger from '../../utils/logger';
 import { addNotificationJob } from '../notification.queue';
 
 const connection = new IORedis(config.redisUrl, {
@@ -14,10 +14,19 @@ const connection = new IORedis(config.redisUrl, {
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
-// Initialize payment providers
-const stripe = new Stripe(config.stripeSecretKey, {
-  apiVersion: '2024-12-18.acacia',
-});
+// Initialize payment providers (lazy initialization to avoid startup errors)
+let stripe: Stripe | null = null;
+const getStripe = () => {
+  if (!stripe) {
+    if (!config.stripeSecretKey) {
+      throw new Error('STRIPE_SECRET_KEY is required for payment processing');
+    }
+    stripe = new Stripe(config.stripeSecretKey, {
+      apiVersion: '2024-12-18.acacia',
+    });
+  }
+  return stripe;
+};
 
 /**
  * Payment worker to process payment jobs
@@ -25,7 +34,17 @@ const stripe = new Stripe(config.stripeSecretKey, {
 export const paymentWorker = new Worker(
   'payment-queue',
   async (job: Job) => {
-    const { paymentId, module, amount, currency, userId, branchId, stateId, metadata, paymentMethod } = job.data;
+    const {
+      paymentId,
+      module,
+      amount,
+      currency,
+      userId,
+      branchId,
+      stateId,
+      metadata,
+      paymentMethod,
+    } = job.data;
 
     logger.info('Processing payment job', {
       jobId: job.id,
@@ -212,7 +231,7 @@ async function processStripePayment(data: {
   metadata: any;
 }): Promise<{ success: boolean; reference: string; message?: string }> {
   try {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount: Math.round(data.amount * 100), // Convert to cents
       currency: data.currency.toLowerCase(),
       metadata: data.metadata,
@@ -259,7 +278,7 @@ async function updatePaymentStatus(paymentId: string, status: string, message?: 
 }
 
 // Worker event handlers
-paymentWorker.on('completed', (job) => {
+paymentWorker.on('completed', job => {
   logger.info('Payment job completed', {
     jobId: job.id,
     paymentId: job.data.paymentId,
@@ -274,7 +293,7 @@ paymentWorker.on('failed', (job, err) => {
   });
 });
 
-paymentWorker.on('error', (err) => {
+paymentWorker.on('error', err => {
   logger.error('Payment worker error', { error: err.message });
 });
 

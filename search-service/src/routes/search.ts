@@ -17,8 +17,25 @@ const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
-const databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-const cacheService = new CacheService(REDIS_URL);
+let databaseService: DatabaseService | null = null;
+let cacheService: CacheService | null = null;
+
+const getDatabase = () => {
+  if (!databaseService) {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    }
+    databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  }
+  return databaseService;
+};
+
+const getCache = () => {
+  if (!cacheService) {
+    cacheService = new CacheService(REDIS_URL);
+  }
+  return cacheService;
+};
 
 /**
  * @route POST /api/v1/search/universal
@@ -41,7 +58,7 @@ router.post(
       req.logger?.logSearchQuery(query, query.category || 'all', 0);
 
       // Check cache first
-      const cachedResults = await cacheService.getSearchResults(query);
+      const cachedResults = await getCache().getSearchResults(query);
       if (cachedResults) {
         const executionTime = Date.now() - startTime;
         req.logger?.logSearchResults(cachedResults.data.total_results, true, executionTime);
@@ -59,11 +76,11 @@ router.post(
         // Search across all categories with limited results per category
         const [hotelResults, productResults, driverResults, postResults, userResults] =
           await Promise.all([
-            databaseService.searchHotels({ ...query, category: 'hotels', limit: 5 }),
-            databaseService.searchProducts({ ...query, category: 'products', limit: 5 }),
-            databaseService.searchDrivers({ ...query, category: 'drivers', limit: 5 }),
-            databaseService.searchPosts({ ...query, category: 'posts', limit: 5 }),
-            databaseService.searchUsers({ ...query, category: 'users', limit: 5 }),
+            getDatabase().searchHotels({ ...query, category: 'hotels', limit: 5 }),
+            getDatabase().searchProducts({ ...query, category: 'products', limit: 5 }),
+            getDatabase().searchDrivers({ ...query, category: 'drivers', limit: 5 }),
+            getDatabase().searchPosts({ ...query, category: 'posts', limit: 5 }),
+            getDatabase().searchUsers({ ...query, category: 'users', limit: 5 }),
           ]);
 
         allResults = [
@@ -97,23 +114,23 @@ router.post(
 
         switch (query.category) {
           case 'hotels':
-            categoryResults = await databaseService.searchHotels(query);
+            categoryResults = await getDatabase().searchHotels(query);
             facets = await getHotelFacets(query);
             break;
           case 'products':
-            categoryResults = await databaseService.searchProducts(query);
+            categoryResults = await getDatabase().searchProducts(query);
             facets = await getProductFacets(query);
             break;
           case 'drivers':
-            categoryResults = await databaseService.searchDrivers(query);
+            categoryResults = await getDatabase().searchDrivers(query);
             facets = await getDriverFacets(query);
             break;
           case 'posts':
-            categoryResults = await databaseService.searchPosts(query);
+            categoryResults = await getDatabase().searchPosts(query);
             facets = await getPostFacets(query);
             break;
           case 'users':
-            categoryResults = await databaseService.searchUsers(query);
+            categoryResults = await getDatabase().searchUsers(query);
             facets = await getUserFacets(query);
             break;
           default:
@@ -163,7 +180,7 @@ router.post(
       };
 
       // Cache the results
-      await cacheService.setSearchResults(query, response);
+      await getCache().setSearchResults(query, response);
 
       req.logger?.logSearchResults(totalResults, false, executionTime);
 
@@ -234,7 +251,7 @@ router.get(
       req.logger?.logSearchQuery(query, query.category || 'all', 0);
 
       // Check cache first
-      const cachedResults = await cacheService.getSearchResults(query);
+      const cachedResults = await getCache().getSearchResults(query);
       if (cachedResults) {
         const executionTime = Date.now() - startTime;
         req.logger?.logSearchResults(cachedResults.data.total_results, true, executionTime);
@@ -251,11 +268,11 @@ router.get(
         // Search across all categories with limited results per category
         const [hotelResults, productResults, driverResults, postResults, userResults] =
           await Promise.all([
-            databaseService.searchHotels({ ...query, category: 'hotels', limit: 5 }),
-            databaseService.searchProducts({ ...query, category: 'products', limit: 5 }),
-            databaseService.searchDrivers({ ...query, category: 'drivers', limit: 5 }),
-            databaseService.searchPosts({ ...query, category: 'posts', limit: 5 }),
-            databaseService.searchUsers({ ...query, category: 'users', limit: 5 }),
+            getDatabase().searchHotels({ ...query, category: 'hotels', limit: 5 }),
+            getDatabase().searchProducts({ ...query, category: 'products', limit: 5 }),
+            getDatabase().searchDrivers({ ...query, category: 'drivers', limit: 5 }),
+            getDatabase().searchPosts({ ...query, category: 'posts', limit: 5 }),
+            getDatabase().searchUsers({ ...query, category: 'users', limit: 5 }),
           ]);
 
         allResults = [
@@ -278,19 +295,19 @@ router.get(
 
         switch (query.category) {
           case 'hotels':
-            categoryResults = await databaseService.searchHotels(query);
+            categoryResults = await getDatabase().searchHotels(query);
             break;
           case 'products':
-            categoryResults = await databaseService.searchProducts(query);
+            categoryResults = await getDatabase().searchProducts(query);
             break;
           case 'drivers':
-            categoryResults = await databaseService.searchDrivers(query);
+            categoryResults = await getDatabase().searchDrivers(query);
             break;
           case 'posts':
-            categoryResults = await databaseService.searchPosts(query);
+            categoryResults = await getDatabase().searchPosts(query);
             break;
           case 'users':
-            categoryResults = await databaseService.searchUsers(query);
+            categoryResults = await getDatabase().searchUsers(query);
             break;
           default:
             throw new Error(`Unsupported category: ${query.category}`);
@@ -311,7 +328,7 @@ router.get(
       }
 
       // Get search suggestions
-      const suggestions = await databaseService.getSearchSuggestions(
+      const suggestions = await getDatabase().getSearchSuggestions(
         query.q,
         query.category || 'all',
         5
@@ -346,7 +363,7 @@ router.get(
       };
 
       // Cache the results
-      await cacheService.setSearchResults(query, response);
+      await getCache().setSearchResults(query, response);
 
       req.logger?.logSearchResults(totalResults, false, executionTime);
 
@@ -438,7 +455,7 @@ router.get(
       const sanitizedQuery = sanitizeSearchQuery(q);
 
       // Check cache
-      const cachedSuggestions = await cacheService.getAutocompleteResults(
+      const cachedSuggestions = await getCache().getAutocompleteResults(
         sanitizedQuery,
         category,
         Number(limit)
@@ -450,7 +467,7 @@ router.get(
       }
 
       // Get suggestions from database
-      const suggestions = await databaseService.getSearchSuggestions(
+      const suggestions = await getDatabase().getSearchSuggestions(
         sanitizedQuery,
         category,
         Number(limit)
@@ -476,7 +493,7 @@ router.get(
       };
 
       // Cache suggestions
-      await cacheService.setAutocompleteResults(
+      await getCache().setAutocompleteResults(
         sanitizedQuery,
         category,
         Number(limit),
@@ -550,7 +567,7 @@ router.post(
       };
 
       // Store in database (async, don't wait)
-      databaseService.storeSearchAnalytics(analyticsData).catch(error => {
+      getDatabase().storeSearchAnalytics(analyticsData).catch(error => {
         req.logger?.error('Failed to store search analytics', error);
       });
 
@@ -610,7 +627,7 @@ router.get(
 
       // Check cache first
       const cacheKey = `filters:${category}:${location || 'all'}`;
-      const cached = await cacheService.get(cacheKey);
+      const cached = await getCache().get(cacheKey);
 
       if (cached) {
         res.json(JSON.parse(cached));
@@ -679,7 +696,7 @@ router.get(
       };
 
       // Cache for 1 hour
-      await cacheService.set(cacheKey, JSON.stringify(response), 3600);
+      await getCache().set(cacheKey, JSON.stringify(response), 3600);
 
       res.json(response);
     } catch (error) {
@@ -731,7 +748,7 @@ router.delete('/cache', optionalAuth, async (req: Request, res: Response): Promi
 
     const { pattern } = req.query as { pattern?: string };
 
-    const clearedCount = await cacheService.invalidateSearchCache(pattern);
+    const clearedCount = await getCache().invalidateSearchCache(pattern);
 
     req.logger?.info('Search cache cleared', {
       clearedCount,
@@ -796,7 +813,7 @@ router.get('/stats', optionalAuth, async (req: Request, res: Response): Promise<
       return;
     }
 
-    const cacheStats = await cacheService.getCacheStats();
+    const cacheStats = await getCache().getCacheStats();
 
     res.json({
       success: true,

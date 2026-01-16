@@ -1,9 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
-import { CreatePackageRequest, DeliveryPackage, UpdatePackageRequest } from '@/types';
-import { ServiceError } from '@/utils/errors';
-import logger from '@/utils/logger';
+import { CreatePackageRequest, DeliveryPackage, UpdatePackageRequest } from '../types';
+import { ServiceError } from '../utils/errors';
+import logger from '../utils/logger';
 
 /**
  * Package management service for CRUD operations on delivery packages

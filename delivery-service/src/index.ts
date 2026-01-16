@@ -5,17 +5,17 @@ import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 
-import config from '@/config';
-import assignmentRoutes from '@/routes/assignments';
-import courierRoutes from '@/routes/couriers';
-import healthRoutes from '@/routes/health';
-import packageRoutes from '@/routes/packages';
-import schedulerRoutes from '@/routes/scheduler';
-import trackingRoutes from '@/routes/tracking';
-import websocketRoutes from '@/routes/websocket';
-import { webSocketService } from '@/services/websocket';
-import logger from '@/utils/logger';
-import { schedulerService } from '@/utils/scheduler';
+import config from './config';
+import assignmentRoutes from './routes/assignments';
+import courierRoutes from './routes/couriers';
+import healthRoutes from './routes/health';
+import packageRoutes from './routes/packages';
+import schedulerRoutes from './routes/scheduler';
+import trackingRoutes from './routes/tracking';
+import websocketRoutes from './routes/websocket';
+import { webSocketService } from './services/websocket';
+import logger from './utils/logger';
+import { schedulerService } from './utils/scheduler';
 
 
 // Create Express application

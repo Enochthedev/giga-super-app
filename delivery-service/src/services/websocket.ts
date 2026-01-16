@@ -3,9 +3,9 @@ import { Server as HttpServer } from 'http';
 import { createClient } from '@supabase/supabase-js';
 import { Socket, Server as SocketIOServer } from 'socket.io';
 
-import config from '@/config';
-import { DeliveryTracking } from '@/types';
-import logger from '@/utils/logger';
+import config from '../config';
+import { DeliveryTracking } from '../types';
+import logger from '../utils/logger';
 
 
 // Initialize Supabase client

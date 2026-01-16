@@ -44,6 +44,10 @@ interface ServiceConfig {
     enableSms: boolean;
     enableEmail: boolean;
   };
+  pagination: {
+    defaultLimit: number;
+    maxLimit: number;
+  };
 }
 
 const config: ServiceConfig = {
@@ -99,9 +103,14 @@ const config: ServiceConfig = {
     enableSms: process.env['ENABLE_SMS_NOTIFICATIONS'] === 'true',
     enableEmail: process.env['ENABLE_EMAIL_NOTIFICATIONS'] === 'true',
   },
+
+  pagination: {
+    defaultLimit: parseInt(process.env['PAGINATION_DEFAULT_LIMIT'] || '20', 10),
+    maxLimit: parseInt(process.env['PAGINATION_MAX_LIMIT'] || '100', 10),
+  },
 };
 
-// Validate required configuration
+// Validate required configuration (warn but don't crash in development)
 const requiredEnvVars = [
   'SUPABASE_URL',
   'SUPABASE_SERVICE_ROLE_KEY',
@@ -112,7 +121,12 @@ const requiredEnvVars = [
 const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
 
 if (missingEnvVars.length > 0) {
-  throw new Error(`Missing required environment variables: ${missingEnvVars.join(', ')}`);
+  const message = `Missing environment variables: ${missingEnvVars.join(', ')}`;
+  if (config.nodeEnv === 'production') {
+    throw new Error(message);
+  } else {
+    console.warn(`[WARNING] ${message}`);
+  }
 }
 
 export default config;

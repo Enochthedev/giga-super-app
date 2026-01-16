@@ -1,9 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
-import { CourierProfile, DeliveryAssignment, LocationCoordinates } from '@/types';
-import { ServiceError } from '@/utils/errors';
-import logger from '@/utils/logger';
+import { CourierProfile, DeliveryAssignment, LocationCoordinates } from '../types';
+import { ServiceError } from '../utils/errors';
+import logger from '../utils/logger';
 
 export interface CourierMatchingCriteria {
   location: LocationCoordinates;

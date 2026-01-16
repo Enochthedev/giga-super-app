@@ -7,7 +7,7 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import IORedis from 'ioredis';
 import NodeCache from 'node-cache';
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import { Twilio } from 'twilio';
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
@@ -54,7 +54,7 @@ const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SE
 const cache = new NodeCache({ stdTTL: 300, checkperiod: 60 });
 
 // Email transporter with connection pooling
-const emailTransporter = nodemailer.createTransporter({
+const emailTransporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.SMTP_PORT || '587', 10),
   secure: false,

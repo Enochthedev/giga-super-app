@@ -11,13 +11,30 @@ import { validateDriverSearch } from '../utils/validation.js';
 
 const router = Router();
 
-// Initialize services
+// Initialize services lazily
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
-const databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-const cacheService = new CacheService(REDIS_URL);
+let databaseService: DatabaseService | null = null;
+let cacheService: CacheService | null = null;
+
+const getDatabase = () => {
+  if (!databaseService) {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    }
+    databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  }
+  return databaseService;
+};
+
+const getCache = () => {
+  if (!cacheService) {
+    cacheService = new CacheService(REDIS_URL);
+  }
+  return cacheService;
+};
 
 /**
  * @route POST /api/v1/search/drivers
@@ -82,7 +99,7 @@ router.post(
       };
 
       // Don't cache real-time location searches
-      const { results, total } = await databaseService.searchDrivers(searchQuery);
+      const { results, total } = await getDatabase().searchDrivers(searchQuery);
 
       const executionTime = Date.now() - startTime;
 
@@ -269,7 +286,7 @@ router.get(
       // Check cache first (but skip for real-time location searches)
       let cachedResults = null;
       if (!queryParams.latitude || !queryParams.longitude) {
-        cachedResults = await cacheService.getSearchResults(searchQuery);
+        cachedResults = await getCache().getSearchResults(searchQuery);
       }
 
       if (cachedResults) {
@@ -281,7 +298,7 @@ router.get(
       }
 
       // Perform driver search
-      const { results, total } = await databaseService.searchDrivers(searchQuery);
+      const { results, total } = await getDatabase().searchDrivers(searchQuery);
 
       const executionTime = Date.now() - startTime;
 
@@ -346,7 +363,7 @@ router.get(
       };
 
       // Cache the results with appropriate TTL
-      await cacheService.setSearchResults(searchQuery, response, cacheTime);
+      await getCache().setSearchResults(searchQuery, response, cacheTime);
 
       req.logger?.logSearchResults(total, false, executionTime);
 
@@ -453,7 +470,7 @@ router.get(
       };
 
       // Don't cache real-time location searches
-      const { results, total } = await databaseService.searchDrivers(searchQuery);
+      const { results, total } = await getDatabase().searchDrivers(searchQuery);
 
       const executionTime = Date.now() - startTime;
 
@@ -519,7 +536,7 @@ router.get(
     try {
       // Check cache
       const cacheKey = 'vehicle_types';
-      const cached = await cacheService.get(cacheKey);
+      const cached = await getCache().get(cacheKey);
 
       if (cached) {
         res.json(JSON.parse(cached));
@@ -587,7 +604,7 @@ router.get(
       };
 
       // Cache for 1 hour
-      await cacheService.set(cacheKey, JSON.stringify(response), 3600);
+      await getCache().set(cacheKey, JSON.stringify(response), 3600);
 
       res.json(response);
     } catch (error) {

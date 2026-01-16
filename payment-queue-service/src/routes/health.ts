@@ -1,14 +1,14 @@
 import { Router, Request, Response } from 'express';
 
-import { testConnection } from '@/utils/database';
-import logger from '@/utils/logger';
+import { testConnection } from '../utils/database';
+import logger from '../utils/logger';
 import {
   getQueueMetrics as getPaymentQueueMetrics,
-} from '@/queues/payment.queue';
-import { getWebhookQueueMetrics } from '@/queues/webhook.queue';
-import { getRefundQueueMetrics } from '@/queues/refund.queue';
-import { getSettlementQueueMetrics } from '@/queues/settlement.queue';
-import { getNotificationQueueMetrics } from '@/queues/notification.queue';
+} from '../queues/payment.queue';
+import { getWebhookQueueMetrics } from '../queues/webhook.queue';
+import { getRefundQueueMetrics } from '../queues/refund.queue';
+import { getSettlementQueueMetrics } from '../queues/settlement.queue';
+import { getNotificationQueueMetrics } from '../queues/notification.queue';
 
 const router = Router();
 

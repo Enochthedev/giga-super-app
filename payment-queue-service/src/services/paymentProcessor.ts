@@ -2,11 +2,11 @@ import axios from 'axios';
 import Stripe from 'stripe';
 import { v4 as uuidv4 } from 'uuid';
 
-import { config } from '@/config';
-import { PaymentRequest, PaymentResponse, CircuitBreakerState } from '@/types';
-import supabase from '@/utils/database';
-import { PaymentProcessingError, ServiceUnavailableError } from '@/utils/errors';
-import logger from '@/utils/logger';
+import { config } from '../config';
+import { PaymentRequest, PaymentResponse, CircuitBreakerState } from '../types';
+import supabase from '../utils/database';
+import { PaymentProcessingError, ServiceUnavailableError } from '../utils/errors';
+import logger from '../utils/logger';
 
 // Initialize Stripe
 const stripe = new Stripe(config.stripeSecretKey, {

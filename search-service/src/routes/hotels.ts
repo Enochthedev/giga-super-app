@@ -17,8 +17,25 @@ const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
-const databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-const cacheService = new CacheService(REDIS_URL);
+let databaseService: DatabaseService | null = null;
+let cacheService: CacheService | null = null;
+
+const getDatabase = () => {
+  if (!databaseService) {
+    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    }
+    databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+  }
+  return databaseService;
+};
+
+const getCache = () => {
+  if (!cacheService) {
+    cacheService = new CacheService(REDIS_URL);
+  }
+  return cacheService;
+};
 
 /**
  * @route POST /api/v1/search/hotels
@@ -73,7 +90,7 @@ router.post(
       };
 
       // Check cache first
-      const cachedResults = await cacheService.getSearchResults(searchQuery);
+      const cachedResults = await getCache().getSearchResults(searchQuery);
       if (cachedResults) {
         const executionTime = Date.now() - startTime;
         req.logger?.logSearchResults(cachedResults.data.total_results, true, executionTime);
@@ -83,7 +100,7 @@ router.post(
       }
 
       // Perform hotel search
-      const { results, total } = await databaseService.searchHotels(searchQuery);
+      const { results, total } = await getDatabase().searchHotels(searchQuery);
 
       const executionTime = Date.now() - startTime;
 
@@ -159,7 +176,7 @@ router.post(
       };
 
       // Cache the results
-      await cacheService.setSearchResults(searchQuery, response, 300); // 5 minutes
+      await getCache().setSearchResults(searchQuery, response, 300); // 5 minutes
 
       req.logger?.logSearchResults(total, false, executionTime);
 
@@ -262,7 +279,7 @@ router.get(
       };
 
       // Check cache first
-      const cachedResults = await cacheService.getSearchResults(searchQuery);
+      const cachedResults = await getCache().getSearchResults(searchQuery);
       if (cachedResults) {
         const executionTime = Date.now() - startTime;
         req.logger?.logSearchResults(cachedResults.data.total_results, true, executionTime);
@@ -272,7 +289,7 @@ router.get(
       }
 
       // Perform hotel search
-      const { results, total } = await databaseService.searchHotels(searchQuery);
+      const { results, total } = await getDatabase().searchHotels(searchQuery);
 
       const executionTime = Date.now() - startTime;
 
@@ -332,7 +349,7 @@ router.get(
       };
 
       // Cache the results
-      await cacheService.setSearchResults(searchQuery, response, 300); // 5 minutes
+      await getCache().setSearchResults(searchQuery, response, 300); // 5 minutes
 
       req.logger?.logSearchResults(total, false, executionTime);
 
@@ -412,14 +429,14 @@ router.get(
 
       // Check cache
       const cacheKey = `popular_hotels:${location || 'all'}:${limit}`;
-      const cached = await cacheService.get(cacheKey);
+      const cached = await getCache().get(cacheKey);
 
       if (cached) {
         res.json(JSON.parse(cached));
         return;
       }
 
-      const { results, total } = await databaseService.searchHotels(searchQuery);
+      const { results, total } = await getDatabase().searchHotels(searchQuery);
 
       const executionTime = Date.now() - startTime;
 
@@ -439,7 +456,7 @@ router.get(
       };
 
       // Cache for 1 hour
-      await cacheService.set(cacheKey, JSON.stringify(response), 3600);
+      await getCache().set(cacheKey, JSON.stringify(response), 3600);
 
       res.json(response);
     } catch (error) {
@@ -508,7 +525,7 @@ router.get(
         },
       };
 
-      const { results, total } = await databaseService.searchHotels(searchQuery);
+      const { results, total } = await getDatabase().searchHotels(searchQuery);
 
       const executionTime = Date.now() - startTime;
 

@@ -1,20 +1,18 @@
 import { Router } from 'express';
-import { asyncHandler } from '../utils/asyncHandler';
-import { auth } from '../middleware/auth';
-import {
-  requireAdminLevel,
-} from '../middleware/rbac.middleware';
-import {
-  validateBranchReport,
-  validateStateReport,
-  validateAdminReport,
-  validateDateRange,
-} from '../middleware/validation.middleware';
 import {
   getBranchReport,
-  getStateReport,
   getNationalReport,
-} from '../controllers/admin.controller';
+  getStateReport,
+} from '../../controllers/admin.controller';
+import { authenticate as auth } from '../../middleware/auth';
+import { requireAdminLevel } from '../../middleware/rbac.middleware';
+import {
+  validateAdminReport,
+  validateBranchReport,
+  validateDateRange,
+  validateStateReport,
+} from '../../middleware/validation.middleware';
+import { asyncHandler } from '../../utils/asyncHandler';
 
 const router = Router();
 

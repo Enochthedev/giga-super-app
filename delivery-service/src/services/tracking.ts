@@ -2,15 +2,15 @@ import { createClient } from '@supabase/supabase-js';
 
 import { googleMapsService } from './googleMaps';
 
-import config from '@/config';
+import config from '../config';
 import {
   DeliveryAssignment,
   DeliveryTracking,
   ERROR_CODES,
   LocationCoordinates,
   TrackDeliveryRequest,
-} from '@/types';
-import logger from '@/utils/logger';
+} from '../types';
+import logger from '../utils/logger';
 
 // Initialize Supabase client
 const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey);
