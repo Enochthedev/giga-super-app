@@ -1,10 +1,10 @@
-# Railway configuration for payment-queue-service
+# Railway configuration for taxi-realtime-service
 # https://docs.railway.app/deploy/config-as-code
 
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "payment-queue-service/Dockerfile"
-watchPaths = ["payment-queue-service/**", "shared/**"]
+dockerfilePath = "taxi-realtime-service/Dockerfile"
+watchPaths = ["taxi-realtime-service/**", "shared/**"]
 
 [deploy]
 numReplicas = 1
