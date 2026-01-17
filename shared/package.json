@@ -4,7 +4,6 @@
   "description": "Shared utilities and configurations for Giga platform services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.js",
