@@ -70,6 +70,8 @@ router.get('/', (_req: Request, res: Response) => {
     name: service.name,
     description: service.description,
     docsUrl: key === 'gateway' ? `${baseUrl}/api-docs/` : `${baseUrl}/docs/${key}/`,
+    jsonUrl: `${baseUrl}/docs/${key}/json`,
+    directUrl: service.url || '', // Direct URL to the service's own /api-docs endpoint
     apiPrefix:
       key === 'gateway'
         ? '/'
@@ -82,12 +84,53 @@ router.get('/', (_req: Request, res: Response) => {
     data: {
       title: 'Giga Platform API Documentation',
       description: 'Unified API documentation for all Giga platform services',
+      note: 'For direct browser access to service documentation, ensure your browser has network access to the internal service URLs.',
       services,
       quickLinks: {
         health: `${baseUrl}/health`,
         healthDetailed: `${baseUrl}/health/detailed`,
         gatewayDocs: `${baseUrl}/api-docs/`,
+        allSpecs: `${baseUrl}/docs/specs`,
       },
+    },
+  });
+});
+
+/**
+ * @openapi
+ * /docs/specs:
+ *   get:
+ *     summary: Get all OpenAPI specifications
+ *     description: Returns links to all service OpenAPI JSON specs
+ *     tags:
+ *       - Documentation
+ */
+router.get('/specs', async (_req: Request, res: Response) => {
+  const baseUrl = `${_req.protocol}://${_req.get('host')}`;
+
+  const specs: Record<string, { name: string; jsonUrl: string; status: string }> = {};
+
+  for (const [key, service] of Object.entries(serviceDocsRegistry)) {
+    if (key === 'gateway') {
+      specs[key] = {
+        name: service.name,
+        jsonUrl: `${baseUrl}/docs/gateway/json`,
+        status: 'available',
+      };
+    } else if (service.url) {
+      specs[key] = {
+        name: service.name,
+        jsonUrl: `${baseUrl}/docs/${key}/json`,
+        status: 'available',
+      };
+    }
+  }
+
+  res.json({
+    success: true,
+    data: {
+      title: 'OpenAPI Specifications',
+      specs,
     },
   });
 });
@@ -162,6 +205,108 @@ const proxyServiceDocs = async (req: Request, res: Response, serviceKey: string)
     });
   }
 };
+
+/**
+ * Fetch OpenAPI JSON spec from a service
+ */
+const fetchServiceSpec = async (req: Request, res: Response, serviceKey: string) => {
+  const service = serviceDocsRegistry[serviceKey];
+
+  if (!service) {
+    res.status(404).json({
+      success: false,
+      error: {
+        code: 'SERVICE_NOT_FOUND',
+        message: `Service '${serviceKey}' not found`,
+      },
+    });
+    return;
+  }
+
+  // Handle gateway special case
+  if (serviceKey === 'gateway') {
+    // Import swaggerSpec from the config
+    try {
+      const { swaggerSpec } = await import('../config/swagger.js');
+      res.json(swaggerSpec);
+    } catch {
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'SPEC_LOAD_ERROR',
+          message: 'Failed to load gateway OpenAPI spec',
+        },
+      });
+    }
+    return;
+  }
+
+  if (!service.url) {
+    res.status(404).json({
+      success: false,
+      error: {
+        code: 'SERVICE_NOT_CONFIGURED',
+        message: `Service '${serviceKey}' is not configured`,
+      },
+    });
+    return;
+  }
+
+  const targetUrl = `${service.url}/api-docs.json`;
+
+  try {
+    logger.debug(`Fetching OpenAPI spec from ${targetUrl}`);
+
+    const response = await axios.get(targetUrl, {
+      timeout: 10000,
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    logger.error(`Failed to fetch spec for ${serviceKey}`, {
+      error: error instanceof Error ? error.message : 'Unknown error',
+      targetUrl,
+    });
+
+    res.status(502).json({
+      success: false,
+      error: {
+        code: 'SPEC_FETCH_ERROR',
+        message: `Failed to fetch OpenAPI spec from ${service.name}`,
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+    });
+  }
+};
+
+/**
+ * @openapi
+ * /docs/{service}/json:
+ *   get:
+ *     summary: Get OpenAPI JSON specification for a service
+ *     description: Returns the OpenAPI JSON spec for the specified service
+ *     tags:
+ *       - Documentation
+ *     parameters:
+ *       - in: path
+ *         name: service
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [gateway, social, admin, search, delivery, payment, notifications, taxi]
+ *     responses:
+ *       200:
+ *         description: OpenAPI JSON specification
+ *       404:
+ *         description: Service not found
+ */
+router.get('/:service/json', (req: Request, res: Response) => {
+  const serviceKey = req.params.service!;
+  fetchServiceSpec(req, res, serviceKey);
+});
 
 /**
  * @openapi
