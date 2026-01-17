@@ -1,3 +1,10 @@
+
+## [2026-01-17] - Auto-generated
+
+### Updated
+- Regenerated collection from TypeScript definitions
+- Services: 09. Admin & Platform, 01. Authentication & User Management, 02. Hotel Discovery & Management, 03. Booking Management, 05. Taxi & Rides, 06. Delivery & Logistics, 07. Social Media, 08. Chat & Communication, 10. Advertising, 04. Payment & Wallet, 11. Notifications, 00. Core Utilities
+
 # API Changelog
 
 All notable changes to the Giga API will be documented in this file.
