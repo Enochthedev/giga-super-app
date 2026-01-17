@@ -117,21 +117,36 @@ const proxyServiceDocs = async (req: Request, res: Response, serviceKey: string)
     logger.debug(`Proxying docs request to ${targetUrl}`);
 
     const response = await axios.get(targetUrl, {
-      timeout: 10000,
+      timeout: 15000,
       responseType: 'arraybuffer',
+      maxRedirects: 5,
+      validateStatus: status => status < 400,
       headers: {
         Accept: req.headers.accept || '*/*',
+        'User-Agent': req.headers['user-agent'] || 'Giga-API-Gateway/1.0',
       },
     });
 
-    // Forward content type
+    // Forward relevant headers
     const contentType = response.headers['content-type'];
     if (contentType) {
       res.setHeader('Content-Type', contentType);
     }
 
+    // Remove CSP header to allow Swagger UI to work properly
+    res.removeHeader('Content-Security-Policy');
+
     res.send(response.data);
   } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 301) {
+      // Handle redirect manually if needed
+      const { location } = error.response.headers;
+      if (location) {
+        res.redirect(301, location.replace('/api-docs', `/docs/${serviceKey}`));
+        return;
+      }
+    }
+
     logger.error(`Failed to fetch docs for ${serviceKey}`, {
       error: error instanceof Error ? error.message : 'Unknown error',
       targetUrl,
