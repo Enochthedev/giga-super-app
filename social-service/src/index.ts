@@ -158,10 +158,23 @@ app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
 
 // Start server
 const server = createServer(app);
+
+server.on('error', (error: NodeJS.ErrnoException) => {
+  if (error.code === 'EADDRINUSE') {
+    logger.error(`Port ${PORT} is already in use`);
+  } else {
+    logger.error('Server error', { error: error.message, code: error.code });
+  }
+  process.exit(1);
+});
+
 server.listen(PORT, '0.0.0.0', () => {
-  logger.info('Social service started', {
+  const address = server.address();
+  logger.info('Social service started and listening', {
     port: PORT,
+    address: address,
     swagger: `http://localhost:${PORT}/api-docs`,
+    env: process.env.NODE_ENV,
   });
 });
 
