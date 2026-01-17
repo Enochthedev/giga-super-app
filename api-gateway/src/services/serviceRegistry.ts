@@ -257,7 +257,8 @@ class ServiceRegistry {
     }
 
     try {
-      const response = await axios.get(`${service.baseUrl}${service.healthEndpoint}`, {
+      const targetUrl = `${service.baseUrl}${service.healthEndpoint}`;
+      const response = await axios.get(targetUrl, {
         timeout: config.healthCheckTimeoutMs,
         headers: service.headers ?? {},
         validateStatus: status => status < 500,
@@ -277,11 +278,26 @@ class ServiceRegistry {
 
       return result;
     } catch (error) {
+      let errorMessage = 'Unknown error';
+      if (axios.isAxiosError(error)) {
+        errorMessage = `${error.message} (${error.code}) accessing ${service.baseUrl}${service.healthEndpoint}`;
+        if (error.response) {
+          errorMessage += ` - Status: ${error.response.status}`;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+
       const result: HealthCheckResult = {
         healthy: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: errorMessage,
         lastCheck: new Date().toISOString(),
       };
+
+      logger.error(`Health check failed for ${serviceId}`, {
+        error: errorMessage,
+        serviceUrl: service.baseUrl,
+      });
 
       service.healthy = false;
       service.lastHealthCheck = new Date();
