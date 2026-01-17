@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ForbiddenError, UnauthorizedError } from '../utils/errors';
 import logger from '../utils/logger';
 
@@ -6,7 +6,7 @@ export interface AuthenticatedRequest extends Request {
   user?: {
     id: string;
     email: string;
-    role: string;
+    role?: string;
     branchId?: string;
     stateId?: string;
     permissions?: string[];
@@ -25,7 +25,7 @@ export const requireRole = (allowedRoles: string[]) => {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const userRole = req.user.role;
+      const userRole = req.user.role || '';
 
       if (!allowedRoles.includes(userRole)) {
         logger.warn('Insufficient role', {
@@ -84,7 +84,7 @@ export const requireAdminLevel = (level: AdminLevel) => {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const userRole = req.user.role;
+      const userRole = req.user.role || '';
 
       // Define hierarchy
       const hierarchy: Record<string, number> = {
@@ -136,13 +136,13 @@ export const canAccessBranch = (branchIdParam: string = 'branchId') => {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const requestedBranchId = req.params[branchIdParam] || req.query[branchIdParam] as string;
+      const requestedBranchId = req.params[branchIdParam] || (req.query[branchIdParam] as string);
 
       if (!requestedBranchId) {
         throw new ForbiddenError('Branch ID required');
       }
 
-      const userRole = req.user.role;
+      const userRole = req.user.role || '';
       const userBranchId = req.user.branchId;
       const userStateId = req.user.stateId;
 
@@ -188,13 +188,13 @@ export const canAccessState = (stateIdParam: string = 'stateId') => {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const requestedStateId = req.params[stateIdParam] || req.query[stateIdParam] as string;
+      const requestedStateId = req.params[stateIdParam] || (req.query[stateIdParam] as string);
 
       if (!requestedStateId) {
         throw new ForbiddenError('State ID required');
       }
 
-      const userRole = req.user.role;
+      const userRole = req.user.role || '';
       const userStateId = req.user.stateId;
 
       // Super admin and national admin can access all states
@@ -235,7 +235,7 @@ export const verifyWebhookSignature = (secretHeaderName: string = 'x-webhook-sig
 
       // Signature verification logic would go here
       // This is a placeholder - implement based on your webhook provider
-      
+
       next();
     } catch (error) {
       next(error);

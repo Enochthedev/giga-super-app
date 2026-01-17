@@ -17,6 +17,7 @@ declare global {
         id: string;
         email: string;
         role?: string;
+        roles?: string[];
         app_metadata?: any;
         user_metadata?: any;
       };

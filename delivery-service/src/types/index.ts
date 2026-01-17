@@ -32,7 +32,7 @@ export interface PaginationInfo {
 export interface AuthenticatedUser {
   id: string;
   email: string;
-  role: string;
+  role?: string;
   roles?: string[];
   app_metadata?: Record<string, any>;
   user_metadata?: Record<string, any>;

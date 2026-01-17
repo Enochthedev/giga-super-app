@@ -6,12 +6,12 @@ import Redis from 'ioredis';
 import { AutocompleteResponse, SearchQuery, SearchResponse } from '../types/index.js';
 
 export class CacheService {
-  private redis: Redis;
+  private redis: any;
   private defaultTTL: number = 300; // 5 minutes
   private isConnected: boolean = false;
 
   constructor(redisUrl: string) {
-    this.redis = new Redis(redisUrl, {
+    this.redis = new (Redis as any)(redisUrl, {
       maxRetriesPerRequest: 3,
       lazyConnect: false,
       enableReadyCheck: true,

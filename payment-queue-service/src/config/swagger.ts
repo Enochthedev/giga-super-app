@@ -1,6 +1,7 @@
-import swaggerJsdoc from 'swagger-jsdoc';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const swaggerJsdoc = require('swagger-jsdoc');
 
-const options: swaggerJsdoc.Options = {
+const options: Record<string, unknown> = {
   definition: {
     openapi: '3.0.3',
     info: {

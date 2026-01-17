@@ -47,6 +47,9 @@ declare namespace Express {
       email: string;
       role?: string;
       roles?: string[];
+      branchId?: string;
+      stateId?: string;
+      permissions?: string[];
     };
   }
 }

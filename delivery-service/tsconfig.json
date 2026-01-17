@@ -1,9 +1,17 @@
 {
-  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "../dist/delivery-service",
+    "target": "ES2022",
     "module": "CommonJS",
     "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "outDir": "../dist/delivery-service",
+    "rootDir": "..",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "sourceMap": true,
     "strict": false,
     "noImplicitAny": false,
     "strictNullChecks": false,
@@ -11,8 +19,7 @@
     "strictPropertyInitialization": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noEmitOnError": false,
-    "skipLibCheck": true
+    "noEmitOnError": false
   },
   "include": ["src/**/*", "../shared/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]

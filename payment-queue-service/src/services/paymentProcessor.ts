@@ -3,7 +3,7 @@ import Stripe from 'stripe';
 import { v4 as uuidv4 } from 'uuid';
 
 import { config } from '../config';
-import { PaymentRequest, PaymentResponse, CircuitBreakerState } from '../types';
+import { CircuitBreakerState, PaymentRequest, PaymentResponse } from '../types';
 import supabase from '../utils/database';
 import { PaymentProcessingError, ServiceUnavailableError } from '../utils/errors';
 import logger from '../utils/logger';
@@ -22,7 +22,7 @@ const circuitBreakers: Record<string, CircuitBreakerState> = {
 // Check circuit breaker state
 const checkCircuitBreaker = (provider: string): void => {
   const breaker = circuitBreakers[provider];
-  
+
   if (breaker.state === 'OPEN') {
     const now = new Date();
     const timeSinceLastFailure = breaker.lastFailureTime

@@ -79,8 +79,8 @@ router.post(
           brand: queryParams.brand,
           condition: queryParams.condition,
           category: queryParams.category,
-          location: queryParams.location,
-          ...queryParams.filters,
+          location: (queryParams as any).location,
+          ...(queryParams as any).filters,
         },
       };
 
@@ -163,7 +163,7 @@ router.post(
       };
 
       // Cache the results
-      await getCache().setSearchResults(searchQuery, response, 300); // 5 minutes
+      await getCache().setSearchResults(searchQuery, response as any, 300); // 5 minutes
 
       req.logger?.logSearchResults(total, false, executionTime);
 
@@ -313,7 +313,7 @@ router.get(
       };
 
       // Cache the results
-      await getCache().setSearchResults(searchQuery, response, 300); // 5 minutes
+      await getCache().setSearchResults(searchQuery, response as any, 300); // 5 minutes
 
       req.logger?.logSearchResults(total, false, executionTime);
 
