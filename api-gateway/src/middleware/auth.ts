@@ -42,6 +42,7 @@ export const authMiddleware = async (
     // Skip auth for health checks, public endpoints, and API documentation
     if (
       req.path.startsWith('/health') ||
+      req.path.endsWith('/health') ||
       req.path.startsWith('/public') ||
       req.path.includes('/api-docs') ||
       req.path.includes('/swagger') ||
