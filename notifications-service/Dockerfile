@@ -1,70 +1,66 @@
 # Multi-stage build for notifications-service (Monorepo)
 FROM node:20-alpine AS builder
 
-# Labels for identification
-LABEL service="notifications-service"
-LABEL version="1.0.0"
-LABEL description="notifications-service for Giga platform"
-
 WORKDIR /app
 
-# Copy package files
+# Copy root package files for shared dependencies
 COPY package*.json ./
 COPY tsconfig.base.json ./
 
-# Install dependencies
-RUN npm ci --include=dev --ignore-scripts
-
-# Copy shared code and service code
+# Copy shared code first (needed for compilation)
 COPY shared ./shared
+
+# Copy service package files and source
 COPY notifications-service ./notifications-service
 
-# Build TypeScript - show errors but continue to verification step
-WORKDIR /app/notifications-service
-RUN npx tsc -p tsconfig.json 2>&1 || true
+# Install root dependencies
+RUN npm ci --include=dev --ignore-scripts
 
-# Verify build output exists - fail with clear message if compilation failed
-RUN if [ ! -f /app/dist/notifications-service/src/index.js ]; then \
-      echo "=== BUILD FAILED ===" && \
-      echo "TypeScript compilation did not produce output." && \
-      echo "Re-running tsc to show errors:" && \
-      npx tsc -p tsconfig.json 2>&1 || true && \
-      exit 1; \
+# Install service-specific dependencies
+WORKDIR /app/notifications-service
+RUN npm ci --include=dev --ignore-scripts 2>/dev/null || npm install --include=dev --ignore-scripts
+
+# Build TypeScript
+WORKDIR /app/notifications-service
+RUN echo "=== TypeScript Build ===" && \
+    npx tsc --listEmittedFiles 2>&1 | head -30 && \
+    echo "=== Build complete ===" && \
+    ls -la ../dist/notifications-service/ 2>/dev/null || true
+
+# Verify build output exists
+RUN if [ ! -f /app/dist/notifications-service/notifications-service/src/index.js ]; then \
+      if [ ! -f /app/dist/notifications-service/src/index.js ]; then \
+        echo "=== BUILD VERIFICATION ===" && \
+        find /app/dist -name "index.js" 2>/dev/null || echo "No index.js found" && \
+        exit 1; \
+      fi; \
     fi && \
-    echo "Build successful - index.js found" && \
-    ls -la /app/dist/notifications-service/src/
+    echo "Build verified successfully"
 
 # Production stage
 FROM node:20-alpine
 
-# Labels for identification
-LABEL service="notifications-service"
-LABEL version="1.0.0"
-LABEL port="3007"
-
 WORKDIR /app
 
-# Copy service package files (not root package.json)
-COPY notifications-service/package.json notifications-service/package-lock.json ./
+# Copy service package files
+COPY notifications-service/package*.json ./
 
 # Install production dependencies only
-RUN npm ci --omit=dev --ignore-scripts
+RUN npm ci --omit=dev --ignore-scripts 2>/dev/null || npm install --omit=dev --ignore-scripts
 
-# Copy built files
+# Copy built files from builder
 COPY --from=builder /app/dist ./dist
 
 # Set environment
 ENV NODE_ENV=production
 ENV PORT=3007
 ENV SERVICE_NAME=notifications-service
-ENV SERVICE_VERSION=1.0.0
 
-# Expose port
 EXPOSE 3007
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3007/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start service
-CMD ["node", "dist/notifications-service/src/index.js"]
+# Start service - try both possible paths
+CMD ["sh", "-c", "node dist/notifications-service/notifications-service/src/index.js 2>/dev/null || node dist/notifications-service/src/index.js"]

@@ -117,7 +117,7 @@ router.post(
             check_in_date: queryParams.check_in,
             check_out_date: queryParams.check_out,
             guests: queryParams.guests,
-            rooms: queryParams.rooms,
+            rooms: (queryParams as any).rooms,
             nights:
               queryParams.check_in && queryParams.check_out
                 ? Math.ceil(
@@ -176,7 +176,7 @@ router.post(
       };
 
       // Cache the results
-      await getCache().setSearchResults(searchQuery, response, 300); // 5 minutes
+      await getCache().setSearchResults(searchQuery, response as any, 300); // 5 minutes
 
       req.logger?.logSearchResults(total, false, executionTime);
 
@@ -349,7 +349,7 @@ router.get(
       };
 
       // Cache the results
-      await getCache().setSearchResults(searchQuery, response, 300); // 5 minutes
+      await getCache().setSearchResults(searchQuery, response as any, 300); // 5 minutes
 
       req.logger?.logSearchResults(total, false, executionTime);
 

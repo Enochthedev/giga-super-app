@@ -3,7 +3,7 @@
  */
 
 export interface SearchQuery {
-  q: string;
+  q?: string;
   category?: SearchCategory;
   location?: string;
   min_price?: number;
@@ -90,12 +90,16 @@ export interface SearchResponse {
 }
 
 export interface SearchFacets {
-  categories: FacetCount[];
-  price_ranges: FacetCount[];
-  ratings: FacetCount[];
-  locations: FacetCount[];
+  categories?: FacetCount[];
+  price_ranges?: FacetCount[];
+  ratings?: FacetCount[];
+  locations?: FacetCount[];
   brands?: FacetCount[];
   amenities?: FacetCount[];
+  vehicle_types?: FacetCount[];
+  availability?: FacetCount[];
+  conditions?: FacetCount[];
+  [key: string]: FacetCount[] | undefined;
 }
 
 export interface FacetCount {
@@ -105,7 +109,7 @@ export interface FacetCount {
 }
 
 export interface AutocompleteQuery {
-  q: string;
+  q?: string;
   category?: SearchCategory;
   limit?: number;
 }
@@ -208,8 +212,20 @@ export interface EcommerceProduct {
   vendor_id: string;
   is_active: boolean;
   stock_quantity: number;
+  specifications?: Record<string, any>;
+  seller_id?: string;
+  seller_name?: string;
+  seller_rating?: number;
+  seller_location?: string;
+  seller_verified?: boolean;
+  free_shipping?: boolean;
+  estimated_delivery?: string;
+  shipping_cost?: number;
+  original_price?: number;
+  discount_percentage?: number;
   created_at: string;
   updated_at: string;
+  [key: string]: any; // Allow additional properties
 }
 
 export interface DriverProfile {
@@ -223,12 +239,24 @@ export interface DriverProfile {
     color?: string;
   };
   vehicle_type?: string;
+  vehicle_make?: string;
+  vehicle_model?: string;
+  vehicle_year?: number;
+  vehicle_color?: string;
+  vehicle_image?: string;
+  license_plate?: string;
+  phone?: string;
   is_online: boolean;
   is_verified: boolean;
+  is_available?: boolean;
+  verified?: boolean;
   current_location?: {
     latitude?: number;
     longitude?: number;
   };
+  current_latitude?: number;
+  current_longitude?: number;
+  current_address?: string;
   rating: number;
   total_rides: number;
   subscription_tier?: string;
@@ -236,6 +264,7 @@ export interface DriverProfile {
   speed?: number;
   created_at: string;
   updated_at: string;
+  [key: string]: any; // Allow additional properties
 }
 
 // Alias for backward compatibility

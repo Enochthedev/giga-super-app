@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { config } from '../config';
 import { RefundRequest } from '../types';
 import supabase from '../utils/database';
-import { PaymentProcessingError, NotFoundError } from '../utils/errors';
+import { NotFoundError, PaymentProcessingError } from '../utils/errors';
 import logger from '../utils/logger';
 
 // Initialize Stripe
@@ -45,15 +45,9 @@ export const processRefund = async (refundRequest: RefundRequest): Promise<any> 
     let refundReference: string;
 
     if (transaction.payment_method === 'stripe') {
-      refundReference = await processStripeRefund(
-        transaction.payment_reference,
-        refundAmount
-      );
+      refundReference = await processStripeRefund(transaction.payment_reference, refundAmount);
     } else {
-      refundReference = await processPaystackRefund(
-        transaction.payment_reference,
-        refundAmount
-      );
+      refundReference = await processPaystackRefund(transaction.payment_reference, refundAmount);
     }
 
     // Update transaction status
@@ -116,10 +110,7 @@ export const processRefund = async (refundRequest: RefundRequest): Promise<any> 
 };
 
 // Process Paystack refund
-const processPaystackRefund = async (
-  paymentReference: string,
-  amount: number
-): Promise<string> => {
+const processPaystackRefund = async (paymentReference: string, amount: number): Promise<string> => {
   try {
     const response = await axios.post(
       'https://api.paystack.co/refund',
@@ -137,9 +128,7 @@ const processPaystackRefund = async (
     );
 
     if (!response.data.status) {
-      throw new PaymentProcessingError(
-        response.data.message || 'Paystack refund failed'
-      );
+      throw new PaymentProcessingError(response.data.message || 'Paystack refund failed');
     }
 
     return response.data.data.id.toString();
@@ -154,10 +143,7 @@ const processPaystackRefund = async (
 };
 
 // Process Stripe refund
-const processStripeRefund = async (
-  paymentReference: string,
-  amount: number
-): Promise<string> => {
+const processStripeRefund = async (paymentReference: string, amount: number): Promise<string> => {
   try {
     const refund = await stripe.refunds.create({
       payment_intent: paymentReference,

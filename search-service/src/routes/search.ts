@@ -70,7 +70,7 @@ router.post(
       // Perform search based on category
       let allResults: SearchResult[] = [];
       let totalResults = 0;
-      let facets = {};
+      let facets: any = {};
 
       if (query.category === 'all') {
         // Search across all categories with limited results per category
@@ -430,7 +430,7 @@ router.get(
         q,
         category = 'all',
         limit = 10,
-      } = req.query as {
+      } = req.query as unknown as {
         q: string;
         category?: SearchCategory;
         limit?: number;
@@ -567,7 +567,7 @@ router.post(
       };
 
       // Store in database (async, don't wait)
-      getDatabase().storeSearchAnalytics(analyticsData).catch(error => {
+      (getDatabase() as any).storeSearchAnalytics(analyticsData).catch((error: Error) => {
         req.logger?.error('Failed to store search analytics', error);
       });
 

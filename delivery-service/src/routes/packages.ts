@@ -23,22 +23,46 @@ router.post(
     body('sender_name').isString().notEmpty().withMessage('Sender name is required'),
     body('sender_phone').isString().notEmpty().withMessage('Sender phone is required'),
     body('sender_address').isString().notEmpty().withMessage('Sender address is required'),
-    body('sender_lat').optional().isFloat({ min: -90, max: 90 }).withMessage('Invalid sender latitude'),
-    body('sender_lng').optional().isFloat({ min: -180, max: 180 }).withMessage('Invalid sender longitude'),
+    body('sender_lat')
+      .optional()
+      .isFloat({ min: -90, max: 90 })
+      .withMessage('Invalid sender latitude'),
+    body('sender_lng')
+      .optional()
+      .isFloat({ min: -180, max: 180 })
+      .withMessage('Invalid sender longitude'),
     body('recipient_name').isString().notEmpty().withMessage('Recipient name is required'),
     body('recipient_phone').isString().notEmpty().withMessage('Recipient phone is required'),
     body('recipient_address').isString().notEmpty().withMessage('Recipient address is required'),
-    body('recipient_lat').optional().isFloat({ min: -90, max: 90 }).withMessage('Invalid recipient latitude'),
-    body('recipient_lng').optional().isFloat({ min: -180, max: 180 }).withMessage('Invalid recipient longitude'),
-    body('package_description').optional().isString().withMessage('Package description must be a string'),
-    body('package_weight').optional().isFloat({ min: 0 }).withMessage('Package weight must be positive'),
-    body('package_dimensions').optional().isObject().withMessage('Package dimensions must be an object'),
+    body('recipient_lat')
+      .optional()
+      .isFloat({ min: -90, max: 90 })
+      .withMessage('Invalid recipient latitude'),
+    body('recipient_lng')
+      .optional()
+      .isFloat({ min: -180, max: 180 })
+      .withMessage('Invalid recipient longitude'),
+    body('package_description')
+      .optional()
+      .isString()
+      .withMessage('Package description must be a string'),
+    body('package_weight')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Package weight must be positive'),
+    body('package_dimensions')
+      .optional()
+      .isObject()
+      .withMessage('Package dimensions must be an object'),
     body('delivery_fee').isFloat({ min: 0 }).withMessage('Delivery fee must be positive'),
     body('priority')
       .optional()
       .isIn(['low', 'normal', 'high', 'urgent'])
       .withMessage('Invalid priority'),
-    body('delivery_instructions').optional().isString().withMessage('Delivery instructions must be a string'),
+    body('delivery_instructions')
+      .optional()
+      .isString()
+      .withMessage('Delivery instructions must be a string'),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
@@ -53,7 +77,10 @@ router.post(
         request_id: req.requestId,
       });
 
-      const pkg = await packageService.createPackage(packageData, req.requestId || 'create-package');
+      const pkg = await packageService.createPackage(
+        packageData,
+        req.requestId || 'create-package'
+      );
 
       const response: APIResponse = {
         success: true,
@@ -151,10 +178,7 @@ router.get(
   requireAuth,
   [
     param('senderId').isUUID().withMessage('Sender ID must be a valid UUID'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Page must be a positive integer'),
+    query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('limit')
       .optional()
       .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -231,10 +255,7 @@ router.get(
     param('status')
       .isIn(['pending', 'assigned', 'picked_up', 'in_transit', 'delivered', 'cancelled', 'failed'])
       .withMessage('Invalid status'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Page must be a positive integer'),
+    query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
     query('limit')
       .optional()
       .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -278,7 +299,7 @@ router.get(
     } catch (error: any) {
       logger.error('Error fetching packages by status', {
         error: error.message,
-        status,
+        status: req.params.status,
       });
 
       const response: APIResponse = {
@@ -314,10 +335,22 @@ router.put(
     body('sender_address').optional().isString().withMessage('Sender address must be a string'),
     body('recipient_name').optional().isString().withMessage('Recipient name must be a string'),
     body('recipient_phone').optional().isString().withMessage('Recipient phone must be a string'),
-    body('recipient_address').optional().isString().withMessage('Recipient address must be a string'),
-    body('package_description').optional().isString().withMessage('Package description must be a string'),
-    body('package_weight').optional().isFloat({ min: 0 }).withMessage('Package weight must be positive'),
-    body('delivery_fee').optional().isFloat({ min: 0 }).withMessage('Delivery fee must be positive'),
+    body('recipient_address')
+      .optional()
+      .isString()
+      .withMessage('Recipient address must be a string'),
+    body('package_description')
+      .optional()
+      .isString()
+      .withMessage('Package description must be a string'),
+    body('package_weight')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Package weight must be positive'),
+    body('delivery_fee')
+      .optional()
+      .isFloat({ min: 0 })
+      .withMessage('Delivery fee must be positive'),
     body('priority')
       .optional()
       .isIn(['low', 'normal', 'high', 'urgent'])

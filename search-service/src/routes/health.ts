@@ -3,6 +3,7 @@
  */
 
 import { Request, Response, Router } from 'express';
+
 import { CacheService } from '../utils/cache.js';
 import { DatabaseService } from '../utils/database.js';
 import { logHealthCheck } from '../utils/logger.js';
@@ -114,7 +115,7 @@ router.get('/detailed', async (req: Request, res: Response): Promise<void> => {
 
     const overallStatus = isHealthy ? 'healthy' : 'degraded';
 
-    logHealthCheck('search-service', overallStatus, healthStatus);
+    logHealthCheck('search-service', overallStatus as any, healthStatus);
 
     res.status(isHealthy ? 200 : 503).json({
       success: true,

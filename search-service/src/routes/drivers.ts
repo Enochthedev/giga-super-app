@@ -335,7 +335,7 @@ router.get(
       };
 
       // Cache the results with appropriate TTL
-      await getCache().setSearchResults(searchQuery, response, cacheTime);
+      await getCache().setSearchResults(searchQuery, response as any, cacheTime);
 
       req.logger?.logSearchResults(total, false, executionTime);
 
@@ -403,7 +403,7 @@ router.get(
         longitude,
         radius = 5,
         limit = 10,
-      } = req.query as {
+      } = req.query as unknown as {
         latitude: string;
         longitude: string;
         radius?: number;
