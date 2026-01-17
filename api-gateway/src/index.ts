@@ -76,8 +76,26 @@ app.use(requestLogger);
 // Health check routes (no auth required)
 app.use('/health', healthRouter);
 
-// API Documentation (no auth required)
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// API Documentation
+const swaggerOptions = {
+  explorer: true,
+  swaggerOptions: {
+    urls: [
+      { url: '/api-docs.json', name: 'API Gateway' },
+      { url: '/docs/social/json', name: 'Social Service' },
+      { url: '/docs/admin/json', name: 'Admin Service' },
+      { url: '/docs/search/json', name: 'Search Service' },
+      { url: '/docs/delivery/json', name: 'Delivery Service' },
+      { url: '/docs/payment/json', name: 'Payment Queue Service' },
+      { url: '/docs/notifications/json', name: 'Notifications Service' },
+      { url: '/docs/taxi/json', name: 'Taxi Realtime Service' },
+    ],
+  },
+  customSiteTitle: 'Giga Platform API Docs',
+};
+
+app.get('/api-docs.json', (req, res) => res.json(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOptions));
 
 // Service documentation hub (no auth required)
 app.use('/docs', docsRouter);
