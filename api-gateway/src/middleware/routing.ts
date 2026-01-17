@@ -71,7 +71,34 @@ export const routingMiddleware = (
     pathRewrite:
       service.platform === 'supabase'
         ? path => `/functions/v1${path.replace('/api/v1', '')}`
-        : { '^/api/v1': '' },
+        : path => {
+            // For Railway services, strip the service-specific prefix
+            // e.g., /api/v1/social/api-docs -> /api-docs
+            // e.g., /api/v1/posts/123 -> /api/v1/posts/123
+            if (path.startsWith('/api/v1/social/')) {
+              return path.replace('/api/v1/social', '');
+            }
+            if (path.startsWith('/api/v1/admin/')) {
+              return path.replace('/api/v1/admin', '');
+            }
+            if (path.startsWith('/api/v1/search/')) {
+              return path.replace('/api/v1/search', '');
+            }
+            if (path.startsWith('/api/v1/payment-queue/')) {
+              return path.replace('/api/v1/payment-queue', '');
+            }
+            if (path.startsWith('/api/v1/delivery/')) {
+              return path.replace('/api/v1/delivery', '');
+            }
+            if (path.startsWith('/api/v1/notifications/')) {
+              return path.replace('/api/v1/notifications', '');
+            }
+            if (path.startsWith('/api/v1/taxi-realtime/')) {
+              return path.replace('/api/v1/taxi-realtime', '');
+            }
+            // Default: keep the path as-is
+            return path;
+          },
     onProxyReq: (proxyReq, clientReq) => {
       const authReq = clientReq as AuthenticatedRequest;
 
