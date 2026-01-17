@@ -1,0 +1,25 @@
+{
+  "name": "@giga/postman-generator",
+  "version": "2.0.0",
+  "description": "TypeScript-based Postman collection generator for Giga Platform API",
+  "type": "module",
+  "main": "dist/generate.js",
+  "scripts": {
+    "generate": "npx tsx src/generate.ts",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "Giga Platform Team",
+  "license": "UNLICENSED",
+  "private": true
+}
