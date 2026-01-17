@@ -114,7 +114,13 @@ export const routingMiddleware = (
       if (clientRes && 'headersSent' in clientRes && !(clientRes as Response).headersSent) {
         (clientRes as Response)
           .status(502)
-          .json(createErrorResponse('PROXY_ERROR', 'Error communicating with service', authReq.id));
+          .json(
+            createErrorResponse(
+              'PROXY_ERROR',
+              `Error communicating with service: ${(err as Error).message}`,
+              authReq.id
+            )
+          );
       }
     },
   };

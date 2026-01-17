@@ -3,12 +3,15 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
+import swaggerUi from 'swagger-ui-express';
 
 import { config } from './config/index.js';
+import { swaggerSpec } from './config/swagger.js';
 import { authMiddleware } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { routingMiddleware } from './middleware/routing.js';
+import { supabaseProxy } from './middleware/supabaseProxy.js';
 import { healthRouter } from './routes/health.js';
 import { serviceRegistry } from './services/serviceRegistry.js';
 import { logger } from './utils/logger.js';
@@ -72,11 +75,13 @@ app.use(requestLogger);
 // Health check routes (no auth required)
 app.use('/health', healthRouter);
 
+// API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 // Authentication middleware for all other routes
 app.use(authMiddleware);
 
 // Supabase proxy middleware (for endpoints not yet migrated to Railway)
-import { supabaseProxy } from './middleware/supabaseProxy.js';
 app.use(supabaseProxy);
 
 // Main routing middleware
@@ -100,6 +105,17 @@ const startServer = async () => {
         port: config.port,
         environment: config.nodeEnv,
         services: serviceRegistry.getServiceCount(),
+      });
+
+      // Log service URLs for debugging (important for Railway deployment)
+      logger.info('Service Configuration:', {
+        social: config.services.social,
+        payment: config.services.payment,
+        delivery: config.services.delivery,
+        notifications: config.services.notifications,
+        admin: config.services.admin,
+        taxiRealtime: config.services.taxiRealtime,
+        search: config.services.search,
       });
     });
   } catch (error) {

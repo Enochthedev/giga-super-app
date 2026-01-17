@@ -5,7 +5,30 @@ import { serviceRegistry } from '../services/serviceRegistry.js';
 
 const router = Router();
 
-// Basic health check
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     summary: Basic health check
+ *     description: Returns the health status of the API Gateway
+ *     responses:
+ *       200:
+ *         description: Service is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: string
+ *                     service:
+ *                       type: string
+ */
 router.get('/', (_req: Request, res: Response) => {
   res.json({
     success: true,
@@ -19,7 +42,18 @@ router.get('/', (_req: Request, res: Response) => {
   });
 });
 
-// Readiness check
+/**
+ * @openapi
+ * /health/ready:
+ *   get:
+ *     summary: Readiness check
+ *     description: Checks if the service registry is initialized
+ *     responses:
+ *       200:
+ *         description: Service is ready
+ *       503:
+ *         description: Service is not ready
+ */
 router.get('/ready', (_req: Request, res: Response) => {
   const isReady = serviceRegistry.isReady();
 
@@ -45,7 +79,16 @@ router.get('/ready', (_req: Request, res: Response) => {
   });
 });
 
-// Liveness check
+/**
+ * @openapi
+ * /health/live:
+ *   get:
+ *     summary: Liveness check
+ *     description: Simple check to see if the process is alive
+ *     responses:
+ *       200:
+ *         description: Service is alive
+ */
 router.get('/live', (_req: Request, res: Response) => {
   res.json({
     success: true,
@@ -56,7 +99,16 @@ router.get('/live', (_req: Request, res: Response) => {
   });
 });
 
-// Detailed health check with all services
+/**
+ * @openapi
+ * /health/detailed:
+ *   get:
+ *     summary: Detailed health check
+ *     description: Checks health of all downstream services
+ *     responses:
+ *       200:
+ *         description: Detailed health status
+ */
 router.get('/detailed', async (_req: Request, res: Response) => {
   try {
     const serviceHealth = await serviceRegistry.checkAllServicesHealth();
@@ -86,7 +138,16 @@ router.get('/detailed', async (_req: Request, res: Response) => {
   }
 });
 
-// Service statistics
+/**
+ * @openapi
+ * /health/stats:
+ *   get:
+ *     summary: Service statistics
+ *     description: Returns statistics about registered services
+ *     responses:
+ *       200:
+ *         description: Service statistics
+ */
 router.get('/stats', async (_req: Request, res: Response) => {
   try {
     const stats = await serviceRegistry.getServiceStats();
