@@ -1,44 +1,19 @@
-# Multi-stage build for taxi-realtime-service (Monorepo)
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Copy root package files for shared dependencies
-COPY package*.json ./
-COPY tsconfig.base.json ./
-
-# Copy shared code first (needed for compilation)
-COPY shared ./shared
-
-# Copy service package files and source
-COPY taxi-realtime-service ./taxi-realtime-service
-
-# Install root dependencies
-RUN npm ci --include=dev --ignore-scripts
-
-# Install service-specific dependencies
-WORKDIR /app/taxi-realtime-service
-RUN npm ci --include=dev --ignore-scripts 2>/dev/null || npm install --include=dev --ignore-scripts
-
-# Build TypeScript
-WORKDIR /app/taxi-realtime-service
-RUN npx tsc && \
-    echo "Build complete" && \
-    ls -la ../dist/taxi-realtime-service/taxi-realtime-service/src/ 2>/dev/null || true
-
-# Production stage
+# Simple Dockerfile for taxi-realtime-service using tsx
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy service package files
-COPY taxi-realtime-service/package*.json ./
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.base.json ./
 
-# Install production dependencies only
-RUN npm ci --omit=dev --ignore-scripts 2>/dev/null || npm install --omit=dev --ignore-scripts
+# Copy shared code and service code
+COPY shared ./shared
+COPY taxi-realtime-service ./taxi-realtime-service
 
-# Copy built files from builder
-COPY --from=builder /app/dist ./dist
+# Install all dependencies (including tsx)
+WORKDIR /app/taxi-realtime-service
+RUN npm ci
 
 # Set environment
 ENV NODE_ENV=production
@@ -51,5 +26,5 @@ EXPOSE 3006
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3006/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start service - correct path with rootDir=".."
-CMD ["node", "dist/taxi-realtime-service/taxi-realtime-service/src/index.js"]
+# Run TypeScript directly with tsx
+CMD ["npx", "tsx", "src/index.ts"]

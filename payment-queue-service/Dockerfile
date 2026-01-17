@@ -1,44 +1,19 @@
-# Multi-stage build for payment-queue-service (Monorepo)
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Copy root package files for shared dependencies
-COPY package*.json ./
-COPY tsconfig.base.json ./
-
-# Copy shared code first (needed for compilation)
-COPY shared ./shared
-
-# Copy service package files and source
-COPY payment-queue-service ./payment-queue-service
-
-# Install root dependencies
-RUN npm ci --include=dev --ignore-scripts
-
-# Install service-specific dependencies
-WORKDIR /app/payment-queue-service
-RUN npm ci --include=dev --ignore-scripts 2>/dev/null || npm install --include=dev --ignore-scripts
-
-# Build TypeScript
-WORKDIR /app/payment-queue-service
-RUN npx tsc && \
-    echo "Build complete" && \
-    ls -la ../dist/payment-queue-service/payment-queue-service/src/ 2>/dev/null || true
-
-# Production stage
+# Simple Dockerfile for payment-queue-service using tsx
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy service package files
-COPY payment-queue-service/package*.json ./
+# Copy package files
+COPY package*.json ./
+COPY tsconfig.base.json ./
 
-# Install production dependencies only
-RUN npm ci --omit=dev --ignore-scripts 2>/dev/null || npm install --omit=dev --ignore-scripts
+# Copy shared code and service code
+COPY shared ./shared
+COPY payment-queue-service ./payment-queue-service
 
-# Copy built files from builder
-COPY --from=builder /app/dist ./dist
+# Install all dependencies (including tsx)
+WORKDIR /app/payment-queue-service
+RUN npm ci
 
 # Set environment
 ENV NODE_ENV=production
@@ -51,5 +26,5 @@ EXPOSE 3003
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3003/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start service - correct path with rootDir=".."
-CMD ["node", "dist/payment-queue-service/payment-queue-service/src/index.js"]
+# Run TypeScript directly with tsx
+CMD ["npx", "tsx", "src/index.ts"]
