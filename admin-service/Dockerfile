@@ -22,27 +22,9 @@ RUN npm ci --include=dev --ignore-scripts 2>/dev/null || npm install --include=d
 
 # Build TypeScript
 WORKDIR /app/admin-service
-RUN echo "=== TypeScript Build ===" && \
-    echo "Files to compile:" && \
-    find src -name "*.ts" | head -20 && \
-    echo "Running tsc..." && \
-    npx tsc --listEmittedFiles 2>&1 | head -50 && \
-    echo "=== Build complete ===" && \
-    ls -la ../dist/admin-service/ 2>/dev/null || echo "Checking alternate paths..." && \
-    ls -la ../dist/ 2>/dev/null || true
-
-# Verify build output exists
-RUN if [ ! -f /app/dist/admin-service/admin-service/src/index.js ]; then \
-      if [ ! -f /app/dist/admin-service/src/index.js ]; then \
-        echo "=== BUILD VERIFICATION ===" && \
-        echo "Looking for index.js..." && \
-        find /app/dist -name "index.js" 2>/dev/null || echo "No index.js found" && \
-        echo "Dist structure:" && \
-        find /app/dist -type f 2>/dev/null | head -30 || echo "No dist folder" && \
-        exit 1; \
-      fi; \
-    fi && \
-    echo "Build verified successfully"
+RUN npx tsc && \
+    echo "Build complete" && \
+    ls -la ../dist/admin-service/admin-service/src/ 2>/dev/null || true
 
 # Production stage
 FROM node:20-alpine
@@ -69,5 +51,5 @@ EXPOSE 3002
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3002/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start service - try both possible paths
-CMD ["sh", "-c", "node dist/admin-service/admin-service/src/index.js 2>/dev/null || node dist/admin-service/src/index.js"]
+# Start service - correct path with rootDir=".."
+CMD ["node", "dist/admin-service/admin-service/src/index.js"]

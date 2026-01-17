@@ -22,20 +22,9 @@ RUN npm ci --include=dev --ignore-scripts 2>/dev/null || npm install --include=d
 
 # Build TypeScript
 WORKDIR /app/delivery-service
-RUN echo "=== TypeScript Build ===" && \
-    npx tsc --listEmittedFiles 2>&1 | head -30 && \
-    echo "=== Build complete ===" && \
-    ls -la ../dist/delivery-service/ 2>/dev/null || true
-
-# Verify build output exists
-RUN if [ ! -f /app/dist/delivery-service/delivery-service/src/index.js ]; then \
-      if [ ! -f /app/dist/delivery-service/src/index.js ]; then \
-        echo "=== BUILD VERIFICATION ===" && \
-        find /app/dist -name "index.js" 2>/dev/null || echo "No index.js found" && \
-        exit 1; \
-      fi; \
-    fi && \
-    echo "Build verified successfully"
+RUN npx tsc && \
+    echo "Build complete" && \
+    ls -la ../dist/delivery-service/delivery-service/src/ 2>/dev/null || true
 
 # Production stage
 FROM node:20-alpine
@@ -62,5 +51,5 @@ EXPOSE 3005
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3005/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start service - try both possible paths
-CMD ["sh", "-c", "node dist/delivery-service/delivery-service/src/index.js 2>/dev/null || node dist/delivery-service/src/index.js"]
+# Start service - correct path with rootDir=".."
+CMD ["node", "dist/delivery-service/delivery-service/src/index.js"]
