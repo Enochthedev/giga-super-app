@@ -10,7 +10,9 @@ import helmet from 'helmet';
 import Redis from 'ioredis';
 import jwt from 'jsonwebtoken';
 import { Server, Socket } from 'socket.io';
+import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
+import { swaggerSpec } from './config/swagger';
 
 dotenv.config();
 
@@ -194,6 +196,13 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
   });
+});
+
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get('/api-docs.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
 });
 
 // Active connections tracking
