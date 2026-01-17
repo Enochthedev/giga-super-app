@@ -12,6 +12,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { routingMiddleware } from './middleware/routing.js';
 import { supabaseProxy } from './middleware/supabaseProxy.js';
+import { docsRouter } from './routes/docs.js';
 import { healthRouter } from './routes/health.js';
 import { serviceRegistry } from './services/serviceRegistry.js';
 import { logger } from './utils/logger.js';
@@ -75,8 +76,11 @@ app.use(requestLogger);
 // Health check routes (no auth required)
 app.use('/health', healthRouter);
 
-// API Documentation
+// API Documentation (no auth required)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Service documentation hub (no auth required)
+app.use('/docs', docsRouter);
 
 // Authentication middleware for all other routes
 app.use(authMiddleware);
