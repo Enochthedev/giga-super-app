@@ -510,6 +510,626 @@ app.get(
 );
 
 // ============================================
+// GIGA DASHBOARD API ENDPOINTS
+// ============================================
+
+// GET /api/dashboard/stats - Main dashboard statistics
+app.get('/api/dashboard/stats', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const { data, error } = await supabase.rpc('get_giga_dashboard_stats', {
+      start_date: startDate || null,
+      end_date: endDate || null,
+    });
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_dashboard_stats', 'giga_dashboard');
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    logger.error('Failed to get dashboard stats', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch dashboard statistics' });
+  }
+});
+
+// GET /api/dashboard/sales-comparison - Sales comparison data
+app.get(
+  '/api/dashboard/sales-comparison',
+  authenticate,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { startDate, endDate } = req.query;
+
+      const { data, error } = await supabase.rpc('get_sales_comparison', {
+        current_period_start: startDate || null,
+        current_period_end: endDate || null,
+      });
+
+      if (error) throw error;
+
+      await createAudit(req, 'view_sales_comparison', 'sales_analytics');
+
+      res.json({ success: true, data });
+    } catch (error: any) {
+      logger.error('Failed to get sales comparison', { error: error.message });
+      res.status(500).json({ error: 'Failed to fetch sales comparison' });
+    }
+  }
+);
+
+// GET /api/dashboard/category-breakdown - Category breakdown
+app.get(
+  '/api/dashboard/category-breakdown',
+  authenticate,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { data, error } = await supabase.rpc('get_category_breakdown');
+
+      if (error) throw error;
+
+      await createAudit(req, 'view_category_breakdown', 'category_analytics');
+
+      res.json({ success: true, data });
+    } catch (error: any) {
+      logger.error('Failed to get category breakdown', { error: error.message });
+      res.status(500).json({ error: 'Failed to fetch category breakdown' });
+    }
+  }
+);
+
+// GET /api/admin/categories - Business categories
+app.get('/api/admin/categories', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { data, error } = await supabase.rpc('get_business_categories');
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_business_categories', 'admin_categories');
+
+    res.json({ success: true, data });
+  } catch (error: any) {
+    logger.error('Failed to get business categories', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch business categories' });
+  }
+});
+
+// ============================================
+// BUSINESS MODULE ENDPOINTS
+// ============================================
+
+// GET /api/ecommerce/traders - E-commerce traders
+app.get('/api/ecommerce/traders', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 20, search, status } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    let query = supabase
+      .from('ecommerce_vendors')
+      .select(
+        `
+        id,
+        business_name,
+        business_description,
+        total_sales,
+        total_orders,
+        average_rating,
+        is_verified,
+        is_active,
+        created_at,
+        user_profiles!inner(first_name, last_name, email, avatar_url)
+      `,
+        { count: 'exact' }
+      )
+      .range(offset, offset + Number(limit) - 1)
+      .order('created_at', { ascending: false });
+
+    if (search) {
+      query = query.ilike('business_name', `%${search}%`);
+    }
+
+    if (status === 'active') {
+      query = query.eq('is_active', true);
+    } else if (status === 'inactive') {
+      query = query.eq('is_active', false);
+    }
+
+    const { data: traders, count, error } = await query;
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_traders', 'ecommerce_traders');
+
+    res.json({
+      success: true,
+      data: { traders },
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total: count || 0,
+        pages: Math.ceil((count || 0) / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get traders', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch traders' });
+  }
+});
+
+// GET /api/taxi/drivers - Taxi drivers
+app.get('/api/taxi/drivers', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 20, search, status } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    let query = supabase
+      .from('driver_profiles')
+      .select(
+        `
+        id,
+        license_number,
+        vehicle_type,
+        vehicle_model,
+        vehicle_year,
+        is_verified,
+        is_active,
+        rating,
+        total_trips,
+        total_earnings,
+        created_at,
+        user_profiles!inner(first_name, last_name, email, phone, avatar_url)
+      `,
+        { count: 'exact' }
+      )
+      .range(offset, offset + Number(limit) - 1)
+      .order('created_at', { ascending: false });
+
+    if (search) {
+      query = query.or(
+        `license_number.ilike.%${search}%,user_profiles.first_name.ilike.%${search}%,user_profiles.last_name.ilike.%${search}%`
+      );
+    }
+
+    if (status === 'active') {
+      query = query.eq('is_active', true);
+    } else if (status === 'inactive') {
+      query = query.eq('is_active', false);
+    }
+
+    const { data: drivers, count, error } = await query;
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_drivers', 'taxi_drivers');
+
+    res.json({
+      success: true,
+      data: { drivers },
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total: count || 0,
+        pages: Math.ceil((count || 0) / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get drivers', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch drivers' });
+  }
+});
+
+// GET /api/hotel/hotels - Hotels
+app.get('/api/hotel/hotels', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 20, search, status } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    let query = supabase
+      .from('hotels')
+      .select(
+        `
+        id,
+        name,
+        description,
+        address,
+        city,
+        state,
+        rating,
+        total_rooms,
+        available_rooms,
+        is_verified,
+        is_active,
+        created_at,
+        user_profiles!inner(first_name, last_name, email, phone)
+      `,
+        { count: 'exact' }
+      )
+      .range(offset, offset + Number(limit) - 1)
+      .order('created_at', { ascending: false });
+
+    if (search) {
+      query = query.or(`name.ilike.%${search}%,city.ilike.%${search}%,state.ilike.%${search}%`);
+    }
+
+    if (status === 'active') {
+      query = query.eq('is_active', true);
+    } else if (status === 'inactive') {
+      query = query.eq('is_active', false);
+    }
+
+    const { data: hotels, count, error } = await query;
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_hotels', 'hotel_listings');
+
+    res.json({
+      success: true,
+      data: { hotels },
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total: count || 0,
+        pages: Math.ceil((count || 0) / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get hotels', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch hotels' });
+  }
+});
+
+// GET /api/media/content - Media content
+app.get('/api/media/content', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 20, type } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    let query = supabase
+      .from('file_metadata')
+      .select(
+        `
+        id,
+        filename,
+        file_type,
+        file_size,
+        mime_type,
+        storage_path,
+        is_public,
+        created_at,
+        user_profiles!inner(first_name, last_name, email)
+      `,
+        { count: 'exact' }
+      )
+      .range(offset, offset + Number(limit) - 1)
+      .order('created_at', { ascending: false });
+
+    if (type) {
+      query = query.eq('file_type', type);
+    }
+
+    const { data: content, count, error } = await query;
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_media_content', 'media_files');
+
+    res.json({
+      success: true,
+      data: { content },
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total: count || 0,
+        pages: Math.ceil((count || 0) / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get media content', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch media content' });
+  }
+});
+
+// ============================================
+// POSTAL MONITORING ENDPOINTS
+// ============================================
+
+// GET /api/postal-monitoring/staff - Postal staff
+app.get('/api/postal-monitoring/staff', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 20, search, region, office } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    let query = supabase
+      .from('nipost_officials')
+      .select(
+        `
+        id,
+        staff_id,
+        first_name,
+        last_name,
+        email,
+        phone,
+        position,
+        department,
+        office_location,
+        region,
+        is_active,
+        created_at
+      `,
+        { count: 'exact' }
+      )
+      .range(offset, offset + Number(limit) - 1)
+      .order('created_at', { ascending: false });
+
+    if (search) {
+      query = query.or(
+        `first_name.ilike.%${search}%,last_name.ilike.%${search}%,staff_id.ilike.%${search}%`
+      );
+    }
+
+    if (region) {
+      query = query.eq('region', region);
+    }
+
+    if (office) {
+      query = query.eq('office_location', office);
+    }
+
+    const { data: staff, count, error } = await query;
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_postal_staff', 'postal_monitoring');
+
+    res.json({
+      success: true,
+      data: { staff },
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total: count || 0,
+        pages: Math.ceil((count || 0) / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get postal staff', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch postal staff' });
+  }
+});
+
+// GET /api/operations/staff - Operations staff (alias for postal staff)
+app.get('/api/operations/staff', authenticate, async (req: AuthRequest, res: Response) => {
+  // Redirect to postal monitoring staff endpoint
+  req.url = '/api/postal-monitoring/staff';
+  return app._router.handle(req, res);
+});
+
+// ============================================
+// POST OFFICE MANAGER ENDPOINTS
+// ============================================
+
+// GET /api/managers/dashboard-stats - Manager dashboard
+app.get('/api/managers/dashboard-stats', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    // Managers can only see their branch/region data
+    const branchId = req.user!.branchId;
+    const stateId = req.user!.stateId;
+
+    if (!branchId && !stateId) {
+      return res.status(403).json({ error: 'Manager access requires branch or state assignment' });
+    }
+
+    let query = supabase
+      .from('nipost_financial_ledger')
+      .select('*')
+      .eq('payment_status', 'completed');
+
+    if (branchId) {
+      query = query.eq('branch_id', branchId);
+    } else if (stateId) {
+      query = query.eq('state_id', stateId);
+    }
+
+    const { data: transactions, error } = await query;
+
+    if (error) throw error;
+
+    const stats = {
+      totalRevenue: transactions?.reduce((sum, t) => sum + parseFloat(t.gross_amount), 0) || 0,
+      totalOrders: transactions?.length || 0,
+      avgOrderValue: transactions?.length
+        ? transactions.reduce((sum, t) => sum + parseFloat(t.gross_amount), 0) / transactions.length
+        : 0,
+      recentActivity: transactions?.slice(0, 10) || [],
+    };
+
+    await createAudit(req, 'view_manager_dashboard', 'manager_stats');
+
+    res.json({ success: true, data: stats });
+  } catch (error: any) {
+    logger.error('Failed to get manager dashboard stats', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch manager dashboard stats' });
+  }
+});
+
+// GET /api/managers/latest-orders - Latest orders
+app.get('/api/managers/latest-orders', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { limit = 10 } = req.query;
+
+    const { data: orders, error } = await supabase
+      .from('ecommerce_orders')
+      .select(
+        `
+        id,
+        order_number,
+        total_amount,
+        status,
+        created_at,
+        user_profiles!inner(first_name, last_name, email)
+      `
+      )
+      .order('created_at', { ascending: false })
+      .limit(Number(limit));
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_latest_orders', 'manager_orders');
+
+    res.json({ success: true, data: { orders } });
+  } catch (error: any) {
+    logger.error('Failed to get latest orders', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch latest orders' });
+  }
+});
+
+// PUT /api/managers/orders/:id - Update order
+app.put('/api/managers/orders/:id', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, notes } = req.body;
+
+    const { data: order, error } = await supabase
+      .from('ecommerce_orders')
+      .update({
+        status,
+        notes,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await createAudit(req, 'update_order', 'order_management', id);
+
+    res.json({ success: true, data: { order } });
+  } catch (error: any) {
+    logger.error('Failed to update order', { error: error.message });
+    res.status(500).json({ error: 'Failed to update order' });
+  }
+});
+
+// DELETE /api/managers/orders/:id - Delete order
+app.delete('/api/managers/orders/:id', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    // Soft delete the order
+    const { error } = await supabase
+      .from('ecommerce_orders')
+      .update({
+        deleted_at: new Date().toISOString(),
+        deleted_by: req.user!.id,
+        deletion_reason: 'manager_deletion',
+      })
+      .eq('id', id);
+
+    if (error) throw error;
+
+    await createAudit(req, 'delete_order', 'order_management', id);
+
+    res.json({ success: true, message: 'Order deleted successfully' });
+  } catch (error: any) {
+    logger.error('Failed to delete order', { error: error.message });
+    res.status(500).json({ error: 'Failed to delete order' });
+  }
+});
+
+// ============================================
+// ADVERTISEMENT MANAGEMENT ENDPOINTS
+// ============================================
+
+// GET /api/ads/incoming - Incoming ads for review
+app.get('/api/ads/incoming', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = 1, limit = 20, status = 'pending' } = req.query;
+    const offset = (Number(page) - 1) * Number(limit);
+
+    const {
+      data: ads,
+      count,
+      error,
+    } = await supabase
+      .from('ad_campaigns')
+      .select(
+        `
+        id,
+        campaign_name,
+        campaign_type,
+        budget,
+        start_date,
+        end_date,
+        status,
+        created_at,
+        advertiser_profiles!inner(business_name, contact_email, contact_phone)
+      `,
+        { count: 'exact' }
+      )
+      .eq('status', status)
+      .range(offset, offset + Number(limit) - 1)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_incoming_ads', 'ad_management');
+
+    res.json({
+      success: true,
+      data: { ads },
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total: count || 0,
+        pages: Math.ceil((count || 0) / Number(limit)),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get incoming ads', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch incoming ads' });
+  }
+});
+
+// PUT /api/ads/:id/status - Update ad status
+app.put('/api/ads/:id/status', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { status, review_notes } = req.body;
+
+    if (!['approved', 'rejected', 'pending'].includes(status)) {
+      return res
+        .status(400)
+        .json({ error: 'Invalid status. Must be approved, rejected, or pending' });
+    }
+
+    const { data: ad, error } = await supabase
+      .from('ad_campaigns')
+      .update({
+        status,
+        review_notes,
+        reviewed_by: req.user!.id,
+        reviewed_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await createAudit(req, 'update_ad_status', 'ad_management', id);
+
+    res.json({ success: true, data: { ad } });
+  } catch (error: any) {
+    logger.error('Failed to update ad status', { error: error.message });
+    res.status(500).json({ error: 'Failed to update ad status' });
+  }
+});
+
+// ============================================
 // AUDIT ENDPOINTS
 // ============================================
 
