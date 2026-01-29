@@ -113,7 +113,22 @@ class ServiceRegistry {
         baseUrl: config.services.admin,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/admin/*', '/api/v1/dashboard/*', '/api/v1/nipost/*'],
+        patterns: [
+          '/api/v1/admin/*',
+          '/api/v1/dashboard/*',
+          '/api/v1/nipost/*',
+          // GIGA Dashboard API patterns
+          '/api/dashboard/*',
+          '/api/admin/categories',
+          '/api/ecommerce/*',
+          '/api/taxi/*',
+          '/api/hotel/*',
+          '/api/media/*',
+          '/api/postal-monitoring/*',
+          '/api/operations/*',
+          '/api/managers/*',
+          '/api/ads/*',
+        ],
       });
     }
 
