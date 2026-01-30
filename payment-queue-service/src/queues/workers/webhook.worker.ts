@@ -1,12 +1,13 @@
+import crypto from 'crypto';
+
 import { createClient } from '@supabase/supabase-js';
 import { Job, Worker } from 'bullmq';
-import crypto from 'crypto';
 
 import { config } from '../../config';
 import logger from '../../utils/logger';
-import { createRedisConnection } from '../../utils/redis';
+import { getRedisConnection, REDIS_CONNECTIONS } from '../../utils/redis';
 
-const connection = createRedisConnection('webhookWorker');
+const connection = getRedisConnection(REDIS_CONNECTIONS.WORKERS);
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 

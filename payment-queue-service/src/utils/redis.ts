@@ -1,12 +1,14 @@
 import IORedis, { RedisOptions } from 'ioredis';
+
 import { config } from '../config';
+
 import logger from './logger';
 
 /**
  * Get Redis connection options with proper TLS configuration for Upstash
  */
 export const getRedisOptions = (): RedisOptions => {
-  const redisUrl = config.redisUrl;
+  const { redisUrl } = config;
   const isTLS = redisUrl.startsWith('rediss://');
 
   const options: RedisOptions = {
@@ -37,9 +39,24 @@ export const getRedisOptions = (): RedisOptions => {
 };
 
 /**
- * Create a new Redis connection with proper error handling and TLS
+ * Connection pool for named connections
+ * BullMQ requires separate connections for Queue and Worker,
+ * but we reuse within the same type to minimize total connections
  */
-export const createRedisConnection = (name: string = 'default'): IORedis => {
+const connectionPool: Map<string, IORedis> = new Map();
+
+/**
+ * Get or create a named Redis connection (reuses existing connections)
+ * This dramatically reduces memory by pooling connections
+ */
+export const getRedisConnection = (name: string = 'default'): IORedis => {
+  // Check if we already have this connection
+  const existing = connectionPool.get(name);
+  if (existing && existing.status !== 'end') {
+    return existing;
+  }
+
+  // Create new connection
   const connection = new IORedis(config.redisUrl, getRedisOptions());
 
   connection.on('error', err => {
@@ -56,29 +73,49 @@ export const createRedisConnection = (name: string = 'default'): IORedis => {
 
   connection.on('close', () => {
     logger.warn(`Redis [${name}] connection closed`);
+    connectionPool.delete(name);
   });
 
   connection.on('reconnecting', () => {
     logger.info(`Redis [${name}] reconnecting...`);
   });
 
+  connectionPool.set(name, connection);
   return connection;
 };
 
-// Singleton connection for shared use
-let sharedConnection: IORedis | null = null;
-
-export const getSharedRedisConnection = (): IORedis => {
-  if (!sharedConnection) {
-    sharedConnection = createRedisConnection('shared');
-  }
-  return sharedConnection;
+/**
+ * @deprecated Use getRedisConnection() instead for pooled connections
+ * Creates a new connection every time - use only when absolutely needed
+ */
+export const createRedisConnection = (name: string = 'default'): IORedis => {
+  // Now routes to pooled connection to save memory
+  return getRedisConnection(name);
 };
 
-export const closeSharedConnection = async (): Promise<void> => {
-  if (sharedConnection) {
-    await sharedConnection.quit();
-    sharedConnection = null;
-    logger.info('Shared Redis connection closed');
-  }
+// Shared connection names for consistent pooling
+export const REDIS_CONNECTIONS = {
+  QUEUES: 'queues', // Shared by all Queue instances
+  WORKERS: 'workers', // Shared by all Worker instances
+} as const;
+
+/**
+ * Close all pooled connections
+ */
+export const closeAllConnections = async (): Promise<void> => {
+  const closePromises = Array.from(connectionPool.entries()).map(async ([name, conn]) => {
+    try {
+      await conn.quit();
+      logger.info(`Redis [${name}] connection closed`);
+    } catch (error: any) {
+      logger.warn(`Error closing Redis [${name}]`, { error: error.message });
+    }
+  });
+  await Promise.all(closePromises);
+  connectionPool.clear();
+  logger.info('All Redis connections closed');
 };
+
+// Legacy exports for backward compatibility
+export const getSharedRedisConnection = (): IORedis => getRedisConnection('shared');
+export const closeSharedConnection = closeAllConnections;
