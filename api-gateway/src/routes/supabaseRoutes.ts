@@ -2377,6 +2377,8 @@
  *         description: Campaign analytics
  *     security:
  *       - BearerAuth: []
+ */
+
 // ===================== COURIER/DELIVERY ENDPOINTS =====================
 
 /**
