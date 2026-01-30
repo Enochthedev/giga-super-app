@@ -1,18 +1,11 @@
 import { Queue, QueueOptions } from 'bullmq';
+
 import { config } from '../config';
 import logger from '../utils/logger';
-import { createRedisConnection } from '../utils/redis';
+import { getRedisConnection, REDIS_CONNECTIONS } from '../utils/redis';
 
-// Redis connection with proper TLS for Upstash
-const connection = createRedisConnection('paymentQueue');
-
-connection.on('connect', () => {
-  logger.info('Redis connected for payment queue');
-});
-
-connection.on('error', error => {
-  logger.error('Redis connection error', { error: error.message });
-});
+// Redis connection with proper TLS for Upstash (pooled)
+const connection = getRedisConnection(REDIS_CONNECTIONS.QUEUES);
 
 // Queue options
 const queueOptions: QueueOptions = {
@@ -99,9 +92,9 @@ export async function getPaymentJobStatus(jobId: string) {
     }
 
     const state = await job.getState();
-    const progress = job.progress;
+    const { progress } = job;
     const returnValue = job.returnvalue;
-    const failedReason = job.failedReason;
+    const { failedReason } = job;
 
     return {
       id: job.id,

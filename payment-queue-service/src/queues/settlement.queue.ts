@@ -1,9 +1,10 @@
 import { Queue, QueueOptions } from 'bullmq';
-import logger from '../utils/logger';
-import { createRedisConnection } from '../utils/redis';
 
-// Redis connection with proper TLS for Upstash
-const connection = createRedisConnection('settlementQueue');
+import logger from '../utils/logger';
+import { getRedisConnection, REDIS_CONNECTIONS } from '../utils/redis';
+
+// Redis connection with proper TLS for Upstash (pooled)
+const connection = getRedisConnection(REDIS_CONNECTIONS.QUEUES);
 
 // Queue options
 const queueOptions: QueueOptions = {

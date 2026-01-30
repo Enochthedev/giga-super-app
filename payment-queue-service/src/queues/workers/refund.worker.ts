@@ -3,10 +3,10 @@ import { Job, Worker } from 'bullmq';
 
 import { config } from '../../config';
 import logger from '../../utils/logger';
-import { createRedisConnection } from '../../utils/redis';
+import { getRedisConnection, REDIS_CONNECTIONS } from '../../utils/redis';
 import { addNotificationJob } from '../notification.queue';
 
-const connection = createRedisConnection('refundWorker');
+const connection = getRedisConnection(REDIS_CONNECTIONS.WORKERS);
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 

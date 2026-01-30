@@ -2,9 +2,9 @@ import { Job, Worker } from 'bullmq';
 
 import { notificationService } from '../../services/notification.service';
 import logger from '../../utils/logger';
-import { createRedisConnection } from '../../utils/redis';
+import { getRedisConnection, REDIS_CONNECTIONS } from '../../utils/redis';
 
-const connection = createRedisConnection('notificationWorker');
+const connection = getRedisConnection(REDIS_CONNECTIONS.WORKERS);
 
 /**
  * Notification worker to process notification jobs
