@@ -1,6 +1,6 @@
 {
   "name": "giga-api-gateway",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "GIGA Platform API Gateway with complete GIGA Dashboard API routing - Routes requests between Supabase and Railway services",
   "main": "dist/index.js",
   "scripts": {
