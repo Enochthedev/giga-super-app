@@ -87,7 +87,7 @@ Check service health at:
     },
     servers: [
       {
-        url: 'https://your-api-gateway.railway.app',
+        url: 'https://giga-giga-production.up.railway.app',
         description: 'Production API Gateway',
       },
       {
