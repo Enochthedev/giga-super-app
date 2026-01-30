@@ -399,6 +399,221 @@ Most list endpoints support:
             },
           },
         },
+        // NIPOST Admin schemas
+        NationalDashboard: {
+          type: 'object',
+          properties: {
+            totalRevenue: {
+              type: 'number',
+              example: 15000000.5,
+              description: 'Total revenue across all states',
+            },
+            totalTransactions: {
+              type: 'integer',
+              example: 4500,
+              description: 'Total number of completed transactions',
+            },
+            totalCommission: {
+              type: 'number',
+              example: 750000.25,
+              description: 'Total commission earned',
+            },
+            stateCount: { type: 'integer', example: 37, description: 'Number of active states' },
+            branchCount: { type: 'integer', example: 774, description: 'Total number of branches' },
+            byModule: {
+              type: 'object',
+              properties: {
+                hotel: { type: 'number', example: 5000000.0 },
+                taxi: { type: 'number', example: 4500000.0 },
+                ecommerce: { type: 'number', example: 5500000.5 },
+              },
+            },
+          },
+          example: {
+            totalRevenue: 15000000.5,
+            totalTransactions: 4500,
+            totalCommission: 750000.25,
+            stateCount: 37,
+            branchCount: 774,
+            byModule: { hotel: 5000000.0, taxi: 4500000.0, ecommerce: 5500000.5 },
+          },
+        },
+        FinancialSummary: {
+          type: 'object',
+          properties: {
+            totalTransactions: {
+              type: 'integer',
+              example: 1250,
+              description: 'Number of completed transactions',
+            },
+            totalRevenue: {
+              type: 'number',
+              example: 5000000.0,
+              description: 'Total gross revenue',
+            },
+            totalCommission: {
+              type: 'number',
+              example: 250000.0,
+              description: 'Total commission amount',
+            },
+            byModule: {
+              type: 'object',
+              properties: {
+                hotel: { type: 'number', example: 100000.0 },
+                taxi: { type: 'number', example: 75000.0 },
+                ecommerce: { type: 'number', example: 75000.0 },
+              },
+            },
+          },
+          example: {
+            totalTransactions: 1250,
+            totalRevenue: 5000000.0,
+            totalCommission: 250000.0,
+            byModule: { hotel: 100000.0, taxi: 75000.0, ecommerce: 75000.0 },
+          },
+        },
+        StateInfo: {
+          type: 'object',
+          properties: {
+            state_id: {
+              type: 'string',
+              format: 'uuid',
+              example: '550e8400-e29b-41d4-a716-446655440000',
+            },
+            state_name: { type: 'string', example: 'Lagos State' },
+          },
+        },
+        BranchInfo: {
+          type: 'object',
+          properties: {
+            branch_id: {
+              type: 'string',
+              format: 'uuid',
+              example: '550e8400-e29b-41d4-a716-446655440001',
+            },
+            branch_name: { type: 'string', example: 'Victoria Island Post Office' },
+          },
+        },
+        Transaction: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            reference_number: { type: 'string', example: 'TXN-2026-001234' },
+            module: { type: 'string', enum: ['hotel', 'taxi', 'ecommerce'], example: 'hotel' },
+            gross_amount: { type: 'number', example: 25000.0 },
+            commission_amount: { type: 'number', example: 1250.0 },
+            net_amount: { type: 'number', example: 23750.0 },
+            payment_status: {
+              type: 'string',
+              enum: ['pending', 'completed', 'failed', 'refunded'],
+              example: 'completed',
+            },
+            payment_method: { type: 'string', example: 'card' },
+            customer_name: { type: 'string', example: 'John Doe' },
+            customer_email: { type: 'string', example: 'john@example.com' },
+            branch_id: { type: 'string', format: 'uuid' },
+            state_id: { type: 'string', format: 'uuid' },
+            created_at: { type: 'string', format: 'date-time', example: '2026-01-29T10:30:00Z' },
+          },
+        },
+        BranchAnalytics: {
+          type: 'object',
+          properties: {
+            period: { type: 'string', enum: ['day', 'week', 'month'], example: 'week' },
+            transactions: {
+              type: 'integer',
+              example: 150,
+              description: 'Transaction count in period',
+            },
+            revenue: { type: 'number', example: 500000.0, description: 'Total revenue in period' },
+            commission: {
+              type: 'number',
+              example: 25000.0,
+              description: 'Total commission in period',
+            },
+            byModule: {
+              type: 'object',
+              properties: {
+                hotel: {
+                  type: 'object',
+                  properties: {
+                    count: { type: 'integer', example: 50 },
+                    revenue: { type: 'number', example: 200000.0 },
+                  },
+                },
+                taxi: {
+                  type: 'object',
+                  properties: {
+                    count: { type: 'integer', example: 75 },
+                    revenue: { type: 'number', example: 150000.0 },
+                  },
+                },
+                ecommerce: {
+                  type: 'object',
+                  properties: {
+                    count: { type: 'integer', example: 25 },
+                    revenue: { type: 'number', example: 150000.0 },
+                  },
+                },
+              },
+            },
+          },
+          example: {
+            period: 'week',
+            transactions: 150,
+            revenue: 500000.0,
+            commission: 25000.0,
+            byModule: {
+              hotel: { count: 50, revenue: 200000.0 },
+              taxi: { count: 75, revenue: 150000.0 },
+              ecommerce: { count: 25, revenue: 150000.0 },
+            },
+          },
+        },
+        ManagerDashboardStats: {
+          type: 'object',
+          properties: {
+            totalRevenue: { type: 'number', example: 500000.0 },
+            totalOrders: { type: 'integer', example: 150 },
+            avgOrderValue: { type: 'number', example: 3333.33 },
+            recentActivity: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Transaction' },
+            },
+          },
+        },
+        AdCampaign: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            campaign_name: { type: 'string', example: 'Summer Sale Campaign' },
+            campaign_type: {
+              type: 'string',
+              enum: ['banner', 'video', 'native', 'sponsored'],
+              example: 'banner',
+            },
+            budget: { type: 'number', example: 50000.0 },
+            start_date: { type: 'string', format: 'date', example: '2026-02-01' },
+            end_date: { type: 'string', format: 'date', example: '2026-02-28' },
+            status: {
+              type: 'string',
+              enum: ['pending', 'approved', 'rejected', 'active', 'completed'],
+              example: 'pending',
+            },
+            review_notes: { type: 'string', example: 'Pending review' },
+            reviewed_by: { type: 'string', format: 'uuid', nullable: true },
+            reviewed_at: { type: 'string', format: 'date-time', nullable: true },
+            created_at: { type: 'string', format: 'date-time' },
+            advertiser_profiles: {
+              type: 'object',
+              properties: {
+                business_name: { type: 'string', example: 'Tech Solutions Ltd' },
+                contact_email: { type: 'string', example: 'ads@techsolutions.com' },
+                contact_phone: { type: 'string', example: '+2348012345678' },
+              },
+            },
+          },
+        },
       },
       responses: {
         UnauthorizedError: {
@@ -407,6 +622,52 @@ Most list endpoints support:
             'application/json': {
               schema: {
                 $ref: '#/components/schemas/ErrorResponse',
+              },
+              example: {
+                success: false,
+                error: 'Invalid token',
+              },
+            },
+          },
+        },
+        ForbiddenError: {
+          description: 'Forbidden - insufficient permissions',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/ErrorResponse',
+              },
+              example: {
+                success: false,
+                error: 'National access required',
+              },
+            },
+          },
+        },
+        NotFoundError: {
+          description: 'Resource not found',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/ErrorResponse',
+              },
+              example: {
+                success: false,
+                error: 'Resource not found',
+              },
+            },
+          },
+        },
+        BadRequestError: {
+          description: 'Bad request - validation error',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/ErrorResponse',
+              },
+              example: {
+                success: false,
+                error: 'Invalid request parameters',
               },
             },
           },
@@ -417,6 +678,10 @@ Most list endpoints support:
             'application/json': {
               schema: {
                 $ref: '#/components/schemas/ErrorResponse',
+              },
+              example: {
+                success: false,
+                error: 'An unexpected error occurred',
               },
             },
           },
