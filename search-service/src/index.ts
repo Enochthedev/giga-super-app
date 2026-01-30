@@ -156,8 +156,10 @@ const server = app.listen(PORT, () => {
   logger.info('Search Service started successfully', {
     port: PORT,
     environment: NODE_ENV,
-    version: '1.0.0',
+    version: '2.1.0',
     timestamp: new Date().toISOString(),
+    features: ['hotels', 'products', 'drivers', 'comprehensive-search'],
+    deployment: 'railway-redeployment-v2.1.0',
   });
 });
 

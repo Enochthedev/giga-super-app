@@ -1,6 +1,6 @@
 {
   "name": "notifications-service",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Notification queue service for Email, SMS, and Push notifications",
   "main": "dist/index.js",
   "scripts": {

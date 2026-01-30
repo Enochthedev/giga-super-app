@@ -1,7 +1,7 @@
 {
   "name": "giga-social-service",
-  "version": "1.0.0",
-  "description": "Social media service for Giga platform - handles posts, comments, likes, and social feed",
+  "version": "2.1.0",
+  "description": "GIGA Social Media Service - handles posts, comments, likes, and social feed with Railway deployment",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",

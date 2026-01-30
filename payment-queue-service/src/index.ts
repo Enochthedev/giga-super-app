@@ -116,6 +116,9 @@ const startServer = async () => {
         port: config.port,
         env: config.nodeEnv,
         nodeVersion: process.version,
+        version: '2.1.0',
+        deployment: 'railway-redeployment-v2.1.0',
+        features: ['bullmq', 'paystack', 'stripe', 'webhooks'],
       });
     });
   } catch (error: any) {

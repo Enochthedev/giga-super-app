@@ -178,6 +178,9 @@ const startServer = async () => {
       port: PORT,
       env: process.env.NODE_ENV || 'development',
       redisConnected: redisInitialized,
+      version: '2.1.0',
+      deployment: 'railway-redeployment-v2.1.0',
+      features: ['websockets', 'real-time-tracking', 'trip-management'],
     });
   });
 };

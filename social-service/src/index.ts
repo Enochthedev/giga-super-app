@@ -170,9 +170,13 @@ server.on('error', (error: NodeJS.ErrnoException) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   const address = server.address();
-  logger.info('Social service started and listening', {
+  logger.info('🚀 GIGA Social Media Service v2.1.0 started successfully', {
     port: PORT,
     address: address,
+    environment: process.env.NODE_ENV || 'development',
+    features: ['posts', 'comments', 'likes', 'feed', 'real-time'],
+    timestamp: new Date().toISOString()
+  });
     swagger: `http://localhost:${PORT}/api-docs`,
     env: process.env.NODE_ENV,
   });

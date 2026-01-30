@@ -829,8 +829,10 @@ app.post('/api/v1/notifications/send', async (req, res) => {
 app.listen(PORT, () => {
   logger.info(`Enhanced Notifications Service started`, {
     port: PORT,
-    version: '2.0.0',
+    version: '2.1.0',
     features: ['templates', 'preferences', 'scheduling', 'bulk', 'analytics'],
+    deployment: 'railway-redeployment-v2.1.0',
+    timestamp: new Date().toISOString(),
   });
 });
 
