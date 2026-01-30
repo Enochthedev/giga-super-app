@@ -149,6 +149,62 @@ app.get('/health', (req, res) => {
     status: 'healthy',
     service: 'admin-service',
     timestamp: new Date().toISOString(),
+    version: '2.1.2',
+    deployment: 'railway-redeployment-v2.1.2',
+  });
+});
+
+/**
+ * @swagger
+ * /api/status:
+ *   get:
+ *     tags: [Health]
+ *     summary: Service status and endpoints
+ *     description: Get service status and available GIGA Dashboard API endpoints
+ *     responses:
+ *       200:
+ *         description: Service status retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: "running"
+ *                 service:
+ *                   type: string
+ *                   example: "admin-service"
+ *                 version:
+ *                   type: string
+ *                   example: "2.1.2"
+ *                 gigaDashboardEndpoints:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["/api/dashboard/stats", "/api/ecommerce/traders"]
+ */
+app.get('/api/status', (req, res) => {
+  res.json({
+    status: 'running',
+    service: 'admin-service',
+    version: '2.1.2',
+    timestamp: new Date().toISOString(),
+    gigaDashboardEndpoints: [
+      '/api/dashboard/stats',
+      '/api/dashboard/sales-comparison',
+      '/api/dashboard/category-breakdown',
+      '/api/admin/categories',
+      '/api/ecommerce/traders',
+      '/api/taxi/drivers',
+      '/api/hotel/hotels',
+      '/api/media/content',
+      '/api/postal-monitoring/staff',
+      '/api/operations/staff',
+      '/api/managers/dashboard-stats',
+      '/api/managers/latest-orders',
+      '/api/ads/incoming',
+    ],
   });
 });
 
@@ -1990,9 +2046,11 @@ app.get('/api/admin/audit-trail', authenticate, async (req: AuthRequest, res: Re
 
 // Start server
 app.listen(PORT, () => {
-  logger.info(`🚀 GIGA Dashboard & Admin Service v2.1.0 started successfully`, {
+  logger.info(`🚀 GIGA Dashboard & Admin Service v2.1.2 started successfully`, {
     port: PORT,
     environment: process.env.NODE_ENV || 'development',
+    version: '2.1.2',
+    deployment: 'railway-redeployment-v2.1.2-swagger-fix',
     gigaDashboardAPI: 'enabled',
     endpoints: 15,
     features: ['dashboard-stats', 'business-modules', 'postal-monitoring', 'ad-management'],

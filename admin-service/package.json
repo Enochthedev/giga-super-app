@@ -1,6 +1,6 @@
 {
   "name": "admin-service",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "GIGA Dashboard & Admin Service - Complete dashboard API with business modules, postal monitoring, and advertisement management",
   "main": "dist/index.js",
   "scripts": {

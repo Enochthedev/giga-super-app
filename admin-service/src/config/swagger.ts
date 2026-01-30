@@ -6,7 +6,7 @@ const options: Record<string, unknown> = {
     openapi: '3.0.3',
     info: {
       title: 'GIGA Dashboard & Admin Service API',
-      version: '2.0.0',
+      version: '2.1.2',
       description: `
 ## GIGA Dashboard & Admin Service API
 
@@ -425,7 +425,7 @@ Most list endpoints support:
     },
     security: [{ BearerAuth: [] }],
   },
-  apis: ['./src/index.ts', './src/routes/*.ts'],
+  apis: ['./src/index.ts', './src/routes/*.ts', './src/**/*.ts'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

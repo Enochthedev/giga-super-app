@@ -1,298 +1,114 @@
-# Railway Health Check Failing - Troubleshooting Guide
+# Railway Service Health Check & Swagger Fix
 
-**Issue**: Service builds successfully but health check fails  
-**Error**: `Attempt #1 failed with service unavailable`
+## Issues Fixed
 
----
+### 1. ✅ Syntax Errors Resolved
 
-## 🔍 How to Verify Which Service is Running
+- **Social Service**: Fixed malformed object structure at line 181
+- **API Gateway**: Fixed malformed object structure at line 134
 
-### Method 1: Check Railway Logs
+### 2. ✅ Admin Service Swagger Enhancement
 
-In Railway dashboard → Service → Logs, look for:
+- **Version Updated**: 2.1.1 → 2.1.2
+- **New Status Endpoint**: Added `/api/status` with GIGA Dashboard endpoint list
+- **Enhanced Health Check**: Added version and deployment info to `/health`
+- **Swagger Configuration**: Updated API scanning paths and version
 
-```
-Service initializing {
-  "service": "social-service",  ← This tells you which service
-  "port": 3001,
-  "environment": "production"
-}
-```
+### 3. ✅ Service Redeployment Triggers
 
-### Method 2: Check Environment Variables
+- **Admin Service**: v2.1.2 with enhanced logging
+- **API Gateway**: v2.1.1 with syntax fix
+- **All Services**: Enhanced startup logging with deployment tracking
 
-The Dockerfile now sets `SERVICE_NAME` environment variable:
+## New Endpoints Added
 
-```dockerfile
-ENV SERVICE_NAME=social-service
-ENV SERVICE_VERSION=1.0.0
-```
-
-In logs, you'll see:
+### Admin Service Status Endpoint
 
 ```
-Social service started successfully {
-  "port": 3001,
-  "service": "social-service"  ← Confirms it's the right service
-}
+GET /api/status
 ```
 
-### Method 3: Check Docker Labels
-
-Each Dockerfile now has labels:
-
-```dockerfile
-LABEL service="social-service"
-LABEL version="1.0.0"
-LABEL port="3001"
-```
-
----
-
-## 🚨 Why Health Check is Failing
-
-The service built successfully (9.24 seconds), but health check fails. This
-means:
-
-1. ✅ Dockerfile is correct
-2. ✅ Build process works
-3. ❌ Service isn't starting properly
-
-**Most likely cause**: Missing environment variables
-
----
-
-## ✅ Fix: Add Environment Variables
-
-### Required Variables for Social Service
-
-Go to Railway dashboard → social-service → Variables tab:
-
-```bash
-# Supabase (REQUIRED)
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
-
-# JWT (REQUIRED)
-JWT_SECRET=your_jwt_secret_here
-
-# Node (REQUIRED)
-NODE_ENV=production
-PORT=3001
-
-# Optional but recommended
-LOG_LEVEL=info
-SUPABASE_ANON_KEY=your_anon_key_here
-JWT_EXPIRES_IN=7d
-```
-
----
-
-## 🔍 Check Railway Logs
-
-### What to Look For
-
-**If service is starting**:
-
-```
-✅ Service initializing
-✅ Social service started successfully
-✅ Listening on port 3001
-```
-
-**If service is failing**:
-
-```
-❌ Error: SUPABASE_URL is required
-❌ Error: Cannot connect to database
-❌ Error: Port 3001 is already in use
-```
-
-### How to Check Logs
-
-1. Go to Railway dashboard
-2. Click on "social-service"
-3. Click "Logs" tab
-4. Look for startup messages
-
----
-
-## 🎯 Step-by-Step Fix
-
-### Step 1: Add Environment Variables
-
-In Railway dashboard → social-service → Variables:
-
-1. Click "New Variable"
-2. Add each variable:
-   ```
-   SUPABASE_URL = https://your-project.supabase.co
-   SUPABASE_SERVICE_ROLE_KEY = your_key
-   JWT_SECRET = your_secret
-   NODE_ENV = production
-   PORT = 3001
-   ```
-
-### Step 2: Redeploy
-
-1. Click "Redeploy" button
-2. Wait for build to complete
-3. Watch logs for startup messages
-
-### Step 3: Verify Health Check
-
-Once deployed, test health endpoint:
-
-```bash
-curl https://your-service-url.railway.app/health
-```
-
-Should return:
+Returns:
 
 ```json
 {
-  "success": true,
-  "data": {
-    "status": "healthy",
-    "service": "social-service",  ← Confirms it's the right service
-    "timestamp": "2026-01-16T...",
-    "uptime": 123.45,
-    "version": "1.0.0",
-    "database": "connected"
-  }
+  "status": "running",
+  "service": "admin-service",
+  "version": "2.1.2",
+  "timestamp": "2026-01-30T...",
+  "gigaDashboardEndpoints": [
+    "/api/dashboard/stats",
+    "/api/dashboard/sales-comparison",
+    "/api/dashboard/category-breakdown",
+    "/api/admin/categories",
+    "/api/ecommerce/traders",
+    "/api/taxi/drivers",
+    "/api/hotel/hotels",
+    "/api/media/content",
+    "/api/postal-monitoring/staff",
+    "/api/operations/staff",
+    "/api/managers/dashboard-stats",
+    "/api/managers/latest-orders",
+    "/api/ads/incoming"
+  ]
 }
 ```
 
----
+## Swagger Documentation Status
 
-## 🔧 Common Issues
+### Expected Results After Redeployment
 
-### Issue 1: Missing SUPABASE_URL
+The admin service Swagger UI should now show:
 
-**Logs show**:
+#### ✅ GIGA Dashboard API Endpoints (15 total)
 
-```
-Service initializing {
-  "supabaseConfigured": false  ← Missing!
-}
-```
+- **Dashboard** (4 endpoints): stats, sales-comparison, category-breakdown,
+  categories
+- **Business Modules** (4 endpoints): traders, drivers, hotels, media content
+- **Postal Monitoring** (2 endpoints): staff, operations staff
+- **Manager Operations** (3 endpoints): dashboard-stats, latest-orders, order
+  CRUD
+- **Advertisement Management** (2 endpoints): incoming ads, status updates
 
-**Fix**: Add `SUPABASE_URL` environment variable
+#### ✅ Health & Status Endpoints
 
-### Issue 2: Missing SUPABASE_SERVICE_ROLE_KEY
+- `GET /health` - Enhanced with version info
+- `GET /api/status` - New endpoint with endpoint list
 
-**Logs show**:
+### Swagger UI Access
 
-```
-Service initializing {
-  "serviceRoleConfigured": false  ← Missing!
-}
-```
+- **Admin Service**: https://giga-giga-production.up.railway.app/api-docs
+- **API Gateway**: https://your-api-gateway.railway.app/api-docs
 
-**Fix**: Add `SUPABASE_SERVICE_ROLE_KEY` environment variable
+## Deployment Status
 
-### Issue 3: Port Already in Use
+### Services Updated
 
-**Logs show**:
+- ✅ **Admin Service**: v2.1.2 (major update with new endpoint)
+- ✅ **API Gateway**: v2.1.1 (syntax fix)
+- ✅ **Social Service**: v2.1.0 (syntax fix)
+- ✅ **All Other Services**: v2.1.0 (enhanced logging)
 
-```
-Error: listen EADDRINUSE: address already in use :::3001
-```
+### Expected Deployment Time
 
-**Fix**: Check if PORT environment variable is set correctly
+- Railway typically redeploys within 2-3 minutes
+- Changes should be visible immediately after redeployment
 
-### Issue 4: Database Connection Failed
+## Verification Steps
 
-**Logs show**:
+1. **Check Service Status**: Visit `/api/status` endpoint
+2. **Verify Swagger UI**: Check if GIGA Dashboard endpoints are visible
+3. **Test Endpoints**: Use Swagger UI to test endpoint functionality
+4. **Check Logs**: Verify enhanced startup logging in Railway dashboard
 
-```
-Error: Failed to connect to database
-```
+## Troubleshooting
 
-**Fix**:
+If endpoints still don't appear:
 
-1. Verify SUPABASE_URL is correct
-2. Verify SUPABASE_SERVICE_ROLE_KEY is correct
-3. Check Supabase project is not paused
+1. Check Railway deployment logs for errors
+2. Verify service is using latest version (2.1.2 for admin)
+3. Clear browser cache and refresh Swagger UI
+4. Check `/api/status` endpoint for endpoint list
 
----
-
-## 📊 Health Check Timeline
-
-```
-Build starts
-  ↓ (9 seconds)
-Build completes ✅
-  ↓
-Container starts
-  ↓
-Service initializes
-  ↓ (should be < 10 seconds)
-Service listens on port 3001
-  ↓
-Health check attempts
-  ↓
-Attempt #1: /health endpoint
-  ↓
-If service not ready: "service unavailable" ❌
-If service ready: 200 OK ✅
-```
-
-**Current issue**: Service not ready when health check runs
-
-**Likely cause**: Service crashes on startup due to missing env vars
-
----
-
-## ✅ Verification Checklist
-
-After adding environment variables:
-
-- [ ] SUPABASE_URL is set
-- [ ] SUPABASE_SERVICE_ROLE_KEY is set
-- [ ] JWT_SECRET is set
-- [ ] NODE_ENV=production
-- [ ] PORT=3001
-- [ ] Service redeployed
-- [ ] Logs show "Service initializing"
-- [ ] Logs show "Social service started successfully"
-- [ ] Health check passes
-- [ ] Can curl /health endpoint
-
----
-
-## 🎯 Quick Fix Command
-
-If you have Railway CLI:
-
-```bash
-cd social-service
-railway link  # Link to social-service
-
-# Add variables
-railway variables --set SUPABASE_URL=your_url
-railway variables --set SUPABASE_SERVICE_ROLE_KEY=your_key
-railway variables --set JWT_SECRET=your_secret
-railway variables --set NODE_ENV=production
-railway variables --set PORT=3001
-
-# Redeploy
-railway up
-```
-
----
-
-## 📚 Next Steps
-
-Once social-service is working:
-
-1. ✅ Verify it's the correct service (check logs for "social-service")
-2. ✅ Test health endpoint
-3. ✅ Test API endpoints
-4. ✅ Repeat for other services (admin, payment, etc.)
-
----
-
-**Key Point**: The build succeeded, so the Dockerfile is correct. The health
-check is failing because the service needs environment variables to start
-properly! 🎯
+The services should now deploy successfully and show all GIGA Dashboard API
+endpoints in Swagger UI! 🚀
