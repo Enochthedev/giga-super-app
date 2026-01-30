@@ -227,7 +227,35 @@ app.get('/api-docs.json', (req, res) => {
 // NATIONAL LEVEL ENDPOINTS (National HQ)
 // ============================================
 
-// GET /api/admin/national/dashboard
+/**
+ * @swagger
+ * /api/admin/national/dashboard:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get national dashboard
+ *     description: Retrieve national-level dashboard statistics and summary data. Requires national access level.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: National dashboard data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       description: National summary statistics
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: National access level required
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get('/api/admin/national/dashboard', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     if (req.user!.accessLevel !== 'national') {
@@ -248,7 +276,38 @@ app.get('/api/admin/national/dashboard', authenticate, async (req: AuthRequest, 
   }
 });
 
-// GET /api/admin/national/financial-summary
+/**
+ * @swagger
+ * /api/admin/national/financial-summary:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get national financial summary
+ *     description: Retrieve financial summary across all states. Requires national access level.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Filter from date
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Filter to date
+ *     responses:
+ *       200:
+ *         description: Financial summary retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: National access level required
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/national/financial-summary',
   authenticate,
@@ -303,7 +362,25 @@ app.get(
   }
 );
 
-// GET /api/admin/national/states
+/**
+ * @swagger
+ * /api/admin/national/states:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get all states
+ *     description: Retrieve list of all states. Requires national access level.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: States list retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: National access level required
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get('/api/admin/national/states', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     if (req.user!.accessLevel !== 'national') {
@@ -334,7 +411,32 @@ app.get('/api/admin/national/states', authenticate, async (req: AuthRequest, res
 // STATE LEVEL ENDPOINTS (State Centers)
 // ============================================
 
-// GET /api/admin/state/:stateId/dashboard
+/**
+ * @swagger
+ * /api/admin/state/{stateId}/dashboard:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get state dashboard
+ *     description: Retrieve dashboard statistics for a specific state
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: stateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: State ID
+ *     responses:
+ *       200:
+ *         description: State dashboard data retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Insufficient permissions for this state
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/state/:stateId/dashboard',
   authenticate,
@@ -365,7 +467,32 @@ app.get(
   }
 );
 
-// GET /api/admin/state/:stateId/branches
+/**
+ * @swagger
+ * /api/admin/state/{stateId}/branches:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get state branches
+ *     description: Retrieve list of branches in a state
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: stateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: State ID
+ *     responses:
+ *       200:
+ *         description: Branches list retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Insufficient permissions
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/state/:stateId/branches',
   authenticate,
@@ -401,7 +528,32 @@ app.get(
   }
 );
 
-// GET /api/admin/state/:stateId/financial-summary
+/**
+ * @swagger
+ * /api/admin/state/{stateId}/financial-summary:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get state financial summary
+ *     description: Retrieve financial summary for a specific state
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: stateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: State ID
+ *     responses:
+ *       200:
+ *         description: State financial summary retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Insufficient permissions
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/state/:stateId/financial-summary',
   authenticate,
@@ -445,7 +597,32 @@ app.get(
 // BRANCH LEVEL ENDPOINTS (Local Branches)
 // ============================================
 
-// GET /api/admin/branch/:branchId/dashboard
+/**
+ * @swagger
+ * /api/admin/branch/{branchId}/dashboard:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get branch dashboard
+ *     description: Retrieve dashboard statistics for a specific branch
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Branch ID
+ *     responses:
+ *       200:
+ *         description: Branch dashboard data retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Access denied to this branch
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/branch/:branchId/dashboard',
   authenticate,
@@ -472,7 +649,55 @@ app.get(
   }
 );
 
-// GET /api/admin/branch/:branchId/transactions
+/**
+ * @swagger
+ * /api/admin/branch/{branchId}/transactions:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get branch transactions
+ *     description: Retrieve paginated list of transactions for a branch
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Branch ID
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: Items per page
+ *       - in: query
+ *         name: module
+ *         schema:
+ *           type: string
+ *           enum: [hotel, taxi, ecommerce]
+ *         description: Filter by module
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *         description: Filter by payment status
+ *     responses:
+ *       200:
+ *         description: Branch transactions retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Access denied to this branch
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/branch/:branchId/transactions',
   authenticate,
@@ -518,7 +743,39 @@ app.get(
   }
 );
 
-// GET /api/admin/branch/:branchId/analytics
+/**
+ * @swagger
+ * /api/admin/branch/{branchId}/analytics:
+ *   get:
+ *     tags: [NIPOST Admin]
+ *     summary: Get branch analytics
+ *     description: Retrieve analytics data for a branch by time period
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Branch ID
+ *       - in: query
+ *         name: period
+ *         schema:
+ *           type: string
+ *           enum: [day, week, month]
+ *           default: week
+ *         description: Analytics period
+ *     responses:
+ *       200:
+ *         description: Branch analytics retrieved successfully
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         description: Access denied to this branch
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 app.get(
   '/api/admin/branch/:branchId/analytics',
   authenticate,
