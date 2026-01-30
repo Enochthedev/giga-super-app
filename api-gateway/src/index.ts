@@ -123,8 +123,13 @@ const startServer = async () => {
 
     // Start server
     app.listen(config.port, () => {
-      logger.info(`API Gateway started on port ${config.port}`, {
+      logger.info(`🚀 GIGA API Gateway v2.1.0 started successfully`, {
         port: config.port,
+        environment: process.env.NODE_ENV || 'development',
+        services: serviceRegistry.getServiceCount(),
+        gigaDashboardAPI: 'enabled',
+        timestamp: new Date().toISOString()
+      });
         environment: config.nodeEnv,
         services: serviceRegistry.getServiceCount(),
       });

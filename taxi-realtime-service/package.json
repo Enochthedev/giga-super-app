@@ -1,6 +1,6 @@
 {
   "name": "taxi-realtime-service",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Real-time taxi service with WebSocket support for Giga platform",
   "main": "dist/index.js",
   "scripts": {

@@ -1,7 +1,7 @@
 {
   "name": "admin-service",
-  "version": "1.0.0",
-  "description": "Multi-tenant admin aggregation service for NIPOST hierarchy",
+  "version": "2.1.1",
+  "description": "GIGA Dashboard & Admin Service - Complete dashboard API with business modules, postal monitoring, and advertisement management",
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",

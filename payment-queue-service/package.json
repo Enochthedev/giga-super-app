@@ -1,6 +1,6 @@
 {
   "name": "payment-queue-service",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Centralized payment queue service for Giga platform - handles all payment requests using BullMQ",
   "main": "dist/index.js",
   "type": "commonjs",

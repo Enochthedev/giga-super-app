@@ -1,0 +1,1356 @@
+openapi: 3.0.3
+info:
+  title: GIGA Dashboard API
+  version: 2.0.0
+  description: |
+    # GIGA Dashboard API Documentation
+
+    Complete API documentation for the GIGA Dashboard system including authentication, dashboard statistics, business modules, and administrative features.
+
+    ## 🔐 Authentication
+    All endpoints require JWT authentication via Supabase Auth:
+    ```
+    Authorization: Bearer <jwt_token>
+    ```
+
+    ## 🌐 Base URLs
+    - **API Gateway (Recommended)**: https://your-api-gateway.railway.app
+    - **Direct Admin Service**: https://your-admin-service.railway.app
+    - **Local Development**: http://localhost:3000 (API Gateway) or http://localhost:3005 (Admin Service)
+
+    ## 📊 Access Levels
+    - **National**: Full access to all data and statistics
+    - **State**: Access to state-specific data only  
+    - **Branch**: Access to branch-specific data only
+    - **Manager**: Limited access to assigned region/branch
+
+    ## 🔍 Pagination & Search
+    Most list endpoints support:
+    - **Pagination**: `?page=1&limit=20`
+    - **Search**: `?search=keyword`
+    - **Filtering**: `?status=active&region=lagos`
+
+  contact:
+    name: GIGA Platform Team
+    email: api@giga.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: https://your-api-gateway.railway.app
+    description: API Gateway (Recommended)
+  - url: https://your-admin-service.railway.app
+    description: Direct Admin Service
+  - url: http://localhost:3000
+    description: Local Development (API Gateway)
+  - url: http://localhost:3005
+    description: Local Development (Admin Service)
+
+tags:
+  - name: Authentication
+    description: User authentication endpoints via Supabase Auth
+  - name: Dashboard
+    description: GIGA Dashboard statistics and analytics
+  - name: Business Modules
+    description: E-commerce, taxi, hotel, media management
+  - name: Postal Monitoring
+    description: Postal staff and operations management
+  - name: Manager Operations
+    description: Post office manager specific endpoints
+  - name: Advertisement Management
+    description: Ad review and approval workflow
+  - name: Admin Panel
+    description: Administrative categories and settings
+
+security:
+  - BearerAuth: []
+
+paths:
+  # Authentication Endpoints
+  /api/v1/auth/token:
+    post:
+      tags: [Authentication]
+      summary: User login
+      description: Authenticate user with email and password to get JWT token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password, grant_type]
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: admin@example.com
+                password:
+                  type: string
+                  format: password
+                  example: password123
+                grant_type:
+                  type: string
+                  enum: [password]
+                  example: password
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: JWT access token
+                  refresh_token:
+                    type: string
+                    description: Refresh token
+                  expires_in:
+                    type: integer
+                    description: Token expiration time in seconds
+                  user:
+                    type: object
+                    description: User information
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/auth/user:
+    get:
+      tags: [Authentication]
+      summary: Get current user
+      description: Get current authenticated user information
+      responses:
+        200:
+          description: User information retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  email:
+                    type: string
+                    format: email
+                  user_metadata:
+                    type: object
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  # Dashboard Endpoints
+  /api/dashboard/stats:
+    get:
+      tags: [Dashboard]
+      summary: Get main dashboard statistics
+      description: Retrieve comprehensive dashboard statistics including revenue, orders, visitors, and conversion rates
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+          description: Start date for statistics (defaults to 30 days ago)
+          example: '2026-01-01'
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: End date for statistics (defaults to today)
+          example: '2026-01-29'
+      responses:
+        200:
+          description: Dashboard statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/DashboardStats'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/dashboard/sales-comparison:
+    get:
+      tags: [Dashboard]
+      summary: Get sales comparison data
+      description: Compare sales between current and previous periods with percentage change
+      parameters:
+        - in: query
+          name: startDate
+          schema:
+            type: string
+            format: date
+          description: Start date for current period
+          example: '2026-01-01'
+        - in: query
+          name: endDate
+          schema:
+            type: string
+            format: date
+          description: End date for current period
+          example: '2026-01-29'
+      responses:
+        200:
+          description: Sales comparison data retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/SalesComparison'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/dashboard/category-breakdown:
+    get:
+      tags: [Dashboard]
+      summary: Get category breakdown
+      description: Get revenue and metrics breakdown by business category (ecommerce, hotel, taxi, media)
+      responses:
+        200:
+          description: Category breakdown retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/CategoryBreakdown'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  # Admin Panel Endpoints
+  /api/admin/categories:
+    get:
+      tags: [Admin Panel]
+      summary: Get business categories
+      description: Retrieve list of available business categories for the platform
+      responses:
+        200:
+          description: Business categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/BusinessCategory'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  # Business Module Endpoints
+  /api/ecommerce/traders:
+    get:
+      tags: [Business Modules]
+      summary: Get e-commerce traders
+      description: Retrieve paginated list of e-commerce traders/vendors with search and filtering
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by business name
+          example: 'electronics'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+          description: Filter by trader status
+      responses:
+        200:
+          description: Traders retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          traders:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Trader'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/taxi/drivers:
+    get:
+      tags: [Business Modules]
+      summary: Get taxi drivers
+      description: Retrieve paginated list of taxi drivers with search and filtering
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by license number or driver name
+          example: 'LIC123'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+          description: Filter by driver status
+      responses:
+        200:
+          description: Drivers retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          drivers:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Driver'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/hotel/hotels:
+    get:
+      tags: [Business Modules]
+      summary: Get hotels
+      description: Retrieve paginated list of hotels with search and filtering
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by hotel name, city, or state
+          example: 'Grand Lagos'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+          description: Filter by hotel status
+      responses:
+        200:
+          description: Hotels retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          hotels:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Hotel'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/media/content:
+    get:
+      tags: [Business Modules]
+      summary: Get media content
+      description: Retrieve paginated list of media content with filtering by type
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [image, video, document, audio]
+          description: Filter by media type
+      responses:
+        200:
+          description: Media content retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          content:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/MediaContent'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  # Postal Monitoring Endpoints
+  /api/postal-monitoring/staff:
+    get:
+      tags: [Postal Monitoring]
+      summary: Get postal staff
+      description: Retrieve paginated list of postal staff with search and filtering
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by staff name or ID
+          example: 'David'
+        - in: query
+          name: region
+          schema:
+            type: string
+          description: Filter by postal region
+          example: 'Lagos'
+        - in: query
+          name: office
+          schema:
+            type: string
+          description: Filter by office location
+          example: 'Lagos Central Post Office'
+      responses:
+        200:
+          description: Postal staff retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          staff:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/PostalStaff'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/operations/staff:
+    get:
+      tags: [Postal Monitoring]
+      summary: Get operations staff
+      description: Alias endpoint for postal staff - same functionality as /api/postal-monitoring/staff
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by staff name or ID
+        - in: query
+          name: region
+          schema:
+            type: string
+          description: Filter by postal region
+        - in: query
+          name: office
+          schema:
+            type: string
+          description: Filter by office location
+      responses:
+        200:
+          description: Operations staff retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          staff:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/PostalStaff'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  # Manager Operations Endpoints
+  /api/managers/dashboard-stats:
+    get:
+      tags: [Manager Operations]
+      summary: Get manager dashboard statistics
+      description: Get dashboard statistics specific to the manager's assigned branch or region
+      responses:
+        200:
+          description: Manager dashboard statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          totalRevenue:
+                            type: number
+                            example: 125000.50
+                          totalOrders:
+                            type: integer
+                            example: 450
+                          avgOrderValue:
+                            type: number
+                            example: 277.78
+                          recentActivity:
+                            type: array
+                            items:
+                              type: object
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/managers/latest-orders:
+    get:
+      tags: [Manager Operations]
+      summary: Get latest orders
+      description: Retrieve the most recent orders for manager review
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+          description: Number of orders to retrieve
+      responses:
+        200:
+          description: Latest orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          orders:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Order'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/managers/orders/{id}:
+    put:
+      tags: [Manager Operations]
+      summary: Update order
+      description: Update order status and add notes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Order ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [pending, processing, shipped, delivered, cancelled]
+                  example: processing
+                notes:
+                  type: string
+                  example: 'Order processed and ready for shipping'
+      responses:
+        200:
+          description: Order updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          order:
+                            $ref: '#/components/schemas/Order'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags: [Manager Operations]
+      summary: Delete order
+      description: Soft delete an order (sets deleted_at timestamp)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Order ID
+      responses:
+        200:
+          description: Order deleted successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: 'Order deleted successfully'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  # Advertisement Management Endpoints
+  /api/ads/incoming:
+    get:
+      tags: [Advertisement Management]
+      summary: Get incoming ads for review
+      description: Retrieve paginated list of advertisements pending review
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, approved, rejected]
+            default: pending
+          description: Filter by advertisement status
+      responses:
+        200:
+          description: Incoming ads retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          ads:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Advertisement'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/ads/{id}/status:
+    put:
+      tags: [Advertisement Management]
+      summary: Update advertisement status
+      description: Approve or reject an advertisement campaign
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Advertisement ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [approved, rejected, pending]
+                  example: approved
+                review_notes:
+                  type: string
+                  example: 'Campaign approved for publication'
+      responses:
+        200:
+          description: Advertisement status updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          ad:
+                            $ref: '#/components/schemas/Advertisement'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from Supabase Auth (required for all endpoints)
+
+  parameters:
+    Page:
+      in: query
+      name: page
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number for pagination
+    Limit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      description: Number of items per page
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Unauthorized - invalid or missing JWT token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Forbidden:
+      description: Forbidden - insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+  schemas:
+    # Response schemas
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: 'Error message'
+
+    PaginatedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 20
+        total:
+          type: integer
+          example: 150
+        pages:
+          type: integer
+          example: 8
+
+    # Dashboard schemas
+    DashboardStats:
+      type: object
+      properties:
+        revenue:
+          type: object
+          properties:
+            value:
+              type: number
+              example: 125000.50
+            change:
+              type: string
+              example: '+22%'
+            trend:
+              type: string
+              enum: [up, down]
+              example: up
+        orders:
+          type: object
+          properties:
+            value:
+              type: integer
+              example: 1250
+            change:
+              type: string
+              example: '+15%'
+            trend:
+              type: string
+              enum: [up, down]
+              example: up
+        visitors:
+          type: object
+          properties:
+            value:
+              type: integer
+              example: 15500
+            change:
+              type: string
+              example: '+49%'
+            trend:
+              type: string
+              enum: [up, down]
+              example: up
+        conversion:
+          type: object
+          properties:
+            value:
+              type: number
+              example: 28.5
+            change:
+              type: string
+              example: '+1.9%'
+            trend:
+              type: string
+              enum: [up, down]
+              example: up
+
+    SalesComparison:
+      type: object
+      properties:
+        current_period:
+          type: object
+          properties:
+            sales:
+              type: number
+              example: 125000.50
+            start_date:
+              type: string
+              format: date
+              example: '2026-01-01'
+            end_date:
+              type: string
+              format: date
+              example: '2026-01-29'
+        previous_period:
+          type: object
+          properties:
+            sales:
+              type: number
+              example: 98000.25
+            start_date:
+              type: string
+              format: date
+              example: '2025-12-03'
+            end_date:
+              type: string
+              format: date
+              example: '2025-12-31'
+        change:
+          type: object
+          properties:
+            amount:
+              type: number
+              example: 27000.25
+            percentage:
+              type: number
+              example: 27.55
+            trend:
+              type: string
+              enum: [up, down]
+              example: up
+
+    CategoryBreakdown:
+      type: object
+      properties:
+        ecommerce:
+          type: object
+          properties:
+            revenue:
+              type: number
+              example: 45000.00
+            orders:
+              type: integer
+              example: 450
+            vendors:
+              type: integer
+              example: 125
+        hotel:
+          type: object
+          properties:
+            revenue:
+              type: number
+              example: 35000.00
+            bookings:
+              type: integer
+              example: 180
+            hotels:
+              type: integer
+              example: 45
+        taxi:
+          type: object
+          properties:
+            revenue:
+              type: number
+              example: 25000.00
+            rides:
+              type: integer
+              example: 850
+            drivers:
+              type: integer
+              example: 200
+        media:
+          type: object
+          properties:
+            content_items:
+              type: integer
+              example: 1250
+            social_posts:
+              type: integer
+              example: 3500
+            engagement:
+              type: integer
+              example: 15000
+
+    # Business module schemas
+    Trader:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        business_name:
+          type: string
+          example: 'Lagos Electronics Store'
+        business_description:
+          type: string
+          example: 'Electronics and gadgets retailer'
+        total_sales:
+          type: number
+          example: 125000.50
+        total_orders:
+          type: integer
+          example: 450
+        average_rating:
+          type: number
+          example: 4.5
+        is_verified:
+          type: boolean
+          example: true
+        is_active:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+        user_profiles:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: 'John'
+            last_name:
+              type: string
+              example: 'Doe'
+            email:
+              type: string
+              example: 'john@example.com'
+            avatar_url:
+              type: string
+              example: 'https://example.com/avatar.jpg'
+
+    Driver:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        license_number:
+          type: string
+          example: 'LIC123456789'
+        vehicle_type:
+          type: string
+          example: 'sedan'
+        vehicle_model:
+          type: string
+          example: 'Toyota Camry'
+        vehicle_year:
+          type: integer
+          example: 2020
+        is_verified:
+          type: boolean
+          example: true
+        is_active:
+          type: boolean
+          example: true
+        rating:
+          type: number
+          example: 4.8
+        total_trips:
+          type: integer
+          example: 1250
+        total_earnings:
+          type: number
+          example: 85000.00
+        created_at:
+          type: string
+          format: date-time
+        user_profiles:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: 'Jane'
+            last_name:
+              type: string
+              example: 'Smith'
+            email:
+              type: string
+              example: 'jane@example.com'
+            phone:
+              type: string
+              example: '+2348012345678'
+            avatar_url:
+              type: string
+              example: 'https://example.com/avatar.jpg'
+
+    Hotel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: 'Grand Lagos Hotel'
+        description:
+          type: string
+          example: 'Luxury hotel in Victoria Island'
+        address:
+          type: string
+          example: '123 Victoria Island, Lagos'
+        city:
+          type: string
+          example: 'Lagos'
+        state:
+          type: string
+          example: 'Lagos State'
+        rating:
+          type: number
+          example: 4.7
+        total_rooms:
+          type: integer
+          example: 150
+        available_rooms:
+          type: integer
+          example: 45
+        is_verified:
+          type: boolean
+          example: true
+        is_active:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+        user_profiles:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: 'Michael'
+            last_name:
+              type: string
+              example: 'Johnson'
+            email:
+              type: string
+              example: 'michael@grandlagos.com'
+            phone:
+              type: string
+              example: '+2348012345678'
+
+    MediaContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        filename:
+          type: string
+          example: 'product-image.jpg'
+        file_type:
+          type: string
+          example: 'image'
+        file_size:
+          type: integer
+          example: 1024000
+        mime_type:
+          type: string
+          example: 'image/jpeg'
+        storage_path:
+          type: string
+          example: '/uploads/images/product-image.jpg'
+        is_public:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+        user_profiles:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: 'Sarah'
+            last_name:
+              type: string
+              example: 'Wilson'
+            email:
+              type: string
+              example: 'sarah@example.com'
+
+    PostalStaff:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        staff_id:
+          type: string
+          example: 'NIPOST001234'
+        first_name:
+          type: string
+          example: 'David'
+        last_name:
+          type: string
+          example: 'Okafor'
+        email:
+          type: string
+          example: 'david.okafor@nipost.gov.ng'
+        phone:
+          type: string
+          example: '+2348012345678'
+        position:
+          type: string
+          example: 'Postal Officer'
+        department:
+          type: string
+          example: 'Operations'
+        office_location:
+          type: string
+          example: 'Lagos Central Post Office'
+        region:
+          type: string
+          example: 'Lagos'
+        is_active:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+
+    Advertisement:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        campaign_name:
+          type: string
+          example: 'Summer Sale Campaign'
+        campaign_type:
+          type: string
+          example: 'banner'
+        budget:
+          type: number
+          example: 50000.00
+        start_date:
+          type: string
+          format: date
+          example: '2026-02-01'
+        end_date:
+          type: string
+          format: date
+          example: '2026-02-28'
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+          example: 'pending'
+        created_at:
+          type: string
+          format: date-time
+        advertiser_profiles:
+          type: object
+          properties:
+            business_name:
+              type: string
+              example: 'Tech Solutions Ltd'
+            contact_email:
+              type: string
+              example: 'contact@techsolutions.com'
+            contact_phone:
+              type: string
+              example: '+2348012345678'
+
+    BusinessCategory:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'ecommerce'
+        name:
+          type: string
+          example: 'E-commerce'
+        description:
+          type: string
+          example: 'Online marketplace and trading'
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        order_number:
+          type: string
+          example: 'ORD-2026-001234'
+        total_amount:
+          type: number
+          example: 15000.00
+        status:
+          type: string
+          example: 'pending'
+        created_at:
+          type: string
+          format: date-time
+        user_profiles:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: 'Alice'
+            last_name:
+              type: string
+              example: 'Brown'
+            email:
+              type: string
+              example: 'alice@example.com'

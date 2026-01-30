@@ -1,6 +1,6 @@
 {
   "name": "delivery-service",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "Delivery and logistics service for Giga platform",
   "main": "dist/index.js",
   "scripts": {

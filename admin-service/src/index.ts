@@ -119,6 +119,31 @@ const createAudit = async (
 };
 
 // Health check
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     tags: [Health]
+ *     summary: Service health check
+ *     description: Check if the admin service is running and healthy
+ *     responses:
+ *       200:
+ *         description: Service is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   example: healthy
+ *                 service:
+ *                   type: string
+ *                   example: admin-service
+ *                 timestamp:
+ *                   type: string
+ *                   format: date-time
+ */
 app.get('/health', (req, res) => {
   res.json({
     status: 'healthy',
@@ -513,6 +538,48 @@ app.get(
 // GIGA DASHBOARD API ENDPOINTS
 // ============================================
 
+/**
+ * @swagger
+ * /api/dashboard/stats:
+ *   get:
+ *     tags: [Dashboard]
+ *     summary: Get main dashboard statistics
+ *     description: Retrieve comprehensive dashboard statistics including revenue, orders, visitors, and conversion rates
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for statistics (defaults to 30 days ago)
+ *         example: "2026-01-01"
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for statistics (defaults to today)
+ *         example: "2026-01-29"
+ *     responses:
+ *       200:
+ *         description: Dashboard statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/DashboardStats'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // GET /api/dashboard/stats - Main dashboard statistics
 app.get('/api/dashboard/stats', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -534,6 +601,47 @@ app.get('/api/dashboard/stats', authenticate, async (req: AuthRequest, res: Resp
   }
 });
 
+/**
+ * @swagger
+ * /api/dashboard/sales-comparison:
+ *   get:
+ *     tags: [Dashboard]
+ *     summary: Get sales comparison data
+ *     description: Compare sales between current and previous periods with percentage change
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Start date for current period
+ *         example: "2026-01-01"
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: End date for current period
+ *         example: "2026-01-29"
+ *     responses:
+ *       200:
+ *         description: Sales comparison data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/SalesComparison'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 // GET /api/dashboard/sales-comparison - Sales comparison data
 app.get(
   '/api/dashboard/sales-comparison',
@@ -559,6 +667,32 @@ app.get(
   }
 );
 
+/**
+ * @swagger
+ * /api/dashboard/category-breakdown:
+ *   get:
+ *     tags: [Dashboard]
+ *     summary: Get category breakdown
+ *     description: Get revenue and metrics breakdown by business category (ecommerce, hotel, taxi, media)
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Category breakdown retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/CategoryBreakdown'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 // GET /api/dashboard/category-breakdown - Category breakdown
 app.get(
   '/api/dashboard/category-breakdown',
@@ -579,6 +713,34 @@ app.get(
   }
 );
 
+/**
+ * @swagger
+ * /api/admin/categories:
+ *   get:
+ *     tags: [Admin Panel]
+ *     summary: Get business categories
+ *     description: Retrieve list of available business categories for the platform
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Business categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/BusinessCategory'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 // GET /api/admin/categories - Business categories
 app.get('/api/admin/categories', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -598,6 +760,66 @@ app.get('/api/admin/categories', authenticate, async (req: AuthRequest, res: Res
 // ============================================
 // BUSINESS MODULE ENDPOINTS
 // ============================================
+
+/**
+ * @swagger
+ * /api/ecommerce/traders:
+ *   get:
+ *     tags: [Business Modules]
+ *     summary: Get e-commerce traders
+ *     description: Retrieve paginated list of e-commerce traders/vendors with search and filtering
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by business name
+ *         example: "electronics"
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [active, inactive]
+ *         description: Filter by trader status
+ *     responses:
+ *       200:
+ *         description: Traders retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         traders:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/Trader'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 
 // GET /api/ecommerce/traders - E-commerce traders
 app.get('/api/ecommerce/traders', authenticate, async (req: AuthRequest, res: Response) => {
@@ -656,6 +878,66 @@ app.get('/api/ecommerce/traders', authenticate, async (req: AuthRequest, res: Re
     res.status(500).json({ error: 'Failed to fetch traders' });
   }
 });
+
+/**
+ * @swagger
+ * /api/taxi/drivers:
+ *   get:
+ *     tags: [Business Modules]
+ *     summary: Get taxi drivers
+ *     description: Retrieve paginated list of taxi drivers with search and filtering
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by license number or driver name
+ *         example: "john"
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [active, inactive]
+ *         description: Filter by driver status
+ *     responses:
+ *       200:
+ *         description: Drivers retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         drivers:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/Driver'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 
 // GET /api/taxi/drivers - Taxi drivers
 app.get('/api/taxi/drivers', authenticate, async (req: AuthRequest, res: Response) => {
@@ -719,6 +1001,66 @@ app.get('/api/taxi/drivers', authenticate, async (req: AuthRequest, res: Respons
   }
 });
 
+/**
+ * @swagger
+ * /api/hotel/hotels:
+ *   get:
+ *     tags: [Business Modules]
+ *     summary: Get hotels
+ *     description: Retrieve paginated list of hotels with search and filtering
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by hotel name, city, or state
+ *         example: "luxury"
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [active, inactive]
+ *         description: Filter by hotel status
+ *     responses:
+ *       200:
+ *         description: Hotels retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         hotels:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/Hotel'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // GET /api/hotel/hotels - Hotels
 app.get('/api/hotel/hotels', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -780,6 +1122,60 @@ app.get('/api/hotel/hotels', authenticate, async (req: AuthRequest, res: Respons
   }
 });
 
+/**
+ * @swagger
+ * /api/media/content:
+ *   get:
+ *     tags: [Business Modules]
+ *     summary: Get media content
+ *     description: Retrieve paginated list of media files and content
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           enum: [image, video, document, audio]
+ *         description: Filter by media type
+ *     responses:
+ *       200:
+ *         description: Media content retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         content:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/MediaContent'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // GET /api/media/content - Media content
 app.get('/api/media/content', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -834,6 +1230,72 @@ app.get('/api/media/content', authenticate, async (req: AuthRequest, res: Respon
 // ============================================
 // POSTAL MONITORING ENDPOINTS
 // ============================================
+
+/**
+ * @swagger
+ * /api/postal-monitoring/staff:
+ *   get:
+ *     tags: [Postal Monitoring]
+ *     summary: Get postal staff
+ *     description: Retrieve paginated list of postal service staff with search and filtering
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by staff name or ID
+ *         example: "john"
+ *       - in: query
+ *         name: region
+ *         schema:
+ *           type: string
+ *         description: Filter by region
+ *         example: "north"
+ *       - in: query
+ *         name: office
+ *         schema:
+ *           type: string
+ *         description: Filter by office location
+ *         example: "lagos"
+ *     responses:
+ *       200:
+ *         description: Postal staff retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         staff:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/PostalStaff'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 
 // GET /api/postal-monitoring/staff - Postal staff
 app.get('/api/postal-monitoring/staff', authenticate, async (req: AuthRequest, res: Response) => {
@@ -899,6 +1361,69 @@ app.get('/api/postal-monitoring/staff', authenticate, async (req: AuthRequest, r
   }
 });
 
+/**
+ * @swagger
+ * /api/operations/staff:
+ *   get:
+ *     tags: [Postal Monitoring]
+ *     summary: Get operations staff
+ *     description: Alias for postal monitoring staff - retrieve paginated list of operations staff
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by staff name or ID
+ *       - in: query
+ *         name: region
+ *         schema:
+ *           type: string
+ *         description: Filter by region
+ *       - in: query
+ *         name: office
+ *         schema:
+ *           type: string
+ *         description: Filter by office location
+ *     responses:
+ *       200:
+ *         description: Operations staff retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         staff:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/PostalStaff'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // GET /api/operations/staff - Operations staff (alias for postal staff)
 app.get('/api/operations/staff', authenticate, async (req: AuthRequest, res: Response) => {
   // Redirect to postal monitoring staff endpoint
@@ -910,12 +1435,41 @@ app.get('/api/operations/staff', authenticate, async (req: AuthRequest, res: Res
 // POST OFFICE MANAGER ENDPOINTS
 // ============================================
 
+/**
+ * @swagger
+ * /api/managers/dashboard-stats:
+ *   get:
+ *     tags: [Manager Operations]
+ *     summary: Get manager dashboard statistics
+ *     description: Retrieve dashboard statistics for post office managers (branch/state level)
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Manager dashboard statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/ManagerDashboardStats'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       403:
+ *         $ref: '#/components/responses/ForbiddenError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // GET /api/managers/dashboard-stats - Manager dashboard
 app.get('/api/managers/dashboard-stats', authenticate, async (req: AuthRequest, res: Response) => {
   try {
     // Managers can only see their branch/region data
-    const branchId = req.user!.branchId;
-    const stateId = req.user!.stateId;
+    const { branchId } = req.user!;
+    const { stateId } = req.user!;
 
     if (!branchId && !stateId) {
       return res.status(403).json({ error: 'Manager access requires branch or state assignment' });
@@ -954,6 +1508,47 @@ app.get('/api/managers/dashboard-stats', authenticate, async (req: AuthRequest, 
   }
 });
 
+/**
+ * @swagger
+ * /api/managers/latest-orders:
+ *   get:
+ *     tags: [Manager Operations]
+ *     summary: Get latest orders
+ *     description: Retrieve the most recent orders for manager review
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 50
+ *           default: 10
+ *         description: Number of orders to retrieve
+ *     responses:
+ *       200:
+ *         description: Latest orders retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         orders:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/Order'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // GET /api/managers/latest-orders - Latest orders
 app.get('/api/managers/latest-orders', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -985,6 +1580,67 @@ app.get('/api/managers/latest-orders', authenticate, async (req: AuthRequest, re
   }
 });
 
+/**
+ * @swagger
+ * /api/managers/orders/{id}:
+ *   put:
+ *     tags: [Manager Operations]
+ *     summary: Update order
+ *     description: Update order status and add notes
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Order ID
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, processing, shipped, delivered, cancelled]
+ *                 description: New order status
+ *                 example: "processing"
+ *               notes:
+ *                 type: string
+ *                 description: Manager notes
+ *                 example: "Order approved for processing"
+ *             required:
+ *               - status
+ *     responses:
+ *       200:
+ *         description: Order updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         order:
+ *                           $ref: '#/components/schemas/Order'
+ *       400:
+ *         $ref: '#/components/responses/BadRequestError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
+
 // PUT /api/managers/orders/:id - Update order
 app.put('/api/managers/orders/:id', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -1012,6 +1668,45 @@ app.put('/api/managers/orders/:id', authenticate, async (req: AuthRequest, res: 
     res.status(500).json({ error: 'Failed to update order' });
   }
 });
+
+/**
+ * @swagger
+ * /api/managers/orders/{id}:
+ *   delete:
+ *     tags: [Manager Operations]
+ *     summary: Delete order
+ *     description: Soft delete an order (marks as deleted but preserves data)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Order ID
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *     responses:
+ *       200:
+ *         description: Order deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: "Order deleted successfully"
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 
 // DELETE /api/managers/orders/:id - Delete order
 app.delete('/api/managers/orders/:id', authenticate, async (req: AuthRequest, res: Response) => {
@@ -1042,6 +1737,61 @@ app.delete('/api/managers/orders/:id', authenticate, async (req: AuthRequest, re
 // ============================================
 // ADVERTISEMENT MANAGEMENT ENDPOINTS
 // ============================================
+
+/**
+ * @swagger
+ * /api/ads/incoming:
+ *   get:
+ *     tags: [Advertisement Management]
+ *     summary: Get incoming ads for review
+ *     description: Retrieve paginated list of advertisement campaigns pending review
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Page number for pagination
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *         description: Number of items per page
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, approved, rejected]
+ *           default: pending
+ *         description: Filter by ad status
+ *     responses:
+ *       200:
+ *         description: Incoming ads retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/PaginatedResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         ads:
+ *                           type: array
+ *                           items:
+ *                             $ref: '#/components/schemas/AdCampaign'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 
 // GET /api/ads/incoming - Incoming ads for review
 app.get('/api/ads/incoming', authenticate, async (req: AuthRequest, res: Response) => {
@@ -1092,6 +1842,67 @@ app.get('/api/ads/incoming', authenticate, async (req: AuthRequest, res: Respons
     res.status(500).json({ error: 'Failed to fetch incoming ads' });
   }
 });
+
+/**
+ * @swagger
+ * /api/ads/{id}/status:
+ *   put:
+ *     tags: [Advertisement Management]
+ *     summary: Update ad status
+ *     description: Approve, reject, or change status of an advertisement campaign
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Advertisement campaign ID
+ *         example: "123e4567-e89b-12d3-a456-426614174000"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [approved, rejected, pending]
+ *                 description: New ad status
+ *                 example: "approved"
+ *               review_notes:
+ *                 type: string
+ *                 description: Review notes or feedback
+ *                 example: "Ad content approved for publication"
+ *             required:
+ *               - status
+ *     responses:
+ *       200:
+ *         description: Ad status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: object
+ *                       properties:
+ *                         ad:
+ *                           $ref: '#/components/schemas/AdCampaign'
+ *       400:
+ *         $ref: '#/components/responses/BadRequestError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
+ */
 
 // PUT /api/ads/:id/status - Update ad status
 app.put('/api/ads/:id/status', authenticate, async (req: AuthRequest, res: Response) => {
@@ -1179,7 +1990,14 @@ app.get('/api/admin/audit-trail', authenticate, async (req: AuthRequest, res: Re
 
 // Start server
 app.listen(PORT, () => {
-  logger.info(`Admin Aggregation Service started`, { port: PORT });
+  logger.info(`🚀 GIGA Dashboard & Admin Service v2.1.0 started successfully`, {
+    port: PORT,
+    environment: process.env.NODE_ENV || 'development',
+    gigaDashboardAPI: 'enabled',
+    endpoints: 15,
+    features: ['dashboard-stats', 'business-modules', 'postal-monitoring', 'ad-management'],
+    timestamp: new Date().toISOString(),
+  });
 });
 
 export default app;

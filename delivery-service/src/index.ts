@@ -136,9 +136,11 @@ const httpServer = server.listen(config.port, () => {
   logger.info('Delivery service started', {
     port: config.port,
     environment: config.nodeEnv,
-    version: '1.0.0',
+    version: '2.1.0',
     websocket: 'enabled',
     timestamp: new Date().toISOString(),
+    deployment: 'railway-redeployment-v2.1.0',
+    features: ['route-optimization', 'real-time-tracking', 'websockets'],
   });
 
   // Start scheduled tasks
