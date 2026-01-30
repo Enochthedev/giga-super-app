@@ -233,7 +233,16 @@ app.get('/api-docs.json', (req, res) => {
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get national dashboard
- *     description: Retrieve national-level dashboard statistics and summary data. Requires national access level.
+ *     description: |
+ *       Retrieve national-level dashboard statistics and summary data.
+ *
+ *       **Access Level Required:** National
+ *
+ *       Returns comprehensive statistics including:
+ *       - Total revenue across all states
+ *       - Transaction counts
+ *       - Commission summaries
+ *       - Module-wise breakdown (hotel, taxi, ecommerce)
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -242,17 +251,29 @@ app.get('/api-docs.json', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               allOf:
- *                 - $ref: '#/components/schemas/SuccessResponse'
- *                 - type: object
- *                   properties:
- *                     data:
- *                       type: object
- *                       description: National summary statistics
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/NationalDashboard'
+ *             example:
+ *               success: true
+ *               data:
+ *                 totalRevenue: 15000000.50
+ *                 totalTransactions: 4500
+ *                 totalCommission: 750000.25
+ *                 stateCount: 37
+ *                 branchCount: 774
+ *                 byModule:
+ *                   hotel: 5000000.00
+ *                   taxi: 4500000.00
+ *                   ecommerce: 5500000.50
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: National access level required
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -282,7 +303,12 @@ app.get('/api/admin/national/dashboard', authenticate, async (req: AuthRequest, 
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get national financial summary
- *     description: Retrieve financial summary across all states. Requires national access level.
+ *     description: |
+ *       Retrieve financial summary across all states.
+ *
+ *       **Access Level Required:** National
+ *
+ *       Supports date range filtering for custom reporting periods.
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -291,20 +317,42 @@ app.get('/api/admin/national/dashboard', authenticate, async (req: AuthRequest, 
  *         schema:
  *           type: string
  *           format: date
- *         description: Filter from date
+ *         description: Start date for filtering (YYYY-MM-DD)
+ *         example: '2026-01-01'
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
  *           format: date
- *         description: Filter to date
+ *         description: End date for filtering (YYYY-MM-DD)
+ *         example: '2026-01-31'
  *     responses:
  *       200:
  *         description: Financial summary retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/FinancialSummary'
+ *             example:
+ *               success: true
+ *               data:
+ *                 totalTransactions: 1250
+ *                 totalRevenue: 5000000.00
+ *                 totalCommission: 250000.00
+ *                 byModule:
+ *                   hotel: 100000.00
+ *                   taxi: 75000.00
+ *                   ecommerce: 75000.00
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: National access level required
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -368,16 +416,40 @@ app.get(
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get all states
- *     description: Retrieve list of all states. Requires national access level.
+ *     description: |
+ *       Retrieve list of all states in the NIPOST network.
+ *
+ *       **Access Level Required:** National
  *     security:
  *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: States list retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/StateInfo'
+ *             example:
+ *               success: true
+ *               data:
+ *                 - state_id: '550e8400-e29b-41d4-a716-446655440000'
+ *                   state_name: 'Lagos State'
+ *                 - state_id: '550e8400-e29b-41d4-a716-446655440001'
+ *                   state_name: 'Abuja FCT'
+ *                 - state_id: '550e8400-e29b-41d4-a716-446655440002'
+ *                   state_name: 'Kano State'
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: National access level required
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -417,7 +489,10 @@ app.get('/api/admin/national/states', authenticate, async (req: AuthRequest, res
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get state dashboard
- *     description: Retrieve dashboard statistics for a specific state
+ *     description: |
+ *       Retrieve dashboard statistics for a specific state.
+ *
+ *       **Access Level Required:** National or State (matching stateId)
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -426,14 +501,33 @@ app.get('/api/admin/national/states', authenticate, async (req: AuthRequest, res
  *         required: true
  *         schema:
  *           type: string
- *         description: State ID
+ *           format: uuid
+ *         description: State UUID
+ *         example: 550e8400-e29b-41d4-a716-446655440000
  *     responses:
  *       200:
  *         description: State dashboard data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/FinancialSummary'
+ *             example:
+ *               success: true
+ *               data:
+ *                 totalTransactions: 350
+ *                 totalRevenue: 1500000.00
+ *                 totalCommission: 75000.00
+ *                 branchCount: 25
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: Insufficient permissions for this state
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -473,7 +567,10 @@ app.get(
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get state branches
- *     description: Retrieve list of branches in a state
+ *     description: |
+ *       Retrieve list of all branches within a state.
+ *
+ *       **Access Level Required:** National or State (matching stateId)
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -482,14 +579,35 @@ app.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: State ID
+ *           format: uuid
+ *         description: State UUID
+ *         example: 550e8400-e29b-41d4-a716-446655440000
  *     responses:
  *       200:
  *         description: Branches list retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/BranchInfo'
+ *             example:
+ *               success: true
+ *               data:
+ *                 - branch_id: '550e8400-e29b-41d4-a716-446655440001'
+ *                   branch_name: 'Victoria Island Post Office'
+ *                 - branch_id: '550e8400-e29b-41d4-a716-446655440002'
+ *                   branch_name: 'Ikeja Main Post Office'
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: Insufficient permissions
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -534,7 +652,10 @@ app.get(
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get state financial summary
- *     description: Retrieve financial summary for a specific state
+ *     description: |
+ *       Retrieve financial summary for a specific state.
+ *
+ *       **Access Level Required:** National or State (matching stateId)
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -543,14 +664,32 @@ app.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: State ID
+ *           format: uuid
+ *         description: State UUID
+ *         example: 550e8400-e29b-41d4-a716-446655440000
  *     responses:
  *       200:
  *         description: State financial summary retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/FinancialSummary'
+ *             example:
+ *               success: true
+ *               data:
+ *                 totalTransactions: 350
+ *                 totalRevenue: 1500000.00
+ *                 totalCommission: 75000.00
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: Insufficient permissions
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -603,7 +742,10 @@ app.get(
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get branch dashboard
- *     description: Retrieve dashboard statistics for a specific branch
+ *     description: |
+ *       Retrieve dashboard statistics for a specific branch.
+ *
+ *       **Access Level Required:** National, State, or Branch (matching branchId)
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -612,14 +754,32 @@ app.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: Branch ID
+ *           format: uuid
+ *         description: Branch UUID
+ *         example: 550e8400-e29b-41d4-a716-446655440001
  *     responses:
  *       200:
  *         description: Branch dashboard data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/FinancialSummary'
+ *             example:
+ *               success: true
+ *               data:
+ *                 totalTransactions: 85
+ *                 totalRevenue: 250000.00
+ *                 totalCommission: 12500.00
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: Access denied to this branch
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -655,7 +815,12 @@ app.get(
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get branch transactions
- *     description: Retrieve paginated list of transactions for a branch
+ *     description: |
+ *       Retrieve paginated list of financial transactions for a branch.
+ *
+ *       **Access Level Required:** National, State, or Branch (matching branchId)
+ *
+ *       Supports filtering by module type and payment status.
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -664,37 +829,77 @@ app.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: Branch ID
+ *           format: uuid
+ *         description: Branch UUID
+ *         example: 550e8400-e29b-41d4-a716-446655440001
  *       - in: query
  *         name: page
  *         schema:
  *           type: integer
+ *           minimum: 1
  *           default: 1
- *         description: Page number
+ *         description: Page number for pagination
+ *         example: 1
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
+ *           minimum: 1
+ *           maximum: 100
  *           default: 20
- *         description: Items per page
+ *         description: Number of items per page
+ *         example: 20
  *       - in: query
  *         name: module
  *         schema:
  *           type: string
  *           enum: [hotel, taxi, ecommerce]
- *         description: Filter by module
+ *         description: Filter by business module
+ *         example: hotel
  *       - in: query
  *         name: status
  *         schema:
  *           type: string
+ *           enum: [pending, completed, failed, refunded]
  *         description: Filter by payment status
+ *         example: completed
  *     responses:
  *       200:
  *         description: Branch transactions retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Transaction'
+ *                 pagination:
+ *                   $ref: '#/components/schemas/Pagination'
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: '550e8400-e29b-41d4-a716-446655440010'
+ *                   reference_number: 'TXN-2026-001234'
+ *                   module: 'hotel'
+ *                   gross_amount: 25000.00
+ *                   commission_amount: 1250.00
+ *                   net_amount: 23750.00
+ *                   payment_status: 'completed'
+ *                   created_at: '2026-01-29T10:30:00Z'
+ *               pagination:
+ *                 page: 1
+ *                 limit: 20
+ *                 total: 85
+ *                 pages: 5
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: Access denied to this branch
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -749,7 +954,12 @@ app.get(
  *   get:
  *     tags: [NIPOST Admin]
  *     summary: Get branch analytics
- *     description: Retrieve analytics data for a branch by time period
+ *     description: |
+ *       Retrieve analytics data for a branch by time period.
+ *
+ *       **Access Level Required:** National, State, or Branch (matching branchId)
+ *
+ *       Returns transaction counts and revenue breakdown by module.
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -758,21 +968,51 @@ app.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: Branch ID
+ *           format: uuid
+ *         description: Branch UUID
+ *         example: 550e8400-e29b-41d4-a716-446655440001
  *       - in: query
  *         name: period
  *         schema:
  *           type: string
  *           enum: [day, week, month]
  *           default: week
- *         description: Analytics period
+ *         description: Time period for analytics
+ *         example: week
  *     responses:
  *       200:
  *         description: Branch analytics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/BranchAnalytics'
+ *             example:
+ *               success: true
+ *               data:
+ *                 period: 'week'
+ *                 transactions: 150
+ *                 revenue: 500000.00
+ *                 commission: 25000.00
+ *                 byModule:
+ *                   hotel:
+ *                     count: 50
+ *                     revenue: 200000.00
+ *                   taxi:
+ *                     count: 75
+ *                     revenue: 150000.00
+ *                   ecommerce:
+ *                     count: 25
+ *                     revenue: 150000.00
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  *       403:
- *         description: Access denied to this branch
+ *         $ref: '#/components/responses/ForbiddenError'
  *       500:
  *         $ref: '#/components/responses/InternalServerError'
  */
