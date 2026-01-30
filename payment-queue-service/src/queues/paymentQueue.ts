@@ -1,42 +1,13 @@
 import { Job, Queue, QueueEvents, Worker } from 'bullmq';
-import IORedis from 'ioredis';
 
 import { config } from '../config';
 import { processPayment } from '../services/paymentProcessor';
 import { PaymentRequest, PaymentResponse } from '../types';
 import logger from '../utils/logger';
+import { createRedisConnection } from '../utils/redis';
 
-// Redis connection with error handling
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: true,
-  connectTimeout: 10000,
-  retryStrategy: (times: number) => {
-    if (times > 10) {
-      logger.error('Redis connection failed after 10 retries');
-      return null;
-    }
-    const delay = Math.min(times * 200, 2000);
-    logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
-    return delay;
-  },
-});
-
-connection.on('error', err => {
-  logger.error('Redis connection error', { error: err.message });
-});
-
-connection.on('connect', () => {
-  logger.info('Redis connected');
-});
-
-connection.on('ready', () => {
-  logger.info('Redis ready');
-});
-
-connection.on('close', () => {
-  logger.warn('Redis connection closed');
-});
+// Redis connection with proper TLS for Upstash
+const connection = createRedisConnection('paymentQueue');
 
 // Payment Queue
 export const paymentQueue = new Queue<PaymentRequest>('payment-processing', {

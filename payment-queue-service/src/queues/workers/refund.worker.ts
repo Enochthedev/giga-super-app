@@ -1,14 +1,12 @@
-import { Worker, Job } from 'bullmq';
-import IORedis from 'ioredis';
+import { createClient } from '@supabase/supabase-js';
+import { Job, Worker } from 'bullmq';
+
 import { config } from '../../config';
 import logger from '../../utils/logger';
-import { createClient } from '@supabase/supabase-js';
+import { createRedisConnection } from '../../utils/redis';
 import { addNotificationJob } from '../notification.queue';
 
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+const connection = createRedisConnection('refundWorker');
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
@@ -155,7 +153,7 @@ async function processRefundWithProvider(
   };
 }
 
-refundWorker.on('completed', (job) => {
+refundWorker.on('completed', job => {
   logger.info('Refund job completed', {
     jobId: job.id,
     refundId: job.data.refundId,
@@ -170,7 +168,7 @@ refundWorker.on('failed', (job, err) => {
   });
 });
 
-refundWorker.on('error', (err) => {
+refundWorker.on('error', err => {
   logger.error('Refund worker error', { error: err.message });
 });
 

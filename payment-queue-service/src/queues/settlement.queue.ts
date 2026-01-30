@@ -1,13 +1,9 @@
 import { Queue, QueueOptions } from 'bullmq';
-import IORedis from 'ioredis';
-import { config } from '../config';
 import logger from '../utils/logger';
+import { createRedisConnection } from '../utils/redis';
 
-// Redis connection
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+// Redis connection with proper TLS for Upstash
+const connection = createRedisConnection('settlementQueue');
 
 // Queue options
 const queueOptions: QueueOptions = {
@@ -32,7 +28,7 @@ const queueOptions: QueueOptions = {
 // Create settlement queue
 export const settlementQueue = new Queue('settlement-queue', queueOptions);
 
-settlementQueue.on('error', (error) => {
+settlementQueue.on('error', error => {
   logger.error('Settlement queue error', { error: error.message });
 });
 
@@ -41,27 +37,21 @@ logger.info('Settlement queue initialized');
 /**
  * Add settlement processing job
  */
-export async function addSettlementJob(
-  jobData: {
-    settlementId: string;
-    period: {
-      start: string;
-      end: string;
-    };
-    level: 'branch' | 'state' | 'national';
-    entityId?: string;
-    module?: string;
-  }
-) {
+export async function addSettlementJob(jobData: {
+  settlementId: string;
+  period: {
+    start: string;
+    end: string;
+  };
+  level: 'branch' | 'state' | 'national';
+  entityId?: string;
+  module?: string;
+}) {
   try {
-    const job = await settlementQueue.add(
-      'process-settlement',
-      jobData,
-      {
-        jobId: jobData.settlementId,
-        priority: 5, // Lower priority - can run in background
-      }
-    );
+    const job = await settlementQueue.add('process-settlement', jobData, {
+      jobId: jobData.settlementId,
+      priority: 5, // Lower priority - can run in background
+    });
 
     logger.info('Settlement job added to queue', {
       jobId: job.id,
@@ -135,7 +125,7 @@ export async function addScheduledSettlement(
 export async function getSettlementJobStatus(jobId: string) {
   try {
     const job = await settlementQueue.getJob(jobId);
-    
+
     if (!job) {
       return null;
     }
