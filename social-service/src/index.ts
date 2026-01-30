@@ -172,11 +172,10 @@ server.listen(PORT, '0.0.0.0', () => {
   const address = server.address();
   logger.info('🚀 GIGA Social Media Service v2.1.0 started successfully', {
     port: PORT,
-    address: address,
+    address,
     environment: process.env.NODE_ENV || 'development',
     features: ['posts', 'comments', 'likes', 'feed', 'real-time'],
-    timestamp: new Date().toISOString()
-  });
+    timestamp: new Date().toISOString(),
     swagger: `http://localhost:${PORT}/api-docs`,
     env: process.env.NODE_ENV,
   });
