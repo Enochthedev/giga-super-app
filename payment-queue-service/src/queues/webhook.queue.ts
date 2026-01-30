@@ -1,13 +1,9 @@
 import { Queue, QueueOptions } from 'bullmq';
-import IORedis from 'ioredis';
-import { config } from '../config';
 import logger from '../utils/logger';
+import { createRedisConnection } from '../utils/redis';
 
-// Redis connection
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+// Redis connection with proper TLS for Upstash
+const connection = createRedisConnection('webhookQueue');
 
 // Queue options
 const queueOptions: QueueOptions = {
@@ -32,7 +28,7 @@ const queueOptions: QueueOptions = {
 // Create webhook queue
 export const webhookQueue = new Queue('webhook-queue', queueOptions);
 
-webhookQueue.on('error', (error) => {
+webhookQueue.on('error', error => {
   logger.error('Webhook queue error', { error: error.message });
 });
 
@@ -41,24 +37,18 @@ logger.info('Webhook queue initialized');
 /**
  * Add webhook processing job
  */
-export async function addWebhookJob(
-  jobData: {
-    provider: 'paystack' | 'stripe';
-    event: string;
-    data: any;
-    signature: string;
-    receivedAt: string;
-  }
-) {
+export async function addWebhookJob(jobData: {
+  provider: 'paystack' | 'stripe';
+  event: string;
+  data: any;
+  signature: string;
+  receivedAt: string;
+}) {
   try {
-    const job = await webhookQueue.add(
-      'process-webhook',
-      jobData,
-      {
-        jobId: `webhook-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        priority: 1, // High priority for webhooks
-      }
-    );
+    const job = await webhookQueue.add('process-webhook', jobData, {
+      jobId: `webhook-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      priority: 1, // High priority for webhooks
+    });
 
     logger.info('Webhook job added to queue', {
       jobId: job.id,

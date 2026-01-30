@@ -1,13 +1,11 @@
-import { Worker, Job } from 'bullmq';
-import IORedis from 'ioredis';
+import { createClient } from '@supabase/supabase-js';
+import { Job, Worker } from 'bullmq';
+
 import { config } from '../../config';
 import logger from '../../utils/logger';
-import { createClient } from '@supabase/supabase-js';
+import { createRedisConnection } from '../../utils/redis';
 
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+const connection = createRedisConnection('settlementWorker');
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
@@ -53,12 +51,13 @@ export const settlementWorker = new Worker(
 
       // Calculate settlement totals
       const totalAmount = transactions?.reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
-      const totalCommission = transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
+      const totalCommission =
+        transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
       const netAmount = totalAmount - totalCommission;
 
       // Group by module
       const byModule: any = {};
-      transactions?.forEach((tx) => {
+      transactions?.forEach(tx => {
         const mod = tx.module;
         if (!byModule[mod]) {
           byModule[mod] = { count: 0, amount: 0, commission: 0 };
@@ -121,7 +120,7 @@ export const settlementWorker = new Worker(
   }
 );
 
-settlementWorker.on('completed', (job) => {
+settlementWorker.on('completed', job => {
   logger.info('Settlement job completed', {
     jobId: job.id,
     settlementId: job.data.settlementId,
@@ -136,7 +135,7 @@ settlementWorker.on('failed', (job, err) => {
   });
 });
 
-settlementWorker.on('error', (err) => {
+settlementWorker.on('error', err => {
   logger.error('Settlement worker error', { error: err.message });
 });
 

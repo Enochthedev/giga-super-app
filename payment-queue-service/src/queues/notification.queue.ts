@@ -1,13 +1,9 @@
 import { Queue, QueueOptions } from 'bullmq';
-import IORedis from 'ioredis';
-import { config } from '../config';
 import logger from '../utils/logger';
+import { createRedisConnection } from '../utils/redis';
 
-// Redis connection
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+// Redis connection with proper TLS for Upstash
+const connection = createRedisConnection('notificationQueue');
 
 // Queue options
 const queueOptions: QueueOptions = {
@@ -32,7 +28,7 @@ const queueOptions: QueueOptions = {
 // Create notification queue
 export const notificationQueue = new Queue('notification-queue', queueOptions);
 
-notificationQueue.on('error', (error) => {
+notificationQueue.on('error', error => {
   logger.error('Notification queue error', { error: error.message });
 });
 
@@ -55,15 +51,11 @@ export async function addNotificationJob(
   }
 ) {
   try {
-    const job = await notificationQueue.add(
-      'send-notification',
-      jobData,
-      {
-        jobId: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        priority: 3,
-        delay: options?.delay || 0,
-      }
-    );
+    const job = await notificationQueue.add('send-notification', jobData, {
+      jobId: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      priority: 3,
+      delay: options?.delay || 0,
+    });
 
     logger.info('Notification job added to queue', {
       jobId: job.id,
@@ -97,7 +89,7 @@ export async function addBulkNotificationJobs(
   }>
 ) {
   try {
-    const jobs = notifications.map((notification) => ({
+    const jobs = notifications.map(notification => ({
       name: 'send-notification',
       data: notification,
       opts: {

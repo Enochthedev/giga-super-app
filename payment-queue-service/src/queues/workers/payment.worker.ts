@@ -1,16 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
 import { Job, Worker } from 'bullmq';
-import IORedis from 'ioredis';
 import Stripe from 'stripe';
+
 import { config } from '../../config';
 import { commissionService } from '../../services/commission.service';
 import logger from '../../utils/logger';
+import { createRedisConnection } from '../../utils/redis';
 import { addNotificationJob } from '../notification.queue';
 
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+const connection = createRedisConnection('paymentWorker');
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 

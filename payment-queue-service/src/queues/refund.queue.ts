@@ -1,13 +1,9 @@
 import { Queue, QueueOptions } from 'bullmq';
-import IORedis from 'ioredis';
-import { config } from '../config';
 import logger from '../utils/logger';
+import { createRedisConnection } from '../utils/redis';
 
-// Redis connection
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+// Redis connection with proper TLS for Upstash
+const connection = createRedisConnection('refundQueue');
 
 // Queue options
 const queueOptions: QueueOptions = {
@@ -32,7 +28,7 @@ const queueOptions: QueueOptions = {
 // Create refund queue
 export const refundQueue = new Queue('refund-queue', queueOptions);
 
-refundQueue.on('error', (error) => {
+refundQueue.on('error', error => {
   logger.error('Refund queue error', { error: error.message });
 });
 
@@ -41,25 +37,19 @@ logger.info('Refund queue initialized');
 /**
  * Add refund processing job
  */
-export async function addRefundJob(
-  jobData: {
-    refundId: string;
-    transactionId: string;
-    amount: number;
-    reason: string;
-    userId: string;
-    requestedBy: string;
-  }
-) {
+export async function addRefundJob(jobData: {
+  refundId: string;
+  transactionId: string;
+  amount: number;
+  reason: string;
+  userId: string;
+  requestedBy: string;
+}) {
   try {
-    const job = await refundQueue.add(
-      'process-refund',
-      jobData,
-      {
-        jobId: jobData.refundId,
-        priority: 2, // Medium-high priority
-      }
-    );
+    const job = await refundQueue.add('process-refund', jobData, {
+      jobId: jobData.refundId,
+      priority: 2, // Medium-high priority
+    });
 
     logger.info('Refund job added to queue', {
       jobId: job.id,
@@ -84,7 +74,7 @@ export async function addRefundJob(
 export async function getRefundJobStatus(jobId: string) {
   try {
     const job = await refundQueue.getJob(jobId);
-    
+
     if (!job) {
       return null;
     }

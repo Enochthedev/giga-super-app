@@ -1,14 +1,12 @@
-import { Worker, Job } from 'bullmq';
-import IORedis from 'ioredis';
+import { createClient } from '@supabase/supabase-js';
+import { Job, Worker } from 'bullmq';
 import crypto from 'crypto';
+
 import { config } from '../../config';
 import logger from '../../utils/logger';
-import { createClient } from '@supabase/supabase-js';
+import { createRedisConnection } from '../../utils/redis';
 
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+const connection = createRedisConnection('webhookWorker');
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
@@ -295,7 +293,7 @@ async function handleStripeRefund(data: any): Promise<void> {
 }
 
 // Worker event handlers
-webhookWorker.on('completed', (job) => {
+webhookWorker.on('completed', job => {
   logger.info('Webhook job completed', {
     jobId: job.id,
     provider: job.data.provider,
@@ -312,7 +310,7 @@ webhookWorker.on('failed', (job, err) => {
   });
 });
 
-webhookWorker.on('error', (err) => {
+webhookWorker.on('error', err => {
   logger.error('Webhook worker error', { error: err.message });
 });
 

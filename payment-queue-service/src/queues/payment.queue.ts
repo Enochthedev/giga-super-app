@@ -1,13 +1,10 @@
 import { Queue, QueueOptions } from 'bullmq';
-import IORedis from 'ioredis';
 import { config } from '../config';
 import logger from '../utils/logger';
+import { createRedisConnection } from '../utils/redis';
 
-// Redis connection
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+// Redis connection with proper TLS for Upstash
+const connection = createRedisConnection('paymentQueue');
 
 connection.on('connect', () => {
   logger.info('Redis connected for payment queue');

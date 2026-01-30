@@ -1,13 +1,10 @@
-import { Worker, Job } from 'bullmq';
-import IORedis from 'ioredis';
-import { config } from '../../config';
-import logger from '../../utils/logger';
-import { notificationService } from '../../services/notification.service';
+import { Job, Worker } from 'bullmq';
 
-const connection = new IORedis(config.redisUrl, {
-  maxRetriesPerRequest: null,
-  enableReadyCheck: false,
-});
+import { notificationService } from '../../services/notification.service';
+import logger from '../../utils/logger';
+import { createRedisConnection } from '../../utils/redis';
+
+const connection = createRedisConnection('notificationWorker');
 
 /**
  * Notification worker to process notification jobs
@@ -156,7 +153,7 @@ async function sendInAppNotification(
   return { success: true };
 }
 
-notificationWorker.on('completed', (job) => {
+notificationWorker.on('completed', job => {
   logger.info('Notification job completed', {
     jobId: job.id,
     userId: job.data.userId,
@@ -173,7 +170,7 @@ notificationWorker.on('failed', (job, err) => {
   });
 });
 
-notificationWorker.on('error', (err) => {
+notificationWorker.on('error', err => {
   logger.error('Notification worker error', { error: err.message });
 });
 
