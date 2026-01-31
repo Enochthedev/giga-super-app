@@ -1,45 +1,45 @@
 import logger from '../../utils/logger';
 import {
-  paymentWorker,
-  closePaymentWorker,
-} from './payment.worker';
-import {
-  webhookWorker,
-  closeWebhookWorker,
-} from './webhook.worker';
-import {
-  refundWorker,
-  closeRefundWorker,
-} from './refund.worker';
-import {
-  settlementWorker,
-  closeSettlementWorker,
-} from './settlement.worker';
-import {
-  notificationWorker,
-  closeNotificationWorker,
-} from './notification.worker';
+  closeWorkerManager,
+  getWorkerStatus,
+  initializeWorkerManager,
+  processExistingJobs,
+  registerProcessor,
+} from './workerManager';
 
-// Export all workers
-export {
-  paymentWorker,
-  webhookWorker,
-  refundWorker,
-  settlementWorker,
-  notificationWorker,
-};
+// Import processor functions from each worker
+import { notificationProcessor } from './notification.worker';
+import { paymentProcessor } from './payment.worker';
+import { refundProcessor } from './refund.worker';
+import { settlementProcessor } from './settlement.worker';
+import { webhookProcessor } from './webhook.worker';
 
 /**
- * Initialize all workers
+ * Initialize all workers via WorkerManager (on-demand activation)
  */
 export function initializeWorkers() {
-  logger.info('All queue workers initialized', {
-    workers: [
-      'payment-worker',
-      'webhook-worker',
-      'refund-worker',
-      'settlement-worker',
-      'notification-worker',
+  // Register all processors
+  registerProcessor('payment-queue', paymentProcessor);
+  registerProcessor('webhook-queue', webhookProcessor);
+  registerProcessor('refund-queue', refundProcessor);
+  registerProcessor('settlement-queue', settlementProcessor);
+  registerProcessor('notification-queue', notificationProcessor);
+
+  // Initialize the worker manager (sets up Pub/Sub listeners)
+  initializeWorkerManager();
+
+  // Process any existing jobs that may be waiting
+  processExistingJobs().catch(error => {
+    logger.warn('Could not check for existing jobs', { error: error.message });
+  });
+
+  logger.info('On-demand worker system initialized', {
+    queues: [
+      'payment-queue',
+      'webhook-queue',
+      'refund-queue',
+      'settlement-queue',
+      'notification-queue',
     ],
   });
 }
@@ -48,18 +48,13 @@ export function initializeWorkers() {
  * Close all workers gracefully
  */
 export async function closeAllWorkers() {
-  logger.info('Closing all workers...');
-  
-  await Promise.all([
-    closePaymentWorker(),
-    closeWebhookWorker(),
-    closeRefundWorker(),
-    closeSettlementWorker(),
-    closeNotificationWorker(),
-  ]);
-  
-  logger.info('All workers closed');
+  await closeWorkerManager();
 }
+
+/**
+ * Get status of all workers
+ */
+export { getWorkerStatus };
 
 // Initialize workers on module load
 initializeWorkers();

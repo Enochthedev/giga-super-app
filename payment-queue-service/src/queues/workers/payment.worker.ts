@@ -1,14 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
-import { Job, Worker } from 'bullmq';
+import { Job } from 'bullmq';
 import Stripe from 'stripe';
 
 import { config } from '../../config';
 import { commissionService } from '../../services/commission.service';
 import logger from '../../utils/logger';
-import { getRedisConnection, REDIS_CONNECTIONS } from '../../utils/redis';
 import { addNotificationJob } from '../notification.queue';
-
-const connection = getRedisConnection(REDIS_CONNECTIONS.WORKERS);
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
@@ -20,181 +17,177 @@ const getStripe = () => {
       throw new Error('STRIPE_SECRET_KEY is required for payment processing');
     }
     stripe = new Stripe(config.stripeSecretKey, {
-      apiVersion: '2025-12-15.clover' as any,
+      apiVersion: '2025-12-15.clover' as Stripe.LatestApiVersion,
     });
   }
   return stripe;
 };
 
 /**
- * Payment worker to process payment jobs
+ * Payment processor function - handles payment job processing
+ * This is registered with WorkerManager and called when jobs arrive
  */
-export const paymentWorker = new Worker(
-  'payment-queue',
-  async (job: Job) => {
-    const {
-      paymentId,
-      module,
-      amount,
-      currency,
-      userId,
-      branchId,
-      stateId,
-      metadata,
-      paymentMethod,
-    } = job.data;
+export async function paymentProcessor(job: Job): Promise<{
+  success: boolean;
+  transactionId: string;
+  paymentReference: string;
+  commission: unknown;
+}> {
+  const {
+    paymentId,
+    module,
+    amount,
+    currency,
+    userId,
+    branchId,
+    stateId,
+    metadata,
+    paymentMethod,
+  } = job.data;
 
-    logger.info('Processing payment job', {
-      jobId: job.id,
-      paymentId,
+  logger.info('Processing payment job', {
+    jobId: job.id,
+    paymentId,
+    module,
+    amount,
+    paymentMethod,
+  });
+
+  try {
+    // Update payment status to processing
+    await updatePaymentStatus(paymentId, 'processing');
+
+    // Calculate commission
+    const commission = await commissionService.calculateCommission(
       module,
       amount,
-      paymentMethod,
+      metadata.transactionType || 'standard'
+    );
+
+    // Process payment based on provider
+    let paymentResult;
+    if (paymentMethod === 'stripe') {
+      paymentResult = await processStripePayment({
+        amount,
+        currency,
+        userId,
+        metadata: {
+          ...metadata,
+          paymentId,
+          module,
+        },
+      });
+    } else {
+      // Default to Paystack
+      paymentResult = await processPaystackPayment({
+        amount,
+        currency,
+        userId,
+        metadata: {
+          ...metadata,
+          paymentId,
+          module,
+        },
+      });
+    }
+
+    // Store transaction record
+    const { error: txError } = await supabase
+      .from('transactions')
+      .insert({
+        id: paymentId,
+        user_id: userId,
+        branch_id: branchId,
+        state_id: stateId,
+        module,
+        transaction_type: 'payment',
+        amount: commission.grossAmount,
+        commission_amount: commission.commissionAmount,
+        net_amount: commission.netAmount,
+        currency,
+        status: paymentResult.success ? 'completed' : 'failed',
+        payment_reference: paymentResult.reference,
+        payment_method: paymentMethod || 'paystack',
+        metadata: {
+          ...metadata,
+          commissionCalculation: commission,
+          paymentResult,
+        },
+        created_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
+
+    if (txError) {
+      throw new Error(`Failed to store transaction: ${txError.message}`);
+    }
+
+    // Update payment status
+    await updatePaymentStatus(
+      paymentId,
+      paymentResult.success ? 'completed' : 'failed',
+      paymentResult.message
+    );
+
+    // Queue notification
+    await addNotificationJob({
+      userId,
+      type: paymentResult.success ? 'payment_success' : 'payment_failed',
+      title: paymentResult.success ? 'Payment Successful' : 'Payment Failed',
+      message: paymentResult.message || '',
+      data: {
+        transactionId: paymentId,
+        amount,
+        currency,
+        module,
+        status: paymentResult.success ? 'completed' : 'failed',
+        timestamp: new Date().toISOString(),
+      },
+      channels: ['email', 'push', 'in_app'],
     });
 
-    try {
-      // Update payment status to processing
-      await updatePaymentStatus(paymentId, 'processing');
+    logger.info('Payment processed successfully', {
+      jobId: job.id,
+      paymentId,
+      success: paymentResult.success,
+    });
 
-      // Calculate commission
-      const commission = await commissionService.calculateCommission(
-        module,
-        amount,
-        metadata.transactionType || 'standard'
-      );
+    return {
+      success: paymentResult.success,
+      transactionId: paymentId,
+      paymentReference: paymentResult.reference,
+      commission,
+    };
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Payment processing failed', {
+      jobId: job.id,
+      paymentId,
+      error: errorMessage,
+    });
 
-      // Process payment based on provider
-      let paymentResult;
-      if (paymentMethod === 'stripe') {
-        paymentResult = await processStripePayment({
-          amount,
-          currency,
-          userId,
-          metadata: {
-            ...metadata,
-            paymentId,
-            module,
-          },
-        });
-      } else {
-        // Default to Paystack
-        paymentResult = await processPaystackPayment({
-          amount,
-          currency,
-          userId,
-          metadata: {
-            ...metadata,
-            paymentId,
-            module,
-          },
-        });
-      }
+    await updatePaymentStatus(paymentId, 'failed', errorMessage);
 
-      // Store transaction record
-      const { data: transaction, error: txError } = await supabase
-        .from('transactions')
-        .insert({
-          id: paymentId,
-          user_id: userId,
-          branch_id: branchId,
-          state_id: stateId,
-          module,
-          transaction_type: 'payment',
-          amount: commission.grossAmount,
-          commission_amount: commission.commissionAmount,
-          net_amount: commission.netAmount,
-          currency,
-          status: paymentResult.success ? 'completed' : 'failed',
-          payment_reference: paymentResult.reference,
-          payment_method: paymentMethod || 'paystack',
-          metadata: {
-            ...metadata,
-            commissionCalculation: commission,
-            paymentResult,
-          },
-          created_at: new Date().toISOString(),
-        })
-        .select()
-        .single();
-
-      if (txError) {
-        throw new Error(`Failed to store transaction: ${txError.message}`);
-      }
-
-      // Update payment status
-      await updatePaymentStatus(
-        paymentId,
-        paymentResult.success ? 'completed' : 'failed',
-        paymentResult.message
-      );
-
-      // Queue notification
-      await addNotificationJob({
-        userId,
-        type: paymentResult.success ? 'payment_success' : 'payment_failed',
-        title: paymentResult.success ? 'Payment Successful' : 'Payment Failed',
-        message: paymentResult.message || '',
-        data: {
-          transactionId: paymentId,
-          amount,
-          currency,
-          module,
-          status: paymentResult.success ? 'completed' : 'failed',
-          timestamp: new Date().toISOString(),
-        },
-        channels: ['email', 'push', 'in_app'],
-      });
-
-      logger.info('Payment processed successfully', {
-        jobId: job.id,
-        paymentId,
-        success: paymentResult.success,
-      });
-
-      return {
-        success: paymentResult.success,
+    // Queue failure notification
+    await addNotificationJob({
+      userId,
+      type: 'payment_failed',
+      title: 'Payment Failed',
+      message: errorMessage || 'Payment processing failed',
+      data: {
         transactionId: paymentId,
-        paymentReference: paymentResult.reference,
-        commission,
-      };
-    } catch (error: any) {
-      logger.error('Payment processing failed', {
-        jobId: job.id,
-        paymentId,
-        error: error.message,
-      });
+        amount,
+        currency,
+        module,
+        status: 'failed',
+        timestamp: new Date().toISOString(),
+      },
+      channels: ['email', 'push', 'in_app'],
+    });
 
-      await updatePaymentStatus(paymentId, 'failed', error.message);
-
-      // Queue failure notification
-      await addNotificationJob({
-        userId,
-        type: 'payment_failed',
-        title: 'Payment Failed',
-        message: error.message || 'Payment processing failed',
-        data: {
-          transactionId: paymentId,
-          amount,
-          currency,
-          module,
-          status: 'failed',
-          timestamp: new Date().toISOString(),
-        },
-        channels: ['email', 'push', 'in_app'],
-      });
-
-      throw error;
-    }
-  },
-  {
-    connection: connection as any,
-    concurrency: 5,
-    limiter: {
-      max: 10,
-      duration: 1000,
-    },
+    throw error;
   }
-);
+}
 
 /**
  * Process Paystack payment
@@ -273,31 +266,4 @@ async function updatePaymentStatus(paymentId: string, status: string, message?: 
       error: error.message,
     });
   }
-}
-
-// Worker event handlers
-paymentWorker.on('completed', job => {
-  logger.info('Payment job completed', {
-    jobId: job.id,
-    paymentId: job.data.paymentId,
-  });
-});
-
-paymentWorker.on('failed', (job, err) => {
-  logger.error('Payment job failed', {
-    jobId: job?.id,
-    paymentId: job?.data?.paymentId,
-    error: err.message,
-  });
-});
-
-paymentWorker.on('error', err => {
-  logger.error('Payment worker error', { error: err.message });
-});
-
-logger.info('Payment worker started');
-
-export async function closePaymentWorker() {
-  await paymentWorker.close();
-  logger.info('Payment worker closed');
 }
