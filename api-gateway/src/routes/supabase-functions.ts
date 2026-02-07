@@ -1751,5 +1751,285 @@
  *                     $ref: '#/components/schemas/SupportTicket'
  */
 
+// =====================================================
+// ADMIN USER MANAGEMENT
+// =====================================================
+
+/**
+ * @openapi
+ * /api/v1/admin/create-user:
+ *   post:
+ *     summary: Create admin or specialized user
+ *     description: |
+ *       **Secure endpoint for programmatic user creation.**
+ *
+ *       This endpoint allows authorized administrators to create users with specific roles
+ *       without manual database intervention.
+ *
+ *       **Authentication Options:**
+ *       1. **Master Key**: Use `x-admin-master-key` header with the admin master key
+ *       2. **Admin Token**: Use a valid JWT from an existing ADMIN user
+ *
+ *       **Supported User Types:**
+ *       - `ADMIN` - System administrators
+ *       - `CUSTOMER` - Regular customers
+ *       - `VENDOR` - E-commerce vendors
+ *       - `DRIVER` - Taxi/delivery drivers
+ *       - `HOST` - Hotel hosts
+ *       - `ADVERTISER` - Ad platform users
+ *       - `NIPOST_OFFICIAL` - Nigerian Postal Service officials (requires additional details)
+ *
+ *       **Rate Limiting:** Maximum 20 user creations per hour.
+ *
+ *       **Direct Supabase URL:**
+ *       `https://nkrqcigvcakqicutkpfd.supabase.co/functions/v1/admin-create-user`
+ *     tags:
+ *       - Admin
+ *       - User Management
+ *     security:
+ *       - BearerAuth: []
+ *       - ApiKey: []
+ *     parameters:
+ *       - in: header
+ *         name: x-admin-master-key
+ *         schema:
+ *           type: string
+ *         description: |
+ *           Admin master key for authentication (alternative to Bearer token).
+ *           Required if not using an admin JWT token.
+ *         example: "your-secure-master-key"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *               - user_type
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: User's email address (must be unique)
+ *                 example: "newadmin@giga.app"
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *                 description: Password (minimum 8 characters)
+ *                 example: "SecurePass123!@#"
+ *               user_type:
+ *                 type: string
+ *                 enum: [ADMIN, CUSTOMER, VENDOR, DRIVER, HOST, ADVERTISER, NIPOST_OFFICIAL]
+ *                 description: Role to assign to the user
+ *                 example: "ADMIN"
+ *               metadata:
+ *                 type: object
+ *                 description: User profile metadata
+ *                 properties:
+ *                   first_name:
+ *                     type: string
+ *                     example: "John"
+ *                   last_name:
+ *                     type: string
+ *                     example: "Doe"
+ *                   phone:
+ *                     type: string
+ *                     example: "+2348012345678"
+ *               nipost_details:
+ *                 type: object
+ *                 description: Required for NIPOST_OFFICIAL user type
+ *                 properties:
+ *                   employee_id:
+ *                     type: string
+ *                     example: "NIPOST-00001"
+ *                   office_id:
+ *                     type: string
+ *                     format: uuid
+ *                   region_id:
+ *                     type: string
+ *                     format: uuid
+ *                   position:
+ *                     type: string
+ *                     example: "Postmaster General"
+ *                   rank:
+ *                     type: string
+ *                     example: "Director General"
+ *                   department:
+ *                     type: string
+ *                     example: "Executive"
+ *                   clearance_level:
+ *                     type: integer
+ *                     minimum: 1
+ *                     maximum: 10
+ *                     description: |
+ *                       Access level:
+ *                       - 1-5: Branch level
+ *                       - 6: State level
+ *                       - 7: Zonal level
+ *                       - 8-10: National level
+ *                     example: 10
+ *                   reporting_to:
+ *                     type: string
+ *                     format: uuid
+ *           examples:
+ *             create_admin:
+ *               summary: Create Admin User
+ *               value:
+ *                 email: "admin@example.com"
+ *                 password: "<your-secure-password>"
+ *                 user_type: "ADMIN"
+ *                 metadata:
+ *                   first_name: "Super"
+ *                   last_name: "Admin"
+ *             create_vendor:
+ *               summary: Create Vendor
+ *               value:
+ *                 email: "vendor@example.com"
+ *                 password: "<your-secure-password>"
+ *                 user_type: "VENDOR"
+ *                 metadata:
+ *                   first_name: "Shop"
+ *                   last_name: "Owner"
+ *                   phone: "+2348012345678"
+ *             create_nipost_official:
+ *               summary: Create NIPOST Official
+ *               value:
+ *                 email: "official@example.gov.ng"
+ *                 password: "<your-secure-password>"
+ *                 user_type: "NIPOST_OFFICIAL"
+ *                 metadata:
+ *                   first_name: "Adekunle"
+ *                   last_name: "Adegboyega"
+ *                 nipost_details:
+ *                   employee_id: "NIPOST-00001"
+ *                   office_id: "00000000-0000-0000-0000-000000000000"
+ *                   region_id: "00000000-0000-0000-0000-000000000001"
+ *                   position: "Postmaster General"
+ *                   rank: "Director General"
+ *                   department: "Executive"
+ *                   clearance_level: 10
+ *     responses:
+ *       201:
+ *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                       example: "e2967c00-f72f-4e22-a1c8-cf316c54707f"
+ *                     email:
+ *                       type: string
+ *                       format: email
+ *                       example: "admin@giga.app"
+ *                     role:
+ *                       type: string
+ *                       example: "ADMIN"
+ *                     created_at:
+ *                       type: string
+ *                       format: date-time
+ *                 credentials:
+ *                   type: object
+ *                   properties:
+ *                     email:
+ *                       type: string
+ *                       example: "user@example.com"
+ *                     password:
+ *                       type: string
+ *                       example: "<password-you-provided>"
+ *                     note:
+ *                       type: string
+ *                       example: "Save these credentials securely. Password cannot be retrieved later."
+ *                 message:
+ *                   type: string
+ *                   example: "ADMIN user created successfully"
+ *             example:
+ *               success: true
+ *               user:
+ *                 id: "e2967c00-f72f-4e22-a1c8-cf316c54707f"
+ *                 email: "admin@giga.app"
+ *                 role: "ADMIN"
+ *                 created_at: "2026-02-07T18:42:55.009485Z"
+ *               credentials:
+ *                 email: "user@example.com"
+ *                 password: "<password-you-provided>"
+ *                 note: "Save these credentials securely. Password cannot be retrieved later."
+ *               message: "ADMIN user created successfully"
+ *       400:
+ *         description: Bad request - Invalid input
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Bad Request"
+ *                 message:
+ *                   type: string
+ *                   example: "Missing required fields: email, password, user_type"
+ *       401:
+ *         description: Unauthorized - Invalid or missing authentication
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid or missing admin master key or admin token"
+ *       409:
+ *         description: Conflict - User already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "User Creation Failed"
+ *                 message:
+ *                   type: string
+ *                   example: "A user with this email address has already been registered"
+ *       429:
+ *         description: Rate limit exceeded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Rate Limit Exceeded"
+ *                 message:
+ *                   type: string
+ *                   example: "Too many admin creations in the last hour. Please try again later."
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error"
+ *                 message:
+ *                   type: string
+ */
+
 // Export for swagger config
 export {};
