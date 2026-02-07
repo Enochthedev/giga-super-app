@@ -252,6 +252,56 @@ Check service health at:
         },
       },
       schemas: {
+        // Authentication schemas
+        AuthError: {
+          type: 'object',
+          properties: {
+            error: { type: 'string', example: 'invalid_grant' },
+            error_description: { type: 'string', example: 'Invalid login credentials' },
+            message: { type: 'string', example: 'Invalid login credentials' },
+          },
+        },
+        AuthSession: {
+          type: 'object',
+          properties: {
+            access_token: { type: 'string', description: 'JWT access token' },
+            token_type: { type: 'string', example: 'bearer' },
+            expires_in: {
+              type: 'integer',
+              example: 3600,
+              description: 'Token lifetime in seconds',
+            },
+            expires_at: { type: 'integer', description: 'Unix timestamp when token expires' },
+            refresh_token: { type: 'string', description: 'Token to refresh the access token' },
+            user: { $ref: '#/components/schemas/AuthUser' },
+          },
+        },
+        AuthUser: {
+          type: 'object',
+          properties: {
+            id: { type: 'string', format: 'uuid' },
+            email: { type: 'string', format: 'email' },
+            phone: { type: 'string' },
+            email_confirmed_at: { type: 'string', format: 'date-time' },
+            created_at: { type: 'string', format: 'date-time' },
+            updated_at: { type: 'string', format: 'date-time' },
+            app_metadata: {
+              type: 'object',
+              properties: {
+                provider: { type: 'string', example: 'email' },
+                role: { type: 'string', example: 'user' },
+              },
+            },
+            user_metadata: {
+              type: 'object',
+              properties: {
+                first_name: { type: 'string' },
+                last_name: { type: 'string' },
+                phone: { type: 'string' },
+              },
+            },
+          },
+        },
         // Common response schemas
         SuccessResponse: {
           type: 'object',
