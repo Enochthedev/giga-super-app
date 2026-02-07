@@ -14,7 +14,7 @@
  * - POST /auth/reset-password - Reset password with token
  */
 
-import { NextFunction, Request, Response, Router } from 'express';
+import { Response, Router } from 'express';
 import { Options, createProxyMiddleware } from 'http-proxy-middleware';
 
 import { config } from '../config/index.js';
@@ -381,109 +381,42 @@ logger.info('Auth proxy configured', { authApiUrl, projectRef });
  */
 
 // =====================================================
-// CONVENIENCE ROUTE HANDLERS
-// =====================================================
-
-/**
- * POST /auth/signup
- * Transform to Supabase signup format
- */
-router.post('/signup', (req: Request, res: Response, next: NextFunction) => {
-  const { email, password, first_name, last_name, phone } = req.body;
-
-  // Transform to Supabase's expected format
-  req.body = {
-    email,
-    password,
-    data: {
-      first_name: first_name || '',
-      last_name: last_name || '',
-      phone: phone || '',
-    },
-  };
-
-  req.url = '/signup';
-  next();
-});
-
-/**
- * POST /auth/login
- * Transform to Supabase token endpoint format
- */
-router.post('/login', (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
-
-  // Transform to Supabase's expected format
-  req.body = {
-    email,
-    password,
-    grant_type: 'password',
-  };
-
-  req.url = '/token?grant_type=password';
-  next();
-});
-
-/**
- * GET /auth/me
- * Maps to Supabase's user endpoint
- */
-router.get('/me', (req: Request, res: Response, next: NextFunction) => {
-  req.url = '/user';
-  next();
-});
-
-/**
- * POST /auth/refresh
- * Transform to Supabase refresh token format
- */
-router.post('/refresh', (req: Request, res: Response, next: NextFunction) => {
-  const { refresh_token } = req.body;
-
-  req.body = {
-    refresh_token,
-    grant_type: 'refresh_token',
-  };
-
-  req.url = '/token?grant_type=refresh_token';
-  next();
-});
-
-/**
- * POST /auth/forgot-password
- * Maps to Supabase's recover endpoint
- */
-router.post('/forgot-password', (req: Request, res: Response, next: NextFunction) => {
-  req.url = '/recover';
-  next();
-});
-
-/**
- * POST /auth/reset-password
- * Transform to Supabase verify format for password reset
- */
-router.post('/reset-password', (req: Request, res: Response, next: NextFunction) => {
-  const { token, access_token, password, new_password } = req.body;
-
-  req.body = {
-    type: 'recovery',
-    token: token || access_token,
-    password: new_password || password,
-  };
-
-  req.url = '/verify';
-  next();
-});
-
-// =====================================================
 // PROXY MIDDLEWARE
 // =====================================================
+// Note: All route transformations are handled directly in the proxy middleware
+// because modifying req.url in Express route handlers does NOT affect
+// http-proxy-middleware's target path.
 
 const proxyOptions: Options = {
   target: authApiUrl,
   changeOrigin: true,
-  pathRewrite: {
-    '^/auth': '', // Remove /auth prefix when forwarding to Supabase
+  pathRewrite: (path: string, _req) => {
+    // Transform convenience routes to Supabase Auth API endpoints
+    // Note: req.url modifications in route handlers don't affect http-proxy-middleware
+    // so we must handle all path transformations here
+
+    // Remove /auth prefix first (router is mounted at /auth)
+    const newPath = path.replace(/^\/auth/, '');
+
+    // Transform convenience endpoints to actual Supabase endpoints
+    if (newPath === '/login') {
+      return '/token?grant_type=password';
+    }
+    if (newPath === '/me') {
+      return '/user';
+    }
+    if (newPath === '/refresh') {
+      return '/token?grant_type=refresh_token';
+    }
+    if (newPath === '/forgot-password') {
+      return '/recover';
+    }
+    if (newPath === '/reset-password') {
+      return '/verify';
+    }
+
+    // Default: return the path with /auth prefix removed
+    return newPath || '/';
   },
   onProxyReq: (proxyReq, req) => {
     // Add Supabase API key to all proxied requests
@@ -494,7 +427,40 @@ const proxyOptions: Options = {
       proxyReq.setHeader('Authorization', req.headers.authorization);
     }
 
-    // Re-serialize the body if it was modified by convenience routes
+    // Transform request body for specific endpoints
+    const originalPath = req.originalUrl?.replace(/^\/auth/, '') || req.path;
+
+    if (originalPath === '/signup' && req.body) {
+      // Transform signup body to include user metadata
+      const { email, password, first_name, last_name, phone } = req.body;
+      req.body = {
+        email,
+        password,
+        data: {
+          first_name: first_name || '',
+          last_name: last_name || '',
+          phone: phone || '',
+        },
+      };
+    } else if (originalPath === '/login' && req.body) {
+      // Transform login body to include grant_type
+      const { email, password } = req.body;
+      req.body = { email, password, grant_type: 'password' };
+    } else if (originalPath === '/refresh' && req.body) {
+      // Transform refresh body to include grant_type
+      const { refresh_token } = req.body;
+      req.body = { refresh_token, grant_type: 'refresh_token' };
+    } else if (originalPath === '/reset-password' && req.body) {
+      // Transform reset-password body
+      const { token, access_token, password, new_password } = req.body;
+      req.body = {
+        type: 'recovery',
+        token: token || access_token,
+        password: new_password || password,
+      };
+    }
+
+    // Re-serialize the body if it exists
     if (req.body && Object.keys(req.body).length > 0) {
       const bodyData = JSON.stringify(req.body);
       proxyReq.setHeader('Content-Type', 'application/json');
@@ -505,7 +471,7 @@ const proxyOptions: Options = {
     logger.debug('[Auth Proxy] Request', {
       method: req.method,
       originalPath: req.path,
-      targetUrl: `${authApiUrl}${req.url}`,
+      targetUrl: `${authApiUrl}${proxyReq.path}`,
     });
   },
   onProxyRes: (proxyRes, req) => {
