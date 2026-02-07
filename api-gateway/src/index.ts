@@ -12,6 +12,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { routingMiddleware } from './middleware/routing.js';
 import { supabaseProxy } from './middleware/supabaseProxy.js';
+import { authRouter } from './routes/auth.js';
 import { docsRouter } from './routes/docs.js';
 import { healthRouter } from './routes/health.js';
 import { serviceRegistry } from './services/serviceRegistry.js';
@@ -100,6 +101,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOption
 // Service documentation hub (no auth required)
 app.use('/docs', docsRouter);
 
+// Auth routes (no auth required - proxies to Supabase Auth)
+app.use('/auth', authRouter);
+
 // Authentication middleware for all other routes
 app.use(authMiddleware);
 
@@ -125,12 +129,10 @@ const startServer = async () => {
     app.listen(config.port, () => {
       logger.info(`🚀 GIGA API Gateway v2.1.0 started successfully`, {
         port: config.port,
-        environment: process.env.NODE_ENV || 'development',
+        environment: config.nodeEnv,
         services: serviceRegistry.getServiceCount(),
         gigaDashboardAPI: 'enabled',
         timestamp: new Date().toISOString(),
-        environment: config.nodeEnv,
-        services: serviceRegistry.getServiceCount(),
       });
 
       // Log service URLs for debugging (important for Railway deployment)
