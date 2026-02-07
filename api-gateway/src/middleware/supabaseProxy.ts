@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { NextFunction, Request, Response } from 'express';
 
+import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 
 /**
@@ -8,8 +9,8 @@ import { logger } from '../utils/logger.js';
  * Routes requests to Supabase Edge Functions for endpoints not yet migrated to Railway
  */
 
-const { SUPABASE_URL } = process.env;
-const { SUPABASE_ANON_KEY } = process.env;
+const SUPABASE_URL = config.supabaseUrl;
+const SUPABASE_ANON_KEY = config.supabaseAnonKey;
 
 // Validate required environment variables
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
@@ -202,7 +203,7 @@ export const supabaseProxy = async (req: Request, res: Response, next: NextFunct
 /**
  * Get Supabase function name from API Gateway route
  */
-function getFunctionNameFromRoute(path: string, method: string): string | null {
+function getFunctionNameFromRoute(path: string, _method: string): string | null {
   // Direct mapping
   if (ROUTE_TO_FUNCTION_MAP[path]) {
     return ROUTE_TO_FUNCTION_MAP[path];

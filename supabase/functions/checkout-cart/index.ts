@@ -5,20 +5,19 @@ Deno.serve(async req => {
   const clientIp =
     req.headers.get('x-forwarded-for') ||
     req.headers.get('x-real-ip') ||
-    req.headers.get('x-forwarded-for') ||
+    req.headers.get('cf-connecting-ip') ||
     'unknown';
   const log = async obj => {
     try {
-      const line =
-        `${JSON.stringify(
-          Object.assign(
-            {
-              timestamp: new Date().toISOString(),
-              request_id: requestId,
-            },
-            obj
-          )
-        )}\n`;
+      const line = `${JSON.stringify(
+        Object.assign(
+          {
+            timestamp: new Date().toISOString(),
+            request_id: requestId,
+          },
+          obj
+        )
+      )}\n`;
       await Deno.writeTextFile('/tmp/checkout_cart_logs.log', line, {
         append: true,
       });
@@ -411,17 +410,18 @@ Deno.serve(async req => {
   } catch (err) {
     await (async () => {
       try {
-        const line =
-          `${JSON.stringify({
-            timestamp: new Date().toISOString(),
-            event: 'exception',
-            request_id: requestId,
-            error: String(err),
-          })}\n`;
+        const line = `${JSON.stringify({
+          timestamp: new Date().toISOString(),
+          event: 'exception',
+          request_id: requestId,
+          error: String(err),
+        })}\n`;
         await Deno.writeTextFile('/tmp/checkout_cart_logs.log', line, {
           append: true,
         });
-      } catch (e) {}
+      } catch (e) {
+        console.error('Failed to write exception log:', e);
+      }
     })();
     return new Response(
       JSON.stringify({
