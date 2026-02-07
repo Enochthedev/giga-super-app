@@ -67,6 +67,9 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
 
   // Support
   '/api/v1/support/tickets': 'get-my-tickets',
+
+  // Admin
+  '/api/v1/admin/create-user': 'admin-create-user',
 };
 
 // Deprecated endpoints with migration info
