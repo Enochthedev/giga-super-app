@@ -2558,12 +2558,90 @@ app.get('/api/admin/audit-trail', authenticate, async (req: AuthRequest, res: Re
  *   get:
  *     tags: [Platform Admin]
  *     summary: Get platform-wide statistics
- *     description: Aggregate counts from all major platform tables
+ *     description: |
+ *       Retrieve aggregate counts and statistics from all major platform tables.
+ *
+ *       Includes:
+ *       - User counts by role (customers, vendors, drivers, hosts)
+ *       - Platform entity counts (hotels, products, bookings, rides)
+ *       - NIPOST official counts
+ *       - Revenue and commission totals
  *     security:
  *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Platform statistics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 stats:
+ *                   type: object
+ *                   properties:
+ *                     users:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: integer
+ *                           description: Total registered users
+ *                           example: 15420
+ *                         customers:
+ *                           type: integer
+ *                           example: 12500
+ *                         vendors:
+ *                           type: integer
+ *                           example: 850
+ *                         drivers:
+ *                           type: integer
+ *                           example: 1200
+ *                         hosts:
+ *                           type: integer
+ *                           example: 350
+ *                     platform:
+ *                       type: object
+ *                       properties:
+ *                         hotels:
+ *                           type: integer
+ *                           example: 425
+ *                         products:
+ *                           type: integer
+ *                           example: 8500
+ *                         bookings:
+ *                           type: integer
+ *                           example: 3200
+ *                         rides:
+ *                           type: integer
+ *                           example: 45000
+ *                     nipost:
+ *                       type: object
+ *                       properties:
+ *                         activeOfficials:
+ *                           type: integer
+ *                           example: 774
+ *                     revenue:
+ *                       type: object
+ *                       properties:
+ *                         total:
+ *                           type: number
+ *                           format: float
+ *                           description: Total revenue in NGN
+ *                           example: 15000000.50
+ *                         commission:
+ *                           type: number
+ *                           format: float
+ *                           description: Total commission earned
+ *                           example: 750000.25
+ *                         currency:
+ *                           type: string
+ *                           example: NGN
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.get('/api/admin/platform/stats', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -2648,6 +2726,14 @@ app.get('/api/admin/platform/stats', authenticate, async (req: AuthRequest, res:
  *   get:
  *     tags: [Platform Admin]
  *     summary: List all users with pagination
+ *     description: |
+ *       Retrieve a paginated list of all platform users.
+ *
+ *       **Features:**
+ *       - Pagination with configurable page size
+ *       - Search by email, first name, or last name
+ *       - Filter by active/inactive status
+ *       - Includes user roles
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -2656,19 +2742,87 @@ app.get('/api/admin/platform/stats', authenticate, async (req: AuthRequest, res:
  *         schema:
  *           type: integer
  *           default: 1
+ *           minimum: 1
+ *         description: Page number for pagination
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 50
+ *           minimum: 1
+ *           maximum: 100
+ *         description: Number of results per page
  *       - in: query
  *         name: search
  *         schema:
  *           type: string
+ *         description: Search by email, first name, or last name (case-insensitive)
+ *         example: "john@example.com"
  *       - in: query
  *         name: is_active
  *         schema:
  *           type: boolean
+ *         description: Filter by active status
+ *     responses:
+ *       200:
+ *         description: Users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       user_id:
+ *                         type: string
+ *                         format: uuid
+ *                       email:
+ *                         type: string
+ *                         format: email
+ *                       first_name:
+ *                         type: string
+ *                       last_name:
+ *                         type: string
+ *                       phone:
+ *                         type: string
+ *                       is_active:
+ *                         type: boolean
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                       user_active_roles:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             active_role:
+ *                               type: string
+ *                               enum: [CUSTOMER, VENDOR, DRIVER, HOST, ADMIN, NIPOST_OFFICIAL]
+ *                 pagination:
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: integer
+ *                       example: 1
+ *                     limit:
+ *                       type: integer
+ *                       example: 50
+ *                     total:
+ *                       type: integer
+ *                       example: 15420
+ *                     totalPages:
+ *                       type: integer
+ *                       example: 309
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.get('/api/admin/users', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -2728,6 +2882,12 @@ app.get('/api/admin/users', authenticate, async (req: AuthRequest, res: Response
  *   get:
  *     tags: [Platform Admin]
  *     summary: Get user details
+ *     description: |
+ *       Retrieve comprehensive details for a specific user including:
+ *       - Basic profile information
+ *       - Active roles
+ *       - Wallet information
+ *       - Associated profiles (customer, vendor, driver, host)
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -2737,6 +2897,48 @@ app.get('/api/admin/users', authenticate, async (req: AuthRequest, res: Response
  *         schema:
  *           type: string
  *           format: uuid
+ *         description: The unique user identifier
+ *         example: "550e8400-e29b-41d4-a716-446655440000"
+ *     responses:
+ *       200:
+ *         description: User details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     user_id:
+ *                       type: string
+ *                       format: uuid
+ *                     email:
+ *                       type: string
+ *                     first_name:
+ *                       type: string
+ *                     last_name:
+ *                       type: string
+ *                     phone:
+ *                       type: string
+ *                     is_active:
+ *                       type: boolean
+ *                     user_active_roles:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                     user_wallets:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *       404:
+ *         description: User not found
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.get('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -2777,8 +2979,61 @@ app.get('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: 
  *   patch:
  *     tags: [Platform Admin]
  *     summary: Update user profile
+ *     description: |
+ *       Update a user's profile information. Protected fields (user_id, created_at) cannot be modified.
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique user identifier
+ *         example: "550e8400-e29b-41d4-a716-446655440000"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *                 example: "John"
+ *               last_name:
+ *                 type: string
+ *                 example: "Doe"
+ *               phone:
+ *                 type: string
+ *                 example: "+234-123-456-7890"
+ *               is_active:
+ *                 type: boolean
+ *                 example: true
+ *               avatar_url:
+ *                 type: string
+ *                 format: uri
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 user:
+ *                   type: object
+ *                 message:
+ *                   type: string
+ *                   example: "User updated successfully"
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.patch('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -2817,8 +3072,38 @@ app.patch('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res
  *   delete:
  *     tags: [Platform Admin]
  *     summary: Deactivate user (soft delete)
+ *     description: |
+ *       Deactivate a user account. This performs a soft delete by setting `is_active` to false.
+ *       The user data is retained for audit purposes but the account becomes inaccessible.
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: The unique user identifier
+ *         example: "550e8400-e29b-41d4-a716-446655440000"
+ *     responses:
+ *       200:
+ *         description: User deactivated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "User deactivated successfully"
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.delete('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -2851,6 +3136,20 @@ app.delete('/api/admin/users/:userId', authenticate, async (req: AuthRequest, re
  *   post:
  *     tags: [Platform Admin]
  *     summary: Bulk upload NIPOST data (regions, offices, officials)
+ *     description: |
+ *       Upload a JSON file containing NIPOST regions, offices, and/or officials data.
+ *
+ *       **File Format:**
+ *       ```json
+ *       {
+ *         "regions": [{...}],
+ *         "offices": [{...}],
+ *         "officials": [{...}]
+ *       }
+ *       ```
+ *
+ *       Uses UPSERT logic - existing records are updated, new ones are inserted.
+ *       Maximum file size: 10MB
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -2859,10 +3158,71 @@ app.delete('/api/admin/users/:userId', authenticate, async (req: AuthRequest, re
  *         multipart/form-data:
  *           schema:
  *             type: object
+ *             required:
+ *               - file
  *             properties:
  *               file:
  *                 type: string
  *                 format: binary
+ *                 description: JSON file containing NIPOST data
+ *     responses:
+ *       200:
+ *         description: Bulk upload completed
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Bulk upload completed"
+ *                 results:
+ *                   type: object
+ *                   properties:
+ *                     regions:
+ *                       type: object
+ *                       properties:
+ *                         success:
+ *                           type: integer
+ *                           example: 37
+ *                         failed:
+ *                           type: integer
+ *                           example: 0
+ *                         errors:
+ *                           type: array
+ *                           items:
+ *                             type: string
+ *                     offices:
+ *                       type: object
+ *                       properties:
+ *                         success:
+ *                           type: integer
+ *                         failed:
+ *                           type: integer
+ *                         errors:
+ *                           type: array
+ *                           items:
+ *                             type: string
+ *                     officials:
+ *                       type: object
+ *                       properties:
+ *                         success:
+ *                           type: integer
+ *                         failed:
+ *                           type: integer
+ *                         errors:
+ *                           type: array
+ *                           items:
+ *                             type: string
+ *       400:
+ *         description: No file uploaded
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.post(
   '/api/admin/nipost/bulk-upload',
@@ -2951,8 +3311,62 @@ app.post(
  *   get:
  *     tags: [Platform Admin]
  *     summary: Export all NIPOST data as JSON
+ *     description: |
+ *       Download all NIPOST data (regions, offices, officials) as a JSON file.
+ *
+ *       The response includes a Content-Disposition header for file download.
  *     security:
  *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: NIPOST data exported successfully
+ *         headers:
+ *           Content-Disposition:
+ *             schema:
+ *               type: string
+ *             description: Attachment header with filename
+ *             example: 'attachment; filename="nipost_data_1707465600000.json"'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 exported_at:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2026-02-09T10:00:00.000Z"
+ *                 regions:
+ *                   type: array
+ *                   description: All NIPOST regions (national, zonal, state, lga)
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       name:
+ *                         type: string
+ *                       code:
+ *                         type: string
+ *                       region_type:
+ *                         type: string
+ *                         enum: [national, zone, state, lga]
+ *                       hierarchy_level:
+ *                         type: integer
+ *                 offices:
+ *                   type: array
+ *                   description: All NIPOST offices
+ *                   items:
+ *                     type: object
+ *                 officials:
+ *                   type: array
+ *                   description: All NIPOST officials
+ *                   items:
+ *                     type: object
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.get('/api/admin/nipost/export', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -2990,8 +3404,49 @@ app.get('/api/admin/nipost/export', authenticate, async (req: AuthRequest, res: 
  *   get:
  *     tags: [Platform Admin]
  *     summary: Get all platform settings
+ *     description: |
+ *       Retrieve all platform configuration settings, organized by category.
  *     security:
  *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Settings retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 settings:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       key:
+ *                         type: string
+ *                         description: Setting identifier
+ *                         example: "commission_rate"
+ *                       value:
+ *                         type: string
+ *                         description: Setting value (may be JSON)
+ *                         example: "0.05"
+ *                       category:
+ *                         type: string
+ *                         example: "payment"
+ *                       description:
+ *                         type: string
+ *                       updated_at:
+ *                         type: string
+ *                         format: date-time
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.get('/api/admin/settings', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -3014,8 +3469,59 @@ app.get('/api/admin/settings', authenticate, async (req: AuthRequest, res: Respo
  *   patch:
  *     tags: [Platform Admin]
  *     summary: Update a platform setting
+ *     description: |
+ *       Update a specific platform setting by its key.
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: key
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The setting key to update
+ *         example: "commission_rate"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - value
+ *             properties:
+ *               value:
+ *                 type: string
+ *                 description: New value for the setting
+ *                 example: "0.07"
+ *     responses:
+ *       200:
+ *         description: Setting updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 setting:
+ *                   type: object
+ *                   properties:
+ *                     key:
+ *                       type: string
+ *                     value:
+ *                       type: string
+ *                     updated_at:
+ *                       type: string
+ *                       format: date-time
+ *                 message:
+ *                   type: string
+ *                   example: "Setting updated successfully"
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
+ *       500:
+ *         $ref: '#/components/responses/InternalServerError'
  */
 app.patch('/api/admin/settings/:key', authenticate, async (req: AuthRequest, res: Response) => {
   try {
