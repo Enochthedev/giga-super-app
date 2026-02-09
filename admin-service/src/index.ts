@@ -6,10 +6,17 @@ import express, { Application, NextFunction, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import jwt from 'jsonwebtoken';
+import multer from 'multer';
 import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
 
 import { swaggerSpec } from './config/swagger';
+
+// Configure multer for file uploads (in-memory)
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+});
 
 dotenv.config();
 
@@ -2538,6 +2545,502 @@ app.get('/api/admin/audit-trail', authenticate, async (req: AuthRequest, res: Re
   } catch (error: any) {
     logger.error('Failed to get audit trail', { error: error.message });
     res.status(500).json({ error: 'Failed to fetch audit trail' });
+  }
+});
+
+// ============================================
+// PLATFORM STATS ENDPOINT
+// ============================================
+
+/**
+ * @swagger
+ * /api/admin/platform/stats:
+ *   get:
+ *     tags: [Platform Admin]
+ *     summary: Get platform-wide statistics
+ *     description: Aggregate counts from all major platform tables
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Platform statistics retrieved successfully
+ */
+app.get('/api/admin/platform/stats', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const [
+      { count: totalUsers },
+      { count: totalCustomers },
+      { count: totalVendors },
+      { count: totalDrivers },
+      { count: totalHosts },
+      { count: totalHotels },
+      { count: totalProducts },
+      { count: totalBookings },
+      { count: totalRides },
+      { count: activeNipostOfficials },
+    ] = await Promise.all([
+      supabase.from('user_profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('customer_profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('vendor_profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('driver_profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('host_profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('hotels').select('*', { count: 'exact', head: true }),
+      supabase.from('products').select('*', { count: 'exact', head: true }),
+      supabase.from('hotel_bookings').select('*', { count: 'exact', head: true }),
+      supabase.from('taxi_rides').select('*', { count: 'exact', head: true }),
+      supabase
+        .from('nipost_officials')
+        .select('*', { count: 'exact', head: true })
+        .eq('is_active', true),
+    ]);
+
+    // Get revenue stats
+    const { data: revenueData } = await supabase
+      .from('nipost_financial_ledger')
+      .select('gross_amount, commission_amount, payment_status');
+
+    const totalRevenue =
+      revenueData?.reduce((sum, t) => sum + parseFloat(t.gross_amount || '0'), 0) || 0;
+    const totalCommission =
+      revenueData?.reduce((sum, t) => sum + parseFloat(t.commission_amount || '0'), 0) || 0;
+
+    await createAudit(req, 'view_platform_stats', 'platform_dashboard');
+
+    res.json({
+      success: true,
+      stats: {
+        users: {
+          total: totalUsers || 0,
+          customers: totalCustomers || 0,
+          vendors: totalVendors || 0,
+          drivers: totalDrivers || 0,
+          hosts: totalHosts || 0,
+        },
+        platform: {
+          hotels: totalHotels || 0,
+          products: totalProducts || 0,
+          bookings: totalBookings || 0,
+          rides: totalRides || 0,
+        },
+        nipost: {
+          activeOfficials: activeNipostOfficials || 0,
+        },
+        revenue: {
+          total: totalRevenue,
+          commission: totalCommission,
+          currency: 'NGN',
+        },
+      },
+    });
+  } catch (error: any) {
+    logger.error('Error fetching platform stats', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch platform statistics' });
+  }
+});
+
+// ============================================
+// USER MANAGEMENT ENDPOINTS
+// ============================================
+
+/**
+ * @swagger
+ * /api/admin/users:
+ *   get:
+ *     tags: [Platform Admin]
+ *     summary: List all users with pagination
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 50
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: is_active
+ *         schema:
+ *           type: boolean
+ */
+app.get('/api/admin/users', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { page = '1', limit = '50', search, is_active } = req.query;
+
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+    const offset = (pageNum - 1) * limitNum;
+
+    let query = supabase
+      .from('user_profiles')
+      .select(
+        `
+        *,
+        user_active_roles(active_role)
+      `,
+        { count: 'exact' }
+      )
+      .range(offset, offset + limitNum - 1)
+      .order('created_at', { ascending: false });
+
+    if (search) {
+      query = query.or(
+        `email.ilike.%${search}%,first_name.ilike.%${search}%,last_name.ilike.%${search}%`
+      );
+    }
+
+    if (is_active !== undefined) {
+      query = query.eq('is_active', is_active === 'true');
+    }
+
+    const { data, count, error } = await query;
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_users', 'user_management');
+
+    res.json({
+      success: true,
+      users: data,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limitNum),
+      },
+    });
+  } catch (error: any) {
+    logger.error('Error fetching users', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/admin/users/{userId}:
+ *   get:
+ *     tags: [Platform Admin]
+ *     summary: Get user details
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ */
+app.get('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    const { data: user, error } = await supabase
+      .from('user_profiles')
+      .select(
+        `
+        *,
+        user_active_roles(active_role),
+        user_wallets(*),
+        customer_profiles(*),
+        vendor_profiles(*),
+        driver_profiles(*),
+        host_profiles(*)
+      `
+      )
+      .eq('user_id', userId)
+      .single();
+
+    if (error || !user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    await createAudit(req, 'view_user_details', 'user_profile', userId);
+
+    res.json({ success: true, user });
+  } catch (error: any) {
+    logger.error('Error fetching user details', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch user details' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/admin/users/{userId}:
+ *   patch:
+ *     tags: [Platform Admin]
+ *     summary: Update user profile
+ *     security:
+ *       - BearerAuth: []
+ */
+app.patch('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const updates = req.body;
+
+    // Remove fields that shouldn't be updated directly
+    delete updates.user_id;
+    delete updates.created_at;
+
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .update(updates)
+      .eq('user_id', userId)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await createAudit(req, 'update_user', 'user_profile', userId);
+
+    res.json({
+      success: true,
+      user: data,
+      message: 'User updated successfully',
+    });
+  } catch (error: any) {
+    logger.error('Error updating user', { error: error.message });
+    res.status(500).json({ error: 'Failed to update user' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/admin/users/{userId}:
+ *   delete:
+ *     tags: [Platform Admin]
+ *     summary: Deactivate user (soft delete)
+ *     security:
+ *       - BearerAuth: []
+ */
+app.delete('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req.params;
+
+    // Soft delete - set is_active to false
+    const { error } = await supabase
+      .from('user_profiles')
+      .update({ is_active: false })
+      .eq('user_id', userId);
+
+    if (error) throw error;
+
+    await createAudit(req, 'deactivate_user', 'user_profile', userId);
+
+    res.json({ success: true, message: 'User deactivated successfully' });
+  } catch (error: any) {
+    logger.error('Error deactivating user', { error: error.message });
+    res.status(500).json({ error: 'Failed to deactivate user' });
+  }
+});
+
+// ============================================
+// BULK NIPOST DATA UPLOAD
+// ============================================
+
+/**
+ * @swagger
+ * /api/admin/nipost/bulk-upload:
+ *   post:
+ *     tags: [Platform Admin]
+ *     summary: Bulk upload NIPOST data (regions, offices, officials)
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ */
+app.post(
+  '/api/admin/nipost/bulk-upload',
+  authenticate,
+  upload.single('file'),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+
+      const fileContent = req.file.buffer.toString('utf-8');
+      const data = JSON.parse(fileContent);
+
+      const results = {
+        regions: { success: 0, failed: 0, errors: [] as string[] },
+        offices: { success: 0, failed: 0, errors: [] as string[] },
+        officials: { success: 0, failed: 0, errors: [] as string[] },
+      };
+
+      // Upload regions
+      if (data.regions && Array.isArray(data.regions)) {
+        for (const region of data.regions) {
+          const { error } = await supabase
+            .from('nipost_regions')
+            .upsert(region, { onConflict: 'id' });
+
+          if (error) {
+            results.regions.failed++;
+            results.regions.errors.push(`Region ${region.name}: ${error.message}`);
+          } else {
+            results.regions.success++;
+          }
+        }
+      }
+
+      // Upload offices
+      if (data.offices && Array.isArray(data.offices)) {
+        for (const office of data.offices) {
+          const { error } = await supabase
+            .from('nipost_offices')
+            .upsert(office, { onConflict: 'id' });
+
+          if (error) {
+            results.offices.failed++;
+            results.offices.errors.push(`Office ${office.name}: ${error.message}`);
+          } else {
+            results.offices.success++;
+          }
+        }
+      }
+
+      // Upload officials
+      if (data.officials && Array.isArray(data.officials)) {
+        for (const official of data.officials) {
+          const { error } = await supabase
+            .from('nipost_officials')
+            .upsert(official, { onConflict: 'employee_id' });
+
+          if (error) {
+            results.officials.failed++;
+            results.officials.errors.push(`Official ${official.employee_id}: ${error.message}`);
+          } else {
+            results.officials.success++;
+          }
+        }
+      }
+
+      await createAudit(req, 'bulk_upload_nipost', 'nipost_data');
+
+      res.json({
+        success: true,
+        message: 'Bulk upload completed',
+        results,
+      });
+    } catch (error: any) {
+      logger.error('Error in bulk upload', { error: error.message });
+      res.status(500).json({ error: 'Failed to process bulk upload', details: error.message });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/admin/nipost/export:
+ *   get:
+ *     tags: [Platform Admin]
+ *     summary: Export all NIPOST data as JSON
+ *     security:
+ *       - BearerAuth: []
+ */
+app.get('/api/admin/nipost/export', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const [{ data: regions }, { data: offices }, { data: officials }] = await Promise.all([
+      supabase.from('nipost_regions').select('*').order('hierarchy_level'),
+      supabase.from('nipost_offices').select('*').order('name'),
+      supabase.from('nipost_officials').select('*').order('clearance_level', { ascending: false }),
+    ]);
+
+    const exportData = {
+      exported_at: new Date().toISOString(),
+      regions: regions || [],
+      offices: offices || [],
+      officials: officials || [],
+    };
+
+    await createAudit(req, 'export_nipost_data', 'nipost_data');
+
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="nipost_data_${Date.now()}.json"`);
+    res.json(exportData);
+  } catch (error: any) {
+    logger.error('Error exporting NIPOST data', { error: error.message });
+    res.status(500).json({ error: 'Failed to export data' });
+  }
+});
+
+// ============================================
+// PLATFORM SETTINGS ENDPOINTS
+// ============================================
+
+/**
+ * @swagger
+ * /api/admin/settings:
+ *   get:
+ *     tags: [Platform Admin]
+ *     summary: Get all platform settings
+ *     security:
+ *       - BearerAuth: []
+ */
+app.get('/api/admin/settings', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { data, error } = await supabase.from('platform_settings').select('*').order('category');
+
+    if (error) throw error;
+
+    await createAudit(req, 'view_settings', 'platform_settings');
+
+    res.json({ success: true, settings: data });
+  } catch (error: any) {
+    logger.error('Error fetching settings', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch settings' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/admin/settings/{key}:
+ *   patch:
+ *     tags: [Platform Admin]
+ *     summary: Update a platform setting
+ *     security:
+ *       - BearerAuth: []
+ */
+app.patch('/api/admin/settings/:key', authenticate, async (req: AuthRequest, res: Response) => {
+  try {
+    const { key } = req.params;
+    const { value } = req.body;
+
+    const { data, error } = await supabase
+      .from('platform_settings')
+      .update({ value, updated_at: new Date().toISOString() })
+      .eq('key', key)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    await createAudit(req, 'update_setting', 'platform_settings', key);
+
+    res.json({
+      success: true,
+      setting: data,
+      message: 'Setting updated successfully',
+    });
+  } catch (error: any) {
+    logger.error('Error updating setting', { error: error.message });
+    res.status(500).json({ error: 'Failed to update setting' });
   }
 });
 

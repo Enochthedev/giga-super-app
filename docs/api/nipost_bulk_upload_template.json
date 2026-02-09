@@ -1,0 +1,76 @@
+{
+  "regions": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "Lagos",
+      "code": "LAG",
+      "region_type": "state",
+      "parent_id": null,
+      "hierarchy_level": 3
+    },
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "Abuja FCT",
+      "code": "FCT",
+      "region_type": "state",
+      "parent_id": null,
+      "hierarchy_level": 3
+    }
+  ],
+  "offices": [
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440000",
+      "name": "Lagos Central Post Office",
+      "code": "LAG-CENTRAL",
+      "office_type": "state",
+      "state_id": "550e8400-e29b-41d4-a716-446655440000",
+      "address": "123 Marina Road",
+      "city": "Lagos",
+      "postal_code": "100001",
+      "phone": "+234-1-234567",
+      "email": "lagos.central@nipost.gov.ng",
+      "is_active": true
+    },
+    {
+      "id": "660e8400-e29b-41d4-a716-446655440001",
+      "name": "Abuja Main Post Office",
+      "code": "FCT-MAIN",
+      "office_type": "state",
+      "state_id": "550e8400-e29b-41d4-a716-446655440001",
+      "address": "456 Central District",
+      "city": "Abuja",
+      "postal_code": "900001",
+      "phone": "+234-9-876543",
+      "email": "abuja.main@nipost.gov.ng",
+      "is_active": true
+    }
+  ],
+  "officials": [
+    {
+      "employee_id": "NIPOST-00001",
+      "user_id": null,
+      "office_id": "660e8400-e29b-41d4-a716-446655440000",
+      "region_id": "550e8400-e29b-41d4-a716-446655440000",
+      "position": "State Postmaster General",
+      "rank": "Senior Manager",
+      "department": "Operations",
+      "clearance_level": 6,
+      "reporting_to": null,
+      "hire_date": "2024-01-01",
+      "is_active": true
+    },
+    {
+      "employee_id": "NIPOST-00002",
+      "user_id": null,
+      "office_id": "660e8400-e29b-41d4-a716-446655440001",
+      "region_id": "550e8400-e29b-41d4-a716-446655440001",
+      "position": "Branch Manager",
+      "rank": "Manager",
+      "department": "Operations",
+      "clearance_level": 4,
+      "reporting_to": "NIPOST-00001",
+      "hire_date": "2024-02-01",
+      "is_active": true
+    }
+  ]
+}
