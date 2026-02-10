@@ -137,17 +137,17 @@ router.get('/staff', authenticate, requireAnyAccess, async (req: AuthRequest, re
       .select(
         `
         id,
-        staff_id,
-        first_name,
-        last_name,
-        email,
-        phone,
+        employee_id,
+        user_id,
         position,
+        rank,
         department,
-        office_location,
-        region,
+        clearance_level,
         is_active,
-        created_at
+        created_at,
+        user_profiles!user_id(first_name, last_name, email, phone),
+        nipost_offices!office_id(office_name, city, state_province),
+        nipost_regions!region_id(region_name, region_code)
       `,
         { count: 'exact' }
       )
@@ -155,21 +155,49 @@ router.get('/staff', authenticate, requireAnyAccess, async (req: AuthRequest, re
       .order('created_at', { ascending: false });
 
     if (search) {
-      query = query.or(
-        `first_name.ilike.%${search}%,last_name.ilike.%${search}%,staff_id.ilike.%${search}%,email.ilike.%${search}%`
-      );
+      // Search in user profile fields via join
+      const { data: searchResults } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .or(`first_name.ilike.%${search}%,last_name.ilike.%${search}%,email.ilike.%${search}%`);
+
+      const userIds = searchResults?.map((u: any) => u.id) || [];
+
+      if (userIds.length > 0) {
+        query = query.or(`user_id.in.(${userIds.join(',')}),employee_id.ilike.%${search}%`);
+      } else {
+        query = query.ilike('employee_id', `%${search}%`);
+      }
     }
 
     if (region) {
-      query = query.eq('region', region as string);
+      const { data: regionData } = await supabase
+        .from('nipost_regions')
+        .select('id')
+        .or(`region_name.ilike.%${region}%,region_code.ilike.%${region}%`)
+        .limit(1)
+        .single();
+
+      if (regionData) {
+        query = query.eq('region_id', regionData.id);
+      }
     }
 
     if (office_location) {
-      query = query.eq('office_location', office_location as string);
+      const { data: officeData } = await supabase
+        .from('nipost_offices')
+        .select('id')
+        .or(`office_name.ilike.%${office_location}%,city.ilike.%${office_location}%`)
+        .limit(1)
+        .single();
+
+      if (officeData) {
+        query = query.eq('office_id', officeData.id);
+      }
     }
 
     if (position) {
-      query = query.eq('position', position as string);
+      query = query.ilike('position', `%${position}%`);
     }
 
     const { data: staff, count, error } = await query;
