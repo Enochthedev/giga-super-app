@@ -73,28 +73,33 @@ export const routingMiddleware = (
         ? path => `/functions/v1${path.replace('/api/v1', '')}`
         : path => {
             // For Railway services, strip the service-specific prefix
-            // e.g., /api/v1/social/api-docs -> /api-docs
-            // e.g., /api/v1/posts/123 -> /api/v1/posts/123
+            // Social service: /api/v1/social/posts -> /api/v1/posts
             if (path.startsWith('/api/v1/social/')) {
-              return path.replace('/api/v1/social', '');
+              return path.replace('/api/v1/social', '/api/v1');
             }
+            // Admin service: /api/v1/admin/postal-monitoring -> /api/postal-monitoring
             if (path.startsWith('/api/v1/admin/')) {
-              return path.replace('/api/v1/admin', '');
+              return path.replace('/api/v1/admin', '/api');
             }
+            // Search service: /api/v1/search/hotels -> /api/v1/search/hotels (no change)
             if (path.startsWith('/api/v1/search/')) {
-              return path.replace('/api/v1/search', '');
+              return path; // Keep as-is
             }
+            // Payment queue service: /api/v1/payment-queue -> /api/v1 (assuming it expects /api/v1)
             if (path.startsWith('/api/v1/payment-queue/')) {
-              return path.replace('/api/v1/payment-queue', '');
+              return path.replace('/api/v1/payment-queue', '/api/v1');
             }
+            // Delivery service: /api/v1/delivery -> /api/v1 (assuming it expects /api/v1)
             if (path.startsWith('/api/v1/delivery/')) {
-              return path.replace('/api/v1/delivery', '');
+              return path.replace('/api/v1/delivery', '/api/v1');
             }
+            // Notifications service: /api/v1/notifications -> /api/v1 (assuming it expects /api/v1)
             if (path.startsWith('/api/v1/notifications/')) {
-              return path.replace('/api/v1/notifications', '');
+              return path.replace('/api/v1/notifications', '/api/v1');
             }
+            // Taxi realtime service: /api/v1/taxi-realtime -> /api/v1 (assuming it expects /api/v1)
             if (path.startsWith('/api/v1/taxi-realtime/')) {
-              return path.replace('/api/v1/taxi-realtime', '');
+              return path.replace('/api/v1/taxi-realtime', '/api/v1');
             }
             // Default: keep the path as-is
             return path;
