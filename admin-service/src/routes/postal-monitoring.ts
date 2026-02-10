@@ -145,7 +145,7 @@ router.get('/staff', authenticate, requireAnyAccess, async (req: AuthRequest, re
         clearance_level,
         is_active,
         created_at,
-        user_profiles(first_name, last_name, email, phone),
+        user_profiles!inner(first_name, last_name, email, phone),
         nipost_offices(office_name, city, state_province),
         nipost_regions(region_name, region_code)
       `,
