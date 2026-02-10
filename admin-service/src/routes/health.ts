@@ -11,8 +11,13 @@ router.get('/', (req: Request, res: Response) => {
     status: 'healthy',
     service: 'admin-service',
     timestamp: new Date().toISOString(),
-    version: '2.2.0',
+    version: '2.3.0-rbac',
     deployment: 'railway-modular-architecture',
+    features: {
+      rbac: 'enabled',
+      multiLayerSecurity: 'active',
+      granularPermissions: 'active',
+    },
   });
 });
 
@@ -24,8 +29,13 @@ router.get('/status', (req: Request, res: Response) => {
   res.json({
     status: 'running',
     service: 'admin-service',
-    version: '2.2.0',
+    version: '2.3.0-rbac',
     timestamp: new Date().toISOString(),
+    rbac: {
+      enabled: true,
+      layers: ['application', 'database'],
+      features: ['hierarchical-access', 'role-based', 'permission-based'],
+    },
     modules: {
       nipost: 'NIPOST Admin Management',
       dashboard: 'Dashboard Analytics',
