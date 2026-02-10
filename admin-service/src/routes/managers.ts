@@ -202,7 +202,7 @@ router.get(
         status,
         created_at,
         user_id,
-        user_profiles(first_name, last_name, email)
+        user_profiles!inner(first_name, last_name, email)
       `,
           { count: 'exact' }
         )

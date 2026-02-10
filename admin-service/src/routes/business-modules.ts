@@ -796,13 +796,21 @@ router.get(
         .eq('is_active', true)
         .limit(20);
 
-      // Get recent orders
-      const { data: orders } = await supabase
-        .from('ecommerce_orders')
-        .select('id, total_amount, status, created_at')
+      // Get recent orders through order items
+      const { data: orderItems } = await supabase
+        .from('ecommerce_order_items')
+        .select(
+          `
+          order_id,
+          ecommerce_orders!inner(id, order_number, total_amount, status, created_at)
+        `
+        )
         .eq('vendor_id', id)
         .order('created_at', { ascending: false })
         .limit(10);
+
+      // Extract unique orders
+      const orders = orderItems?.map((item: any) => item.ecommerce_orders) || [];
 
       // Get reviews (from product reviews)
       const productIds = (products || []).map((p: any) => p.id);

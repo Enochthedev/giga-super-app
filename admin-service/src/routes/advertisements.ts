@@ -140,7 +140,7 @@ router.get('/incoming', authenticate, requireAnyAccess, async (req: AuthRequest,
         advertiser_id,
         advertiser_profiles(
           company_name,
-          user_profiles(email, phone)
+          user_profiles!inner(email, phone)
         )
       `,
         { count: 'exact' }
