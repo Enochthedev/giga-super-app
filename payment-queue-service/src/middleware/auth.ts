@@ -1,8 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import { NextFunction, Request, Response } from 'express';
 
+import { createClient } from '@supabase/supabase-js';
 import { UnauthorizedError } from '../utils/errors';
 import logger from '../utils/logger';
+
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
 export interface AuthRequest extends Request {
   user?: {
@@ -26,13 +31,20 @@ export const authenticate = async (
 
     const token = authHeader.substring(7);
 
-    // Verify JWT token (adjust secret based on your auth setup)
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any;
+    // Verify token with Supabase
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser(token);
+
+    if (error || !user) {
+      throw new UnauthorizedError('Invalid token');
+    }
 
     req.user = {
-      id: decoded.sub || decoded.userId,
-      email: decoded.email,
-      role: decoded.role,
+      id: user.id,
+      email: user.email || '',
+      role: user.user_metadata?.role,
     };
 
     next();
@@ -52,13 +64,19 @@ export const optionalAuth = async (
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key') as any;
+      // Verify token with Supabase
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser(token);
 
-      req.user = {
-        id: decoded.sub || decoded.userId,
-        email: decoded.email,
-        role: decoded.role,
-      };
+      if (!error && user) {
+        req.user = {
+          id: user.id,
+          email: user.email || '',
+          role: user.user_metadata?.role,
+        };
+      }
     }
 
     next();
