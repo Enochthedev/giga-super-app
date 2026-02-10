@@ -1,6 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const swaggerJsdoc = require('swagger-jsdoc');
 
+const API_GATEWAY_URL =
+  process.env.API_GATEWAY_URL || 'https://giga-giga-production.up.railway.app';
+
 const options: Record<string, unknown> = {
   definition: {
     openapi: '3.0.3',
@@ -25,9 +28,8 @@ All endpoints require JWT authentication via Supabase Auth:
 Authorization: Bearer <jwt_token>
 \`\`\`
 
-### 🌐 Base URLs
-- **API Gateway**: https://your-api-gateway.railway.app
-- **Direct Service**: https://your-admin-service.railway.app
+### 🌐 Base URL
+- **API Gateway**: ${API_GATEWAY_URL}
 
 ### 📊 Access Levels
 - **National**: Full access to all data and statistics
@@ -59,20 +61,12 @@ Most list endpoints support:
     },
     servers: [
       {
-        url: 'https://your-api-gateway.railway.app',
-        description: 'API Gateway (Recommended)',
+        url: API_GATEWAY_URL,
+        description: 'API Gateway (Production)',
       },
       {
-        url: 'https://your-admin-service.railway.app',
-        description: 'Direct Admin Service',
-      },
-      {
-        url: 'http://localhost:3000',
-        description: 'Local Development (API Gateway)',
-      },
-      {
-        url: 'http://localhost:3005',
-        description: 'Local Development (Admin Service)',
+        url: `http://localhost:${process.env.PORT || '3005'}`,
+        description: 'Local Development',
       },
     ],
     tags: [
