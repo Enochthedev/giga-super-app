@@ -22,8 +22,64 @@ const logger = winston.createLogger({
 // ============================================
 
 /**
- * GET /api/admin/national/dashboard
- * Get national dashboard statistics
+ * @swagger
+ * /api/admin/national/dashboard:
+ *   get:
+ *     tags: [NIPOST Admin - National]
+ *     summary: Get national dashboard statistics
+ *     description: Retrieve national-level dashboard statistics and summary data (National HQ access required)
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: National dashboard data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalRevenue:
+ *                       type: number
+ *                     totalTransactions:
+ *                       type: integer
+ *                     totalCommission:
+ *                       type: number
+ *                     stateCount:
+ *                       type: integer
+ *                     branchCount:
+ *                       type: integer
+ *                     byModule:
+ *                       type: object
+ *                       properties:
+ *                         hotel:
+ *                           type: number
+ *                         taxi:
+ *                           type: number
+ *                         ecommerce:
+ *                           type: number
+ *             example:
+ *               success: true
+ *               data:
+ *                 totalRevenue: 15000000.50
+ *                 totalTransactions: 4500
+ *                 totalCommission: 750000.25
+ *                 stateCount: 37
+ *                 branchCount: 774
+ *                 byModule:
+ *                   hotel: 5000000.00
+ *                   taxi: 4500000.00
+ *                   ecommerce: 5500000.50
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - National access required
+ *       500:
+ *         description: Internal server error
  */
 router.get(
   '/national/dashboard',

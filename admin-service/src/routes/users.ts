@@ -17,8 +17,96 @@ const logger = winston.createLogger({
 });
 
 /**
- * GET /api/admin/users
- * Get paginated list of users
+ * @swagger
+ * /api/admin/users:
+ *   get:
+ *     tags: [User Management]
+ *     summary: Get paginated list of users
+ *     description: Retrieve all users with search and filtering capabilities (National access required)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 50
+ *           maximum: 100
+ *         description: Items per page
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by first name, last name, or email
+ *         example: 'john'
+ *       - in: query
+ *         name: is_active
+ *         schema:
+ *           type: boolean
+ *         description: Filter by active status
+ *     responses:
+ *       200:
+ *         description: Users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       email:
+ *                         type: string
+ *                       phone:
+ *                         type: string
+ *                       first_name:
+ *                         type: string
+ *                       last_name:
+ *                         type: string
+ *                       avatar_url:
+ *                         type: string
+ *                       is_active:
+ *                         type: boolean
+ *                       created_at:
+ *                         type: string
+ *                         format: date-time
+ *                 pagination:
+ *                   type: object
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: "u1234567-89ab-cdef-0123-456789abcdef"
+ *                   email: "john.doe@example.com"
+ *                   phone: "+2348012345678"
+ *                   first_name: "John"
+ *                   last_name: "Doe"
+ *                   avatar_url: "https://example.com/avatar.jpg"
+ *                   is_active: true
+ *                   created_at: "2025-01-15T10:30:00Z"
+ *               pagination:
+ *                 page: 1
+ *                 limit: 50
+ *                 total: 15420
+ *                 pages: 309
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - National access required
+ *       500:
+ *         description: Internal server error
  */
 router.get('/', authenticate, requireNationalAccess, async (req: AuthRequest, res: Response) => {
   try {
@@ -59,8 +147,153 @@ router.get('/', authenticate, requireNationalAccess, async (req: AuthRequest, re
 });
 
 /**
- * GET /api/admin/users/:userId
- * Get single user details
+ * @swagger
+ * /api/admin/users/{userId}:
+ *   get:
+ *     tags: [User Management]
+ *     summary: Get single user details
+ *     description: Retrieve detailed information about a specific user including roles
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: "u1234567-89ab-cdef-0123-456789abcdef"
+ *                 email: "john.doe@example.com"
+ *                 phone: "+2348012345678"
+ *                 first_name: "John"
+ *                 last_name: "Doe"
+ *                 avatar_url: "https://example.com/avatar.jpg"
+ *                 is_active: true
+ *                 created_at: "2025-01-15T10:30:00Z"
+ *                 user_roles:
+ *                   - role_name: "customer"
+ *                     granted_at: "2025-01-15T10:30:00Z"
+ *                   - role_name: "driver"
+ *                     granted_at: "2025-01-20T14:20:00Z"
+ *                 user_active_roles:
+ *                   active_role: "driver"
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ *   patch:
+ *     tags: [User Management]
+ *     summary: Update user details
+ *     description: Update user profile information (National access required)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               is_active:
+ *                 type: boolean
+ *           example:
+ *             first_name: "John"
+ *             last_name: "Smith"
+ *             phone: "+2348012345678"
+ *             is_active: true
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: "u1234567-89ab-cdef-0123-456789abcdef"
+ *                 first_name: "John"
+ *                 last_name: "Smith"
+ *                 updated_at: "2025-02-10T15:45:00Z"
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       500:
+ *         description: Internal server error
+ *   delete:
+ *     tags: [User Management]
+ *     summary: Soft delete a user
+ *     description: Mark a user as deleted (soft delete) with optional reason
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: User ID
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reason:
+ *                 type: string
+ *           example:
+ *             reason: "User requested account deletion"
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "User deleted successfully"
+ *               data:
+ *                 id: "u1234567-89ab-cdef-0123-456789abcdef"
+ *                 deleted_at: "2025-02-10T15:50:00Z"
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden
+ *       500:
+ *         description: Internal server error
  */
 router.get(
   '/:userId',
