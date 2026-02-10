@@ -313,7 +313,7 @@ router.get(
         .select(
           `
         ${SELECT_FIELDS.DRIVER},
-        user:user_profiles!user_id (
+        user:user_profiles!driver_profiles_user_id_fkey (
           first_name,
           last_name,
           email,
@@ -817,7 +817,7 @@ router.get(
           rating,
           comment,
           created_at,
-          user:user_profiles!user_id(first_name, last_name)
+          user:user_profiles!product_reviews_user_id_fkey(first_name, last_name)
         `
           )
           .in('product_id', productIds)
@@ -1116,7 +1116,7 @@ router.get(
         .select(
           `
           ${SELECT_FIELDS.DRIVER},
-          user:user_profiles!user_id(first_name, last_name, email, phone, avatar_url)
+          user:user_profiles!driver_profiles_user_id_fkey(first_name, last_name, email, phone, avatar_url)
         `
         )
         .eq('id', id)
@@ -1354,7 +1354,7 @@ router.get(
           booking_status,
           created_at,
           user_id,
-          user_profiles!user_id(first_name, last_name)
+          user_profiles!hotel_bookings_user_id_fkey(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
@@ -1371,7 +1371,7 @@ router.get(
           comment,
           created_at,
           user_id,
-          user_profiles!user_id(first_name, last_name)
+          user_profiles!hotel_reviews_user_id_fkey(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
