@@ -313,7 +313,7 @@ router.get(
         .select(
           `
         ${SELECT_FIELDS.DRIVER},
-        user_profiles!driver_profiles_user_id_fkey(
+        user_profiles(
           first_name,
           last_name,
           email,
@@ -484,9 +484,9 @@ router.get(
         .select(
           `
         ${SELECT_FIELDS.HOTEL},
-        host_profiles!inner(
+        host_profiles(
           user_id,
-          user_profiles!inner(
+          user_profiles(
             first_name,
             last_name,
             email,
@@ -651,7 +651,7 @@ router.get(
         status,
         created_at,
         uploaded_by,
-        user_profiles!inner(first_name, last_name, email)
+        user_profiles(first_name, last_name, email)
       `,
           { count: 'exact' }
         )
@@ -817,7 +817,7 @@ router.get(
           rating,
           comment,
           created_at,
-          user_profiles!ecommerce_product_reviews_user_id_fkey(first_name, last_name)
+          user_profiles(first_name, last_name)
         `
           )
           .in('product_id', productIds)
@@ -1116,7 +1116,7 @@ router.get(
         .select(
           `
           ${SELECT_FIELDS.DRIVER},
-          user_profiles!driver_profiles_user_id_fkey(first_name, last_name, email, phone, avatar_url)
+          user_profiles(first_name, last_name, email, phone, avatar_url)
         `
         )
         .eq('id', id)
@@ -1326,7 +1326,7 @@ router.get(
         .select(
           `
           user_id,
-          user_profiles!inner(first_name, last_name, email, phone)
+          user_profiles(first_name, last_name, email, phone)
         `
         )
         .eq('user_id', (hotel as any).host_id)
@@ -1361,7 +1361,7 @@ router.get(
           booking_status,
           created_at,
           user_id,
-          user_profiles!inner(first_name, last_name)
+          user_profiles(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
@@ -1378,7 +1378,7 @@ router.get(
           comment,
           created_at,
           user_id,
-          user_profiles!inner(first_name, last_name)
+          user_profiles(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
@@ -1516,7 +1516,7 @@ router.get(
           metadata,
           created_at,
           uploaded_by,
-          user_profiles!file_metadata_uploaded_by_fkey(first_name, last_name, email, avatar_url)
+          user_profiles(first_name, last_name, email, avatar_url)
         `
         )
         .eq('id', id)

@@ -24,7 +24,7 @@ export const SELECT_FIELDS = {
     verified_at,
     created_at,
     updated_at,
-    user_profiles!inner(first_name, last_name, email, avatar_url)
+    user_profiles(first_name, last_name, email, avatar_url)
   `,
 
   DRIVER: `
