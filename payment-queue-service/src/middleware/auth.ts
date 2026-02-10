@@ -1,6 +1,6 @@
+import { createClient } from '@supabase/supabase-js';
 import { NextFunction, Request, Response } from 'express';
 
-import { createClient } from '@supabase/supabase-js';
 import { UnauthorizedError } from '../utils/errors';
 import logger from '../utils/logger';
 

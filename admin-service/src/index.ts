@@ -1400,21 +1400,7 @@ app.get('/api/ecommerce/traders', authenticate, async (req: AuthRequest, res: Re
 
     let query = supabase
       .from('ecommerce_vendors')
-      .select(
-        `
-        id,
-        business_name,
-        business_description,
-        total_sales,
-        total_orders,
-        average_rating,
-        is_verified,
-        is_active,
-        created_at,
-        user_profiles!inner(first_name, last_name, email, avatar_url)
-      `,
-        { count: 'exact' }
-      )
+      .select(VENDOR_SELECT_FIELDS, { count: 'exact' })
       .range(offset, offset + Number(limit) - 1)
       .order('created_at', { ascending: false });
 
@@ -1520,18 +1506,14 @@ app.get('/api/taxi/drivers', authenticate, async (req: AuthRequest, res: Respons
       .from('driver_profiles')
       .select(
         `
-        id,
-        license_number,
-        vehicle_type,
-        vehicle_model,
-        vehicle_year,
-        is_verified,
-        is_active,
-        rating,
-        total_trips,
-        total_earnings,
-        created_at,
-        user_profiles!inner(first_name, last_name, email, phone, avatar_url)
+        ${DRIVER_SELECT_FIELDS},
+        user:user_profiles!user_id (
+          first_name,
+          last_name,
+          email,
+          phone,
+          avatar_url
+        )
       `,
         { count: 'exact' }
       )
@@ -1539,15 +1521,14 @@ app.get('/api/taxi/drivers', authenticate, async (req: AuthRequest, res: Respons
       .order('created_at', { ascending: false });
 
     if (search) {
-      query = query.or(
-        `license_number.ilike.%${search}%,user_profiles.first_name.ilike.%${search}%,user_profiles.last_name.ilike.%${search}%`
-      );
+      // Search in license_number only (can't search joined tables in Supabase)
+      query = query.ilike('license_number', `%${search}%`);
     }
 
     if (status === 'active') {
-      query = query.eq('is_active', true);
+      query = query.eq('is_verified', true);
     } else if (status === 'inactive') {
-      query = query.eq('is_active', false);
+      query = query.eq('is_verified', false);
     }
 
     const { data: drivers, count, error } = await query;
@@ -1642,19 +1623,13 @@ app.get('/api/hotel/hotels', authenticate, async (req: AuthRequest, res: Respons
       .from('hotels')
       .select(
         `
-        id,
-        name,
-        description,
-        address,
-        city,
-        state,
-        rating,
-        total_rooms,
-        available_rooms,
-        is_verified,
-        is_active,
-        created_at,
-        user_profiles!inner(first_name, last_name, email, phone)
+        ${HOTEL_SELECT_FIELDS},
+        host:user_profiles!host_id (
+          first_name,
+          last_name,
+          email,
+          phone
+        )
       `,
         { count: 'exact' }
       )
@@ -2968,7 +2943,7 @@ app.get('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res: 
         host_profiles(*)
       `
       )
-      .eq('user_id', userId)
+      .eq('id', userId)
       .single();
 
     if (error || !user) {
@@ -3058,7 +3033,7 @@ app.patch('/api/admin/users/:userId', authenticate, async (req: AuthRequest, res
     const { data, error } = await supabase
       .from('user_profiles')
       .update(updates)
-      .eq('user_id', userId)
+      .eq('id', userId)
       .select()
       .single();
 
@@ -3124,7 +3099,7 @@ app.delete('/api/admin/users/:userId', authenticate, async (req: AuthRequest, re
     const { error } = await supabase
       .from('user_profiles')
       .update({ is_active: false })
-      .eq('user_id', userId);
+      .eq('id', userId);
 
     if (error) throw error;
 

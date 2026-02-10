@@ -12,6 +12,10 @@
     "./config": {
       "import": "./dist/config/index.js",
       "types": "./dist/config/index.d.ts"
+    },
+    "./types/database": {
+      "import": "./types/database.js",
+      "types": "./types/database.d.ts"
     }
   },
   "scripts": {
@@ -20,6 +24,7 @@
     "clean": "rm -rf dist"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "^2.39.0",
     "typescript": "^5.3.3"
   }
 }
