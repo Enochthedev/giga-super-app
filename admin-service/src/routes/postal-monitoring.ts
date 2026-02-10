@@ -145,9 +145,9 @@ router.get('/staff', authenticate, requireAnyAccess, async (req: AuthRequest, re
         clearance_level,
         is_active,
         created_at,
-        user_profiles!nipost_officials_user_id_fkey(first_name, last_name, email, phone),
-        nipost_offices!nipost_officials_office_id_fkey(office_name, city, state_province),
-        nipost_regions!nipost_officials_region_id_fkey(region_name, region_code)
+        user_profiles(first_name, last_name, email, phone),
+        nipost_offices(office_name, city, state_province),
+        nipost_regions(region_name, region_code)
       `,
         { count: 'exact' }
       )

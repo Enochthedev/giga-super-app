@@ -138,9 +138,9 @@ router.get('/incoming', authenticate, requireAnyAccess, async (req: AuthRequest,
         review_notes,
         created_at,
         advertiser_id,
-        advertiser_profiles!inner(
+        advertiser_profiles(
           company_name,
-          user_profiles!advertiser_profiles_user_id_fkey(email, phone)
+          user_profiles(email, phone)
         )
       `,
         { count: 'exact' }

@@ -122,7 +122,7 @@ class ServiceRegistry {
           '/api/v1/advertisers/*',
           // GIGA Dashboard API patterns
           '/api/dashboard/*',
-          '/api/admin/categories',
+          '/api/admin/*', // This covers /api/admin/users, /api/admin/national/*, etc.
           '/api/ecommerce/*',
           '/api/taxi/*',
           '/api/hotel/*',

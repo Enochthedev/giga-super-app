@@ -1,5 +1,6 @@
 import { Response, Router } from 'express';
 import winston from 'winston';
+
 import { createAudit, createFailedAudit } from '../middleware/audit';
 import { AuthRequest, authenticate, requireAnyAccess, requireManager } from '../middleware/auth';
 import { calculatePagination, getPaginationRange, supabase } from '../utils/database';
@@ -201,7 +202,7 @@ router.get(
         status,
         created_at,
         user_id,
-        user_profiles!inner(first_name, last_name, email)
+        user_profiles(first_name, last_name, email)
       `,
           { count: 'exact' }
         )
