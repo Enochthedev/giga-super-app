@@ -484,11 +484,14 @@ router.get(
         .select(
           `
         ${SELECT_FIELDS.HOTEL},
-        host:user_profiles!host_id (
-          first_name,
-          last_name,
-          email,
-          phone
+        host:host_profiles!hotels_host_id_fkey (
+          user_id,
+          user_profiles!host_profiles_user_id_fkey (
+            first_name,
+            last_name,
+            email,
+            phone
+          )
         )
       `,
           { count: 'exact' }
@@ -648,7 +651,7 @@ router.get(
         status,
         created_at,
         uploaded_by,
-        user_profiles!uploaded_by(first_name, last_name, email)
+        user_profiles!file_metadata_uploaded_by_fkey(first_name, last_name, email)
       `,
           { count: 'exact' }
         )
@@ -1348,9 +1351,10 @@ router.get(
           check_in_date,
           check_out_date,
           total_amount,
-          status,
+          booking_status,
           created_at,
-          guest:user_profiles!guest_id(first_name, last_name)
+          user_id,
+          user_profiles!user_id(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
@@ -1366,7 +1370,8 @@ router.get(
           rating,
           comment,
           created_at,
-          reviewer:user_profiles!reviewer_id(first_name, last_name)
+          user_id,
+          user_profiles!user_id(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
