@@ -117,6 +117,9 @@ class ServiceRegistry {
           '/api/v1/admin/*',
           '/api/v1/dashboard/*',
           '/api/v1/nipost/*',
+          '/api/v1/ads/*', // Ads management (both admin and public endpoints)
+          '/api/v1/campaigns/*',
+          '/api/v1/advertisers/*',
           // GIGA Dashboard API patterns
           '/api/dashboard/*',
           '/api/admin/categories',
@@ -154,14 +157,16 @@ class ServiceRegistry {
       });
     }
 
+    // Note: Ads functionality is handled by the Admin Service
+    // Keeping this registration for future separation if needed
     if (config.services.ads) {
       this.registerService('railway-ads', {
         id: 'railway-ads',
-        name: 'Ads Service',
+        name: 'Ads Service (Future)',
         baseUrl: config.services.ads,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/ads/*', '/api/v1/campaigns/*', '/api/v1/advertisers/*'],
+        patterns: ['/api/v1/ads-future/*'], // Changed to avoid conflict with admin service
       });
     }
 

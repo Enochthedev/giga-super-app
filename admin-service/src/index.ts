@@ -86,6 +86,7 @@ app.use('/api/postal-monitoring', postalMonitoringRoutes);
 app.use('/api/operations', postalMonitoringRoutes); // Alias for postal-monitoring
 app.use('/api/managers', managersRoutes);
 app.use('/api/ads', advertisementsRoutes);
+app.use('/api/v1/ads', advertisementsRoutes); // Support v1 API path
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

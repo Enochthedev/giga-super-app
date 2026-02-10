@@ -1,5 +1,6 @@
 import { Response, Router } from 'express';
 import winston from 'winston';
+
 import { createAudit, createFailedAudit } from '../middleware/audit';
 import { AuthRequest, authenticate, requireAnyAccess, requirePermission } from '../middleware/auth';
 import { calculatePagination, getPaginationRange, supabase } from '../utils/database';
@@ -298,5 +299,153 @@ router.put(
     }
   }
 );
+
+/**
+ * @swagger
+ * /api/ads/fetch:
+ *   post:
+ *     tags: [Advertisement Management]
+ *     summary: Fetch ads for display
+ *     description: Retrieve active advertisements based on placement type and targeting criteria
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               placement_type:
+ *                 type: string
+ *                 enum: [banner, video, native, sponsored]
+ *                 description: Type of ad placement
+ *               limit:
+ *                 type: integer
+ *                 default: 1
+ *                 minimum: 1
+ *                 maximum: 10
+ *                 description: Number of ads to return
+ *               user_context:
+ *                 type: object
+ *                 description: Optional user context for targeting
+ *           example:
+ *             placement_type: "banner"
+ *             limit: 3
+ *     responses:
+ *       200:
+ *         description: Ads retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 ads:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       campaign_id:
+ *                         type: string
+ *                         format: uuid
+ *                       title:
+ *                         type: string
+ *                       description:
+ *                         type: string
+ *                       creative:
+ *                         type: object
+ *                       landing_url:
+ *                         type: string
+ *                       cta_text:
+ *                         type: string
+ *                       tracking_token:
+ *                         type: string
+ *             example:
+ *               success: true
+ *               ads:
+ *                 - campaign_id: "a1234567-89ab-cdef-0123-456789abcdef"
+ *                   title: "Summer Sale Campaign"
+ *                   description: "Get 50% off on all products"
+ *                   creative:
+ *                     image_url: "https://example.com/banner.jpg"
+ *                     video_url: null
+ *                   landing_url: "https://example.com/sale"
+ *                   cta_text: "Learn More"
+ *                   tracking_token: "eyJjaWQiOiJhMTIzNDU2Ny04OWFiLWNkZWYtMDEyMy00NTY3ODlhYmNkZWYiLCJ0cyI6MTcwNzU3NjAwMDAwMH0="
+ *       400:
+ *         description: Bad request
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/fetch', async (req: AuthRequest, res: Response) => {
+  try {
+    const { placement_type, limit = 1, user_context } = req.body || {};
+
+    // Validate limit
+    const adsLimit = Math.min(Math.max(1, parseInt(limit as string, 10) || 1), 10);
+
+    // Get today's date for filtering
+    const today = new Date().toISOString().split('T')[0];
+
+    // Query active campaigns
+    let query = supabase
+      .from('ad_campaigns')
+      .select('*')
+      .eq('status', 'approved') // Changed from 'active' to 'approved' to match the status update endpoint
+      .lte('start_date', today)
+      .gte('end_date', today)
+      .is('deleted_at', null)
+      .limit(50); // Fetch more than needed for filtering
+
+    // Add placement type filter if provided
+    if (placement_type) {
+      query = query.eq('campaign_type', placement_type);
+    }
+
+    const { data: campaigns, error } = await query;
+
+    if (error) throw error;
+
+    // Filter campaigns by budget (spent_amount < budget)
+    let eligibleCampaigns = (campaigns || []).filter((campaign: any) => {
+      // Check if budget is not exceeded
+      const spentAmount = parseFloat(campaign.spent_amount || '0');
+      const budget = parseFloat(campaign.budget || '0');
+      return spentAmount < budget;
+    });
+
+    // Randomize selection for fair distribution
+    eligibleCampaigns = eligibleCampaigns.sort(() => 0.5 - Math.random());
+
+    // Select top N campaigns
+    const selectedAds = eligibleCampaigns.slice(0, adsLimit).map((campaign: any) => ({
+      campaign_id: campaign.id,
+      title: campaign.campaign_name,
+      description: campaign.description || '',
+      creative: campaign.creative_assets || {},
+      landing_url: campaign.landing_url || '',
+      cta_text: campaign.cta_text || 'Learn More',
+      tracking_token: Buffer.from(JSON.stringify({ cid: campaign.id, ts: Date.now() })).toString(
+        'base64'
+      ),
+    }));
+
+    // Log ad fetch (optional - can be used for analytics)
+    logger.info('Ads fetched', {
+      placement_type,
+      requested: adsLimit,
+      returned: selectedAds.length,
+      user_context,
+    });
+
+    res.json({
+      success: true,
+      ads: selectedAds,
+    });
+  } catch (error: any) {
+    logger.error('Failed to fetch ads', { error: error.message });
+    res.status(500).json({ success: false, error: 'Failed to fetch advertisements' });
+  }
+});
 
 export default router;

@@ -11,12 +11,13 @@ router.get('/', (req: Request, res: Response) => {
     status: 'healthy',
     service: 'admin-service',
     timestamp: new Date().toISOString(),
-    version: '2.3.0-rbac',
+    version: '2.4.0-complete',
     deployment: 'railway-modular-architecture',
     features: {
       rbac: 'enabled',
       multiLayerSecurity: 'active',
       granularPermissions: 'active',
+      allEndpoints: 'complete',
     },
   });
 });
@@ -29,7 +30,7 @@ router.get('/status', (req: Request, res: Response) => {
   res.json({
     status: 'running',
     service: 'admin-service',
-    version: '2.3.0-rbac',
+    version: '2.4.0-complete',
     timestamp: new Date().toISOString(),
     rbac: {
       enabled: true,
@@ -39,7 +40,7 @@ router.get('/status', (req: Request, res: Response) => {
     modules: {
       nipost: 'NIPOST Admin Management',
       dashboard: 'Dashboard Analytics',
-      businessModules: 'Business Module Management',
+      businessModules: 'Business Module Management (Complete)',
       users: 'User Management',
       settings: 'Platform Settings',
       audit: 'Audit Trail',
@@ -63,9 +64,14 @@ router.get('/status', (req: Request, res: Response) => {
       ],
       businessModules: [
         '/api/ecommerce/traders',
+        '/api/ecommerce/traders/:id',
+        'POST /api/ecommerce/traders',
         '/api/taxi/drivers',
+        '/api/taxi/drivers/:id',
         '/api/hotel/hotels',
+        '/api/hotel/hotels/:id',
         '/api/media/content',
+        '/api/media/content/:id',
       ],
       users: ['/api/admin/users', '/api/admin/users/:userId'],
     },
