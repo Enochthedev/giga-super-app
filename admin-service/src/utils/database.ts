@@ -23,7 +23,8 @@ export const SELECT_FIELDS = {
     is_active,
     verified_at,
     created_at,
-    updated_at
+    updated_at,
+    user_profiles!inner(first_name, last_name, email, avatar_url)
   `,
 
   DRIVER: `

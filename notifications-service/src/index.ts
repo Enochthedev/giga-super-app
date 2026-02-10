@@ -18,7 +18,8 @@ import { swaggerSpec } from './config/swagger';
 dotenv.config();
 
 const PORT = parseInt(process.env.PORT || '3007', 10);
-const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+const REDIS_URL =
+  process.env.REDIS_URL || process.env.RAILWAY_REDIS_URL || 'redis://localhost:6379';
 
 // Logger with request ID support
 const logger = winston.createLogger({
@@ -35,17 +36,20 @@ const logger = winston.createLogger({
 });
 
 // Redis connection with connection pooling and error handling
+// Optimized for Upstash free tier limits
 const connection = new IORedis(REDIS_URL, {
   maxRetriesPerRequest: null,
   lazyConnect: false,
-  enableReadyCheck: true,
+  enableReadyCheck: false, // Reduce health check requests
   connectTimeout: 10000,
+  enableOfflineQueue: false, // Don't queue commands when offline
   retryStrategy: (times: number) => {
-    if (times > 10) {
-      logger.error('Redis connection failed after 10 retries');
+    if (times > 3) {
+      // Reduce retry attempts
+      logger.error('Redis connection failed after 3 retries');
       return null;
     }
-    const delay = Math.min(times * 200, 2000);
+    const delay = Math.min(times * 500, 2000);
     logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
     return delay;
   },
@@ -101,16 +105,24 @@ const twilioClient =
     ? new Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
     : null;
 
-// Enhanced Notification Queues
-export const emailQueue = new Queue('email-notifications', { connection: connection as any });
-export const smsQueue = new Queue('sms-notifications', { connection: connection as any });
-export const pushQueue = new Queue('push-notifications', { connection: connection as any });
-export const scheduledQueue = new Queue('scheduled-notifications', {
+// Consolidated Notification Queue (reduces Redis key usage)
+// Instead of 7 separate queues, use one queue with job types
+export const notificationQueue = new Queue('notifications', {
   connection: connection as any,
+  defaultJobOptions: {
+    removeOnComplete: 100, // Keep only last 100 completed jobs
+    removeOnFail: 50, // Keep only last 50 failed jobs
+  },
 });
-export const bulkQueue = new Queue('bulk-notifications', { connection: connection as any });
-export const retryQueue = new Queue('retry-notifications', { connection: connection as any });
-export const campaignQueue = new Queue('campaign-notifications', { connection: connection as any });
+
+// Legacy queue exports for backward compatibility
+export const emailQueue = notificationQueue;
+export const smsQueue = notificationQueue;
+export const pushQueue = notificationQueue;
+export const scheduledQueue = notificationQueue;
+export const bulkQueue = notificationQueue;
+export const retryQueue = notificationQueue;
+export const campaignQueue = notificationQueue;
 
 // Interfaces
 interface NotificationJob {
@@ -297,8 +309,13 @@ async function updateNotificationHistory(id: string, updates: any): Promise<void
 
 // Enhanced Email Worker with template support
 const enhancedEmailWorker = new Worker(
-  'email-notifications',
+  'notifications', // Use consolidated queue name
   async (job: Job<NotificationJob>) => {
+    // Only process email jobs
+    if (job.name !== 'send-email' && job.data.type !== 'email') {
+      return { success: true, skipped: true };
+    }
+
     const { userId, templateId, recipient, subject, body, variables, id } = job.data;
 
     logger.info('Processing email notification', {
@@ -323,7 +340,7 @@ const enhancedEmailWorker = new Worker(
       // 2. Check quiet hours
       if (preferences && PreferencesService.isQuietHours(preferences)) {
         const delay = PreferencesService.getDelayUntilActiveHours(preferences);
-        await scheduledQueue.add('send-email', job.data, { delay });
+        await notificationQueue.add('send-email', job.data, { delay });
         logger.info('Email rescheduled due to quiet hours', { userId, delay });
         return { success: true, rescheduled: true };
       }
@@ -395,8 +412,13 @@ const enhancedEmailWorker = new Worker(
 
 // Enhanced SMS Worker
 const enhancedSmsWorker = new Worker(
-  'sms-notifications',
+  'notifications', // Use consolidated queue name
   async (job: Job<NotificationJob>) => {
+    // Only process SMS jobs
+    if (job.name !== 'send-sms' && job.data.type !== 'sms') {
+      return { success: true, skipped: true };
+    }
+
     const { userId, templateId, recipient, body, variables, id } = job.data;
 
     logger.info('Processing SMS notification', {
@@ -482,8 +504,13 @@ const enhancedSmsWorker = new Worker(
 
 // Bulk notification worker
 const bulkWorker = new Worker(
-  'bulk-notifications',
+  'notifications', // Use consolidated queue name
   async (job: Job) => {
+    // Only process bulk jobs
+    if (job.name !== 'bulk-send' && !job.data.campaignId) {
+      return { success: true, skipped: true };
+    }
+
     const { campaignId, templateId, recipients, variables } = job.data;
 
     logger.info('Processing bulk notification', {
@@ -522,7 +549,7 @@ const bulkWorker = new Worker(
             });
 
             // Queue individual notification
-            await emailQueue.add('send-email', {
+            await notificationQueue.add('send-email', {
               id: notificationId,
               userId: recipient.userId,
               templateId,
@@ -764,7 +791,7 @@ app.post('/api/v1/notifications/send', async (req, res) => {
     if (scheduledFor) {
       const delay = new Date(scheduledFor).getTime() - Date.now();
       if (delay > 0) {
-        job = await scheduledQueue.add(`send-${type}`, jobData, { delay });
+        job = await notificationQueue.add(`send-${type}`, jobData, { delay });
       } else {
         return res.status(400).json({
           success: false,
@@ -772,13 +799,13 @@ app.post('/api/v1/notifications/send', async (req, res) => {
         });
       }
     } else {
-      if (type === 'email') {
-        job = await emailQueue.add('send-email', jobData, { attempts: 3, priority });
-      } else if (type === 'sms') {
-        job = await smsQueue.add('send-sms', jobData, { attempts: 3, priority });
-      } else if (type === 'push') {
-        job = await pushQueue.add('send-push', jobData, { attempts: 3, priority });
-      }
+      // Use consolidated queue with job name to identify type
+      job = await notificationQueue.add(`send-${type}`, jobData, {
+        attempts: 3,
+        priority,
+        removeOnComplete: true, // Auto-remove completed jobs to save Redis space
+        removeOnFail: false, // Keep failed jobs for debugging
+      });
     }
 
     res.status(202).json({
