@@ -85,7 +85,7 @@ router.get('/', async (req: Request, res: Response) => {
         view_count,
         expires_at,
         created_at,
-        user_profiles!inner(id, first_name, last_name, avatar_url)
+        user_profiles!stories_user_id_fkey(id, first_name, last_name, avatar_url)
       `
       )
       .in('user_id', userIds)
@@ -416,7 +416,7 @@ router.get('/:storyId/viewers', async (req: Request, res: Response) => {
       .select(
         `
         viewed_at,
-        user_profiles!inner(id, first_name, last_name, avatar_url)
+        user_profiles!story_views_user_id_fkey(id, first_name, last_name, avatar_url)
       `
       )
       .eq('story_id', storyId)

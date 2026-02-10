@@ -313,7 +313,7 @@ router.get(
         .select(
           `
         ${SELECT_FIELDS.DRIVER},
-        user:user_profiles!driver_profiles_user_id_fkey (
+        user_profiles!driver_profiles_user_id_fkey(
           first_name,
           last_name,
           email,
@@ -484,9 +484,9 @@ router.get(
         .select(
           `
         ${SELECT_FIELDS.HOTEL},
-        host:host_profiles!hotels_host_id_fkey (
+        host_profiles!inner(
           user_id,
-          user_profiles!host_profiles_user_id_fkey (
+          user_profiles!inner(
             first_name,
             last_name,
             email,
@@ -651,7 +651,7 @@ router.get(
         status,
         created_at,
         uploaded_by,
-        user_profiles!file_metadata_uploaded_by_fkey(first_name, last_name, email)
+        user_profiles!inner(first_name, last_name, email)
       `,
           { count: 'exact' }
         )
@@ -810,14 +810,14 @@ router.get(
 
       if (productIds.length > 0) {
         const { data: reviewsData } = await supabase
-          .from('product_reviews')
+          .from('ecommerce_product_reviews')
           .select(
             `
           id,
           rating,
           comment,
           created_at,
-          user:user_profiles!product_reviews_user_id_fkey(first_name, last_name)
+          user_profiles!ecommerce_product_reviews_user_id_fkey(first_name, last_name)
         `
           )
           .in('product_id', productIds)
@@ -1116,7 +1116,7 @@ router.get(
         .select(
           `
           ${SELECT_FIELDS.DRIVER},
-          user:user_profiles!driver_profiles_user_id_fkey(first_name, last_name, email, phone, avatar_url)
+          user_profiles!driver_profiles_user_id_fkey(first_name, last_name, email, phone, avatar_url)
         `
         )
         .eq('id', id)
@@ -1132,16 +1132,16 @@ router.get(
 
       // Get recent trips
       const { data: trips } = await supabase
-        .from('taxi_rides')
+        .from('rides')
         .select(
           `
           id,
           pickup_location,
           dropoff_location,
-          fare_amount,
+          final_amount,
           status,
           created_at,
-          completed_at
+          dropoff_time
         `
         )
         .eq('driver_id', id)
@@ -1156,8 +1156,8 @@ router.get(
       thisMonthStart.setDate(1);
 
       const { data: earningsData } = await supabase
-        .from('taxi_rides')
-        .select('fare_amount, created_at')
+        .from('rides')
+        .select('final_amount, created_at')
         .eq('driver_id', id)
         .eq('status', 'completed');
 
@@ -1169,7 +1169,7 @@ router.get(
       };
 
       (earningsData || []).forEach((ride: any) => {
-        const amount = ride.fare_amount || 0;
+        const amount = parseFloat(ride.final_amount || '0');
         earnings.total += amount;
 
         const rideDate = new Date(ride.created_at);
@@ -1320,17 +1320,24 @@ router.get(
         });
       }
 
-      // Get host info
-      const { data: host } = await supabase
-        .from('user_profiles')
-        .select('first_name, last_name, email, phone')
-        .eq('id', (hotel as any).host_id)
+      // Get host info through host_profiles
+      const { data: hostProfile } = await supabase
+        .from('host_profiles')
+        .select(
+          `
+          user_id,
+          user_profiles!inner(first_name, last_name, email, phone)
+        `
+        )
+        .eq('user_id', (hotel as any).host_id)
         .single();
+
+      const host = hostProfile?.user_profiles || null;
 
       // Get rooms
       const { data: rooms } = await supabase
         .from('room_types')
-        .select('id, name, base_price, max_occupancy, available_rooms')
+        .select('id, name, base_price, capacity, total_rooms')
         .eq('hotel_id', id);
 
       // Get amenities (from hotel metadata or default list)
@@ -1354,7 +1361,7 @@ router.get(
           booking_status,
           created_at,
           user_id,
-          user_profiles!hotel_bookings_user_id_fkey(first_name, last_name)
+          user_profiles!inner(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
@@ -1371,7 +1378,7 @@ router.get(
           comment,
           created_at,
           user_id,
-          user_profiles!hotel_reviews_user_id_fkey(first_name, last_name)
+          user_profiles!inner(first_name, last_name)
         `
         )
         .eq('hotel_id', id)
@@ -1509,7 +1516,7 @@ router.get(
           metadata,
           created_at,
           uploaded_by,
-          publisher:user_profiles!uploaded_by(first_name, last_name, email, avatar_url)
+          user_profiles!file_metadata_uploaded_by_fkey(first_name, last_name, email, avatar_url)
         `
         )
         .eq('id', id)

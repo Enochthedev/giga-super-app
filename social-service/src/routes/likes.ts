@@ -214,7 +214,7 @@ router.get('/users', async (req: Request, res: Response) => {
         `
         user_id,
         created_at,
-        user_profiles!inner(id, first_name, last_name, avatar_url)
+        user_profiles!post_likes_user_id_fkey(id, first_name, last_name, avatar_url)
       `
       )
       .eq('post_id', postId)
