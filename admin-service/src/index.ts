@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
@@ -24,7 +23,6 @@ dotenv.config();
 const PORT = parseInt(process.env.PORT ?? process.env.ADMIN_SERVICE_PORT ?? '3005', 10);
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Logger
 const logger = winston.createLogger({
@@ -68,8 +66,17 @@ const authenticate = async (req: AuthRequest, res: Response, next: NextFunction)
       return res.status(401).json({ error: 'No token provided' });
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    const userId = decoded.sub || decoded.userId;
+    // Use Supabase's built-in auth verification
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      logger.error('Auth failed', { error: authError?.message });
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    const userId = user.id;
 
     // Get user permissions
     const { data: permissions, error } = await supabase
@@ -80,12 +87,13 @@ const authenticate = async (req: AuthRequest, res: Response, next: NextFunction)
       .single();
 
     if (error || !permissions) {
+      logger.error('No permissions found', { userId, error: error?.message });
       return res.status(403).json({ error: 'No permissions found' });
     }
 
     req.user = {
       id: userId,
-      email: '', // Email not available from permissions, set empty
+      email: user.email || '',
       accessLevel: permissions.access_level,
       branchId: permissions.branch_id,
       stateId: permissions.state_id,

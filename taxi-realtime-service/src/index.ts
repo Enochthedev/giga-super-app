@@ -8,10 +8,10 @@ import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import helmet from 'helmet';
 import Redis from 'ioredis';
-import jwt from 'jsonwebtoken';
 import { Server, Socket } from 'socket.io';
 import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
+
 import { swaggerSpec } from './config/swagger';
 
 dotenv.config();
@@ -21,7 +21,6 @@ const PORT = parseInt(process.env.PORT ?? process.env.TAXI_REALTIME_SERVICE_PORT
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // Logger
 const logger = winston.createLogger({
@@ -223,9 +222,20 @@ io.use(async (socket: Socket, next) => {
       return next(new Error('Authentication required'));
     }
 
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
-    socket.data.userId = decoded.sub || decoded.userId;
-    socket.data.role = decoded.role || 'rider';
+    // Use Supabase's built-in auth verification
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      logger.error('Socket auth failed', { error: authError?.message });
+      return next(new Error('Invalid token'));
+    }
+
+    socket.data.userId = user.id;
+    // For now default to rider, role management might need DB lookup if not in metadata
+    socket.data.role = user.user_metadata?.role || 'rider';
 
     logger.info('Socket authenticated', {
       socketId: socket.id,
