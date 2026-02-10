@@ -138,7 +138,10 @@ router.get('/incoming', authenticate, requireAnyAccess, async (req: AuthRequest,
         review_notes,
         created_at,
         advertiser_id,
-        advertiser_profiles!ad_campaigns_advertiser_id_fkey(business_name, contact_email, contact_phone)
+        advertiser_profiles!inner(
+          company_name,
+          user_profiles!advertiser_profiles_user_id_fkey(email, phone)
+        )
       `,
         { count: 'exact' }
       )
