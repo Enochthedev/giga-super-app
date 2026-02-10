@@ -42,6 +42,9 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const app: Application = express();
 
+// Trust first proxy (Railway/Docker/nginx) - required for express-rate-limit
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
 app.use(cors());
