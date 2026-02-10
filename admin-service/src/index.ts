@@ -8,14 +8,18 @@ import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
 
 // Import routes
+import { swaggerSpec } from './config/swagger';
+import adminPanelRoutes from './routes/admin-panel';
+import advertisementsRoutes from './routes/advertisements';
 import businessModulesRoutes from './routes/business-modules';
 import dashboardRoutes from './routes/dashboard';
 import healthRoutes from './routes/health';
+import managersRoutes from './routes/managers';
 import nipostRoutes from './routes/nipost';
+import postalMonitoringRoutes from './routes/postal-monitoring';
 import usersRoutes from './routes/users';
 
 // Import config
-import { swaggerSpec } from './config/swagger';
 
 dotenv.config();
 
@@ -74,9 +78,14 @@ app.use('/api', healthRoutes);
 
 // API Routes
 app.use('/api/admin', nipostRoutes);
+app.use('/api/admin', adminPanelRoutes);
+app.use('/api/admin/users', usersRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api', businessModulesRoutes);
-app.use('/api/admin/users', usersRoutes);
+app.use('/api/postal-monitoring', postalMonitoringRoutes);
+app.use('/api/operations', postalMonitoringRoutes); // Alias for postal-monitoring
+app.use('/api/managers', managersRoutes);
+app.use('/api/ads', advertisementsRoutes);
 
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
