@@ -7,7 +7,11 @@ import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
 
-// Import routes
+import {
+  initializeObservability,
+  setupHealthChecks,
+  setupObservabilityErrorHandler,
+} from './config/observability';
 import { swaggerSpec } from './config/swagger';
 import adminPanelRoutes from './routes/admin-panel';
 import advertisementsRoutes from './routes/advertisements';
@@ -18,8 +22,6 @@ import managersRoutes from './routes/managers';
 import nipostRoutes from './routes/nipost';
 import postalMonitoringRoutes from './routes/postal-monitoring';
 import usersRoutes from './routes/users';
-
-// Import config
 
 dotenv.config();
 
@@ -38,6 +40,9 @@ const logger = winston.createLogger({
 });
 
 const app: Application = express();
+
+// Initialize observability (Sentry, metrics, tracing) - MUST BE FIRST
+initializeObservability(app);
 
 // Trust first proxy (Railway/Docker/nginx) - required for express-rate-limit
 app.set('trust proxy', 1);
@@ -88,21 +93,31 @@ app.use('/api/managers', managersRoutes);
 app.use('/api/ads', advertisementsRoutes);
 app.use('/api/v1/ads', advertisementsRoutes); // Support v1 API path
 
-// Error handling middleware
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  logger.error('Unhandled error', {
-    error: err.message,
-    stack: err.stack,
-    path: req.path,
-    method: req.method,
-  });
+// Setup observability error handler (Sentry) - MUST BE BEFORE other error handlers
+setupObservabilityErrorHandler(app);
 
-  res.status(err.status || 500).json({
-    success: false,
-    error: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-  });
-});
+// Error handling middleware
+app.use(
+  (
+    err: Error & { status?: number },
+    req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    logger.error('Unhandled error', {
+      error: err.message,
+      stack: err.stack,
+      path: req.path,
+      method: req.method,
+    });
+
+    res.status(err.status || 500).json({
+      success: false,
+      error: err.message || 'Internal server error',
+      ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    });
+  }
+);
 
 // 404 handler
 app.use((req, res) => {
@@ -116,6 +131,9 @@ app.use((req, res) => {
 
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
+  // Setup health checks and metrics endpoints
+  setupHealthChecks(app);
+
   logger.info(`Admin Service started`, {
     port: PORT,
     environment: process.env.NODE_ENV || 'development',

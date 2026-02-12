@@ -81,6 +81,22 @@ export const routingMiddleware = (
             if (path.startsWith('/api/v1/admin/')) {
               return path.replace('/api/v1/admin', '/api');
             }
+            // Admin service direct routes (GIGA Dashboard API)
+            // These routes are already in the correct format for the admin service
+            if (
+              path.startsWith('/api/dashboard/') ||
+              path.startsWith('/api/postal-monitoring/') ||
+              path.startsWith('/api/ads/') ||
+              path.startsWith('/api/admin/') ||
+              path.startsWith('/api/ecommerce/') ||
+              path.startsWith('/api/taxi/') ||
+              path.startsWith('/api/hotel/') ||
+              path.startsWith('/api/media/') ||
+              path.startsWith('/api/operations/') ||
+              path.startsWith('/api/managers/')
+            ) {
+              return path; // Keep as-is - admin service expects these paths
+            }
             // Search service: /api/v1/search/hotels -> /api/v1/search/hotels (no change)
             if (path.startsWith('/api/v1/search/')) {
               return path; // Keep as-is
