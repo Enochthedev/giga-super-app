@@ -11,7 +11,11 @@ COPY tsconfig.base.json ./
 COPY shared ./shared
 COPY social-service ./social-service
 
-# Install all dependencies (including tsx)
+# Install shared dependencies first
+WORKDIR /app/shared
+RUN npm ci --omit=dev
+
+# Install service dependencies
 WORKDIR /app/social-service
 RUN npm ci
 

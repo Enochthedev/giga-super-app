@@ -43,7 +43,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // Redis clients for Socket.IO adapter
 let pubClient: Redis | null = null;
 let subClient: Redis | null = null;
-let redisConnected = false;
+let redisConnected = false; // eslint-disable-line @typescript-eslint/no-unused-vars
 
 const initRedis = async (): Promise<boolean> => {
   try {
@@ -306,11 +306,10 @@ io.on('connection', (socket: Socket) => {
 
       // Update driver location in database
       await supabase
-        .from('taxi_drivers')
+        .from('driver_profiles')
         .update({
-          current_lat: data.lat,
-          current_lng: data.lng,
-          last_location_update: new Date().toISOString(),
+          current_location: { latitude: data.lat, longitude: data.lng },
+          last_location_updated_at: new Date().toISOString(),
         })
         .eq('user_id', userId);
 
@@ -341,7 +340,7 @@ io.on('connection', (socket: Socket) => {
       try {
         // Calculate nearby drivers (simplified - in production use PostGIS)
         const nearbyDrivers = Array.from(driverLocations.entries())
-          .filter(([driverId, location]) => {
+          .filter(([_driverId, location]) => {
             const distance = calculateDistance(data.lat, data.lng, location.lat, location.lng);
             return distance <= data.radius && Date.now() - location.timestamp < 60000; // Active in last minute
           })
@@ -382,14 +381,12 @@ io.on('connection', (socket: Socket) => {
       try {
         // Create trip in database
         const { data: trip, error } = await supabase
-          .from('taxi_trips')
+          .from('rides')
           .insert({
-            rider_id: userId,
+            passenger_id: userId,
             driver_id: data.driverId,
-            pickup_lat: data.pickupLat,
-            pickup_lng: data.pickupLng,
-            dropoff_lat: data.dropoffLat,
-            dropoff_lng: data.dropoffLng,
+            pickup_location: { latitude: data.pickupLat, longitude: data.pickupLng },
+            dropoff_location: { latitude: data.dropoffLat, longitude: data.dropoffLng },
             status: 'requested',
             created_at: new Date().toISOString(),
           })
@@ -404,10 +401,8 @@ io.on('connection', (socket: Socket) => {
           io.to(driverSocketId).emit('trip:new-request', {
             tripId: trip.id,
             riderId: userId,
-            pickupLat: data.pickupLat,
-            pickupLng: data.pickupLng,
-            dropoffLat: data.dropoffLat,
-            dropoffLng: data.dropoffLng,
+            pickupLocation: trip.pickup_location,
+            dropoffLocation: trip.dropoff_location,
           });
         }
 
@@ -435,7 +430,7 @@ io.on('connection', (socket: Socket) => {
     try {
       // Update trip status
       const { data: trip, error } = await supabase
-        .from('taxi_trips')
+        .from('rides')
         .update({ status: 'accepted', accepted_at: new Date().toISOString() })
         .eq('id', data.tripId)
         .eq('driver_id', userId)
@@ -445,7 +440,7 @@ io.on('connection', (socket: Socket) => {
       if (error) throw error;
 
       // Notify rider
-      const riderSocketId = activeRiders.get(trip.rider_id);
+      const riderSocketId = activeRiders.get(trip.passenger_id);
       if (riderSocketId) {
         io.to(riderSocketId).emit('trip:accepted', {
           tripId: trip.id,
@@ -466,7 +461,7 @@ io.on('connection', (socket: Socket) => {
   socket.on('trip:status:update', async (data: { tripId: string; status: string }) => {
     try {
       const { data: trip, error } = await supabase
-        .from('taxi_trips')
+        .from('rides')
         .update({ status: data.status, updated_at: new Date().toISOString() })
         .eq('id', data.tripId)
         .select()
@@ -476,7 +471,7 @@ io.on('connection', (socket: Socket) => {
 
       // Notify both driver and rider
       const driverSocketId = activeDrivers.get(trip.driver_id);
-      const riderSocketId = activeRiders.get(trip.rider_id);
+      const riderSocketId = activeRiders.get(trip.passenger_id);
 
       const statusUpdate = {
         tripId: trip.id,

@@ -35,30 +35,23 @@ export class DatabaseService {
   async searchHotels(
     query: SearchQuery
   ): Promise<{ results: SearchResult<Hotel>[]; total: number }> {
+    // Join with room_types to get pricing info
     let dbQuery = this.supabase
       .from('hotels')
-      .select('*', { count: 'exact' })
+      .select('*, room_types(base_price)', { count: 'exact' })
       .eq('is_active', true)
       .is('deleted_at', null);
 
-    // Text search
+    // Text search - use city/state instead of location (which is PostGIS type)
     if (query.q) {
       dbQuery = dbQuery.or(
-        `name.ilike.%${query.q}%,description.ilike.%${query.q}%,location.ilike.%${query.q}%`
+        `name.ilike.%${query.q}%,description.ilike.%${query.q}%,city.ilike.%${query.q}%,state.ilike.%${query.q}%`
       );
     }
 
-    // Location filter
+    // Location filter - search in city and state
     if (query.location) {
-      dbQuery = dbQuery.ilike('location', `%${query.location}%`);
-    }
-
-    // Price filters
-    if (query.min_price) {
-      dbQuery = dbQuery.gte('price_per_night', query.min_price);
-    }
-    if (query.max_price) {
-      dbQuery = dbQuery.lte('price_per_night', query.max_price);
+      dbQuery = dbQuery.or(`city.ilike.%${query.location}%,state.ilike.%${query.location}%`);
     }
 
     // Star rating filter
@@ -85,26 +78,44 @@ export class DatabaseService {
       throw new Error(`Hotel search failed: ${error.message}`);
     }
 
-    const results: SearchResult<Hotel>[] = (data || []).map((hotel: Hotel) => ({
-      id: hotel.id,
-      type: 'hotels' as SearchCategory,
-      title: hotel.name,
-      description: hotel.description,
-      image_url: hotel.image_urls?.[0],
-      price: hotel.price_per_night,
-      currency: hotel.currency,
-      rating: hotel.star_rating,
-      location: hotel.location,
-      relevance_score: this.calculateRelevanceScore(
-        query.q || '',
-        `${hotel.name} ${hotel.description}`
-      ),
-      data: hotel,
-      created_at: hotel.created_at,
-      updated_at: hotel.updated_at,
-    }));
+    const results: SearchResult<Hotel>[] = (data || []).map((hotel: any) => {
+      // Get minimum price from room_types
+      const roomTypes = hotel.room_types || [];
+      const minPrice =
+        roomTypes.length > 0
+          ? Math.min(...roomTypes.map((rt: any) => parseFloat(rt.base_price) || 0))
+          : undefined;
 
-    return { results, total: count || 0 };
+      return {
+        id: hotel.id,
+        type: 'hotels' as SearchCategory,
+        title: hotel.name,
+        description: hotel.description,
+        image_url: hotel.featured_image || hotel.images?.[0],
+        price: minPrice,
+        currency: 'NGN', // Default currency
+        rating: hotel.star_rating,
+        location: `${hotel.city}, ${hotel.state}`,
+        relevance_score: this.calculateRelevanceScore(
+          query.q || '',
+          `${hotel.name} ${hotel.description}`
+        ),
+        data: hotel,
+        created_at: hotel.created_at,
+        updated_at: hotel.updated_at,
+      };
+    });
+
+    // Apply price filters after fetching (since price is from room_types)
+    let filteredResults = results;
+    if (query.min_price) {
+      filteredResults = filteredResults.filter(r => r.price && r.price >= query.min_price!);
+    }
+    if (query.max_price) {
+      filteredResults = filteredResults.filter(r => r.price && r.price <= query.max_price!);
+    }
+
+    return { results: filteredResults, total: count || 0 };
   }
 
   /**
@@ -295,7 +306,7 @@ export class DatabaseService {
     let dbQuery = this.supabase
       .from('social_posts')
       .select('*', { count: 'exact' })
-      .eq('is_public', true)
+      .eq('visibility', 'public')
       .is('deleted_at', null);
 
     // Text search
@@ -317,12 +328,12 @@ export class DatabaseService {
       throw new Error(`Post search failed: ${error.message}`);
     }
 
-    const results: SearchResult<SocialPost>[] = (data || []).map((post: SocialPost) => ({
+    const results: SearchResult<SocialPost>[] = (data || []).map((post: any) => ({
       id: post.id,
       type: 'posts' as SearchCategory,
       title: post.content.substring(0, 100) + (post.content.length > 100 ? '...' : ''),
       description: post.content,
-      image_url: post.image_urls?.[0],
+      image_url: post.media_urls?.[0],
       relevance_score: this.calculateRelevanceScore(query.q || '', post.content),
       data: post,
       created_at: post.created_at,
@@ -343,21 +354,16 @@ export class DatabaseService {
       .select('*', { count: 'exact' })
       .is('deleted_at', null);
 
-    // Text search
+    // Text search - use first_name, last_name only (no bio column)
     if (query.q) {
       dbQuery = dbQuery.or(
-        `first_name.ilike.%${query.q}%,last_name.ilike.%${query.q}%,bio.ilike.%${query.q}%`
+        `first_name.ilike.%${query.q}%,last_name.ilike.%${query.q}%,email.ilike.%${query.q}%`
       );
-    }
-
-    // Location filter
-    if (query.location) {
-      dbQuery = dbQuery.ilike('location', `%${query.location}%`);
     }
 
     // Verified filter
     if (query.filters?.available_only) {
-      dbQuery = dbQuery.eq('is_verified', true);
+      dbQuery = dbQuery.eq('is_phone_verified', true);
     }
 
     // Sorting
@@ -374,16 +380,16 @@ export class DatabaseService {
       throw new Error(`User search failed: ${error.message}`);
     }
 
-    const results: SearchResult<UserProfile>[] = (data || []).map((user: UserProfile) => ({
+    const results: SearchResult<UserProfile>[] = (data || []).map((user: any) => ({
       id: user.id,
       type: 'users' as SearchCategory,
-      title: `${user.first_name} ${user.last_name}`,
-      description: user.bio,
+      title: `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'User',
+      description: undefined,
       image_url: user.avatar_url,
-      location: user.location,
+      location: undefined,
       relevance_score: this.calculateRelevanceScore(
         query.q || '',
-        `${user.first_name} ${user.last_name} ${user.bio || ''}`
+        `${user.first_name || ''} ${user.last_name || ''}`
       ),
       data: user,
       created_at: user.created_at,
@@ -441,7 +447,7 @@ export class DatabaseService {
     const sortMappings: Record<string, Record<string, string>> = {
       hotels: {
         relevance: 'name',
-        price: 'price_per_night',
+        price: 'star_rating', // Price is in room_types, fallback to star_rating
         rating: 'star_rating',
         created_at: 'created_at',
       },
@@ -452,15 +458,15 @@ export class DatabaseService {
         created_at: 'created_at',
       },
       drivers: {
-        relevance: 'name',
+        relevance: 'rating',
         rating: 'rating',
-        distance: 'name', // Distance calculated separately
+        distance: 'rating', // Distance calculated separately
         created_at: 'created_at',
       },
       posts: {
-        relevance: 'content',
+        relevance: 'created_at',
         created_at: 'created_at',
-        likes_count: 'likes_count',
+        likes_count: 'like_count',
       },
       users: {
         relevance: 'first_name',
