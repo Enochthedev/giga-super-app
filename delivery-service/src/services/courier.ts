@@ -37,7 +37,11 @@ export class CourierService {
         .single();
 
       if (existing) {
-        throw new ServiceError('Courier profile already exists for this user', 'COURIER_ALREADY_EXISTS', 409);
+        throw new ServiceError(
+          'Courier profile already exists for this user',
+          'COURIER_ALREADY_EXISTS',
+          409
+        );
       }
 
       // Generate courier code
@@ -58,12 +62,11 @@ export class CourierService {
           vehicle_capacity_kg: courierData.vehicle_capacity_kg || 50,
           max_delivery_radius_km: courierData.max_delivery_radius_km || 20,
           license_number: courierData.license_number,
-          license_expiry: courierData.license_expiry,
-          verification_documents: courierData.verification_documents,
-          verification_status: 'pending',
+          license_expiry_date: courierData.license_expiry,
+          // is_verified defaults to false (pending verification)
+          is_verified: false,
           availability_status: 'offline',
           is_online: false,
-          is_available: false,
           is_active: true,
         })
         .select()
@@ -106,7 +109,11 @@ export class CourierService {
       return this.mapDatabaseCourier(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error fetching courier', { error, courier_id: courierId, request_id: requestId });
+      logger.error('Error fetching courier', {
+        error,
+        courier_id: courierId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -129,7 +136,11 @@ export class CourierService {
       return this.mapDatabaseCourier(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error fetching courier by user ID', { error, user_id: userId, request_id: requestId });
+      logger.error('Error fetching courier by user ID', {
+        error,
+        user_id: userId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -151,13 +162,12 @@ export class CourierService {
     try {
       const offset = (page - 1) * limit;
 
-      let query = this.supabase
-        .from('courier_profiles')
-        .select('*', { count: 'exact' });
+      let query = this.supabase.from('courier_profiles').select('*', { count: 'exact' });
 
-      // Apply filters
+      // Apply filters - map verification_status to is_verified boolean
       if (filters.verification_status) {
-        query = query.eq('verification_status', filters.verification_status);
+        const isVerified = filters.verification_status === 'verified';
+        query = query.eq('is_verified', isVerified);
       }
       if (filters.availability_status) {
         query = query.eq('availability_status', filters.availability_status);
@@ -224,7 +234,11 @@ export class CourierService {
       return this.mapDatabaseCourier(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error updating courier', { error, courier_id: courierId, request_id: requestId });
+      logger.error('Error updating courier', {
+        error,
+        courier_id: courierId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -242,14 +256,17 @@ export class CourierService {
       const { error } = await this.supabase
         .from('courier_profiles')
         .update({
-          current_lat: latitude,
-          current_lng: longitude,
+          current_latitude: latitude,
+          current_longitude: longitude,
           last_location_update: new Date().toISOString(),
         })
         .eq('id', courierId);
 
       if (error) {
-        logger.error('Failed to update courier location', { error: error.message, request_id: requestId });
+        logger.error('Failed to update courier location', {
+          error: error.message,
+          request_id: requestId,
+        });
         throw new ServiceError('Failed to update location', 'DATABASE_ERROR', 500);
       }
 
@@ -259,7 +276,11 @@ export class CourierService {
       });
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error updating courier location', { error, courier_id: courierId, request_id: requestId });
+      logger.error('Error updating courier location', {
+        error,
+        courier_id: courierId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -278,16 +299,11 @@ export class CourierService {
         updated_at: new Date().toISOString(),
       };
 
-      // Update related flags
+      // Update related flags - is_available doesn't exist in DB, only is_online
       if (status === 'offline') {
         updates.is_online = false;
-        updates.is_available = false;
-      } else if (status === 'available') {
-        updates.is_online = true;
-        updates.is_available = true;
       } else {
         updates.is_online = true;
-        updates.is_available = false;
       }
 
       const { data, error } = await this.supabase
@@ -298,7 +314,10 @@ export class CourierService {
         .single();
 
       if (error) {
-        logger.error('Failed to update availability', { error: error.message, request_id: requestId });
+        logger.error('Failed to update availability', {
+          error: error.message,
+          request_id: requestId,
+        });
         throw new ServiceError('Failed to update availability', 'DATABASE_ERROR', 500);
       }
 
@@ -311,7 +330,11 @@ export class CourierService {
       return this.mapDatabaseCourier(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error updating availability', { error, courier_id: courierId, request_id: requestId });
+      logger.error('Error updating availability', {
+        error,
+        courier_id: courierId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -326,15 +349,16 @@ export class CourierService {
   ): Promise<CourierProfile> {
     try {
       const updates: any = {
-        verification_status: status,
+        // Map status to is_verified boolean
+        is_verified: status === 'verified',
         updated_at: new Date().toISOString(),
       };
 
       // If suspended, make them unavailable
       if (status === 'suspended') {
         updates.is_active = false;
-        updates.is_available = false;
         updates.availability_status = 'offline';
+        updates.is_online = false;
       } else if (status === 'verified') {
         updates.is_active = true;
       }
@@ -347,7 +371,10 @@ export class CourierService {
         .single();
 
       if (error) {
-        logger.error('Failed to update verification status', { error: error.message, request_id: requestId });
+        logger.error('Failed to update verification status', {
+          error: error.message,
+          request_id: requestId,
+        });
         throw new ServiceError('Failed to update verification status', 'DATABASE_ERROR', 500);
       }
 
@@ -360,7 +387,11 @@ export class CourierService {
       return this.mapDatabaseCourier(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error updating verification status', { error, courier_id: courierId, request_id: requestId });
+      logger.error('Error updating verification status', {
+        error,
+        courier_id: courierId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -378,28 +409,33 @@ export class CourierService {
         performance_metrics: courier.performance_metrics,
         verification_status: courier.verification_status,
         availability_status: courier.availability_status,
-        current_load_kg: courier.current_location ?
-          (await this.getCurrentLoad(courierId)) : 0,
+        // Calculate current load from active delivery assignments
+        current_load_kg: await this.calculateCurrentLoad(courierId),
         active_deliveries: await this.getActiveDeliveryCount(courierId),
       };
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error fetching courier stats', { error, courier_id: courierId, request_id: requestId });
+      logger.error('Error fetching courier stats', {
+        error,
+        courier_id: courierId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
 
   /**
-   * Get current load for courier (helper method)
+   * Calculate current load from active delivery assignments (helper method)
    */
-  private async getCurrentLoad(courierId: string): Promise<number> {
+  private async calculateCurrentLoad(courierId: string): Promise<number> {
     const { data } = await this.supabase
-      .from('courier_profiles')
-      .select('current_load_kg')
-      .eq('id', courierId)
-      .single();
+      .from('delivery_assignments')
+      .select('package_weight_kg')
+      .eq('courier_id', courierId)
+      .in('status', ['assigned', 'picked_up', 'in_transit'])
+      .is('deleted_at', null);
 
-    return data?.current_load_kg || 0;
+    return data?.reduce((sum, pkg) => sum + (pkg.package_weight_kg || 0), 0) || 0;
   }
 
   /**
@@ -410,7 +446,14 @@ export class CourierService {
       .from('delivery_assignments')
       .select('id', { count: 'exact', head: true })
       .eq('courier_id', courierId)
-      .in('status', ['assigned', 'courier_en_route_pickup', 'arrived_at_pickup', 'picked_up', 'in_transit', 'out_for_delivery']);
+      .in('status', [
+        'assigned',
+        'courier_en_route_pickup',
+        'arrived_at_pickup',
+        'picked_up',
+        'in_transit',
+        'out_for_delivery',
+      ]);
 
     return count || 0;
   }
@@ -427,14 +470,19 @@ export class CourierService {
       last_name: data.last_name,
       phone_number: data.phone_number,
       email: data.email,
-      verification_status: data.verification_status,
+      // Map is_verified boolean to verification_status string
+      verification_status: data.is_verified ? 'verified' : 'pending',
       availability_status: data.availability_status,
       is_online: data.is_online,
-      current_location: data.current_lat && data.current_lng ? {
-        latitude: data.current_lat,
-        longitude: data.current_lng,
-        updated_at: data.last_location_update,
-      } : undefined,
+      // Use correct column names: current_latitude, current_longitude
+      current_location:
+        data.current_latitude && data.current_longitude
+          ? {
+              latitude: data.current_latitude,
+              longitude: data.current_longitude,
+              updated_at: data.last_location_update,
+            }
+          : undefined,
       vehicle_info: {
         type: data.vehicle_type,
         registration: data.vehicle_registration,
@@ -443,15 +491,17 @@ export class CourierService {
       },
       performance_metrics: {
         total_deliveries: data.total_deliveries || 0,
-        completed_deliveries: data.completed_deliveries || 0,
+        // DB uses successful_deliveries, not completed_deliveries
+        completed_deliveries: data.successful_deliveries || 0,
         failed_deliveries: data.failed_deliveries || 0,
         average_rating: data.rating || 5.0,
-        completion_rate: data.completed_deliveries && data.total_deliveries
-          ? (data.completed_deliveries / data.total_deliveries) * 100
-          : 100,
-        on_time_delivery_rate: data.on_time_delivery_rate || 100,
+        completion_rate:
+          data.successful_deliveries && data.total_deliveries
+            ? (data.successful_deliveries / data.total_deliveries) * 100
+            : 100,
+        on_time_delivery_rate: 100, // Not tracked in DB, default value
         average_delivery_time_minutes: data.average_delivery_time_minutes || 0,
-        total_earnings: data.total_earnings || 0,
+        total_earnings: 0, // Not tracked in courier_profiles, would come from payments
       },
       created_at: data.created_at,
       updated_at: data.updated_at,
