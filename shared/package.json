@@ -13,6 +13,10 @@
       "import": "./dist/config/index.js",
       "types": "./dist/config/index.d.ts"
     },
+    "./observability": {
+      "import": "./dist/observability/index.js",
+      "types": "./dist/observability/index.d.ts"
+    },
     "./types/database": {
       "import": "./types/database.js",
       "types": "./types/database.d.ts"

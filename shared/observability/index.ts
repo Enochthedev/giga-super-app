@@ -14,4 +14,10 @@ export * from './sentry';
 export * from './tracing';
 
 // Health check utilities
-export { createHealthCheck } from './health';
+export {
+  createDatabaseChecker,
+  createExternalServiceChecker,
+  createHealthCheck,
+  createMemoryChecker,
+} from './health';
+export type { HealthCheckResult, HealthChecker } from './health';
