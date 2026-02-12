@@ -46,7 +46,9 @@ export const authMiddleware = async (
       req.path.startsWith('/public') ||
       req.path.includes('/api-docs') ||
       req.path.includes('/swagger') ||
-      req.path.endsWith('/docs')
+      req.path.endsWith('/docs') ||
+      req.path === '/api/ads/fetch' ||
+      req.path === '/api/v1/ads/fetch'
     ) {
       next();
       return;
