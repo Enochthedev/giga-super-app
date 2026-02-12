@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/node';
-import { ProfilingIntegration } from '@sentry/profiling-node';
 import { Express } from 'express';
 
 interface SentryConfig {
@@ -30,12 +29,8 @@ export const initializeSentry = (config: SentryConfig): void => {
 
     // Performance Monitoring
     tracesSampleRate: config.tracesSampleRate || 0.1, // 10% of transactions
-    profilesSampleRate: config.profilesSampleRate || 0.1, // 10% profiling
 
     integrations: [
-      // Profiling integration for performance insights
-      new ProfilingIntegration(),
-
       // HTTP integration for tracking outgoing requests
       new Sentry.Integrations.Http({ tracing: true }),
 
