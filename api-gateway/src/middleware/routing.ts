@@ -68,6 +68,8 @@ export const routingMiddleware = (
   const proxyOptions: Options = {
     target: service.baseUrl,
     changeOrigin: true,
+    timeout: 30000, // 30 second timeout for backend requests
+    proxyTimeout: 30000, // 30 second timeout for proxy
     pathRewrite:
       service.platform === 'supabase'
         ? path => `/functions/v1${path.replace('/api/v1', '')}`
@@ -145,6 +147,15 @@ export const routingMiddleware = (
       // Add request ID for tracing
       if (authReq.id) {
         proxyReq.setHeader('X-Request-ID', authReq.id);
+      }
+
+      // Re-stream the body for POST/PUT/PATCH requests
+      // This is needed because express.json() consumes the body
+      if (['POST', 'PUT', 'PATCH'].includes(authReq.method || '')) {
+        const bodyData = JSON.stringify(authReq.body || {});
+        proxyReq.setHeader('Content-Type', 'application/json');
+        proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
+        proxyReq.write(bodyData);
       }
     },
     onProxyRes: (_proxyRes, _clientReq, clientRes) => {
