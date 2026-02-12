@@ -508,12 +508,11 @@ export interface UpdateCourierRequest {
   vehicle_capacity_kg?: number;
   max_delivery_radius_km?: number;
   license_number?: string;
-  license_expiry?: string;
+  license_expiry_date?: string;
   is_online?: boolean;
-  is_available?: boolean;
   availability_status?: CourierAvailabilityStatus;
-  current_lat?: number;
-  current_lng?: number;
+  current_latitude?: number;
+  current_longitude?: number;
 }
 
 export type VehicleType = 'bicycle' | 'motorcycle' | 'car' | 'van' | 'truck';

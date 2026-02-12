@@ -99,7 +99,7 @@ class TrackingService {
       // Calculate additional tracking metrics
       const enhancedData = await this.enhanceTrackingData(filteredData, assignment);
 
-      // Insert tracking record
+      // Insert tracking record - include required location column (PostGIS geography)
       const { data: trackingRecord, error } = await supabase
         .from('delivery_tracking')
         .insert({
@@ -107,6 +107,8 @@ class TrackingService {
           courier_id: courierProfile.id,
           latitude: enhancedData.latitude,
           longitude: enhancedData.longitude,
+          // location is a PostGIS geography column - use ST_MakePoint
+          location: `SRID=4326;POINT(${enhancedData.longitude} ${enhancedData.latitude})`,
           accuracy_meters: enhancedData.accuracy_meters,
           speed_kmh: enhancedData.speed_kmh,
           heading_degrees: enhancedData.heading_degrees,

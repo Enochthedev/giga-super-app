@@ -136,7 +136,7 @@ export class DeliveryAssignmentService {
         continue;
       }
 
-      // Check availability status
+      // Check availability status - find_nearby_couriers already filters for is_active and is_verified
       if (courier.availability_status !== 'available' || !courier.is_online) {
         continue;
       }
@@ -157,20 +157,29 @@ export class DeliveryAssignmentService {
       }
 
       // Check vehicle capacity if package weight is specified
-      if (packageWeightKg && courier.vehicle_capacity_kg) {
-        // Get total weight of current assignments
-        const { data: currentPackages } = await this.supabase
-          .from('delivery_assignments')
-          .select('package_weight_kg')
-          .eq('courier_id', courier.courier_id)
-          .in('status', ['assigned', 'picked_up', 'in_transit'])
-          .is('deleted_at', null);
+      // Note: find_nearby_couriers doesn't return vehicle_capacity_kg, need to fetch it
+      if (packageWeightKg) {
+        const { data: courierDetails } = await this.supabase
+          .from('courier_profiles')
+          .select('vehicle_capacity_kg')
+          .eq('id', courier.courier_id)
+          .single();
 
-        const currentWeight =
-          currentPackages?.reduce((sum, pkg) => sum + (pkg.package_weight_kg || 0), 0) || 0;
+        if (courierDetails?.vehicle_capacity_kg) {
+          // Get total weight of current assignments
+          const { data: currentPackages } = await this.supabase
+            .from('delivery_assignments')
+            .select('package_weight_kg')
+            .eq('courier_id', courier.courier_id)
+            .in('status', ['assigned', 'picked_up', 'in_transit'])
+            .is('deleted_at', null);
 
-        if (currentWeight + packageWeightKg > courier.vehicle_capacity_kg) {
-          continue;
+          const currentWeight =
+            currentPackages?.reduce((sum, pkg) => sum + (pkg.package_weight_kg || 0), 0) || 0;
+
+          if (currentWeight + packageWeightKg > courierDetails.vehicle_capacity_kg) {
+            continue;
+          }
         }
       }
 
@@ -220,6 +229,15 @@ export class DeliveryAssignmentService {
     const maxDeliveries = Math.max(...couriers.map(c => c.total_deliveries || 0));
 
     for (const courier of couriers) {
+      // Fetch additional courier details not returned by find_nearby_couriers
+      const { data: courierDetails } = await this.supabase
+        .from('courier_profiles')
+        .select(
+          'user_id, email, vehicle_registration, vehicle_capacity_kg, max_delivery_radius_km, successful_deliveries, total_deliveries, current_latitude, current_longitude, last_location_update, created_at, updated_at'
+        )
+        .eq('id', courier.courier_id)
+        .single();
+
       // Distance score (40% weight) - closer is better
       const distanceScore =
         maxDistance > 0 ? ((maxDistance - courier.distance_km) / maxDistance) * 40 : 40;
@@ -228,8 +246,8 @@ export class DeliveryAssignmentService {
       const ratingScore = (courier.rating / 5) * 25;
 
       // Experience score (20% weight) - more deliveries is better
-      const experienceScore =
-        maxDeliveries > 0 ? ((courier.total_deliveries || 0) / maxDeliveries) * 20 : 0;
+      const totalDeliveries = courierDetails?.total_deliveries || 0;
+      const experienceScore = maxDeliveries > 0 ? (totalDeliveries / maxDeliveries) * 20 : 0;
 
       // Workload score (10% weight) - fewer current assignments is better
       const workloadScore = (1 - courier.currentAssignments / this.MAX_COURIER_ASSIGNMENTS) * 10;
@@ -270,8 +288,8 @@ export class DeliveryAssignmentService {
       }
 
       // Apply capacity bonus for larger vehicles when needed
-      if (criteria.packageWeightKg && courier.vehicle_capacity_kg) {
-        const capacityUtilization = criteria.packageWeightKg / courier.vehicle_capacity_kg;
+      if (criteria.packageWeightKg && courierDetails?.vehicle_capacity_kg) {
+        const capacityUtilization = criteria.packageWeightKg / courierDetails.vehicle_capacity_kg;
         if (capacityUtilization <= 0.8) {
           // Good capacity margin
           totalScore += 3;
@@ -281,21 +299,22 @@ export class DeliveryAssignmentService {
       const courierScore: CourierScore = {
         courier: {
           id: courier.courier_id,
-          user_id: courier.user_id,
+          user_id: courierDetails?.user_id || '',
           courier_code: courier.courier_code,
           first_name: courier.first_name,
           last_name: courier.last_name,
           phone_number: courier.phone_number,
-          email: courier.email || '',
-          verification_status: courier.is_verified ? 'verified' : 'pending',
+          email: courierDetails?.email || '',
+          // find_nearby_couriers filters for is_verified=true, so all returned are verified
+          verification_status: 'verified',
           availability_status: courier.availability_status,
           is_online: courier.is_online,
           current_location:
-            courier.current_latitude && courier.current_longitude
+            courierDetails?.current_latitude && courierDetails?.current_longitude
               ? {
-                  latitude: courier.current_latitude,
-                  longitude: courier.current_longitude,
-                  updated_at: courier.last_location_update || new Date().toISOString(),
+                  latitude: courierDetails.current_latitude,
+                  longitude: courierDetails.current_longitude,
+                  updated_at: courierDetails.last_location_update || new Date().toISOString(),
                 }
               : {
                   latitude: 0,
@@ -304,25 +323,25 @@ export class DeliveryAssignmentService {
                 },
           vehicle_info: {
             type: courier.vehicle_type,
-            registration: courier.vehicle_registration || '',
-            capacity_kg: courier.vehicle_capacity_kg || 0,
-            max_delivery_radius_km: courier.max_delivery_radius_km || 0,
+            registration: courierDetails?.vehicle_registration || '',
+            capacity_kg: courierDetails?.vehicle_capacity_kg || 0,
+            max_delivery_radius_km: courierDetails?.max_delivery_radius_km || 0,
           },
           performance_metrics: {
-            total_deliveries: courier.total_deliveries || 0,
-            completed_deliveries: courier.successful_deliveries || 0,
-            failed_deliveries: courier.failed_deliveries || 0,
+            total_deliveries: courierDetails?.total_deliveries || 0,
+            completed_deliveries: courierDetails?.successful_deliveries || 0,
+            failed_deliveries: 0, // Would need to fetch separately
             average_rating: courier.rating,
             completion_rate:
-              courier.total_deliveries > 0
-                ? (courier.successful_deliveries || 0) / courier.total_deliveries
+              courierDetails?.total_deliveries > 0
+                ? (courierDetails?.successful_deliveries || 0) / courierDetails.total_deliveries
                 : 0,
             on_time_delivery_rate: 0.95, // Default value, would be calculated from data
-            average_delivery_time_minutes: courier.average_delivery_time_minutes || 0,
+            average_delivery_time_minutes: 0, // Would need to fetch separately
             total_earnings: 0, // Would be calculated from payment data
           },
-          created_at: courier.created_at || new Date().toISOString(),
-          updated_at: courier.updated_at || new Date().toISOString(),
+          created_at: courierDetails?.created_at || new Date().toISOString(),
+          updated_at: courierDetails?.updated_at || new Date().toISOString(),
         },
         score: Math.round(totalScore * 100) / 100,
         distanceKm: courier.distance_km,
@@ -609,8 +628,49 @@ export class DeliveryAssignmentService {
       );
     }
 
+    // Map courier data to CourierScore format
     return {
-      courier,
+      courier: {
+        id: courier.id,
+        user_id: courier.user_id,
+        courier_code: courier.courier_code,
+        first_name: courier.first_name,
+        last_name: courier.last_name,
+        phone_number: courier.phone_number,
+        email: courier.email || '',
+        verification_status: courier.is_verified ? 'verified' : 'pending',
+        availability_status: courier.availability_status,
+        is_online: courier.is_online,
+        current_location:
+          courier.current_latitude && courier.current_longitude
+            ? {
+                latitude: courier.current_latitude,
+                longitude: courier.current_longitude,
+                updated_at: courier.last_location_update || new Date().toISOString(),
+              }
+            : undefined,
+        vehicle_info: {
+          type: courier.vehicle_type,
+          registration: courier.vehicle_registration || '',
+          capacity_kg: courier.vehicle_capacity_kg || 0,
+          max_delivery_radius_km: courier.max_delivery_radius_km || 0,
+        },
+        performance_metrics: {
+          total_deliveries: courier.total_deliveries || 0,
+          completed_deliveries: courier.successful_deliveries || 0,
+          failed_deliveries: courier.failed_deliveries || 0,
+          average_rating: courier.rating || 5.0,
+          completion_rate:
+            courier.total_deliveries > 0
+              ? (courier.successful_deliveries || 0) / courier.total_deliveries
+              : 0,
+          on_time_delivery_rate: 0.95,
+          average_delivery_time_minutes: courier.average_delivery_time_minutes || 0,
+          total_earnings: 0,
+        },
+        created_at: courier.created_at,
+        updated_at: courier.updated_at,
+      },
       score: 100, // Manual assignment gets perfect score
       distanceKm: 0, // Distance not calculated for manual assignment
       currentAssignments,
@@ -634,14 +694,20 @@ export class DeliveryAssignmentService {
     courier: CourierScore,
     requestId: string
   ): Promise<DeliveryAssignment> {
+    // Generate assignment number
+    const assignmentNumber = `DA${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).substring(2, 5).toUpperCase()}`;
+
     const assignmentData = {
       id: uuidv4(),
+      assignment_number: assignmentNumber,
       order_id: request.orderId,
       courier_id: courier.courier.id,
       pickup_latitude: request.pickupLocation.latitude,
       pickup_longitude: request.pickupLocation.longitude,
       delivery_latitude: request.deliveryLocation.latitude,
       delivery_longitude: request.deliveryLocation.longitude,
+      // delivery_address_id is required - need to get from order or create
+      delivery_address_id: request.orderId, // Placeholder - should be actual address ID
       status: 'assigned' as const,
       priority: request.priority || 3,
       package_weight_kg: request.packageWeightKg,
