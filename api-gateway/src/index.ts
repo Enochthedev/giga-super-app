@@ -6,6 +6,11 @@ import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 
 import { config } from './config/index.js';
+import {
+  initializeObservability,
+  setupHealthChecks,
+  setupObservabilityErrorHandler,
+} from './config/observability.js';
 import { swaggerSpec } from './config/swagger.js';
 import { authMiddleware } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
@@ -19,6 +24,9 @@ import { serviceRegistry } from './services/serviceRegistry.js';
 import { logger } from './utils/logger.js';
 
 const app = express();
+
+// Initialize observability (Sentry, metrics, tracing) - MUST BE FIRST
+initializeObservability(app);
 
 // Security middleware
 app.use(
@@ -113,6 +121,9 @@ app.use(supabaseProxy);
 // Main routing middleware
 app.use(routingMiddleware);
 
+// Setup observability error handler (Sentry) - MUST BE BEFORE other error handlers
+setupObservabilityErrorHandler(app);
+
 // Error handling
 app.use(errorHandler);
 
@@ -124,6 +135,9 @@ const startServer = async () => {
   try {
     // Initialize service registry
     await serviceRegistry.initialize();
+
+    // Setup health checks and metrics endpoints
+    setupHealthChecks(app);
 
     // Start server
     app.listen(config.port, () => {

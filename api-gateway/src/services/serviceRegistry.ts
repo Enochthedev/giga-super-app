@@ -368,6 +368,23 @@ class ServiceRegistry {
     return Array.from(this.services.values()).filter(service => !service.healthy);
   }
 
+  isServiceHealthy(serviceName: string): boolean {
+    // Map service names to service IDs
+    const serviceIdMap: Record<string, string> = {
+      social: 'railway-social',
+      admin: 'railway-admin',
+      search: 'railway-search',
+      payment: 'railway-payment',
+      delivery: 'railway-delivery',
+      notifications: 'railway-notifications',
+      taxiRealtime: 'railway-taxi-realtime',
+    };
+
+    const serviceId = serviceIdMap[serviceName] || serviceName;
+    const service = this.services.get(serviceId);
+    return service?.healthy ?? false;
+  }
+
   getCircuitBreaker(serviceId: string): CircuitBreaker {
     if (!this.circuitBreakers.has(serviceId)) {
       const service = this.services.get(serviceId);
