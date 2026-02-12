@@ -35,6 +35,12 @@ RUN npm ci --only=production --ignore-scripts
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/shared ./shared
 
+# Install shared dependencies
+WORKDIR /app/shared
+RUN npm ci --omit=dev
+
+WORKDIR /app
+
 # Expose port (Railway will set PORT env var)
 EXPOSE 3000
 

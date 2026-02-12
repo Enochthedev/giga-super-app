@@ -11,7 +11,11 @@ COPY tsconfig.base.json ./
 COPY shared ./shared
 COPY admin-service ./admin-service
 
-# Install all dependencies (including tsx)
+# Install shared dependencies first
+WORKDIR /app/shared
+RUN npm ci --omit=dev
+
+# Install service dependencies
 WORKDIR /app/admin-service
 RUN npm ci
 

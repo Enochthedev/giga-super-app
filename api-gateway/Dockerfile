@@ -11,7 +11,11 @@ COPY tsconfig.base.json ./
 COPY shared ./shared
 COPY api-gateway ./api-gateway
 
-# Install all dependencies (including tsx)
+# Install shared dependencies first
+WORKDIR /app/shared
+RUN npm ci --omit=dev
+
+# Install api-gateway dependencies
 WORKDIR /app/api-gateway
 RUN npm ci
 
