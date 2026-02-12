@@ -693,8 +693,8 @@ paths:
           name: status
           schema:
             type: string
-            enum: [pending, approved, rejected]
-            default: pending
+            enum: [draft, pending_approval, active, paused, completed, cancelled, rejected]
+            default: pending_approval
           description: Filter by advertisement status
       responses:
         200:
@@ -741,8 +741,9 @@ paths:
               properties:
                 status:
                   type: string
-                  enum: [approved, rejected, pending]
-                  example: approved
+                  enum: [active, rejected, paused, cancelled]
+                  example: active
+                  description: New status for the campaign (active = approved)
                 review_notes:
                   type: string
                   example: 'Campaign approved for publication'
@@ -1279,6 +1280,7 @@ components:
           example: 'Summer Sale Campaign'
         campaign_type:
           type: string
+          enum: [banner, video, native, sponsored, search]
           example: 'banner'
         budget:
           type: number
@@ -1293,8 +1295,8 @@ components:
           example: '2026-02-28'
         status:
           type: string
-          enum: [pending, approved, rejected]
-          example: 'pending'
+          enum: [draft, pending_approval, active, paused, completed, cancelled, rejected]
+          example: 'pending_approval'
         created_at:
           type: string
           format: date-time
