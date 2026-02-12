@@ -39,14 +39,14 @@ const logger = winston.createLogger({
  *         name: status
  *         schema:
  *           type: string
- *           enum: [pending, approved, rejected]
+ *           enum: [draft, pending_approval, active, paused, completed, cancelled, rejected]
  *         description: Filter by ad status
- *         example: 'pending'
+ *         example: 'pending_approval'
  *       - in: query
  *         name: campaign_type
  *         schema:
  *           type: string
- *           enum: [banner, video, native, sponsored]
+ *           enum: [banner, video, native, sponsored, search]
  *         description: Filter by campaign type
  *     responses:
  *       200:
@@ -103,7 +103,7 @@ const logger = winston.createLogger({
  *                   budget: 50000.00
  *                   start_date: "2026-02-01"
  *                   end_date: "2026-02-28"
- *                   status: "pending"
+ *                   status: "pending_approval"
  *                   created_at: "2026-01-25T10:30:00Z"
  *                   advertiser_profiles:
  *                     business_name: "Tech Solutions Ltd"
@@ -152,8 +152,8 @@ router.get('/incoming', authenticate, requireAnyAccess, async (req: AuthRequest,
     if (status) {
       query = query.eq('status', status as string);
     } else {
-      // Default to pending ads
-      query = query.eq('status', 'pending');
+      // Default to pending_approval ads (awaiting review)
+      query = query.eq('status', 'pending_approval');
     }
 
     if (campaign_type) {
@@ -205,11 +205,12 @@ router.get('/incoming', authenticate, requireAnyAccess, async (req: AuthRequest,
  *             properties:
  *               status:
  *                 type: string
- *                 enum: [approved, rejected]
+ *                 enum: [active, rejected, paused, cancelled]
+ *                 description: New status for the campaign (active = approved)
  *               review_notes:
  *                 type: string
  *           example:
- *             status: "approved"
+ *             status: "active"
  *             review_notes: "Campaign meets all guidelines and is approved for publication"
  *     responses:
  *       200:
@@ -263,8 +264,12 @@ router.put(
       const { adId } = req.params;
       const { status, review_notes } = req.body;
 
-      if (!['approved', 'rejected'].includes(status)) {
-        return res.status(400).json({ error: 'Invalid status. Must be "approved" or "rejected"' });
+      // Valid status transitions for admin actions
+      const validStatuses = ['active', 'rejected', 'paused', 'cancelled'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({
+          error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
+        });
       }
 
       const { data: ad, error } = await supabase
@@ -286,7 +291,10 @@ router.put(
         return res.status(404).json({ error: 'Advertisement not found' });
       }
 
-      await createAudit(req, 'update_ad_status', 'ad_campaigns', adId, { status, review_notes });
+      await createAudit(req, 'update_ad_status', 'ad_campaigns', adId, {
+        status,
+        review_notes,
+      });
 
       res.json({ success: true, data: ad });
     } catch (error: any) {
@@ -394,7 +402,7 @@ router.post('/fetch', async (req: AuthRequest, res: Response) => {
     let query = supabase
       .from('ad_campaigns')
       .select('*')
-      .eq('status', 'approved') // Changed from 'active' to 'approved' to match the status update endpoint
+      .eq('status', 'active') // Use 'active' status for live campaigns
       .lte('start_date', today)
       .gte('end_date', today)
       .is('deleted_at', null)

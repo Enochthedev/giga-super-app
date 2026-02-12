@@ -103,7 +103,7 @@ router.get(
       const { data: revenueData } = await supabase
         .from('payments')
         .select('amount')
-        .eq('status', 'completed')
+        .eq('payment_status', 'completed')
         .is('deleted_at', null);
 
       const totalRevenue =
