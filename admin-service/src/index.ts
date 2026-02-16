@@ -19,7 +19,7 @@ import businessModulesRoutes from './routes/business-modules';
 import dashboardRoutes from './routes/dashboard';
 import healthRoutes from './routes/health';
 import managersRoutes from './routes/managers';
-import modulesRoutes from './routes/modules';
+import modulesRoutes from './routes/modules/index';
 import nipostRoutes from './routes/nipost';
 import postalMonitoringRoutes from './routes/postal-monitoring';
 import usersRoutes from './routes/users';
