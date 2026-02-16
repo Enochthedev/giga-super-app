@@ -5,77 +5,72 @@ const options = {
     openapi: '3.0.3',
     info: {
       title: 'Taxi Realtime Service API',
-      version: '1.0.0',
+      version: '2.0.0',
       description: `
-## Taxi Realtime Service API
+## Taxi Realtime Service
 
-Real-time taxi tracking and trip management using WebSockets (Socket.IO).
+Real-time taxi tracking and ride management service with REST API and WebSocket support.
 
-### Features
-- **Driver Tracking**: Real-time location updates every 5 seconds
-- **Trip Management**: Request, accept, and manage taxi trips
-- **Rider/Driver Matching**: Find nearby available drivers
-- **Live ETA Updates**: Dynamic arrival time calculations
+### Base URLs
+- **REST API**: \`https://taxi-realtime.giga.railway.app/api\`
+- **WebSocket**: \`wss://taxi-realtime.giga.railway.app\`
+- **Swagger UI**: \`/api-docs\`
+
+### Authentication
+All protected endpoints require JWT Bearer token from Supabase Auth:
+\`\`\`
+Authorization: Bearer <your-jwt-token>
+\`\`\`
 
 ### WebSocket Connection
-Connect via Socket.IO at \`wss://giga-giga-production.up.railway.app\` with JWT auth:
 \`\`\`javascript
-const socket = io('wss://giga-giga-production.up.railway.app', {
+const socket = io('wss://taxi-realtime.giga.railway.app', {
   auth: { token: 'your-jwt-token' }
 });
 \`\`\`
 
-### Socket.IO Events
+### WebSocket Events
 
-#### Driver Events
-| Event | Direction | Description |
-|-------|-----------|-------------|
-| \`driver:location:update\` | Client → Server | Update driver location |
-| \`driver:available\` | Broadcast | Driver became available |
+#### Driver Events (emit)
+| Event | Payload | Description |
+|-------|---------|-------------|
+| \`driver:location:update\` | \`{ lat, lng }\` | Update driver location |
+| \`trip:accept\` | \`{ tripId }\` | Accept a trip request |
+| \`trip:status:update\` | \`{ tripId, status }\` | Update trip status |
 
-#### Rider Events
-| Event | Direction | Description |
-|-------|-----------|-------------|
-| \`rider:request:nearby-drivers\` | Client → Server | Find nearby drivers |
-| \`rider:nearby-drivers\` | Server → Client | List of nearby drivers |
-| \`rider:track:driver\` | Client → Server | Start tracking a driver |
+#### Driver Events (listen)
+| Event | Payload | Description |
+|-------|---------|-------------|
+| \`trip:new-request\` | \`{ tripId, riderId, pickupLocation, dropoffLocation }\` | New trip request |
+| \`trip:accept:confirmed\` | \`{ tripId }\` | Trip acceptance confirmed |
 
-#### Trip Events
-| Event | Direction | Description |
-|-------|-----------|-------------|
-| \`trip:request\` | Client → Server | Request a new trip |
-| \`trip:request:received\` | Server → Driver | Trip request for driver |
-| \`trip:accept\` | Client → Server | Driver accepts trip |
-| \`trip:accepted\` | Server → Rider | Trip was accepted |
-| \`trip:status:update\` | Client → Server | Update trip status |
-| \`trip:status:changed\` | Broadcast | Trip status changed |
+#### Rider Events (emit)
+| Event | Payload | Description |
+|-------|---------|-------------|
+| \`rider:request:nearby-drivers\` | \`{ lat, lng, radius }\` | Find nearby drivers |
+| \`trip:request\` | \`{ driverId, pickupLat, pickupLng, dropoffLat, dropoffLng }\` | Request a trip |
+| \`rider:track:driver\` | \`{ driverId }\` | Start tracking driver |
+| \`rider:untrack:driver\` | \`{ driverId }\` | Stop tracking driver |
 
-### Trip Status Flow
-\`\`\`
-requested → accepted → driver_arrived → in_progress → completed
-                  ↘ cancelled        ↘ cancelled
-\`\`\`
-
-### Rate Limiting
-- Location updates: 100/minute per driver
-- Trip requests: 10/minute per rider
+#### Rider Events (listen)
+| Event | Payload | Description |
+|-------|---------|-------------|
+| \`rider:nearby-drivers\` | \`{ drivers: [...] }\` | List of nearby drivers |
+| \`trip:request:sent\` | \`{ tripId }\` | Trip request created |
+| \`trip:accepted\` | \`{ tripId, driverId }\` | Trip was accepted |
+| \`driver:location\` | \`{ driverId, lat, lng, timestamp }\` | Driver location update |
+| \`trip:status\` | \`{ tripId, status, timestamp }\` | Trip status changed |
       `,
-      contact: {
-        name: 'Giga Platform Team',
-        email: 'api@giga.com',
-      },
+      contact: { name: 'Giga Platform Team', email: 'api@giga.com' },
     },
     servers: [
-      {
-        url: '/',
-        description: 'Root',
-      },
+      { url: '/', description: 'Current Server' },
+      { url: 'https://taxi-realtime.giga.railway.app', description: 'Production' },
     ],
     tags: [
-      { name: 'Health', description: 'Service health checks' },
-      { name: 'Drivers', description: 'Driver management and availability' },
-      { name: 'Trips', description: 'Trip lifecycle management' },
-      { name: 'Tracking', description: 'Real-time location tracking' },
+      { name: 'Health', description: 'Service health endpoints' },
+      { name: 'Drivers', description: 'Driver profile and location management' },
+      { name: 'Rides', description: 'Ride request and management' },
     ],
     components: {
       securitySchemes: {
@@ -87,63 +82,75 @@ requested → accepted → driver_arrived → in_progress → completed
         },
       },
       schemas: {
-        // Core entities
         Driver: {
           type: 'object',
           properties: {
-            id: { type: 'string', format: 'uuid', example: '550e8400-e29b-41d4-a716-446655440000' },
+            id: { type: 'string', format: 'uuid' },
             user_id: { type: 'string', format: 'uuid' },
-            name: { type: 'string', example: 'John Driver' },
-            phone: { type: 'string', example: '+2348012345678' },
-            vehicle_type: {
-              type: 'string',
-              enum: ['sedan', 'suv', 'van', 'motorcycle', 'tricycle'],
-              example: 'sedan',
+            license_number: { type: 'string', example: 'DRV-12345' },
+            vehicle_info: {
+              type: 'object',
+              properties: {
+                make: { type: 'string', example: 'Toyota' },
+                model: { type: 'string', example: 'Camry' },
+                year: { type: 'integer', example: 2020 },
+                color: { type: 'string', example: 'Black' },
+                plate_number: { type: 'string', example: 'ABC-123-XY' },
+              },
             },
-            vehicle_plate: { type: 'string', example: 'ABC-123-XY' },
-            rating: { type: 'number', minimum: 1, maximum: 5, example: 4.8 },
-            total_trips: { type: 'integer', example: 256 },
-            is_available: { type: 'boolean', example: true },
+            is_online: { type: 'boolean', example: true },
             is_verified: { type: 'boolean', example: true },
-            created_at: { type: 'string', format: 'date-time' },
+            rating: { type: 'number', minimum: 1, maximum: 5, example: 4.8 },
+            total_rides: { type: 'integer', example: 256 },
+            vehicle_type: { type: 'string', enum: ['standard', 'premium', 'suv', 'motorcycle'] },
+            current_location: { $ref: '#/components/schemas/GeoLocation' },
+            user: { $ref: '#/components/schemas/UserProfile' },
           },
         },
-        DriverLocation: {
+        UserProfile: {
           type: 'object',
-          required: ['driver_id', 'latitude', 'longitude'],
           properties: {
-            driver_id: { type: 'string', format: 'uuid' },
-            latitude: { type: 'number', format: 'double', example: 6.5244 },
-            longitude: { type: 'number', format: 'double', example: 3.3792 },
-            heading: { type: 'number', description: 'Direction in degrees (0-360)', example: 45 },
-            speed: { type: 'number', description: 'Speed in km/h', example: 35.5 },
-            accuracy: { type: 'number', description: 'GPS accuracy in meters', example: 10 },
-            timestamp: { type: 'string', format: 'date-time' },
+            first_name: { type: 'string', example: 'John' },
+            last_name: { type: 'string', example: 'Doe' },
+            email: { type: 'string', format: 'email' },
+            phone: { type: 'string', example: '+2348012345678' },
+            avatar_url: { type: 'string', format: 'uri' },
           },
         },
         GeoLocation: {
           type: 'object',
-          required: ['lat', 'lng'],
+          required: ['latitude', 'longitude'],
           properties: {
-            lat: { type: 'number', format: 'double', example: 6.5244 },
-            lng: { type: 'number', format: 'double', example: 3.3792 },
+            latitude: { type: 'number', format: 'double', example: 6.5244 },
+            longitude: { type: 'number', format: 'double', example: 3.3792 },
           },
         },
-        Trip: {
+        NearbyDriver: {
+          type: 'object',
+          allOf: [{ $ref: '#/components/schemas/Driver' }],
+          properties: {
+            distance_km: { type: 'number', example: 1.5 },
+            eta_minutes: { type: 'integer', example: 5 },
+          },
+        },
+        Ride: {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' },
-            rider_id: { type: 'string', format: 'uuid' },
+            ride_number: { type: 'string', example: 'RIDE-ABC123' },
+            passenger_id: { type: 'string', format: 'uuid' },
             driver_id: { type: 'string', format: 'uuid' },
             status: {
               type: 'string',
               enum: [
                 'requested',
                 'accepted',
-                'driver_arrived',
+                'arrived',
+                'picked_up',
                 'in_progress',
                 'completed',
                 'cancelled',
+                'no_show',
               ],
               example: 'in_progress',
             },
@@ -151,142 +158,93 @@ requested → accepted → driver_arrived → in_progress → completed
             pickup_address: { type: 'string', example: 'Victoria Island, Lagos' },
             dropoff_location: { $ref: '#/components/schemas/GeoLocation' },
             dropoff_address: { type: 'string', example: 'Ikeja, Lagos' },
-            estimated_fare: { type: 'number', example: 3500.0 },
-            final_fare: { type: 'number', example: 3750.0 },
-            distance_km: { type: 'number', example: 15.5 },
-            duration_minutes: { type: 'integer', example: 35 },
+            distance_km: { type: 'number', example: 12.5 },
+            estimated_duration_minutes: { type: 'integer', example: 30 },
+            base_fare: { type: 'number', example: 500 },
+            total_fare: { type: 'number', example: 2350 },
+            final_amount: { type: 'number', example: 2350 },
+            rating: { type: 'integer', minimum: 1, maximum: 5 },
+            review_comment: { type: 'string' },
+            passenger_notes: { type: 'string' },
+            driver_eta_minutes: { type: 'integer' },
             created_at: { type: 'string', format: 'date-time' },
-            started_at: { type: 'string', format: 'date-time' },
+            accepted_at: { type: 'string', format: 'date-time' },
+            pickup_time: { type: 'string', format: 'date-time' },
+            dropoff_time: { type: 'string', format: 'date-time' },
             completed_at: { type: 'string', format: 'date-time' },
+            cancelled_at: { type: 'string', format: 'date-time' },
+            cancellation_reason: { type: 'string' },
           },
         },
-        TripRequest: {
-          type: 'object',
-          required: ['driverId', 'pickupLat', 'pickupLng', 'dropoffLat', 'dropoffLng'],
-          properties: {
-            driverId: { type: 'string', format: 'uuid' },
-            pickupLat: { type: 'number', format: 'double', example: 6.5244 },
-            pickupLng: { type: 'number', format: 'double', example: 3.3792 },
-            dropoffLat: { type: 'number', format: 'double', example: 6.6018 },
-            dropoffLng: { type: 'number', format: 'double', example: 3.3515 },
-            pickupAddress: { type: 'string', example: 'Victoria Island, Lagos' },
-            dropoffAddress: { type: 'string', example: 'Ikeja, Lagos' },
-          },
-        },
-        NearbyDriver: {
+        FareEstimate: {
           type: 'object',
           properties: {
-            driver: { $ref: '#/components/schemas/Driver' },
-            location: { $ref: '#/components/schemas/GeoLocation' },
-            distance_km: { type: 'number', example: 1.5 },
-            eta_minutes: { type: 'integer', example: 5 },
+            distance_km: { type: 'number', example: 12.5 },
+            duration_minutes: { type: 'integer', example: 30 },
+            base_fare: { type: 'number', example: 500 },
+            distance_fare: { type: 'number', example: 1250 },
+            time_fare: { type: 'number', example: 600 },
+            estimated_total: { type: 'number', example: 2350 },
+            currency: { type: 'string', example: 'NGN' },
+            vehicle_type: { type: 'string', example: 'standard' },
           },
         },
-        NearbyDriversRequest: {
-          type: 'object',
-          required: ['lat', 'lng'],
-          properties: {
-            lat: { type: 'number', format: 'double', example: 6.5244 },
-            lng: { type: 'number', format: 'double', example: 3.3792 },
-            radius: { type: 'number', description: 'Search radius in km', default: 5, example: 3 },
-            vehicleType: {
-              type: 'string',
-              enum: ['sedan', 'suv', 'van', 'motorcycle', 'tricycle'],
-            },
-          },
-        },
-        // Response schemas
-        SuccessResponse: {
-          type: 'object',
-          properties: {
-            success: { type: 'boolean', example: true },
-            data: { type: 'object' },
-          },
-        },
-        ErrorResponse: {
+        Error: {
           type: 'object',
           properties: {
             success: { type: 'boolean', example: false },
             error: {
               type: 'object',
               properties: {
-                code: { type: 'string', example: 'TRIP_NOT_FOUND' },
-                message: { type: 'string', example: 'Trip not found' },
+                code: { type: 'string', example: 'VALIDATION_ERROR' },
+                message: { type: 'string', example: 'Invalid input' },
               },
             },
-          },
-        },
-        HealthResponse: {
-          type: 'object',
-          properties: {
-            status: { type: 'string', example: 'healthy' },
-            service: { type: 'string', example: 'taxi-realtime-service' },
-            version: { type: 'string', example: '1.0.0' },
-            uptime: { type: 'number', description: 'Uptime in seconds' },
-            redis: { type: 'string', enum: ['connected', 'disconnected'] },
-            activeDrivers: { type: 'integer', example: 45 },
-            activeRiders: { type: 'integer', example: 120 },
-            timestamp: { type: 'string', format: 'date-time' },
           },
         },
       },
       responses: {
         UnauthorizedError: {
-          description: 'Unauthorized - Authentication required',
+          description: 'Authentication required',
           content: {
             'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              schema: { $ref: '#/components/schemas/Error' },
               example: {
                 success: false,
-                error: { code: 'AUTHENTICATION_REQUIRED', message: 'Valid JWT token required' },
+                error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
               },
             },
           },
         },
         ForbiddenError: {
-          description: 'Forbidden - Insufficient permissions',
+          description: 'Insufficient permissions',
           content: {
             'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
-              example: {
-                success: false,
-                error: { code: 'FORBIDDEN', message: 'Only drivers can perform this action' },
-              },
+              schema: { $ref: '#/components/schemas/Error' },
+              example: { success: false, error: { code: 'FORBIDDEN', message: 'Access denied' } },
             },
           },
         },
         NotFoundError: {
-          description: 'Not Found - Resource does not exist',
+          description: 'Resource not found',
           content: {
             'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              schema: { $ref: '#/components/schemas/Error' },
               example: {
                 success: false,
-                error: { code: 'NOT_FOUND', message: 'Trip not found' },
+                error: { code: 'NOT_FOUND', message: 'Resource not found' },
               },
             },
           },
         },
-        BadRequestError: {
-          description: 'Bad Request - Invalid input',
+        ValidationError: {
+          description: 'Invalid input',
           content: {
             'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              schema: { $ref: '#/components/schemas/Error' },
               example: {
                 success: false,
-                error: { code: 'VALIDATION_ERROR', message: 'Invalid coordinates' },
-              },
-            },
-          },
-        },
-        InternalServerError: {
-          description: 'Internal Server Error',
-          content: {
-            'application/json': {
-              schema: { $ref: '#/components/schemas/ErrorResponse' },
-              example: {
-                success: false,
-                error: { code: 'INTERNAL_ERROR', message: 'An unexpected error occurred' },
+                error: { code: 'VALIDATION_ERROR', message: 'Invalid input' },
               },
             },
           },
@@ -294,8 +252,591 @@ requested → accepted → driver_arrived → in_progress → completed
       },
     },
     security: [{ BearerAuth: [] }],
+    paths: {
+      '/health': {
+        get: {
+          tags: ['Health'],
+          summary: 'Health check',
+          security: [],
+          responses: {
+            200: {
+              description: 'Service is healthy',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      status: { type: 'string', example: 'healthy' },
+                      service: { type: 'string', example: 'taxi-realtime-service' },
+                      timestamp: { type: 'string', format: 'date-time' },
+                      uptime: { type: 'number', example: 3600 },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/api/drivers/profile': {
+        get: {
+          tags: ['Drivers'],
+          summary: 'Get current driver profile',
+          description: "Returns the authenticated driver's full profile including user details",
+          responses: {
+            200: {
+              description: 'Driver profile',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Driver' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/drivers/availability': {
+        put: {
+          tags: ['Drivers'],
+          summary: 'Update driver availability',
+          description: 'Toggle driver online/offline status',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['is_online'],
+                  properties: {
+                    is_online: { type: 'boolean', description: 'Set to true to go online' },
+                  },
+                },
+                example: { is_online: true },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Availability updated',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Driver' },
+                      message: { type: 'string' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+          },
+        },
+      },
+      '/api/drivers/location': {
+        put: {
+          tags: ['Drivers'],
+          summary: 'Update driver location',
+          description:
+            "Update driver's current GPS coordinates. Call every 5 seconds while online.",
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['latitude', 'longitude'],
+                  properties: {
+                    latitude: { type: 'number', format: 'double', example: 6.5244 },
+                    longitude: { type: 'number', format: 'double', example: 3.3792 },
+                    heading: {
+                      type: 'number',
+                      description: 'Direction 0-360 degrees',
+                      example: 45,
+                    },
+                    speed: { type: 'number', description: 'Speed in km/h', example: 35.5 },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: { description: 'Location updated' },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+          },
+        },
+      },
+      '/api/drivers/nearby': {
+        get: {
+          tags: ['Drivers'],
+          summary: 'Find nearby drivers',
+          description:
+            'Find available drivers within a radius. Returns drivers sorted by distance.',
+          parameters: [
+            {
+              name: 'latitude',
+              in: 'query',
+              required: true,
+              schema: { type: 'number' },
+              description: 'User latitude',
+            },
+            {
+              name: 'longitude',
+              in: 'query',
+              required: true,
+              schema: { type: 'number' },
+              description: 'User longitude',
+            },
+            {
+              name: 'radius',
+              in: 'query',
+              schema: { type: 'number', default: 5 },
+              description: 'Search radius in km',
+            },
+            {
+              name: 'vehicle_type',
+              in: 'query',
+              schema: { type: 'string', enum: ['standard', 'premium', 'suv', 'motorcycle'] },
+              description: 'Filter by vehicle type',
+            },
+          ],
+          responses: {
+            200: {
+              description: 'List of nearby drivers',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { type: 'array', items: { $ref: '#/components/schemas/NearbyDriver' } },
+                      count: { type: 'integer' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      '/api/drivers/{driverId}': {
+        get: {
+          tags: ['Drivers'],
+          summary: 'Get driver by ID',
+          description: "Get a specific driver's public profile",
+          security: [],
+          parameters: [
+            {
+              name: 'driverId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            200: {
+              description: 'Driver profile',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Driver' },
+                    },
+                  },
+                },
+              },
+            },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/rides/estimate': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Get fare estimate',
+          description: 'Calculate fare estimate for a ride. No authentication required.',
+          security: [],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['pickup_lat', 'pickup_lng', 'dropoff_lat', 'dropoff_lng'],
+                  properties: {
+                    pickup_lat: { type: 'number', example: 6.5244 },
+                    pickup_lng: { type: 'number', example: 3.3792 },
+                    dropoff_lat: { type: 'number', example: 6.6018 },
+                    dropoff_lng: { type: 'number', example: 3.3515 },
+                    vehicle_type: {
+                      type: 'string',
+                      enum: ['standard', 'premium', 'suv'],
+                      default: 'standard',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Fare estimate',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/FareEstimate' },
+                    },
+                  },
+                },
+              },
+            },
+            400: { $ref: '#/components/responses/ValidationError' },
+          },
+        },
+      },
+      '/api/rides': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Request a ride',
+          description: 'Create a new ride request',
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['pickup_lat', 'pickup_lng', 'dropoff_lat', 'dropoff_lng'],
+                  properties: {
+                    pickup_lat: { type: 'number', example: 6.5244 },
+                    pickup_lng: { type: 'number', example: 3.3792 },
+                    pickup_address: { type: 'string', example: 'Victoria Island, Lagos' },
+                    dropoff_lat: { type: 'number', example: 6.6018 },
+                    dropoff_lng: { type: 'number', example: 3.3515 },
+                    dropoff_address: { type: 'string', example: 'Ikeja, Lagos' },
+                    driver_id: {
+                      type: 'string',
+                      format: 'uuid',
+                      description: 'Request specific driver',
+                    },
+                    scheduled_time: {
+                      type: 'string',
+                      format: 'date-time',
+                      description: 'For scheduled rides',
+                    },
+                    passenger_notes: { type: 'string', example: 'I am at the main entrance' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: 'Ride created',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            400: { $ref: '#/components/responses/ValidationError' },
+          },
+        },
+      },
+      '/api/rides/history': {
+        get: {
+          tags: ['Rides'],
+          summary: 'Get ride history',
+          description: 'Get paginated ride history for the authenticated user',
+          parameters: [
+            {
+              name: 'role',
+              in: 'query',
+              schema: { type: 'string', enum: ['passenger', 'driver'], default: 'passenger' },
+              description: 'Filter by role',
+            },
+            {
+              name: 'status',
+              in: 'query',
+              schema: { type: 'string' },
+              description: 'Filter by status',
+            },
+            { name: 'limit', in: 'query', schema: { type: 'integer', default: 20, maximum: 100 } },
+            { name: 'offset', in: 'query', schema: { type: 'integer', default: 0 } },
+          ],
+          responses: {
+            200: {
+              description: 'Ride history',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { type: 'array', items: { $ref: '#/components/schemas/Ride' } },
+                      pagination: {
+                        type: 'object',
+                        properties: {
+                          total: { type: 'integer' },
+                          limit: { type: 'integer' },
+                          offset: { type: 'integer' },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}': {
+        get: {
+          tags: ['Rides'],
+          summary: 'Get ride details',
+          description: 'Get full details of a specific ride including driver and passenger info',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            200: {
+              description: 'Ride details',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: { $ref: '#/components/responses/ForbiddenError' },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/status': {
+        put: {
+          tags: ['Rides'],
+          summary: 'Update ride status',
+          description:
+            'Update the status of a ride. Status flow: requested → accepted → arrived → picked_up → in_progress → completed',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['status'],
+                  properties: {
+                    status: {
+                      type: 'string',
+                      enum: [
+                        'accepted',
+                        'arrived',
+                        'picked_up',
+                        'in_progress',
+                        'completed',
+                        'cancelled',
+                        'no_show',
+                      ],
+                    },
+                    cancellation_reason: {
+                      type: 'string',
+                      description: 'Required when status is cancelled',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Status updated',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: { $ref: '#/components/responses/ForbiddenError' },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/accept': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Accept a ride (Driver)',
+          description: 'Driver accepts a ride request. Only verified drivers can accept rides.',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    driver_eta_minutes: {
+                      type: 'integer',
+                      description: 'Estimated arrival time in minutes',
+                      example: 5,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Ride accepted',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                      message: { type: 'string' },
+                    },
+                  },
+                },
+              },
+            },
+            400: {
+              description: 'Ride unavailable',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: { code: 'RIDE_UNAVAILABLE', message: 'Ride is no longer available' },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: { $ref: '#/components/responses/ForbiddenError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/rate': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Rate a ride',
+          description: "Passenger rates a completed ride. Updates driver's average rating.",
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['rating'],
+                  properties: {
+                    rating: { type: 'integer', minimum: 1, maximum: 5, example: 5 },
+                    review_comment: { type: 'string', example: 'Great driver, very professional!' },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Rating submitted',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                      message: { type: 'string' },
+                    },
+                  },
+                },
+              },
+            },
+            400: {
+              description: 'Invalid state',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: { code: 'INVALID_STATE', message: 'Can only rate completed rides' },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: { $ref: '#/components/responses/ForbiddenError' },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+    },
   },
-  apis: ['./src/index.ts', './src/routes/*.ts'],
+  apis: ['./src/routes/*.ts'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

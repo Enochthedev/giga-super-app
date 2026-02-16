@@ -13,6 +13,9 @@ import swaggerUi from 'swagger-ui-express';
 import winston from 'winston';
 
 import { swaggerSpec } from './config/swagger';
+import { authMiddleware, optionalAuthMiddleware } from './middleware/auth';
+import driversRouter from './routes/drivers';
+import ridesRouter from './routes/rides';
 
 dotenv.config();
 
@@ -206,6 +209,11 @@ app.get('/api-docs.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
+
+// REST API Routes
+app.use('/api/drivers', authMiddleware, driversRouter);
+// Rides routes - estimate is public, others need auth (handled in route)
+app.use('/api/rides', optionalAuthMiddleware, ridesRouter);
 
 // Active connections tracking
 const activeDrivers = new Map<string, string>(); // driverId -> socketId
