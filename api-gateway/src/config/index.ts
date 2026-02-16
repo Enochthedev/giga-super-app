@@ -19,9 +19,12 @@ export const config = {
   // CORS
   corsOrigin: process.env.CORS_ORIGIN ?? '*',
 
-  // Rate Limiting
-  rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? '900000', 10), // 15 minutes
-  rateLimitMaxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS ?? '100', 10),
+  // Rate Limiting (tiered - see middleware/rateLimiter.ts for full config)
+  rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? '60000', 10), // 1 minute
+  rateLimitAnonymousMax: parseInt(process.env.RATE_LIMIT_ANONYMOUS_MAX ?? '500', 10),
+  rateLimitAuthenticatedMax: parseInt(process.env.RATE_LIMIT_AUTHENTICATED_MAX ?? '1000', 10),
+  rateLimitPremiumMax: parseInt(process.env.RATE_LIMIT_PREMIUM_MAX ?? '2000', 10),
+  rateLimitAdminMax: parseInt(process.env.RATE_LIMIT_ADMIN_MAX ?? '5000', 10),
 
   // Supabase
   supabaseUrl: process.env.SUPABASE_URL ?? '',
