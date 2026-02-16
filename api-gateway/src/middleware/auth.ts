@@ -10,9 +10,6 @@ import { logger } from '../utils/logger.js';
 // Token validation cache (5 minute TTL)
 const tokenCache = new NodeCache({ stdTTL: 300, checkperiod: 60 });
 
-// Rate limiting for auth attempts per IP
-const authAttempts = new NodeCache({ stdTTL: 900 }); // 15 minutes
-
 // Lazy initialization of Supabase client
 let supabase: SupabaseClient | null = null;
 
@@ -54,34 +51,9 @@ export const authMiddleware = async (
       return;
     }
 
-    // Rate limiting check
-    const clientIP = req.ip ?? 'unknown';
-    const attempts = authAttempts.get<number>(clientIP) ?? 0;
-
-    if (attempts >= 10) {
-      logger.warn('Authentication rate limit exceeded', {
-        requestId: req.id,
-        ip: clientIP,
-        attempts,
-      });
-
-      res
-        .status(429)
-        .json(
-          createErrorResponse(
-            'RATE_LIMIT_EXCEEDED',
-            'Too many authentication attempts. Please try again later.',
-            req.id
-          )
-        );
-      return;
-    }
-
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
-      authAttempts.set(clientIP, attempts + 1);
-
       res
         .status(401)
         .json(
@@ -116,13 +88,10 @@ export const authMiddleware = async (
       } = await getSupabaseClient().auth.getUser(token);
 
       if (error || !supabaseUser) {
-        authAttempts.set(clientIP, attempts + 1);
-
         logger.warn('Authentication failed', {
           requestId: req.id,
           error: error?.message,
-          ip: clientIP,
-          attempts: attempts + 1,
+          ip: req.ip,
         });
 
         res
@@ -184,9 +153,6 @@ export const authMiddleware = async (
     // Add user context to request
     req.user = user;
     req.authToken = token;
-
-    // Reset failed attempts on successful auth
-    authAttempts.del(clientIP);
 
     logger.debug('User authenticated', {
       requestId: req.id,
@@ -289,6 +255,5 @@ export const optionalAuth = async (
  */
 export const getAuthStats = () => ({
   tokenCacheSize: tokenCache.keys().length,
-  authAttemptsTracked: authAttempts.keys().length,
   cacheHitRate: tokenCache.getStats(),
 });

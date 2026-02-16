@@ -1,7 +1,6 @@
 import compression from 'compression';
 import cors from 'cors';
 import express from 'express';
-import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 
@@ -14,6 +13,7 @@ import {
 import { swaggerSpec } from './config/swagger.js';
 import { authMiddleware } from './middleware/auth.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
+import { baseRateLimiter, tieredRateLimiter } from './middleware/rateLimiter.js';
 import { requestLogger } from './middleware/requestLogger.js';
 import { routingMiddleware } from './middleware/routing.js';
 import { supabaseProxy } from './middleware/supabaseProxy.js';
@@ -62,22 +62,9 @@ if (config.trustProxy) {
   app.set('trust proxy', 1);
 }
 
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: config.rateLimitWindowMs,
-  max: config.rateLimitMaxRequests,
-  message: {
-    success: false,
-    error: {
-      code: 'RATE_LIMIT_EXCEEDED',
-      message: 'Too many requests. Please try again later.',
-    },
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
-app.use(limiter);
+// Base rate limiting (generous limits for anonymous users)
+// This is applied before auth to protect against DDoS
+app.use(baseRateLimiter);
 
 // Request logging
 app.use(requestLogger);
@@ -114,6 +101,9 @@ app.use('/auth', authRouter);
 
 // Authentication middleware for all other routes
 app.use(authMiddleware);
+
+// Tiered rate limiting (applied after auth to give authenticated users higher limits)
+app.use(tieredRateLimiter);
 
 // Supabase proxy middleware (for endpoints not yet migrated to Railway)
 app.use(supabaseProxy);
