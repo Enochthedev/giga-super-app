@@ -19,6 +19,7 @@ import businessModulesRoutes from './routes/business-modules';
 import dashboardRoutes from './routes/dashboard';
 import healthRoutes from './routes/health';
 import managersRoutes from './routes/managers';
+import modulesRoutes from './routes/modules';
 import nipostRoutes from './routes/nipost';
 import postalMonitoringRoutes from './routes/postal-monitoring';
 import usersRoutes from './routes/users';
@@ -92,6 +93,7 @@ app.use('/api/operations', postalMonitoringRoutes); // Alias for postal-monitori
 app.use('/api/managers', managersRoutes);
 app.use('/api/ads', advertisementsRoutes);
 app.use('/api/v1/ads', advertisementsRoutes); // Support v1 API path
+app.use('/api/managers', modulesRoutes); // Consolidated modules: /api/managers/{module}/*
 
 // Setup observability error handler (Sentry) - MUST BE BEFORE other error handlers
 setupObservabilityErrorHandler(app);

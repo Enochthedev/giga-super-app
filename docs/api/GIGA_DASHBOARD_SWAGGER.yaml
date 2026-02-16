@@ -52,6 +52,14 @@ tags:
     description: User authentication endpoints via Supabase Auth
   - name: Dashboard
     description: GIGA Dashboard statistics and analytics
+  - name: Manager - E-commerce
+    description: E-commerce products, orders, vendors management for managers
+  - name: Manager - Taxi
+    description: Taxi drivers, rides, and earnings management for managers
+  - name: Manager - Hotel
+    description: Hotels, bookings, rooms, and reviews management for managers
+  - name: Manager - Media
+    description: Media files, hotel photos, and advertisements management for managers
   - name: Business Modules
     description: E-commerce, taxi, hotel, media management
   - name: Postal Monitoring
@@ -771,6 +779,909 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  # E-commerce Endpoints
+  /api/ecommerce/products:
+    get:
+      tags: [E-commerce]
+      summary: Get e-commerce products
+      description: Retrieve paginated list of products with search and filtering
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by product name or SKU
+        - in: query
+          name: category_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: vendor_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive]
+      responses:
+        200:
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          products:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/Product'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags: [E-commerce]
+      summary: Create new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, base_price, vendor_id]
+              properties:
+                name:
+                  type: string
+                base_price:
+                  type: number
+                vendor_id:
+                  type: string
+                  format: uuid
+                category_id:
+                  type: string
+                  format: uuid
+                description:
+                  type: string
+                sku:
+                  type: string
+                stock_quantity:
+                  type: integer
+                discount_percentage:
+                  type: integer
+      responses:
+        201:
+          description: Product created successfully
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/ecommerce/products/{id}:
+    get:
+      tags: [E-commerce]
+      summary: Get product details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Product details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags: [E-commerce]
+      summary: Update product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Product updated successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags: [E-commerce]
+      summary: Soft delete product
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Product deleted successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/orders:
+    get:
+      tags: [E-commerce]
+      summary: Get e-commerce orders
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by order number or email
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, processing, shipped, delivered, cancelled, refunded]
+        - in: query
+          name: payment_status
+          schema:
+            type: string
+            enum: [pending, paid, failed, refunded]
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          orders:
+                            type: array
+                            items:
+                              $ref: '#/components/schemas/EcommerceOrder'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/ecommerce/orders/{id}:
+    get:
+      tags: [E-commerce]
+      summary: Get order details with items
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Order details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/orders/{id}/status:
+    put:
+      tags: [E-commerce]
+      summary: Update order status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [pending, processing, shipped, delivered, cancelled, refunded]
+                notes:
+                  type: string
+                tracking_number:
+                  type: string
+                carrier:
+                  type: string
+      responses:
+        200:
+          description: Order status updated successfully
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/categories:
+    get:
+      tags: [E-commerce]
+      summary: Get product categories
+      parameters:
+        - in: query
+          name: parent_id
+          schema:
+            type: string
+          description: Filter by parent category (use 'null' for root categories)
+        - in: query
+          name: include_inactive
+          schema:
+            type: boolean
+            default: false
+      responses:
+        200:
+          description: Categories retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [E-commerce]
+      summary: Create category
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                parent_id:
+                  type: string
+                  format: uuid
+                icon_url:
+                  type: string
+                image_url:
+                  type: string
+                display_order:
+                  type: integer
+      responses:
+        201:
+          description: Category created successfully
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/categories/{id}:
+    put:
+      tags: [E-commerce]
+      summary: Update category
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Category updated successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/vendors:
+    get:
+      tags: [E-commerce]
+      summary: Get e-commerce vendors/traders
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by business name
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive, verified, unverified]
+      responses:
+        200:
+          description: Vendors retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/ecommerce/vendors/{id}:
+    get:
+      tags: [E-commerce]
+      summary: Get vendor details with products and orders
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Vendor details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/vendors/{id}/verify:
+    put:
+      tags: [E-commerce]
+      summary: Verify or unverify vendor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [is_verified]
+              properties:
+                is_verified:
+                  type: boolean
+      responses:
+        200:
+          description: Vendor verification updated successfully
+        400:
+          $ref: '#/components/responses/BadRequest'
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/ecommerce/dashboard-stats:
+    get:
+      tags: [E-commerce]
+      summary: Get e-commerce dashboard statistics
+      description: Get overview stats for e-commerce module
+      parameters:
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Dashboard stats retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: object
+                    properties:
+                      orders:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          completed:
+                            type: integer
+                          pending:
+                            type: integer
+                          revenue:
+                            type: number
+                      products:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          low_stock:
+                            type: integer
+                      vendors:
+                        type: object
+                        properties:
+                          total:
+                            type: integer
+                          active:
+                            type: integer
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  # Taxi Endpoints
+  /api/taxi/drivers:
+    get:
+      tags: [Taxi]
+      summary: Get taxi drivers
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by license number or name
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive, online, offline, verified, unverified]
+      responses:
+        200:
+          description: Drivers retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/taxi/drivers/{id}:
+    get:
+      tags: [Taxi]
+      summary: Get driver details with rides and earnings
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Driver details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/taxi/drivers/{id}/verify:
+    put:
+      tags: [Taxi]
+      summary: Verify or unverify driver
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [is_verified]
+              properties:
+                is_verified:
+                  type: boolean
+      responses:
+        200:
+          description: Driver verification updated
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/taxi/rides:
+    get:
+      tags: [Taxi]
+      summary: Get taxi rides
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, accepted, in_progress, completed, cancelled]
+        - in: query
+          name: driver_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Rides retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/taxi/rides/{id}:
+    get:
+      tags: [Taxi]
+      summary: Get ride details with tracking
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Ride details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/taxi/dashboard-stats:
+    get:
+      tags: [Taxi]
+      summary: Get taxi dashboard statistics
+      parameters:
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Dashboard stats retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  # Hotel Endpoints
+  /api/hotel/hotels:
+    get:
+      tags: [Hotel]
+      summary: Get hotels
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by hotel name, city, or state
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive, verified, unverified]
+        - in: query
+          name: city
+          schema:
+            type: string
+        - in: query
+          name: state
+          schema:
+            type: string
+      responses:
+        200:
+          description: Hotels retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/hotel/hotels/{id}:
+    get:
+      tags: [Hotel]
+      summary: Get hotel details with rooms, bookings, and reviews
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Hotel details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/hotel/hotels/{id}/verify:
+    put:
+      tags: [Hotel]
+      summary: Verify or unverify hotel
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [is_verified]
+              properties:
+                is_verified:
+                  type: boolean
+      responses:
+        200:
+          description: Hotel verification updated
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/hotel/bookings:
+    get:
+      tags: [Hotel]
+      summary: Get hotel bookings
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, confirmed, checked_in, checked_out, cancelled]
+        - in: query
+          name: hotel_id
+          schema:
+            type: string
+            format: uuid
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Bookings retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/hotel/bookings/{id}:
+    get:
+      tags: [Hotel]
+      summary: Get booking details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Booking details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/hotel/bookings/{id}/status:
+    put:
+      tags: [Hotel]
+      summary: Update booking status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [pending, confirmed, checked_in, checked_out, cancelled]
+                notes:
+                  type: string
+      responses:
+        200:
+          description: Booking status updated
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/hotel/room-types:
+    get:
+      tags: [Hotel]
+      summary: Get room types
+      parameters:
+        - in: query
+          name: hotel_id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Room types retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/hotel/dashboard-stats:
+    get:
+      tags: [Hotel]
+      summary: Get hotel dashboard statistics
+      parameters:
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Dashboard stats retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  # Media Endpoints
+  /api/media/files:
+    get:
+      tags: [Media]
+      summary: Get media files
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [image, video, document, audio]
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [active, inactive, pending]
+      responses:
+        200:
+          description: Files retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/media/files/{id}:
+    get:
+      tags: [Media]
+      summary: Get file details
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: File details retrieved successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+    delete:
+      tags: [Media]
+      summary: Delete file
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: File deleted successfully
+        404:
+          $ref: '#/components/responses/NotFound'
+
+  /api/media/hotel-photos:
+    get:
+      tags: [Media]
+      summary: Get hotel photos
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: hotel_id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Hotel photos retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/media/advertisements:
+    get:
+      tags: [Media]
+      summary: Get advertisements
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [draft, pending_approval, active, paused, completed, cancelled, rejected]
+      responses:
+        200:
+          description: Advertisements retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/media/dashboard-stats:
+    get:
+      tags: [Media]
+      summary: Get media dashboard statistics
+      parameters:
+        - in: query
+          name: start_date
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: end_date
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: Dashboard stats retrieved successfully
+        401:
+          $ref: '#/components/responses/Unauthorized'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -1356,3 +2267,143 @@ components:
             email:
               type: string
               example: 'alice@example.com'
+
+    # E-commerce schemas
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: 'Samsung Galaxy S24'
+        slug:
+          type: string
+          example: 'samsung-galaxy-s24'
+        base_price:
+          type: number
+          example: 450000
+        discount_percentage:
+          type: integer
+          example: 10
+        final_price:
+          type: number
+          example: 405000
+        sku:
+          type: string
+          example: 'SGS24-BLK-256'
+        stock_quantity:
+          type: integer
+          example: 50
+        thumbnail:
+          type: string
+          example: 'https://example.com/images/product.jpg'
+        is_active:
+          type: boolean
+          example: true
+        is_featured:
+          type: boolean
+          example: false
+        view_count:
+          type: integer
+          example: 1250
+        order_count:
+          type: integer
+          example: 85
+        average_rating:
+          type: number
+          example: 4.5
+        review_count:
+          type: integer
+          example: 42
+        created_at:
+          type: string
+          format: date-time
+        vendor:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            business_name:
+              type: string
+              example: 'Tech Galaxy Nigeria'
+        category:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            name:
+              type: string
+              example: 'Electronics'
+
+    EcommerceOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        order_number:
+          type: string
+          example: 'ORD-2026-001234'
+        user_id:
+          type: string
+          format: uuid
+        guest_email:
+          type: string
+          example: 'guest@example.com'
+        subtotal:
+          type: number
+          example: 450000
+        discount_amount:
+          type: number
+          example: 45000
+        shipping_cost:
+          type: number
+          example: 2500
+        tax_amount:
+          type: number
+          example: 33750
+        total_amount:
+          type: number
+          example: 441250
+        payment_method:
+          type: string
+          example: 'card'
+        payment_status:
+          type: string
+          enum: [pending, paid, failed, refunded]
+          example: 'paid'
+        status:
+          type: string
+          enum: [pending, processing, shipped, delivered, cancelled, refunded]
+          example: 'processing'
+        tracking_number:
+          type: string
+          example: 'TRK123456789'
+        carrier:
+          type: string
+          example: 'DHL'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        user_profiles:
+          type: object
+          properties:
+            first_name:
+              type: string
+              example: 'John'
+            last_name:
+              type: string
+              example: 'Doe'
+            email:
+              type: string
+              example: 'john@example.com'
+            phone:
+              type: string
+              example: '+2348012345678'
