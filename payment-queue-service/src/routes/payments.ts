@@ -34,6 +34,66 @@ const validateRefundRequest = [
   body('amount').optional().isFloat({ min: 0.01 }).withMessage('Amount must be greater than 0'),
 ];
 
+/**
+ * @swagger
+ * /payments:
+ *   post:
+ *     summary: Create payment request
+ *     description: Queue a new payment for processing
+ *     tags: [Payments]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - module
+ *               - amount
+ *               - currency
+ *               - userId
+ *               - branchId
+ *               - stateId
+ *               - metadata
+ *             properties:
+ *               module:
+ *                 type: string
+ *                 enum: [hotel, taxi, ecommerce]
+ *               amount:
+ *                 type: number
+ *                 minimum: 0.01
+ *               currency:
+ *                 type: string
+ *                 example: NGN
+ *               userId:
+ *                 type: string
+ *                 format: uuid
+ *               branchId:
+ *                 type: string
+ *               stateId:
+ *                 type: string
+ *               metadata:
+ *                 type: object
+ *                 properties:
+ *                   moduleTransactionId:
+ *                     type: string
+ *                     format: uuid
+ *                   customerEmail:
+ *                     type: string
+ *                     format: email
+ *               paymentMethod:
+ *                 type: string
+ *                 enum: [paystack, stripe]
+ *     responses:
+ *       202:
+ *         description: Payment queued for processing
+ *       400:
+ *         description: Invalid request
+ *       401:
+ *         description: Unauthorized
+ */
 // POST /payments - Create payment request
 router.post('/', authenticate, validatePaymentRequest, async (req: AuthRequest, res: Response) => {
   try {
@@ -93,6 +153,46 @@ router.post('/', authenticate, validatePaymentRequest, async (req: AuthRequest, 
   }
 });
 
+/**
+ * @swagger
+ * /payments/{paymentId}/status:
+ *   get:
+ *     summary: Get payment status
+ *     description: Check the status of a queued payment
+ *     tags: [Payments]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: paymentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Payment ID
+ *     responses:
+ *       200:
+ *         description: Payment status retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     paymentId:
+ *                       type: string
+ *                     state:
+ *                       type: string
+ *                     progress:
+ *                       type: number
+ *       400:
+ *         description: Payment not found
+ *       401:
+ *         description: Unauthorized
+ */
 // GET /payments/:paymentId/status - Get payment status
 router.get('/:paymentId/status', authenticate, async (req: AuthRequest, res: Response) => {
   try {
@@ -130,6 +230,40 @@ router.get('/:paymentId/status', authenticate, async (req: AuthRequest, res: Res
   }
 });
 
+/**
+ * @swagger
+ * /payments/refund:
+ *   post:
+ *     summary: Request refund
+ *     description: Queue a refund request for processing
+ *     tags: [Refunds]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - transactionId
+ *               - reason
+ *             properties:
+ *               transactionId:
+ *                 type: string
+ *               reason:
+ *                 type: string
+ *               amount:
+ *                 type: number
+ *                 minimum: 0.01
+ *     responses:
+ *       202:
+ *         description: Refund queued for processing
+ *       400:
+ *         description: Invalid request
+ *       401:
+ *         description: Unauthorized
+ */
 // POST /payments/refund - Request refund
 router.post(
   '/refund',
@@ -180,6 +314,44 @@ router.post(
   }
 );
 
+/**
+ * @swagger
+ * /payments/queue/stats:
+ *   get:
+ *     summary: Get queue statistics
+ *     description: Get payment queue statistics including waiting, active, completed, and failed jobs
+ *     tags: [Metrics]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Queue statistics retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     queue:
+ *                       type: string
+ *                     stats:
+ *                       type: object
+ *                       properties:
+ *                         waiting:
+ *                           type: integer
+ *                         active:
+ *                           type: integer
+ *                         completed:
+ *                           type: integer
+ *                         failed:
+ *                           type: integer
+ *       401:
+ *         description: Unauthorized
+ */
 // GET /payments/queue/stats - Get queue statistics
 router.get('/queue/stats', authenticate, async (req: AuthRequest, res: Response) => {
   try {

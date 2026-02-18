@@ -37,9 +37,29 @@ const getCache = () => {
 };
 
 /**
- * @route POST /api/v1/search/drivers
- * @desc Search taxi drivers with location-based filtering
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/drivers:
+ *   post:
+ *     summary: Search drivers
+ *     description: Search taxi drivers with location-based filtering
+ *     tags: [Drivers]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/DriverSearchFilters'
+ *     responses:
+ *       200:
+ *         description: Driver search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SearchResponse'
+ *       400:
+ *         description: Invalid search parameters
  */
 router.post(
   '/',
@@ -201,9 +221,46 @@ router.post(
 );
 
 /**
- * @route GET /api/v1/search/drivers (legacy support)
- * @desc Search taxi drivers with query parameters (legacy)
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/drivers:
+ *   get:
+ *     summary: Search drivers (legacy)
+ *     description: Search taxi drivers with query parameters (legacy GET support)
+ *     tags: [Drivers]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: latitude
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: longitude
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: radius
+ *         schema:
+ *           type: number
+ *           default: 5
+ *       - in: query
+ *         name: vehicle_type
+ *         schema:
+ *           type: string
+ *           enum: [sedan, suv, hatchback, luxury, motorcycle]
+ *       - in: query
+ *         name: rating_min
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: available_only
+ *         schema:
+ *           type: boolean
+ *     responses:
+ *       200:
+ *         description: Driver search results
+ *       400:
+ *         description: Invalid parameters
  */
 router.get(
   '/',
@@ -386,9 +443,38 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/drivers/nearby
- * @desc Find drivers near a specific location
- * @access Public
+ * @swagger
+ * /search/drivers/nearby:
+ *   get:
+ *     summary: Find nearby drivers
+ *     description: Find available drivers near a specific location
+ *     tags: [Drivers]
+ *     parameters:
+ *       - in: query
+ *         name: latitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: longitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: radius
+ *         schema:
+ *           type: number
+ *           default: 5
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Nearby drivers list
+ *       400:
+ *         description: Missing coordinates
  */
 router.get(
   '/nearby',
@@ -494,9 +580,38 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/drivers/vehicle-types
- * @desc Get available vehicle types
- * @access Public
+ * @swagger
+ * /search/drivers/vehicle-types:
+ *   get:
+ *     summary: Get vehicle types
+ *     description: Get list of available vehicle types with pricing
+ *     tags: [Drivers]
+ *     responses:
+ *       200:
+ *         description: Vehicle types list
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     vehicle_types:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           type:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           capacity:
+ *                             type: integer
+ *                           base_fare:
+ *                             type: number
  */
 router.get(
   '/vehicle-types',
@@ -601,9 +716,40 @@ router.get(
 );
 
 /**
- * @route POST /api/v1/search/drivers/estimate-fare
- * @desc Estimate fare for a trip
- * @access Public
+ * @swagger
+ * /search/drivers/estimate-fare:
+ *   post:
+ *     summary: Estimate fare
+ *     description: Estimate fare for a trip between two locations
+ *     tags: [Drivers]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - pickup_latitude
+ *               - pickup_longitude
+ *               - destination_latitude
+ *               - destination_longitude
+ *             properties:
+ *               pickup_latitude:
+ *                 type: number
+ *               pickup_longitude:
+ *                 type: number
+ *               destination_latitude:
+ *                 type: number
+ *               destination_longitude:
+ *                 type: number
+ *               vehicle_type:
+ *                 type: string
+ *                 default: sedan
+ *     responses:
+ *       200:
+ *         description: Fare estimate
+ *       400:
+ *         description: Missing coordinates
  */
 router.post(
   '/estimate-fare',

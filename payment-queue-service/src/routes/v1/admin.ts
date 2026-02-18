@@ -17,9 +17,37 @@ import { asyncHandler } from '../../utils/asyncHandler';
 const router = Router();
 
 /**
- * GET /api/v1/admin/payments/branch
- * Get branch-level payment reporting
- * Requires: branch_admin or higher
+ * @swagger
+ * /api/v1/admin/payments/branch:
+ *   get:
+ *     summary: Branch payment report
+ *     description: Get branch-level payment reporting (requires branch_admin or higher)
+ *     tags: [Settlements]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: Branch payment report
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Insufficient permissions
  */
 router.get(
   '/branch',
@@ -31,9 +59,37 @@ router.get(
 );
 
 /**
- * GET /api/v1/admin/payments/state
- * Get state-level payment reporting
- * Requires: state_admin or higher
+ * @swagger
+ * /api/v1/admin/payments/state:
+ *   get:
+ *     summary: State payment report
+ *     description: Get state-level payment reporting (requires state_admin or higher)
+ *     tags: [Settlements]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: stateId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: State payment report
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Insufficient permissions
  */
 router.get(
   '/state',
@@ -45,9 +101,32 @@ router.get(
 );
 
 /**
- * GET /api/v1/admin/payments/national
- * Get national-level payment reporting
- * Requires: national_admin or higher
+ * @swagger
+ * /api/v1/admin/payments/national:
+ *   get:
+ *     summary: National payment report
+ *     description: Get national-level payment reporting (requires national_admin or higher)
+ *     tags: [Settlements]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: startDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: endDate
+ *         schema:
+ *           type: string
+ *           format: date
+ *     responses:
+ *       200:
+ *         description: National payment report
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Insufficient permissions
  */
 router.get(
   '/national',

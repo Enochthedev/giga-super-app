@@ -36,9 +36,38 @@ const getCache = () => {
 };
 
 /**
- * @route GET /api/v1/health
- * @desc Basic health check
- * @access Public
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Basic health check
+ *     description: Returns basic health status of the search service
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Service is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: string
+ *                       example: healthy
+ *                     service:
+ *                       type: string
+ *                       example: search-service
+ *                     version:
+ *                       type: string
+ *                       example: "1.0.0"
+ *                     uptime:
+ *                       type: number
+ *                       example: 3600
  */
 router.get('/', (req: Request, res: Response): void => {
   const requestId = req.headers['x-request-id'] as string;
@@ -61,9 +90,17 @@ router.get('/', (req: Request, res: Response): void => {
 });
 
 /**
- * @route GET /api/v1/health/detailed
- * @desc Detailed health check with dependency status
- * @access Public
+ * @swagger
+ * /health/detailed:
+ *   get:
+ *     summary: Detailed health check
+ *     description: Returns detailed health status including dependency checks
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Service and dependencies are healthy
+ *       503:
+ *         description: Service or dependencies are unhealthy
  */
 router.get('/detailed', async (req: Request, res: Response): Promise<void> => {
   const startTime = Date.now();
