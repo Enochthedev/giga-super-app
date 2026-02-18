@@ -1,18 +1,29 @@
-import { Router, Request, Response } from 'express';
-import logger from '../utils/logger';
-import {
-  getQueueMetrics as getPaymentQueueMetrics,
-} from '../queues/payment.queue';
-import { getWebhookQueueMetrics } from '../queues/webhook.queue';
+import { Request, Response, Router } from 'express';
+import { getNotificationQueueMetrics } from '../queues/notification.queue';
+import { getQueueMetrics as getPaymentQueueMetrics } from '../queues/payment.queue';
 import { getRefundQueueMetrics } from '../queues/refund.queue';
 import { getSettlementQueueMetrics } from '../queues/settlement.queue';
-import { getNotificationQueueMetrics } from '../queues/notification.queue';
+import { getWebhookQueueMetrics } from '../queues/webhook.queue';
+import logger from '../utils/logger';
 
 const router = Router();
 
 /**
- * GET /metrics
- * Prometheus-compatible metrics endpoint
+ * @swagger
+ * /metrics:
+ *   get:
+ *     summary: Prometheus metrics
+ *     description: Get Prometheus-compatible metrics for all queues and process stats
+ *     tags: [Metrics]
+ *     responses:
+ *       200:
+ *         description: Metrics in Prometheus format
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *       500:
+ *         description: Error generating metrics
  */
 router.get('/', async (req: Request, res: Response) => {
   try {
@@ -83,11 +94,15 @@ router.get('/', async (req: Request, res: Response) => {
     metrics.push(`settlement_queue_jobs_active ${settlementQueue?.active || 0}`);
 
     // Notification queue metrics
-    metrics.push('# HELP notification_queue_jobs_waiting Number of jobs waiting in notification queue');
+    metrics.push(
+      '# HELP notification_queue_jobs_waiting Number of jobs waiting in notification queue'
+    );
     metrics.push('# TYPE notification_queue_jobs_waiting gauge');
     metrics.push(`notification_queue_jobs_waiting ${notificationQueue?.waiting || 0}`);
 
-    metrics.push('# HELP notification_queue_jobs_active Number of active jobs in notification queue');
+    metrics.push(
+      '# HELP notification_queue_jobs_active Number of active jobs in notification queue'
+    );
     metrics.push('# TYPE notification_queue_jobs_active gauge');
     metrics.push(`notification_queue_jobs_active ${notificationQueue?.active || 0}`);
 

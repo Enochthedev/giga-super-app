@@ -38,9 +38,31 @@ const getCache = () => {
 };
 
 /**
- * @route POST /api/v1/search/hotels
- * @desc Search hotels with advanced filters
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/hotels:
+ *   post:
+ *     summary: Search hotels
+ *     description: Search hotels with advanced filters including location, price, amenities
+ *     tags: [Hotels]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/HotelSearchFilters'
+ *     responses:
+ *       200:
+ *         description: Hotel search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SearchResponse'
+ *       400:
+ *         description: Invalid search parameters
+ *       429:
+ *         description: Rate limit exceeded
  */
 router.post(
   '/',
@@ -227,9 +249,62 @@ router.post(
 );
 
 /**
- * @route GET /api/v1/search/hotels (legacy support)
- * @desc Search hotels with query parameters (legacy)
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/hotels:
+ *   get:
+ *     summary: Search hotels (legacy)
+ *     description: Search hotels with query parameters (legacy GET support)
+ *     tags: [Hotels]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Search query
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Location filter
+ *       - in: query
+ *         name: min_price
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: max_price
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: star_rating
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: check_in
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: check_out
+ *         schema:
+ *           type: string
+ *           format: date
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *     responses:
+ *       200:
+ *         description: Hotel search results
+ *       400:
+ *         description: Invalid parameters
  */
 router.get(
   '/',
@@ -400,9 +475,28 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/hotels/popular
- * @desc Get popular hotels
- * @access Public
+ * @swagger
+ * /search/hotels/popular:
+ *   get:
+ *     summary: Get popular hotels
+ *     description: Get list of popular hotels, optionally filtered by location
+ *     tags: [Hotels]
+ *     parameters:
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Filter by location
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Popular hotels list
+ *       500:
+ *         description: Server error
  */
 router.get(
   '/popular',
@@ -481,9 +575,43 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/hotels/nearby
- * @desc Find hotels near a location
- * @access Public
+ * @swagger
+ * /search/hotels/nearby:
+ *   get:
+ *     summary: Find nearby hotels
+ *     description: Find hotels near a specific location using coordinates
+ *     tags: [Hotels]
+ *     parameters:
+ *       - in: query
+ *         name: latitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: Latitude coordinate
+ *       - in: query
+ *         name: longitude
+ *         required: true
+ *         schema:
+ *           type: number
+ *         description: Longitude coordinate
+ *       - in: query
+ *         name: radius
+ *         schema:
+ *           type: number
+ *           default: 10
+ *         description: Search radius in km
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *     responses:
+ *       200:
+ *         description: Nearby hotels list
+ *       400:
+ *         description: Missing coordinates
+ *       500:
+ *         description: Server error
  */
 router.get(
   '/nearby',

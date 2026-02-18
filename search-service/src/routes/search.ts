@@ -38,9 +38,31 @@ const getCache = () => {
 };
 
 /**
- * @route POST /api/v1/search/universal
- * @desc Universal search across all categories with advanced filters
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/universal:
+ *   post:
+ *     summary: Universal search
+ *     description: Search across all categories (hotels, products, drivers, posts, users)
+ *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SearchQuery'
+ *     responses:
+ *       200:
+ *         description: Search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SearchResponse'
+ *       400:
+ *         description: Invalid search parameters
+ *       429:
+ *         description: Rate limit exceeded
  */
 router.post(
   '/universal',
@@ -231,9 +253,47 @@ router.post(
 );
 
 /**
- * @route GET /api/v1/search
- * @desc Universal search across all categories (legacy GET support)
- * @access Public (with optional authentication)
+ * @swagger
+ * /search:
+ *   get:
+ *     summary: Universal search (legacy)
+ *     description: Search across all categories with query parameters (legacy GET support)
+ *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search query
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *           enum: [all, hotels, products, drivers, posts, users]
+ *           default: all
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           enum: [relevance, price_asc, price_desc, rating, distance, newest]
+ *     responses:
+ *       200:
+ *         description: Search results
+ *       400:
+ *         description: Invalid parameters
  */
 router.get(
   '/',
@@ -414,9 +474,39 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/suggestions
- * @desc Get search suggestions for autocomplete
- * @access Public
+ * @swagger
+ * /search/suggestions:
+ *   get:
+ *     summary: Get search suggestions
+ *     description: Get autocomplete suggestions for search queries
+ *     tags: [Search]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *           minLength: 2
+ *         description: Search query (min 2 characters)
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *           default: all
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Search suggestions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AutocompleteResponse'
+ *       400:
+ *         description: Query too short
  */
 router.get(
   '/suggestions',
@@ -524,9 +614,35 @@ router.get(
 );
 
 /**
- * @route POST /api/v1/search/analytics
- * @desc Track search analytics and user interactions
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/analytics:
+ *   post:
+ *     summary: Track search analytics
+ *     description: Track search analytics and user interactions
+ *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               query:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               results_count:
+ *                 type: integer
+ *               clicked_result_id:
+ *                 type: string
+ *               clicked_position:
+ *                 type: integer
+ *               session_id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Analytics recorded
  */
 router.post(
   '/analytics',
@@ -608,9 +724,25 @@ router.post(
 );
 
 /**
- * @route GET /api/v1/search/filters
- * @desc Get available filters and facets for a specific search category
- * @access Public
+ * @swagger
+ * /search/filters:
+ *   get:
+ *     summary: Get search filters
+ *     description: Get available filters and facets for a specific search category
+ *     tags: [Search]
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *           default: all
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Available filters
  */
 router.get(
   '/filters',
@@ -721,9 +853,25 @@ router.get(
 );
 
 /**
- * @route DELETE /api/v1/search/cache
- * @desc Clear search cache (admin only)
- * @access Admin
+ * @swagger
+ * /search/cache:
+ *   delete:
+ *     summary: Clear search cache
+ *     description: Clear search cache (admin only)
+ *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: pattern
+ *         schema:
+ *           type: string
+ *         description: Cache key pattern to clear
+ *     responses:
+ *       200:
+ *         description: Cache cleared
+ *       403:
+ *         description: Admin access required
  */
 router.delete('/cache', optionalAuth, async (req: Request, res: Response): Promise<void> => {
   const requestId = req.headers['x-request-id'] as string;
@@ -788,9 +936,19 @@ router.delete('/cache', optionalAuth, async (req: Request, res: Response): Promi
 });
 
 /**
- * @route GET /api/v1/search/stats
- * @desc Get search service statistics (admin only)
- * @access Admin
+ * @swagger
+ * /search/stats:
+ *   get:
+ *     summary: Get search statistics
+ *     description: Get search service statistics (admin only)
+ *     tags: [Search]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Service statistics
+ *       403:
+ *         description: Admin access required
  */
 router.get('/stats', optionalAuth, async (req: Request, res: Response): Promise<void> => {
   const requestId = req.headers['x-request-id'] as string;

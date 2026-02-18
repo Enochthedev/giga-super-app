@@ -1,17 +1,45 @@
-import { Router, Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 
-import { testConnection } from '../utils/database';
-import logger from '../utils/logger';
-import {
-  getQueueMetrics as getPaymentQueueMetrics,
-} from '../queues/payment.queue';
-import { getWebhookQueueMetrics } from '../queues/webhook.queue';
+import { getNotificationQueueMetrics } from '../queues/notification.queue';
+import { getQueueMetrics as getPaymentQueueMetrics } from '../queues/payment.queue';
 import { getRefundQueueMetrics } from '../queues/refund.queue';
 import { getSettlementQueueMetrics } from '../queues/settlement.queue';
-import { getNotificationQueueMetrics } from '../queues/notification.queue';
+import { getWebhookQueueMetrics } from '../queues/webhook.queue';
+import { testConnection } from '../utils/database';
+import logger from '../utils/logger';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Service health check
+ *     description: Returns comprehensive health status including database and queue health
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Service is healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 status:
+ *                   type: string
+ *                   enum: [healthy, degraded]
+ *                 service:
+ *                   type: string
+ *                 checks:
+ *                   type: object
+ *                   properties:
+ *                     database:
+ *                       type: string
+ *                     queues:
+ *                       type: string
+ *       503:
+ *         description: Service is unhealthy or degraded
+ */
 router.get('/', async (req: Request, res: Response) => {
   try {
     const dbHealthy = await testConnection();
@@ -67,6 +95,19 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /health/ready:
+ *   get:
+ *     summary: Readiness probe
+ *     description: Kubernetes readiness probe - checks if service is ready to accept traffic
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Service is ready
+ *       503:
+ *         description: Service is not ready
+ */
 router.get('/ready', async (req: Request, res: Response) => {
   try {
     const dbHealthy = await testConnection();
@@ -81,6 +122,17 @@ router.get('/ready', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /health/live:
+ *   get:
+ *     summary: Liveness probe
+ *     description: Kubernetes liveness probe - checks if service is alive
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Service is alive
+ */
 router.get('/live', (req: Request, res: Response) => {
   res.status(200).json({ status: 'alive' });
 });

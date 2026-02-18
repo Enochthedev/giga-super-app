@@ -37,9 +37,29 @@ const getCache = () => {
 };
 
 /**
- * @route POST /api/v1/search/products
- * @desc Search products with advanced filters
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/products:
+ *   post:
+ *     summary: Search products
+ *     description: Search products with advanced filters
+ *     tags: [Products]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProductSearchFilters'
+ *     responses:
+ *       200:
+ *         description: Product search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SearchResponse'
+ *       400:
+ *         description: Invalid search parameters
  */
 router.post(
   '/',
@@ -214,9 +234,60 @@ router.post(
 );
 
 /**
- * @route GET /api/v1/search/products (legacy support)
- * @desc Search products with query parameters (legacy)
- * @access Public (with optional authentication)
+ * @swagger
+ * /search/products:
+ *   get:
+ *     summary: Search products (legacy)
+ *     description: Search products with query parameters (legacy GET support)
+ *     tags: [Products]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Search query
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: brand
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: min_price
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: max_price
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: condition
+ *         schema:
+ *           type: string
+ *           enum: [new, used, refurbished]
+ *       - in: query
+ *         name: in_stock
+ *         schema:
+ *           type: boolean
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *     responses:
+ *       200:
+ *         description: Product search results
+ *       400:
+ *         description: Invalid parameters
  */
 router.get(
   '/',
@@ -364,9 +435,15 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/products/categories
- * @desc Get product categories
- * @access Public
+ * @swagger
+ * /search/products/categories:
+ *   get:
+ *     summary: Get product categories
+ *     description: Get list of product categories
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: Categories list
  */
 router.get(
   '/categories',
@@ -439,9 +516,25 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/products/trending
- * @desc Get trending products
- * @access Public
+ * @swagger
+ * /search/products/trending:
+ *   get:
+ *     summary: Get trending products
+ *     description: Get list of trending products
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *     responses:
+ *       200:
+ *         description: Trending products list
  */
 router.get(
   '/trending',
@@ -520,9 +613,25 @@ router.get(
 );
 
 /**
- * @route GET /api/v1/search/products/brands
- * @desc Get product brands
- * @access Public
+ * @swagger
+ * /search/products/brands:
+ *   get:
+ *     summary: Get product brands
+ *     description: Get list of product brands
+ *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 50
+ *     responses:
+ *       200:
+ *         description: Brands list
  */
 router.get(
   '/brands',
