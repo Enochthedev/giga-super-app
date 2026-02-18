@@ -1,39 +1,29 @@
-import { Queue, QueueOptions } from 'bullmq';
-
 import logger from '../utils/logger';
-import { getRedisConnection, REDIS_CONNECTIONS } from '../utils/redis';
+import {
+  QueueLike,
+  closeQueue,
+  createQueue,
+  getQueueMetrics,
+  isBullMQQueue,
+  isRedisEnabled,
+} from './queue-factory';
 
-// Redis connection with proper TLS for Upstash (pooled)
-const connection = getRedisConnection(REDIS_CONNECTIONS.QUEUES);
-
-// Queue options
-const queueOptions: QueueOptions = {
-  connection: connection as any,
-  defaultJobOptions: {
-    attempts: 5,
-    backoff: {
-      type: 'exponential',
-      delay: 5000,
-    },
-    removeOnComplete: {
-      count: 1000,
-      age: 7 * 24 * 3600, // 7 days
-    },
-    removeOnFail: {
-      count: 500,
-      age: 30 * 24 * 3600, // 30 days
-    },
+// Create notification queue with Redis or in-memory fallback
+export const notificationQueue: QueueLike = createQueue('notification-queue', {
+  attempts: 5,
+  backoff: {
+    type: 'exponential',
+    delay: 5000,
   },
-};
-
-// Create notification queue
-export const notificationQueue = new Queue('notification-queue', queueOptions);
-
-notificationQueue.on('error', error => {
-  logger.error('Notification queue error', { error: error.message });
+  removeOnComplete: {
+    count: 1000,
+    age: 7 * 24 * 3600, // 7 days
+  },
+  removeOnFail: {
+    count: 500,
+    age: 30 * 24 * 3600, // 30 days
+  },
 });
-
-logger.info('Notification queue initialized');
 
 /**
  * Add notification job
@@ -63,6 +53,7 @@ export async function addNotificationJob(
       userId: jobData.userId,
       type: jobData.type,
       channels: jobData.channels,
+      redisEnabled: isRedisEnabled(),
     });
 
     return job;
@@ -90,22 +81,40 @@ export async function addBulkNotificationJobs(
   }>
 ) {
   try {
-    const jobs = notifications.map(notification => ({
-      name: 'send-notification',
-      data: notification,
-      opts: {
-        jobId: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        priority: 3,
-      },
-    }));
+    // For BullMQ, use addBulk; for in-memory, add one by one
+    if (isBullMQQueue(notificationQueue)) {
+      const jobs = notifications.map(notification => ({
+        name: 'send-notification',
+        data: notification,
+        opts: {
+          jobId: `notification-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          priority: 3,
+        },
+      }));
 
-    const addedJobs = await notificationQueue.addBulk(jobs);
+      const addedJobs = await notificationQueue.addBulk(jobs);
 
-    logger.info('Bulk notification jobs added to queue', {
-      count: addedJobs.length,
-    });
+      logger.info('Bulk notification jobs added to queue', {
+        count: addedJobs.length,
+        redisEnabled: true,
+      });
 
-    return addedJobs;
+      return addedJobs;
+    } else {
+      // In-memory fallback: add one by one
+      const addedJobs = [];
+      for (const notification of notifications) {
+        const job = await addNotificationJob(notification);
+        addedJobs.push(job);
+      }
+
+      logger.info('Bulk notification jobs added to in-memory queue', {
+        count: addedJobs.length,
+        redisEnabled: false,
+      });
+
+      return addedJobs;
+    }
   } catch (error: any) {
     logger.error('Failed to add bulk notification jobs', {
       error: error.message,
@@ -119,27 +128,9 @@ export async function addBulkNotificationJobs(
  * Get notification queue metrics
  */
 export async function getNotificationQueueMetrics() {
-  try {
-    const [waiting, active, completed, failed, delayed] = await Promise.all([
-      notificationQueue.getWaitingCount(),
-      notificationQueue.getActiveCount(),
-      notificationQueue.getCompletedCount(),
-      notificationQueue.getFailedCount(),
-      notificationQueue.getDelayedCount(),
-    ]);
-
-    return { waiting, active, completed, failed, delayed };
-  } catch (error: any) {
-    logger.error('Failed to get notification queue metrics', { error: error.message });
-    return null;
-  }
+  return getQueueMetrics(notificationQueue);
 }
 
 export async function closeNotificationQueue() {
-  try {
-    await notificationQueue.close();
-    logger.info('Notification queue closed');
-  } catch (error: any) {
-    logger.error('Error closing notification queue', { error: error.message });
-  }
+  return closeQueue(notificationQueue, 'notification');
 }

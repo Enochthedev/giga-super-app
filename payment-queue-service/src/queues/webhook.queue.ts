@@ -1,39 +1,28 @@
-import { Queue, QueueOptions } from 'bullmq';
-
 import logger from '../utils/logger';
-import { getRedisConnection, REDIS_CONNECTIONS } from '../utils/redis';
+import {
+  QueueLike,
+  closeQueue,
+  createQueue,
+  getQueueMetrics,
+  isRedisEnabled,
+} from './queue-factory';
 
-// Redis connection with proper TLS for Upstash (pooled)
-const connection = getRedisConnection(REDIS_CONNECTIONS.QUEUES);
-
-// Queue options
-const queueOptions: QueueOptions = {
-  connection: connection as any,
-  defaultJobOptions: {
-    attempts: 5,
-    backoff: {
-      type: 'exponential',
-      delay: 2000,
-    },
-    removeOnComplete: {
-      count: 500,
-      age: 24 * 3600,
-    },
-    removeOnFail: {
-      count: 1000,
-      age: 7 * 24 * 3600,
-    },
+// Create webhook queue with Redis or in-memory fallback
+export const webhookQueue: QueueLike = createQueue('webhook-queue', {
+  attempts: 5,
+  backoff: {
+    type: 'exponential',
+    delay: 2000,
   },
-};
-
-// Create webhook queue
-export const webhookQueue = new Queue('webhook-queue', queueOptions);
-
-webhookQueue.on('error', error => {
-  logger.error('Webhook queue error', { error: error.message });
+  removeOnComplete: {
+    count: 500,
+    age: 24 * 3600,
+  },
+  removeOnFail: {
+    count: 1000,
+    age: 7 * 24 * 3600,
+  },
 });
-
-logger.info('Webhook queue initialized');
 
 /**
  * Add webhook processing job
@@ -55,6 +44,7 @@ export async function addWebhookJob(jobData: {
       jobId: job.id,
       provider: jobData.provider,
       event: jobData.event,
+      redisEnabled: isRedisEnabled(),
     });
 
     return job;
@@ -71,26 +61,9 @@ export async function addWebhookJob(jobData: {
  * Get webhook queue metrics
  */
 export async function getWebhookQueueMetrics() {
-  try {
-    const [waiting, active, completed, failed] = await Promise.all([
-      webhookQueue.getWaitingCount(),
-      webhookQueue.getActiveCount(),
-      webhookQueue.getCompletedCount(),
-      webhookQueue.getFailedCount(),
-    ]);
-
-    return { waiting, active, completed, failed };
-  } catch (error: any) {
-    logger.error('Failed to get webhook queue metrics', { error: error.message });
-    return null;
-  }
+  return getQueueMetrics(webhookQueue);
 }
 
 export async function closeWebhookQueue() {
-  try {
-    await webhookQueue.close();
-    logger.info('Webhook queue closed');
-  } catch (error: any) {
-    logger.error('Error closing webhook queue', { error: error.message });
-  }
+  return closeQueue(webhookQueue, 'webhook');
 }

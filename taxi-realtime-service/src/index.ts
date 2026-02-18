@@ -21,9 +21,28 @@ dotenv.config();
 
 // Configuration
 const PORT = parseInt(process.env.PORT ?? process.env.TAXI_REALTIME_SERVICE_PORT ?? '3006', 10);
-const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
+const REDIS_URL = process.env.REDIS_URL || '';
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
 const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+/**
+ * Check if Redis should be used
+ * Disable in development to save Upstash free tier commands
+ */
+const shouldUseRedis = (): boolean => {
+  const forceDisable = process.env.DISABLE_REDIS === 'true';
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // Disable if explicitly disabled, no URL, or local dev URL
+  if (forceDisable || !REDIS_URL || REDIS_URL === 'redis://localhost:6379') {
+    if (isDev) {
+      console.log('Redis disabled for development - Socket.IO will run in single-instance mode');
+    }
+    return false;
+  }
+
+  return true;
+};
 
 // Logger
 const logger = winston.createLogger({
@@ -46,9 +65,15 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // Redis clients for Socket.IO adapter
 let pubClient: Redis | null = null;
 let subClient: Redis | null = null;
-let redisConnected = false; // eslint-disable-line @typescript-eslint/no-unused-vars
+let redisConnected = false;
 
 const initRedis = async (): Promise<boolean> => {
+  // Skip Redis initialization if disabled
+  if (!shouldUseRedis()) {
+    logger.info('Redis disabled - skipping initialization');
+    return false;
+  }
+
   try {
     // Parse Redis URL to ensure it has the correct format
     let redisUrl = REDIS_URL;
@@ -62,16 +87,18 @@ const initRedis = async (): Promise<boolean> => {
     pubClient = new Redis(redisUrl, {
       maxRetriesPerRequest: 3,
       retryStrategy: (times: number) => {
-        if (times > 10) {
-          logger.error('Redis connection failed after 10 retries');
+        // Reduce retries to save commands
+        if (times > 5) {
+          logger.error('Redis connection failed after 5 retries');
           return null; // Stop retrying
         }
-        const delay = Math.min(times * 200, 2000);
+        const delay = Math.min(times * 500, 3000);
         logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
         return delay;
       },
-      lazyConnect: false,
-      enableReadyCheck: true,
+      lazyConnect: true, // Don't connect until needed
+      enableReadyCheck: false, // CRITICAL: Save commands
+      enableOfflineQueue: false, // Don't queue when offline
       connectTimeout: 10000,
     });
 
@@ -94,21 +121,29 @@ const initRedis = async (): Promise<boolean> => {
       redisConnected = false;
     });
 
-    // Wait for connection
+    // Connect explicitly
+    await pubClient.connect();
+
+    // Wait for connection with timeout
     await new Promise<void>((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Redis connection timeout'));
-      }, 15000);
+      }, 10000);
 
-      pubClient!.once('ready', () => {
+      if (pubClient!.status === 'ready') {
         clearTimeout(timeout);
         resolve();
-      });
+      } else {
+        pubClient!.once('ready', () => {
+          clearTimeout(timeout);
+          resolve();
+        });
 
-      pubClient!.once('error', err => {
-        clearTimeout(timeout);
-        reject(err);
-      });
+        pubClient!.once('error', err => {
+          clearTimeout(timeout);
+          reject(err);
+        });
+      }
     });
 
     subClient = pubClient.duplicate();
@@ -125,27 +160,36 @@ const initRedis = async (): Promise<boolean> => {
       logger.info('Redis sub client ready');
     });
 
+    // Connect sub client
+    await subClient.connect();
+
     // Wait for sub client to be ready
     await new Promise<void>((resolve, reject) => {
       const timeout = setTimeout(() => {
         reject(new Error('Redis sub client connection timeout'));
-      }, 15000);
+      }, 10000);
 
-      subClient!.once('ready', () => {
+      if (subClient!.status === 'ready') {
         clearTimeout(timeout);
         resolve();
-      });
+      } else {
+        subClient!.once('ready', () => {
+          clearTimeout(timeout);
+          resolve();
+        });
 
-      subClient!.once('error', err => {
-        clearTimeout(timeout);
-        reject(err);
-      });
+        subClient!.once('error', err => {
+          clearTimeout(timeout);
+          reject(err);
+        });
+      }
     });
 
     logger.info('Redis clients initialized successfully');
     return true;
-  } catch (error: any) {
-    logger.error('Failed to initialize Redis', { error: error.message });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to initialize Redis', { error: errorMessage });
     return false;
   }
 };

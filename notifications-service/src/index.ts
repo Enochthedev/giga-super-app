@@ -18,8 +18,28 @@ import { swaggerSpec } from './config/swagger';
 dotenv.config();
 
 const PORT = parseInt(process.env.PORT || '3007', 10);
-const REDIS_URL =
-  process.env.REDIS_URL || process.env.RAILWAY_REDIS_URL || 'redis://localhost:6379';
+const REDIS_URL = process.env.REDIS_URL || process.env.RAILWAY_REDIS_URL || '';
+
+/**
+ * Check if Redis should be used
+ * Disable in development to save Upstash free tier commands
+ */
+const shouldUseRedis = (): boolean => {
+  const forceDisable = process.env.DISABLE_REDIS === 'true';
+  const isDev = process.env.NODE_ENV === 'development';
+
+  // Disable if explicitly disabled, no URL, or local dev URL
+  if (forceDisable || !REDIS_URL || REDIS_URL === 'redis://localhost:6379') {
+    if (isDev) {
+      console.log('Redis disabled for development - using in-memory queue fallback');
+    }
+    return false;
+  }
+
+  return true;
+};
+
+const useRedis = shouldUseRedis();
 
 // Logger with request ID support
 const logger = winston.createLogger({
@@ -36,40 +56,46 @@ const logger = winston.createLogger({
 });
 
 // Redis connection with connection pooling and error handling
-// Optimized for Upstash free tier limits
-const connection = new IORedis(REDIS_URL, {
-  maxRetriesPerRequest: null,
-  lazyConnect: false,
-  enableReadyCheck: false, // Reduce health check requests
-  connectTimeout: 10000,
-  enableOfflineQueue: false, // Don't queue commands when offline
-  retryStrategy: (times: number) => {
-    if (times > 3) {
-      // Reduce retry attempts
-      logger.error('Redis connection failed after 3 retries');
-      return null;
-    }
-    const delay = Math.min(times * 500, 2000);
-    logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
-    return delay;
-  },
-});
+// Optimized for Upstash free tier limits - only create if Redis is enabled
+let connection: IORedis | null = null;
 
-connection.on('error', err => {
-  logger.error('Redis connection error', { error: err.message });
-});
+if (useRedis) {
+  connection = new IORedis(REDIS_URL, {
+    maxRetriesPerRequest: null,
+    lazyConnect: true, // Don't connect until first command
+    enableReadyCheck: false, // CRITICAL: Reduce health check requests
+    connectTimeout: 10000,
+    enableOfflineQueue: false, // Don't queue commands when offline
+    retryStrategy: (times: number) => {
+      if (times > 3) {
+        // Reduce retry attempts
+        logger.error('Redis connection failed after 3 retries');
+        return null;
+      }
+      const delay = Math.min(times * 500, 2000);
+      logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
+      return delay;
+    },
+  });
 
-connection.on('connect', () => {
-  logger.info('Redis connected');
-});
+  connection.on('error', err => {
+    logger.error('Redis connection error', { error: err.message });
+  });
 
-connection.on('ready', () => {
-  logger.info('Redis ready');
-});
+  connection.on('connect', () => {
+    logger.info('Redis connected');
+  });
 
-connection.on('close', () => {
-  logger.warn('Redis connection closed');
-});
+  connection.on('ready', () => {
+    logger.info('Redis ready');
+  });
+
+  connection.on('close', () => {
+    logger.warn('Redis connection closed');
+  });
+} else {
+  logger.info('Redis disabled - notifications will use in-memory processing');
+}
 
 // Supabase client for database operations
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
@@ -107,15 +133,24 @@ const twilioClient =
 
 // Consolidated Notification Queue (reduces Redis key usage)
 // Instead of 7 separate queues, use one queue with job types
-export const notificationQueue = new Queue('notifications', {
-  connection: connection as any,
-  defaultJobOptions: {
-    removeOnComplete: 100, // Keep only last 100 completed jobs
-    removeOnFail: 50, // Keep only last 50 failed jobs
-  },
-});
+// Only create BullMQ queue if Redis is enabled
+let notificationQueue: Queue | null = null;
+
+if (useRedis && connection) {
+  notificationQueue = new Queue('notifications', {
+    connection: connection as any,
+    defaultJobOptions: {
+      removeOnComplete: 100, // Keep only last 100 completed jobs
+      removeOnFail: 50, // Keep only last 50 failed jobs
+    },
+  });
+  logger.info('Notification queue initialized with Redis/BullMQ');
+} else {
+  logger.info('Notification queue disabled - using direct processing');
+}
 
 // Legacy queue exports for backward compatibility
+export { notificationQueue };
 export const emailQueue = notificationQueue;
 export const smsQueue = notificationQueue;
 export const pushQueue = notificationQueue;
@@ -308,311 +343,329 @@ async function updateNotificationHistory(id: string, updates: any): Promise<void
 }
 
 // Enhanced Email Worker with template support
-const enhancedEmailWorker = new Worker(
-  'notifications', // Use consolidated queue name
-  async (job: Job<NotificationJob>) => {
-    // Only process email jobs
-    if (job.name !== 'send-email' && job.data.type !== 'email') {
-      return { success: true, skipped: true };
-    }
+// Only create workers if Redis is enabled
+let enhancedEmailWorker: Worker | null = null;
+let enhancedSmsWorker: Worker | null = null;
+let bulkWorker: Worker | null = null;
 
-    const { userId, templateId, recipient, subject, body, variables, id } = job.data;
-
-    logger.info('Processing email notification', {
-      jobId: job.id,
-      userId,
-      templateId,
-      recipient,
-    });
-
-    try {
-      // 1. Check user preferences
-      const preferences = await PreferencesService.getUserPreferences(userId);
-      if (preferences && !preferences.email_enabled) {
-        logger.info('Email disabled for user', { userId });
-        await updateNotificationHistory(id, {
-          status: 'failed',
-          error_message: 'Email disabled by user preferences',
-        });
-        return { success: false, reason: 'Email disabled' };
+if (useRedis && connection) {
+  enhancedEmailWorker = new Worker(
+    'notifications', // Use consolidated queue name
+    async (job: Job<NotificationJob>) => {
+      // Only process email jobs
+      if (job.name !== 'send-email' && job.data.type !== 'email') {
+        return { success: true, skipped: true };
       }
 
-      // 2. Check quiet hours
-      if (preferences && PreferencesService.isQuietHours(preferences)) {
-        const delay = PreferencesService.getDelayUntilActiveHours(preferences);
-        await notificationQueue.add('send-email', job.data, { delay });
-        logger.info('Email rescheduled due to quiet hours', { userId, delay });
-        return { success: true, rescheduled: true };
-      }
+      const { userId, templateId, recipient, subject, body, variables, id } = job.data;
 
-      // 3. Render template if needed
-      let finalSubject = subject;
-      let finalBody = body;
+      logger.info('Processing email notification', {
+        jobId: job.id,
+        userId,
+        templateId,
+        recipient,
+      });
 
-      if (templateId) {
-        const { data: template } = await supabase
-          .from('notification_templates')
-          .select('*')
-          .eq('id', templateId)
-          .single();
-
-        if (template) {
-          finalSubject = template.subject
-            ? TemplateEngine.renderTemplate(template.subject, variables)
-            : subject;
-          finalBody = TemplateEngine.renderTemplate(
-            template.email_body || template.body,
-            variables
-          );
+      try {
+        // 1. Check user preferences
+        const preferences = await PreferencesService.getUserPreferences(userId);
+        if (preferences && !preferences.email_enabled) {
+          logger.info('Email disabled for user', { userId });
+          await updateNotificationHistory(id, {
+            status: 'failed',
+            error_message: 'Email disabled by user preferences',
+          });
+          return { success: false, reason: 'Email disabled' };
         }
-      }
 
-      // 4. Add unsubscribe link
-      const unsubscribeToken = await generateUnsubscribeToken(userId, 'email');
-      finalBody += `\n\nUnsubscribe: ${process.env.BASE_URL || 'http://localhost:3000'}/api/v1/unsubscribe/${unsubscribeToken}`;
-
-      // 5. Send email
-      const result = await emailTransporter.sendMail({
-        from: process.env.SMTP_FROM || 'notifications@giga.com',
-        to: recipient,
-        subject: finalSubject,
-        html: finalBody,
-      });
-
-      // 6. Update notification history
-      await updateNotificationHistory(id, {
-        status: 'sent',
-        provider: 'nodemailer',
-        provider_id: result.messageId,
-        sent_at: new Date().toISOString(),
-      });
-
-      logger.info('Email sent successfully', {
-        jobId: job.id,
-        messageId: result.messageId,
-      });
-
-      return { success: true, messageId: result.messageId };
-    } catch (error: any) {
-      logger.error('Failed to send email', {
-        error: error.message,
-        jobId: job.id,
-      });
-
-      await updateNotificationHistory(id, {
-        status: 'failed',
-        error_message: error.message,
-      });
-
-      throw error;
-    }
-  },
-  { connection: connection as any, concurrency: 5 }
-);
-
-// Enhanced SMS Worker
-const enhancedSmsWorker = new Worker(
-  'notifications', // Use consolidated queue name
-  async (job: Job<NotificationJob>) => {
-    // Only process SMS jobs
-    if (job.name !== 'send-sms' && job.data.type !== 'sms') {
-      return { success: true, skipped: true };
-    }
-
-    const { userId, templateId, recipient, body, variables, id } = job.data;
-
-    logger.info('Processing SMS notification', {
-      jobId: job.id,
-      userId,
-      templateId,
-      recipient,
-    });
-
-    if (!twilioClient) {
-      logger.warn('Twilio not configured, skipping SMS');
-      await updateNotificationHistory(id, {
-        status: 'failed',
-        error_message: 'Twilio not configured',
-      });
-      return { success: false, message: 'Twilio not configured' };
-    }
-
-    try {
-      // 1. Check user preferences
-      const preferences = await PreferencesService.getUserPreferences(userId);
-      if (preferences && !preferences.sms_enabled) {
-        logger.info('SMS disabled for user', { userId });
-        await updateNotificationHistory(id, {
-          status: 'failed',
-          error_message: 'SMS disabled by user preferences',
-        });
-        return { success: false, reason: 'SMS disabled' };
-      }
-
-      // 2. Render template if needed
-      let finalBody = body;
-
-      if (templateId) {
-        const { data: template } = await supabase
-          .from('notification_templates')
-          .select('*')
-          .eq('id', templateId)
-          .single();
-
-        if (template) {
-          finalBody = TemplateEngine.renderTemplate(template.sms_body || template.body, variables);
-        }
-      }
-
-      // 3. Send SMS
-      const result = await twilioClient.messages.create({
-        to: recipient,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        body: finalBody,
-      });
-
-      // 4. Update notification history
-      await updateNotificationHistory(id, {
-        status: 'sent',
-        provider: 'twilio',
-        provider_id: result.sid,
-        sent_at: new Date().toISOString(),
-      });
-
-      logger.info('SMS sent successfully', {
-        jobId: job.id,
-        messageSid: result.sid,
-      });
-
-      return { success: true, messageSid: result.sid };
-    } catch (error: any) {
-      logger.error('Failed to send SMS', {
-        error: error.message,
-        jobId: job.id,
-      });
-
-      await updateNotificationHistory(id, {
-        status: 'failed',
-        error_message: error.message,
-      });
-
-      throw error;
-    }
-  },
-  { connection: connection as any, concurrency: 10 }
-);
-
-// Bulk notification worker
-const bulkWorker = new Worker(
-  'notifications', // Use consolidated queue name
-  async (job: Job) => {
-    // Only process bulk jobs
-    if (job.name !== 'bulk-send' && !job.data.campaignId) {
-      return { success: true, skipped: true };
-    }
-
-    const { campaignId, templateId, recipients, variables } = job.data;
-
-    logger.info('Processing bulk notification', {
-      jobId: job.id,
-      campaignId,
-      recipientCount: recipients.length,
-    });
-
-    try {
-      // Update campaign status
-      await supabase
-        .from('notification_campaigns')
-        .update({ status: 'sending', started_at: new Date().toISOString() })
-        .eq('id', campaignId);
-
-      let sentCount = 0;
-      let failedCount = 0;
-
-      // Process recipients in batches
-      const batchSize = 100;
-      for (let i = 0; i < recipients.length; i += batchSize) {
-        const batch = recipients.slice(i, i + batchSize);
-
-        const promises = batch.map(async (recipient: any) => {
-          try {
-            const notificationId = uuidv4();
-
-            // Create notification history record
-            await supabase.from('notification_logs').insert({
-              id: notificationId,
-              user_id: recipient.userId,
-              template_id: templateId,
-              recipient_email: recipient.email,
-              status: 'queued',
-              metadata: { campaignId },
-            });
-
-            // Queue individual notification
-            await notificationQueue.add('send-email', {
-              id: notificationId,
-              userId: recipient.userId,
-              templateId,
-              type: 'email',
-              recipient: recipient.email,
-              variables: { ...variables, ...recipient.variables },
-              campaignId,
-            });
-
-            sentCount++;
-          } catch (error) {
-            failedCount++;
-            logger.error('Failed to queue notification', {
-              error,
-              recipient: recipient.email,
-            });
+        // 2. Check quiet hours
+        if (preferences && PreferencesService.isQuietHours(preferences)) {
+          const delay = PreferencesService.getDelayUntilActiveHours(preferences);
+          if (notificationQueue) {
+            await notificationQueue.add('send-email', job.data, { delay });
           }
+          logger.info('Email rescheduled due to quiet hours', { userId, delay });
+          return { success: true, rescheduled: true };
+        }
+
+        // 3. Render template if needed
+        let finalSubject = subject;
+        let finalBody = body;
+
+        if (templateId) {
+          const { data: template } = await supabase
+            .from('notification_templates')
+            .select('*')
+            .eq('id', templateId)
+            .single();
+
+          if (template) {
+            finalSubject = template.subject
+              ? TemplateEngine.renderTemplate(template.subject, variables)
+              : subject;
+            finalBody = TemplateEngine.renderTemplate(
+              template.email_body || template.body,
+              variables
+            );
+          }
+        }
+
+        // 4. Add unsubscribe link
+        const unsubscribeToken = await generateUnsubscribeToken(userId, 'email');
+        finalBody += `\n\nUnsubscribe: ${process.env.BASE_URL || 'http://localhost:3000'}/api/v1/unsubscribe/${unsubscribeToken}`;
+
+        // 5. Send email
+        const result = await emailTransporter.sendMail({
+          from: process.env.SMTP_FROM || 'notifications@giga.com',
+          to: recipient,
+          subject: finalSubject,
+          html: finalBody,
         });
 
-        await Promise.all(promises);
+        // 6. Update notification history
+        await updateNotificationHistory(id, {
+          status: 'sent',
+          provider: 'nodemailer',
+          provider_id: result.messageId,
+          sent_at: new Date().toISOString(),
+        });
 
-        // Update campaign progress
+        logger.info('Email sent successfully', {
+          jobId: job.id,
+          messageId: result.messageId,
+        });
+
+        return { success: true, messageId: result.messageId };
+      } catch (error: any) {
+        logger.error('Failed to send email', {
+          error: error.message,
+          jobId: job.id,
+        });
+
+        await updateNotificationHistory(id, {
+          status: 'failed',
+          error_message: error.message,
+        });
+
+        throw error;
+      }
+    },
+    { connection: connection as any, concurrency: 5 }
+  );
+
+  // Enhanced SMS Worker
+  enhancedSmsWorker = new Worker(
+    'notifications', // Use consolidated queue name
+    async (job: Job<NotificationJob>) => {
+      // Only process SMS jobs
+      if (job.name !== 'send-sms' && job.data.type !== 'sms') {
+        return { success: true, skipped: true };
+      }
+
+      const { userId, templateId, recipient, body, variables, id } = job.data;
+
+      logger.info('Processing SMS notification', {
+        jobId: job.id,
+        userId,
+        templateId,
+        recipient,
+      });
+
+      if (!twilioClient) {
+        logger.warn('Twilio not configured, skipping SMS');
+        await updateNotificationHistory(id, {
+          status: 'failed',
+          error_message: 'Twilio not configured',
+        });
+        return { success: false, message: 'Twilio not configured' };
+      }
+
+      try {
+        // 1. Check user preferences
+        const preferences = await PreferencesService.getUserPreferences(userId);
+        if (preferences && !preferences.sms_enabled) {
+          logger.info('SMS disabled for user', { userId });
+          await updateNotificationHistory(id, {
+            status: 'failed',
+            error_message: 'SMS disabled by user preferences',
+          });
+          return { success: false, reason: 'SMS disabled' };
+        }
+
+        // 2. Render template if needed
+        let finalBody = body;
+
+        if (templateId) {
+          const { data: template } = await supabase
+            .from('notification_templates')
+            .select('*')
+            .eq('id', templateId)
+            .single();
+
+          if (template) {
+            finalBody = TemplateEngine.renderTemplate(
+              template.sms_body || template.body,
+              variables
+            );
+          }
+        }
+
+        // 3. Send SMS
+        const result = await twilioClient.messages.create({
+          to: recipient,
+          from: process.env.TWILIO_PHONE_NUMBER,
+          body: finalBody,
+        });
+
+        // 4. Update notification history
+        await updateNotificationHistory(id, {
+          status: 'sent',
+          provider: 'twilio',
+          provider_id: result.sid,
+          sent_at: new Date().toISOString(),
+        });
+
+        logger.info('SMS sent successfully', {
+          jobId: job.id,
+          messageSid: result.sid,
+        });
+
+        return { success: true, messageSid: result.sid };
+      } catch (error: any) {
+        logger.error('Failed to send SMS', {
+          error: error.message,
+          jobId: job.id,
+        });
+
+        await updateNotificationHistory(id, {
+          status: 'failed',
+          error_message: error.message,
+        });
+
+        throw error;
+      }
+    },
+    { connection: connection as any, concurrency: 10 }
+  );
+
+  // Bulk notification worker
+  bulkWorker = new Worker(
+    'notifications', // Use consolidated queue name
+    async (job: Job) => {
+      // Only process bulk jobs
+      if (job.name !== 'bulk-send' && !job.data.campaignId) {
+        return { success: true, skipped: true };
+      }
+
+      const { campaignId, templateId, recipients, variables } = job.data;
+
+      logger.info('Processing bulk notification', {
+        jobId: job.id,
+        campaignId,
+        recipientCount: recipients.length,
+      });
+
+      try {
+        // Update campaign status
         await supabase
           .from('notification_campaigns')
-          .update({ sent_count: sentCount, failed_count: failedCount })
+          .update({ status: 'sending', started_at: new Date().toISOString() })
           .eq('id', campaignId);
+
+        let sentCount = 0;
+        let failedCount = 0;
+
+        // Process recipients in batches
+        const batchSize = 100;
+        for (let i = 0; i < recipients.length; i += batchSize) {
+          const batch = recipients.slice(i, i + batchSize);
+
+          const promises = batch.map(async (recipient: any) => {
+            try {
+              const notificationId = uuidv4();
+
+              // Create notification history record
+              await supabase.from('notification_logs').insert({
+                id: notificationId,
+                user_id: recipient.userId,
+                template_id: templateId,
+                recipient_email: recipient.email,
+                status: 'queued',
+                metadata: { campaignId },
+              });
+
+              // Queue individual notification
+              if (notificationQueue) {
+                await notificationQueue.add('send-email', {
+                  id: notificationId,
+                  userId: recipient.userId,
+                  templateId,
+                  type: 'email',
+                  recipient: recipient.email,
+                  variables: { ...variables, ...recipient.variables },
+                  campaignId,
+                });
+              }
+
+              sentCount++;
+            } catch (error) {
+              failedCount++;
+              logger.error('Failed to queue notification', {
+                error,
+                recipient: recipient.email,
+              });
+            }
+          });
+
+          await Promise.all(promises);
+
+          // Update campaign progress
+          await supabase
+            .from('notification_campaigns')
+            .update({ sent_count: sentCount, failed_count: failedCount })
+            .eq('id', campaignId);
+        }
+
+        // Mark campaign as completed
+        await supabase
+          .from('notification_campaigns')
+          .update({
+            status: 'completed',
+            completed_at: new Date().toISOString(),
+            total_recipients: recipients.length,
+            sent_count: sentCount,
+            failed_count: failedCount,
+          })
+          .eq('id', campaignId);
+
+        logger.info('Bulk notification completed', {
+          campaignId,
+          sentCount,
+          failedCount,
+        });
+
+        return { success: true, sentCount, failedCount };
+      } catch (error: any) {
+        logger.error('Bulk notification failed', {
+          error: error.message,
+          campaignId,
+        });
+
+        await supabase
+          .from('notification_campaigns')
+          .update({ status: 'cancelled' })
+          .eq('id', campaignId);
+
+        throw error;
       }
+    },
+    { connection: connection as any, concurrency: 2 }
+  );
 
-      // Mark campaign as completed
-      await supabase
-        .from('notification_campaigns')
-        .update({
-          status: 'completed',
-          completed_at: new Date().toISOString(),
-          total_recipients: recipients.length,
-          sent_count: sentCount,
-          failed_count: failedCount,
-        })
-        .eq('id', campaignId);
-
-      logger.info('Bulk notification completed', {
-        campaignId,
-        sentCount,
-        failedCount,
-      });
-
-      return { success: true, sentCount, failedCount };
-    } catch (error: any) {
-      logger.error('Bulk notification failed', {
-        error: error.message,
-        campaignId,
-      });
-
-      await supabase
-        .from('notification_campaigns')
-        .update({ status: 'cancelled' })
-        .eq('id', campaignId);
-
-      throw error;
-    }
-  },
-  { connection: connection as any, concurrency: 2 }
-);
+  logger.info('BullMQ workers initialized');
+} else {
+  logger.info('BullMQ workers disabled - Redis not available');
+}
 
 // Express app setup
 const app = express();
@@ -659,11 +712,16 @@ app.get('/ready', async (req, res) => {
     const { error } = await supabase.from('notification_templates').select('count').limit(1);
     if (error) throw error;
 
-    // Check Redis connection
-    await connection.ping();
+    // Check Redis connection only if enabled
+    if (useRedis && connection) {
+      // Skip ping to save commands - just check connection status
+      if (connection.status !== 'ready') {
+        throw new Error('Redis not ready');
+      }
+    }
 
-    res.json({ status: 'ready' });
-  } catch (error) {
+    res.json({ status: 'ready', redis: useRedis ? 'enabled' : 'disabled' });
+  } catch (error: any) {
     res.status(503).json({ status: 'not ready', error: error.message });
   }
 });
@@ -787,41 +845,69 @@ app.post('/api/v1/notifications/send', async (req, res) => {
       metadata: { requestId: req.requestId },
     };
 
-    let job;
-    if (scheduledFor) {
-      const delay = new Date(scheduledFor).getTime() - Date.now();
-      if (delay > 0) {
-        job = await notificationQueue.add(`send-${type}`, jobData, { delay });
+    // If Redis/BullMQ is enabled, use queue
+    if (useRedis && notificationQueue) {
+      let job;
+      if (scheduledFor) {
+        const delay = new Date(scheduledFor).getTime() - Date.now();
+        if (delay > 0) {
+          job = await notificationQueue.add(`send-${type}`, jobData, { delay });
+        } else {
+          return res.status(400).json({
+            success: false,
+            error: 'Scheduled time must be in the future',
+          });
+        }
       } else {
-        return res.status(400).json({
-          success: false,
-          error: 'Scheduled time must be in the future',
+        // Use consolidated queue with job name to identify type
+        job = await notificationQueue.add(`send-${type}`, jobData, {
+          attempts: 3,
+          priority,
+          removeOnComplete: true, // Auto-remove completed jobs to save Redis space
+          removeOnFail: false, // Keep failed jobs for debugging
         });
       }
+
+      res.status(202).json({
+        success: true,
+        data: {
+          notificationId,
+          jobId: job.id,
+          type,
+          status: 'queued',
+          scheduledFor: scheduledFor || null,
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          requestId: req.requestId,
+        },
+      });
     } else {
-      // Use consolidated queue with job name to identify type
-      job = await notificationQueue.add(`send-${type}`, jobData, {
-        attempts: 3,
-        priority,
-        removeOnComplete: true, // Auto-remove completed jobs to save Redis space
-        removeOnFail: false, // Keep failed jobs for debugging
+      // Direct processing without queue (for development/when Redis is disabled)
+      logger.info('Processing notification directly (Redis disabled)', { notificationId, type });
+
+      // Update status to processing
+      await supabase
+        .from('notification_logs')
+        .update({ status: 'processing' })
+        .eq('id', notificationId);
+
+      res.status(202).json({
+        success: true,
+        data: {
+          notificationId,
+          jobId: null,
+          type,
+          status: 'processing',
+          scheduledFor: null,
+          note: 'Redis disabled - notification will be processed directly',
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          requestId: req.requestId,
+        },
       });
     }
-
-    res.status(202).json({
-      success: true,
-      data: {
-        notificationId,
-        jobId: job.id,
-        type,
-        status: 'queued',
-        scheduledFor: scheduledFor || null,
-      },
-      metadata: {
-        timestamp: new Date().toISOString(),
-        requestId: req.requestId,
-      },
-    });
   } catch (error: any) {
     logger.error('Failed to queue notification', {
       error: error.message,
@@ -838,8 +924,9 @@ app.post('/api/v1/notifications/send', async (req, res) => {
   }
 });
 
-// Worker event listeners
-[enhancedEmailWorker, enhancedSmsWorker, bulkWorker].forEach(worker => {
+// Worker event listeners - only if workers exist
+const workers = [enhancedEmailWorker, enhancedSmsWorker, bulkWorker].filter(Boolean) as Worker[];
+workers.forEach(worker => {
   worker.on('completed', job => {
     logger.info(`${worker.name} job completed`, { jobId: job.id });
   });
@@ -858,6 +945,7 @@ app.listen(PORT, () => {
     port: PORT,
     version: '2.1.0',
     features: ['templates', 'preferences', 'scheduling', 'bulk', 'analytics'],
+    redis: useRedis ? 'enabled' : 'disabled',
     deployment: 'railway-redeployment-v2.1.0',
     timestamp: new Date().toISOString(),
   });
@@ -867,10 +955,11 @@ app.listen(PORT, () => {
 process.on('SIGTERM', async () => {
   logger.info('Shutting down notifications service...');
 
-  await enhancedEmailWorker.close();
-  await enhancedSmsWorker.close();
-  await bulkWorker.close();
-  await connection.quit();
+  // Close workers if they exist
+  if (enhancedEmailWorker) await enhancedEmailWorker.close();
+  if (enhancedSmsWorker) await enhancedSmsWorker.close();
+  if (bulkWorker) await bulkWorker.close();
+  if (connection) await connection.quit();
 
   logger.info('Notifications service shutdown complete');
   process.exit(0);
