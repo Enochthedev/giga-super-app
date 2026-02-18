@@ -1,39 +1,28 @@
-import { Queue, QueueOptions } from 'bullmq';
-
 import logger from '../utils/logger';
-import { getRedisConnection, REDIS_CONNECTIONS } from '../utils/redis';
+import {
+  QueueLike,
+  closeQueue,
+  createQueue,
+  getQueueMetrics,
+  isRedisEnabled,
+} from './queue-factory';
 
-// Redis connection with proper TLS for Upstash (pooled)
-const connection = getRedisConnection(REDIS_CONNECTIONS.QUEUES);
-
-// Queue options
-const queueOptions: QueueOptions = {
-  connection: connection as any,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: {
-      type: 'exponential',
-      delay: 3000,
-    },
-    removeOnComplete: {
-      count: 200,
-      age: 24 * 3600,
-    },
-    removeOnFail: {
-      count: 500,
-      age: 30 * 24 * 3600, // 30 days
-    },
+// Create refund queue with Redis or in-memory fallback
+export const refundQueue: QueueLike = createQueue('refund-queue', {
+  attempts: 3,
+  backoff: {
+    type: 'exponential',
+    delay: 3000,
   },
-};
-
-// Create refund queue
-export const refundQueue = new Queue('refund-queue', queueOptions);
-
-refundQueue.on('error', error => {
-  logger.error('Refund queue error', { error: error.message });
+  removeOnComplete: {
+    count: 200,
+    age: 24 * 3600,
+  },
+  removeOnFail: {
+    count: 500,
+    age: 30 * 24 * 3600, // 30 days
+  },
 });
-
-logger.info('Refund queue initialized');
 
 /**
  * Add refund processing job
@@ -57,6 +46,7 @@ export async function addRefundJob(jobData: {
       refundId: jobData.refundId,
       transactionId: jobData.transactionId,
       amount: jobData.amount,
+      redisEnabled: isRedisEnabled(),
     });
 
     return job;
@@ -103,26 +93,9 @@ export async function getRefundJobStatus(jobId: string) {
  * Get refund queue metrics
  */
 export async function getRefundQueueMetrics() {
-  try {
-    const [waiting, active, completed, failed] = await Promise.all([
-      refundQueue.getWaitingCount(),
-      refundQueue.getActiveCount(),
-      refundQueue.getCompletedCount(),
-      refundQueue.getFailedCount(),
-    ]);
-
-    return { waiting, active, completed, failed };
-  } catch (error: any) {
-    logger.error('Failed to get refund queue metrics', { error: error.message });
-    return null;
-  }
+  return getQueueMetrics(refundQueue);
 }
 
 export async function closeRefundQueue() {
-  try {
-    await refundQueue.close();
-    logger.info('Refund queue closed');
-  } catch (error: any) {
-    logger.error('Error closing refund queue', { error: error.message });
-  }
+  return closeQueue(refundQueue, 'refund');
 }

@@ -1,39 +1,28 @@
-import { Queue, QueueOptions } from 'bullmq';
-
 import logger from '../utils/logger';
-import { getRedisConnection, REDIS_CONNECTIONS } from '../utils/redis';
+import {
+  QueueLike,
+  closeQueue,
+  createQueue,
+  getQueueMetrics,
+  isRedisEnabled,
+} from './queue-factory';
 
-// Redis connection with proper TLS for Upstash (pooled)
-const connection = getRedisConnection(REDIS_CONNECTIONS.QUEUES);
-
-// Queue options
-const queueOptions: QueueOptions = {
-  connection: connection as any,
-  defaultJobOptions: {
-    attempts: 3,
-    backoff: {
-      type: 'exponential',
-      delay: 10000,
-    },
-    removeOnComplete: {
-      count: 50,
-      age: 90 * 24 * 3600, // 90 days
-    },
-    removeOnFail: {
-      count: 100,
-      age: 90 * 24 * 3600,
-    },
+// Create settlement queue with Redis or in-memory fallback
+export const settlementQueue: QueueLike = createQueue('settlement-queue', {
+  attempts: 3,
+  backoff: {
+    type: 'exponential',
+    delay: 10000,
   },
-};
-
-// Create settlement queue
-export const settlementQueue = new Queue('settlement-queue', queueOptions);
-
-settlementQueue.on('error', error => {
-  logger.error('Settlement queue error', { error: error.message });
+  removeOnComplete: {
+    count: 50,
+    age: 90 * 24 * 3600, // 90 days
+  },
+  removeOnFail: {
+    count: 100,
+    age: 90 * 24 * 3600,
+  },
 });
-
-logger.info('Settlement queue initialized');
 
 /**
  * Add settlement processing job
@@ -59,6 +48,7 @@ export async function addSettlementJob(jobData: {
       settlementId: jobData.settlementId,
       level: jobData.level,
       period: jobData.period,
+      redisEnabled: isRedisEnabled(),
     });
 
     return job;
@@ -154,26 +144,9 @@ export async function getSettlementJobStatus(jobId: string) {
  * Get settlement queue metrics
  */
 export async function getSettlementQueueMetrics() {
-  try {
-    const [waiting, active, completed, failed] = await Promise.all([
-      settlementQueue.getWaitingCount(),
-      settlementQueue.getActiveCount(),
-      settlementQueue.getCompletedCount(),
-      settlementQueue.getFailedCount(),
-    ]);
-
-    return { waiting, active, completed, failed };
-  } catch (error: any) {
-    logger.error('Failed to get settlement queue metrics', { error: error.message });
-    return null;
-  }
+  return getQueueMetrics(settlementQueue);
 }
 
 export async function closeSettlementQueue() {
-  try {
-    await settlementQueue.close();
-    logger.info('Settlement queue closed');
-  } catch (error: any) {
-    logger.error('Error closing settlement queue', { error: error.message });
-  }
+  return closeQueue(settlementQueue, 'settlement');
 }
