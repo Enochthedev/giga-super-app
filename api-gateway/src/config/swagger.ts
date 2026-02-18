@@ -737,9 +737,12 @@ Check service health at:
     },
     security: [{ BearerAuth: [] }, { ApiKey: [] }],
   },
+  // Support both development (src/*.ts) and production (dist/*.js)
   apis: [
     './src/routes/*.ts',
     './src/middleware/*.ts',
+    './dist/routes/*.js',
+    './dist/middleware/*.js',
     // Include external API documentation
     '../docs/api/GIGA_DASHBOARD_SWAGGER.yaml',
   ],

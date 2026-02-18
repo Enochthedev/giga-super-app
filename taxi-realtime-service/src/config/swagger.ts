@@ -836,7 +836,8 @@ const socket = io('wss://taxi-realtime.giga.railway.app', {
       },
     },
   },
-  apis: ['./src/routes/*.ts'],
+  // Support both development (src/*.ts) and production (dist/*.js)
+  apis: ['./src/routes/*.ts', './dist/routes/*.js'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
