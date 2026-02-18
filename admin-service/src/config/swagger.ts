@@ -684,7 +684,15 @@ Most list endpoints support:
     },
     security: [{ BearerAuth: [] }],
   },
-  apis: ['./src/index.ts', './src/routes/*.ts', './src/**/*.ts'],
+  // Support both development (src/*.ts) and production (dist/*.js)
+  apis: [
+    './src/index.ts',
+    './src/routes/*.ts',
+    './src/**/*.ts',
+    './dist/index.js',
+    './dist/routes/*.js',
+    './dist/**/*.js',
+  ],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

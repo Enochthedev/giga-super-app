@@ -403,7 +403,8 @@ Cache TTL varies by query type (5-15 minutes).
     },
     security: [{ BearerAuth: [] }],
   },
-  apis: ['./src/routes/*.ts', './src/index.ts'],
+  // Support both development (src/*.ts) and production (dist/*.js)
+  apis: ['./src/routes/*.ts', './src/index.ts', './dist/routes/*.js', './dist/index.js'],
 };
 
 export const swaggerSpec = swaggerJsdoc(options);

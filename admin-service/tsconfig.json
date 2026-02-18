@@ -4,7 +4,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "lib": ["ES2022"],
-    "outDir": "../dist/admin-service",
+    "outDir": "./dist",
     "rootDir": "..",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -18,7 +18,8 @@
     "noImplicitReturns": false,
     "strictPropertyInitialization": false,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "noEmitOnError": false
   },
   "include": ["src/**/*", "../shared/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
