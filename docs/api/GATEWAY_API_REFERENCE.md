@@ -68,23 +68,25 @@ All endpoints follow the pattern: `/api/v1/{service}/{resource}`
 
 #### Supabase Services (Edge Functions)
 
-- **Authentication**: `/api/v1/auth/*`, `/api/v1/users/*`
-- **Hotels**: `/api/v1/hotels/*`, `/api/v1/bookings/*`, `/api/v1/rooms/*`
-- **Payments**: `/api/v1/payments/*`, `/api/v1/wallet/*`
-- **E-commerce**: `/api/v1/products/*`, `/api/v1/cart/*`, `/api/v1/orders/*`
-- **Taxi**: `/api/v1/rides/*`, `/api/v1/drivers/*`
+- **Authentication**: `/api/v1/auth*`, `/api/v1/user*`
+- **Hotels**: `/api/v1/hotel*`, `/api/v1/booking*`, `/api/v1/room*`
+- **Payments**: `/api/v1/payment*`, `/api/v1/wallet*`
+- **E-commerce**: `/api/v1/product*`, `/api/v1/cart*`, `/api/v1/order*`
+- **Taxi**: `/api/v1/ride*`, `/api/v1/driver*`
 
 #### Railway Services (Microservices)
 
-- **Social Media**: `/api/v1/social/*`, `/api/v1/posts/*`, `/api/v1/comments/*`,
-  `/api/v1/likes/*`, `/api/v1/feed/*`, `/api/v1/stories/*`
-- **Admin**: `/api/v1/admin/*`, `/api/v1/dashboard/*`, `/api/v1/nipost/*`
-- **Search**: `/api/v1/search/*`
-- **Payment Queue**: `/api/v1/payment-queue/*`
-- **Delivery**: `/api/v1/delivery/*`, `/api/v1/courier/*`, `/api/v1/tracking/*`
-- **Notifications**: `/api/v1/notifications/*`, `/api/v1/push/*`,
-  `/api/v1/alerts/*`
-- **Taxi Realtime**: `/api/v1/taxi-realtime/*`, `/api/v1/driver-location/*`
+- **Social Media**: `/api/v1/social*`, `/api/v1/post*`, `/api/v1/comment*`,
+  `/api/v1/like*`, `/api/v1/feed*`, `/api/v1/stor*`
+- **Admin**: `/api/v1/admin*`, `/api/v1/dashboard*`, `/api/v1/nipost*`
+- **Search**: `/api/v1/search*`
+- **Payment Queue**: `/api/v1/payment-queue*`
+- **Delivery**: `/api/v1/delivery*`, `/api/v1/courier*`, `/api/v1/tracking*`
+- **Notifications**: `/api/v1/notifications*`, `/api/v1/push*`, `/api/v1/alert*`
+- **Taxi Realtime**: `/api/v1/taxi-realtime*`, `/api/v1/driver-location*`
+
+**Note**: Patterns use prefix matching (e.g., `/api/v1/courier*` matches both
+`/api/v1/couriers` and `/api/v1/couriers/123`).
 
 ## Public Endpoints (No Auth Required)
 
