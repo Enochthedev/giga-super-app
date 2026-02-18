@@ -89,7 +89,9 @@ paths:
     post:
       tags: [Authentication]
       summary: User registration
-      description: Register a new user account
+      description: |
+        Register a new user account with email and password only.
+        First name, last name, and phone number are collected on separate screens after registration.
       operationId: registerUser
       security: []
       requestBody:
@@ -98,26 +100,22 @@ paths:
           application/json:
             schema:
               type: object
-              required: [email, password, first_name, last_name]
+              required: [email, password]
               properties:
                 email:
                   type: string
                   format: email
-                first_name:
-                  type: string
-                  minLength: 1
-                  maxLength: 50
-                last_name:
-                  type: string
-                  minLength: 1
-                  maxLength: 50
+                  description: User's email address
+                  example: "user@example.com"
                 password:
                   type: string
                   format: password
                   minLength: 8
-                phone:
-                  type: string
-                  pattern: '^\+[1-9]\d{1,14}$'
+                  description: User's password (minimum 8 characters)
+                  example: "securePassword123"
+            example:
+              email: "user@example.com"
+              password: "securePassword123"$'
       responses:
         '201':
           description: Registration successful
