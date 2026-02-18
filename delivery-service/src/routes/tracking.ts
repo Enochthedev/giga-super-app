@@ -10,119 +10,136 @@ import logger from '../utils/logger';
 const router = Router();
 
 /**
- * POST /track-delivery
- * Update delivery location and status with real-time tracking
+ * @swagger
+ * /track-delivery:
+ *   post:
+ *     tags: [Tracking]
+ *     summary: Update delivery location
+ *     description: Updates courier location with real-time tracking data
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [assignment_id, latitude, longitude]
+ *             properties:
+ *               assignment_id:
+ *                 type: string
+ *                 format: uuid
+ *               latitude:
+ *                 type: number
+ *               longitude:
+ *                 type: number
+ *               accuracy_meters:
+ *                 type: number
+ *               speed_kmh:
+ *                 type: number
+ *               heading_degrees:
+ *                 type: number
+ *               battery_level:
+ *                 type: integer
+ *               status:
+ *                 type: string
+ *               notes:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Location updated successfully
+ *       400:
+ *         $ref: '#/components/responses/BadRequestError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
   '/track-delivery',
   requireAuth,
   [
-    body('assignment_id').isUUID().withMessage('Assignment ID must be a valid UUID'),
-    body('latitude')
-      .isFloat({ min: -90, max: 90 })
-      .withMessage('Latitude must be between -90 and 90'),
-    body('longitude')
-      .isFloat({ min: -180, max: 180 })
-      .withMessage('Longitude must be between -180 and 180'),
-    body('accuracy_meters')
-      .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Accuracy must be a positive number'),
-    body('speed_kmh').optional().isFloat({ min: 0 }).withMessage('Speed must be a positive number'),
-    body('heading_degrees')
-      .optional()
-      .isFloat({ min: 0, max: 360 })
-      .withMessage('Heading must be between 0 and 360 degrees'),
-    body('battery_level')
-      .optional()
-      .isInt({ min: 0, max: 100 })
-      .withMessage('Battery level must be between 0 and 100'),
+    body('assignment_id').isUUID(),
+    body('latitude').isFloat({ min: -90, max: 90 }),
+    body('longitude').isFloat({ min: -180, max: 180 }),
+    body('accuracy_meters').optional().isFloat({ min: 0 }),
+    body('speed_kmh').optional().isFloat({ min: 0 }),
+    body('heading_degrees').optional().isFloat({ min: 0, max: 360 }),
+    body('battery_level').optional().isInt({ min: 0, max: 100 }),
     body('status')
       .optional()
-      .isIn([
-        'pending',
-        'assigned',
-        'picked_up',
-        'in_transit',
-        'out_for_delivery',
-        'delivered',
-        'failed',
-        'cancelled',
-        'returned',
-      ])
-      .withMessage('Invalid delivery status'),
-    body('notes')
-      .optional()
-      .isString()
-      .isLength({ max: 1000 })
-      .withMessage('Notes must be a string with max 1000 characters'),
+      .isIn(['pending', 'assigned', 'picked_up', 'in_transit', 'delivered', 'failed']),
+    body('notes').optional().isString().isLength({ max: 1000 }),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const trackingData: TrackDeliveryRequest = req.body;
-      const userId = req.user!.id;
-
-      logger.info('Processing tracking update', {
-        assignment_id: trackingData.assignment_id,
-        user_id: userId,
-        latitude: trackingData.latitude,
-        longitude: trackingData.longitude,
-      });
-
-      const result = await trackingService.updateDeliveryTracking(trackingData, userId);
-
+      const result = await trackingService.updateDeliveryTracking(trackingData, req.user!.id);
       const response: APIResponse = {
         success: true,
         data: result,
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'track-delivery',
+          request_id: req.requestId || 'track',
           version: '1.0.0',
         },
       };
-
       res.json(response);
     } catch (error: any) {
-      logger.error('Error updating delivery tracking', {
-        error: error.message,
-        assignment_id: req.body.assignment_id,
-        user_id: req.user?.id,
-      });
-
-      const response: APIResponse = {
+      logger.error('Error updating tracking', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to update tracking',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'track-delivery-error',
+          request_id: req.requestId || 'track-err',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * GET /tracking/:assignmentId
- * Get real-time tracking data for a delivery assignment
+ * @swagger
+ * /tracking/{assignmentId}:
+ *   get:
+ *     tags: [Tracking]
+ *     summary: Get tracking data
+ *     description: Retrieves real-time tracking data for a delivery assignment
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 50
+ *       - in: query
+ *         name: since
+ *         schema:
+ *           type: string
+ *           format: date-time
+ *     responses:
+ *       200:
+ *         description: Tracking data retrieved
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
   '/tracking/:assignmentId',
   requireAuth,
   [
-    param('assignmentId').isUUID().withMessage('Assignment ID must be a valid UUID'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: 100 })
-      .withMessage('Limit must be between 1 and 100'),
-    query('since').optional().isISO8601().withMessage('Since must be a valid ISO 8601 date'),
+    param('assignmentId').isUUID(),
+    query('limit').optional().isInt({ min: 1, max: 100 }),
+    query('since').optional().isISO8601(),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
@@ -130,21 +147,11 @@ router.get(
       const { assignmentId } = req.params;
       const limit = parseInt(req.query.limit as string) || 50;
       const since = req.query.since as string;
-      const userId = req.user!.id;
-
-      logger.info('Fetching tracking data', {
-        assignment_id: assignmentId,
-        user_id: userId,
+      const trackingData = await trackingService.getTrackingData(assignmentId, req.user!.id, {
         limit,
         since,
       });
-
-      const trackingData = await trackingService.getTrackingData(assignmentId, userId, {
-        limit,
-        since,
-      });
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: trackingData,
         metadata: {
@@ -152,57 +159,56 @@ router.get(
           request_id: req.requestId || 'get-tracking',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error fetching tracking data', {
-        error: error.message,
-        assignment_id: req.params.assignmentId,
-        user_id: req.user?.id,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error fetching tracking', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to fetch tracking data',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'get-tracking-error',
+          request_id: req.requestId || 'get-tracking-err',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * GET /tracking/:assignmentId/progress
- * Get delivery progress and ETA information
+ * @swagger
+ * /tracking/{assignmentId}/progress:
+ *   get:
+ *     tags: [Tracking]
+ *     summary: Get delivery progress
+ *     description: Retrieves delivery progress and ETA information
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Delivery progress retrieved
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
   '/tracking/:assignmentId/progress',
   requireAuth,
-  [param('assignmentId').isUUID().withMessage('Assignment ID must be a valid UUID')],
+  [param('assignmentId').isUUID()],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { assignmentId } = req.params;
-      const userId = req.user!.id;
-
-      logger.info('Fetching delivery progress', {
-        assignment_id: assignmentId,
-        user_id: userId,
-      });
-
-      const progress = await trackingService.getDeliveryProgress(assignmentId, userId);
-
-      const response: APIResponse = {
+      const progress = await trackingService.getDeliveryProgress(assignmentId, req.user!.id);
+      res.json({
         success: true,
         data: progress,
         metadata: {
@@ -210,101 +216,87 @@ router.get(
           request_id: req.requestId || 'get-progress',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error fetching delivery progress', {
-        error: error.message,
-        assignment_id: req.params.assignmentId,
-        user_id: req.user?.id,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error fetching progress', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to fetch delivery progress',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'get-progress-error',
+          request_id: req.requestId || 'get-progress-err',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * POST /tracking/:assignmentId/cleanup
- * Cleanup old tracking data for a delivery assignment
+ * @swagger
+ * /tracking/{assignmentId}/cleanup:
+ *   post:
+ *     tags: [Tracking]
+ *     summary: Cleanup tracking data
+ *     description: Removes old tracking data for a delivery assignment
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: assignmentId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               retention_hours:
+ *                 type: integer
+ *                 default: 72
+ *     responses:
+ *       200:
+ *         description: Tracking data cleaned up
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
   '/tracking/:assignmentId/cleanup',
   requireAuth,
-  [
-    param('assignmentId').isUUID().withMessage('Assignment ID must be a valid UUID'),
-    body('retention_hours')
-      .optional()
-      .isInt({ min: 1, max: 8760 })
-      .withMessage('Retention hours must be between 1 and 8760 (1 year)'),
-  ],
+  [param('assignmentId').isUUID(), body('retention_hours').optional().isInt({ min: 1, max: 8760 })],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { assignmentId } = req.params;
-      const retentionHours = req.body.retention_hours || 72; // Default 3 days
-      const userId = req.user!.id;
-
-      logger.info('Cleaning up tracking data', {
-        assignment_id: assignmentId,
-        user_id: userId,
-        retention_hours: retentionHours,
-      });
-
+      const retentionHours = req.body.retention_hours || 72;
       const result = await trackingService.cleanupTrackingData(
         assignmentId,
-        userId,
+        req.user!.id,
         retentionHours
       );
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: result,
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'cleanup-tracking',
+          request_id: req.requestId || 'cleanup',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error cleaning up tracking data', {
-        error: error.message,
-        assignment_id: req.params.assignmentId,
-        user_id: req.user?.id,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error cleaning up tracking', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to cleanup tracking data',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'cleanup-tracking-error',
+          request_id: req.requestId || 'cleanup-err',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );

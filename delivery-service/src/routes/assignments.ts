@@ -3,261 +3,260 @@ import { body, param, validationResult } from 'express-validator';
 import { v4 as uuidv4 } from 'uuid';
 
 import { DeliveryAssignmentService } from '../services/deliveryAssignment';
-
 import { AuthenticatedRequest } from '../types';
 import { database } from '../utils/database';
 import { createErrorResponse, createNotFoundError, createValidationError } from '../utils/errors';
 import logger from '../utils/logger';
 
-
 const router = Router();
-
-// Initialize delivery assignment service
 const deliveryService = new DeliveryAssignmentService(database.getClient());
 
 /**
- * Create a new delivery assignment
- * POST /assignments
+ * @swagger
+ * /assignments:
+ *   post:
+ *     tags: [Assignments]
+ *     summary: Create delivery assignment
+ *     description: Creates a new delivery assignment linking a package to a courier
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [order_id, pickup_location, delivery_location, recipient_name, recipient_phone]
+ *             properties:
+ *               order_id:
+ *                 type: string
+ *                 format: uuid
+ *               pickup_location:
+ *                 type: object
+ *                 properties:
+ *                   latitude:
+ *                     type: number
+ *                   longitude:
+ *                     type: number
+ *               delivery_location:
+ *                 type: object
+ *                 properties:
+ *                   latitude:
+ *                     type: number
+ *                   longitude:
+ *                     type: number
+ *               recipient_name:
+ *                 type: string
+ *               recipient_phone:
+ *                 type: string
+ *               package_weight_kg:
+ *                 type: number
+ *               priority:
+ *                 type: integer
+ *                 minimum: 1
+ *                 maximum: 5
+ *               specific_courier_id:
+ *                 type: string
+ *                 format: uuid
+ *     responses:
+ *       201:
+ *         description: Assignment created successfully
+ *       400:
+ *         $ref: '#/components/responses/BadRequestError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
   '/',
   [
-    body('order_id').isUUID().withMessage('Valid order ID is required'),
-    body('pickup_location.latitude')
-      .isFloat({ min: -90, max: 90 })
-      .withMessage('Valid pickup latitude is required'),
-    body('pickup_location.longitude')
-      .isFloat({ min: -180, max: 180 })
-      .withMessage('Valid pickup longitude is required'),
-    body('delivery_location.latitude')
-      .isFloat({ min: -90, max: 90 })
-      .withMessage('Valid delivery latitude is required'),
-    body('delivery_location.longitude')
-      .isFloat({ min: -180, max: 180 })
-      .withMessage('Valid delivery longitude is required'),
-    body('recipient_name').notEmpty().withMessage('Recipient name is required'),
-    body('recipient_phone').notEmpty().withMessage('Recipient phone is required'),
-    body('package_weight_kg')
-      .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Package weight must be positive'),
-    body('priority')
-      .optional()
-      .isInt({ min: 1, max: 5 })
-      .withMessage('Priority must be between 1-5'),
-    body('specific_courier_id').optional().isUUID().withMessage('Courier ID must be valid UUID'),
+    body('order_id').isUUID(),
+    body('pickup_location.latitude').isFloat({ min: -90, max: 90 }),
+    body('pickup_location.longitude').isFloat({ min: -180, max: 180 }),
+    body('delivery_location.latitude').isFloat({ min: -90, max: 90 }),
+    body('delivery_location.longitude').isFloat({ min: -180, max: 180 }),
+    body('recipient_name').notEmpty(),
+    body('recipient_phone').notEmpty(),
+    body('package_weight_kg').optional().isFloat({ min: 0 }),
+    body('priority').optional().isInt({ min: 1, max: 5 }),
+    body('specific_courier_id').optional().isUUID(),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     const requestId = req.requestId || uuidv4();
-
     try {
-      // Check validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         throw createValidationError('Validation failed', { errors: errors.array() });
       }
-
-      const {
-        order_id,
-        pickup_location,
-        delivery_location,
-        package_weight_kg,
-        package_dimensions,
-        special_instructions,
-        pickup_instructions,
-        delivery_instructions,
-        recipient_name,
-        recipient_phone,
-        sender_name,
-        sender_phone,
-        priority,
-        delivery_scheduled_at,
-        delivery_fee,
-        courier_commission,
-        specific_courier_id,
-      } = req.body;
-
-      logger.info('Creating delivery assignment', {
-        requestId,
-        orderId: order_id,
-        userId: req.user?.id,
-        specificCourier: !!specific_courier_id,
-      });
-
-      // Create assignment request
       const assignmentRequest = {
-        orderId: order_id,
-        pickupLocation: pickup_location,
-        deliveryLocation: delivery_location,
-        packageWeightKg: package_weight_kg,
-        packageDimensions: package_dimensions,
-        specialInstructions: special_instructions,
-        pickupInstructions: pickup_instructions,
-        deliveryInstructions: delivery_instructions,
-        recipientName: recipient_name,
-        recipientPhone: recipient_phone,
-        senderName: sender_name,
-        senderPhone: sender_phone,
-        priority: priority || 3,
-        deliveryScheduledAt: delivery_scheduled_at,
-        deliveryFee: delivery_fee,
-        courierCommission: courier_commission,
-        specificCourierId: specific_courier_id,
+        orderId: req.body.order_id,
+        pickupLocation: req.body.pickup_location,
+        deliveryLocation: req.body.delivery_location,
+        packageWeightKg: req.body.package_weight_kg,
+        packageDimensions: req.body.package_dimensions,
+        specialInstructions: req.body.special_instructions,
+        pickupInstructions: req.body.pickup_instructions,
+        deliveryInstructions: req.body.delivery_instructions,
+        recipientName: req.body.recipient_name,
+        recipientPhone: req.body.recipient_phone,
+        senderName: req.body.sender_name,
+        senderPhone: req.body.sender_phone,
+        priority: req.body.priority || 3,
+        deliveryScheduledAt: req.body.delivery_scheduled_at,
+        deliveryFee: req.body.delivery_fee,
+        courierCommission: req.body.courier_commission,
+        specificCourierId: req.body.specific_courier_id,
       };
-
-      // Create the assignment
       const assignment = await deliveryService.assignDelivery(assignmentRequest, requestId);
-
       res.status(201).json({
         success: true,
         data: assignment,
-        metadata: {
-          timestamp: new Date().toISOString(),
-          request_id: requestId,
-          version: '1.0.0',
-        },
+        metadata: { timestamp: new Date().toISOString(), request_id: requestId, version: '1.0.0' },
       });
     } catch (error) {
-      logger.error('Failed to create delivery assignment', {
-        requestId,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        userId: req.user?.id,
-      });
-
+      logger.error('Failed to create assignment', { requestId, error: (error as Error).message });
       const errorResponse = createErrorResponse(error as Error, requestId);
-      const statusCode = (error as any).statusCode || 500;
-      res.status(statusCode).json(errorResponse);
+      res.status((error as any).statusCode || 500).json(errorResponse);
     }
   }
 );
 
 /**
- * Get delivery assignment by ID
- * GET /assignments/:id
+ * @swagger
+ * /assignments/{id}:
+ *   get:
+ *     tags: [Assignments]
+ *     summary: Get assignment by ID
+ *     description: Retrieves delivery assignment details including courier and order info
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Assignment details retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Assignment'
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.get(
-  '/:id',
-  [param('id').isUUID().withMessage('Valid assignment ID is required')],
-  async (req: AuthenticatedRequest, res: Response) => {
-    const requestId = req.requestId || uuidv4();
-
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        throw createValidationError('Validation failed', { errors: errors.array() });
-      }
-
-      const { id } = req.params;
-
-      logger.debug('Fetching delivery assignment', {
-        requestId,
-        assignmentId: id,
-        userId: req.user?.id,
-      });
-
-      const { data: assignment, error } = await database
-        .getClient()
-        .from('delivery_assignments')
-        .select(
-          `
-          *,
-          courier:courier_profiles(id, first_name, last_name, phone_number, vehicle_type, rating),
-          order:ecommerce_orders(id, order_number, status, total_amount)
-        `
-        )
-        .eq('id', id)
-        .is('deleted_at', null)
-        .single();
-
-      if (error || !assignment) {
-        throw createNotFoundError('Delivery assignment not found');
-      }
-
-      res.json({
-        success: true,
-        data: assignment,
-        metadata: {
-          timestamp: new Date().toISOString(),
-          request_id: requestId,
-          version: '1.0.0',
-        },
-      });
-    } catch (error) {
-      logger.error('Failed to fetch delivery assignment', {
-        requestId,
-        assignmentId: req.params.id,
-        error: error instanceof Error ? error.message : 'Unknown error',
-      });
-
-      const errorResponse = createErrorResponse(error as Error, requestId);
-      const statusCode = (error as any).statusCode || 500;
-      res.status(statusCode).json(errorResponse);
+router.get('/:id', [param('id').isUUID()], async (req: AuthenticatedRequest, res: Response) => {
+  const requestId = req.requestId || uuidv4();
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw createValidationError('Validation failed', { errors: errors.array() });
     }
+    const { id } = req.params;
+    const { data: assignment, error } = await database
+      .getClient()
+      .from('delivery_assignments')
+      .select(
+        `*, courier:courier_profiles(id, first_name, last_name, phone_number, vehicle_type, rating), order:ecommerce_orders(id, order_number, status, total_amount)`
+      )
+      .eq('id', id)
+      .is('deleted_at', null)
+      .single();
+    if (error || !assignment) {
+      throw createNotFoundError('Delivery assignment not found');
+    }
+    res.json({
+      success: true,
+      data: assignment,
+      metadata: { timestamp: new Date().toISOString(), request_id: requestId, version: '1.0.0' },
+    });
+  } catch (error) {
+    logger.error('Failed to fetch assignment', { requestId, error: (error as Error).message });
+    const errorResponse = createErrorResponse(error as Error, requestId);
+    res.status((error as any).statusCode || 500).json(errorResponse);
   }
-);
+});
 
 /**
- * Find available couriers for a location
- * POST /assignments/find-couriers
+ * @swagger
+ * /assignments/find-couriers:
+ *   post:
+ *     tags: [Assignments]
+ *     summary: Find available couriers
+ *     description: Finds available couriers near a location for delivery assignment
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [location]
+ *             properties:
+ *               location:
+ *                 type: object
+ *                 properties:
+ *                   latitude:
+ *                     type: number
+ *                   longitude:
+ *                     type: number
+ *               radius_km:
+ *                 type: number
+ *                 default: 10
+ *               package_weight_kg:
+ *                 type: number
+ *               priority:
+ *                 type: integer
+ *               required_vehicle_type:
+ *                 type: string
+ *               min_rating:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Available couriers found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 couriers:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/NearbyCourer'
+ *                 total_found:
+ *                   type: integer
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
   '/find-couriers',
   [
-    body('location.latitude')
-      .isFloat({ min: -90, max: 90 })
-      .withMessage('Valid latitude is required'),
-    body('location.longitude')
-      .isFloat({ min: -180, max: 180 })
-      .withMessage('Valid longitude is required'),
-    body('radius_km')
-      .optional()
-      .isFloat({ min: 1, max: 100 })
-      .withMessage('Radius must be between 1-100 km'),
-    body('package_weight_kg')
-      .optional()
-      .isFloat({ min: 0 })
-      .withMessage('Package weight must be positive'),
-    body('priority')
-      .optional()
-      .isInt({ min: 1, max: 5 })
-      .withMessage('Priority must be between 1-5'),
+    body('location.latitude').isFloat({ min: -90, max: 90 }),
+    body('location.longitude').isFloat({ min: -180, max: 180 }),
+    body('radius_km').optional().isFloat({ min: 1, max: 100 }),
+    body('package_weight_kg').optional().isFloat({ min: 0 }),
+    body('priority').optional().isInt({ min: 1, max: 5 }),
   ],
   async (req: AuthenticatedRequest, res: Response) => {
     const requestId = req.requestId || uuidv4();
-
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         throw createValidationError('Validation failed', { errors: errors.array() });
       }
-
-      const {
-        location,
-        radius_km,
-        package_weight_kg,
-        priority,
-        required_vehicle_type,
-        min_rating,
-      } = req.body;
-
-      logger.debug('Finding available couriers', {
-        requestId,
-        location,
-        radius_km,
-        userId: req.user?.id,
-      });
-
       const criteria = {
-        location,
-        maxRadiusKm: radius_km,
-        packageWeightKg: package_weight_kg,
-        priority,
-        requiredVehicleType: required_vehicle_type,
-        minRating: min_rating,
+        location: req.body.location,
+        maxRadiusKm: req.body.radius_km,
+        packageWeightKg: req.body.package_weight_kg,
+        priority: req.body.priority,
+        requiredVehicleType: req.body.required_vehicle_type,
+        minRating: req.body.min_rating,
       };
-
       const availableCouriers = await deliveryService.findAvailableCouriers(criteria, requestId);
-
       res.json({
         success: true,
         data: {
@@ -265,22 +264,12 @@ router.post(
           total_found: availableCouriers.length,
           search_criteria: criteria,
         },
-        metadata: {
-          timestamp: new Date().toISOString(),
-          request_id: requestId,
-          version: '1.0.0',
-        },
+        metadata: { timestamp: new Date().toISOString(), request_id: requestId, version: '1.0.0' },
       });
     } catch (error) {
-      logger.error('Failed to find available couriers', {
-        requestId,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        userId: req.user?.id,
-      });
-
+      logger.error('Failed to find couriers', { requestId, error: (error as Error).message });
       const errorResponse = createErrorResponse(error as Error, requestId);
-      const statusCode = (error as any).statusCode || 500;
-      res.status(statusCode).json(errorResponse);
+      res.status((error as any).statusCode || 500).json(errorResponse);
     }
   }
 );

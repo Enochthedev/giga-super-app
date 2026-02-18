@@ -5,7 +5,7 @@ import config from '../config';
 import { requireAuth, requireRole } from '../middleware/auth';
 import { handleValidationErrors } from '../middleware/validation';
 import { CourierService } from '../services/courier';
-import { APIResponse, AuthenticatedRequest, CreateCourierRequest, ERROR_CODES } from '../types';
+import { AuthenticatedRequest, CreateCourierRequest, ERROR_CODES } from '../types';
 import { db } from '../utils/database';
 import logger from '../utils/logger';
 
@@ -13,43 +13,60 @@ const router = Router();
 const courierService = new CourierService(db);
 
 /**
- * POST /couriers
- * Create a new courier profile (onboarding)
+ * @swagger
+ * /couriers:
+ *   post:
+ *     tags: [Couriers]
+ *     summary: Create courier profile
+ *     description: Creates a new courier profile for delivery agent onboarding
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [first_name, last_name, phone_number, vehicle_type]
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               phone_number:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               vehicle_type:
+ *                 type: string
+ *                 enum: [bicycle, motorcycle, car, van, truck]
+ *     responses:
+ *       201:
+ *         description: Courier profile created
+ *       400:
+ *         $ref: '#/components/responses/BadRequestError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
   '/couriers',
   requireAuth,
   [
-    body('first_name').isString().notEmpty().withMessage('First name is required'),
-    body('last_name').isString().notEmpty().withMessage('Last name is required'),
-    body('phone_number').isString().notEmpty().withMessage('Phone number is required'),
-    body('email').optional().isEmail().withMessage('Invalid email address'),
-    body('vehicle_type')
-      .isIn(['bicycle', 'motorcycle', 'car', 'van', 'truck'])
-      .withMessage('Invalid vehicle type'),
-    body('vehicle_registration').optional().isString().withMessage('Vehicle registration must be a string'),
-    body('vehicle_capacity_kg').optional().isFloat({ min: 0 }).withMessage('Vehicle capacity must be positive'),
-    body('max_delivery_radius_km').optional().isFloat({ min: 0 }).withMessage('Delivery radius must be positive'),
-    body('license_number').optional().isString().withMessage('License number must be a string'),
-    body('license_expiry').optional().isISO8601().withMessage('Invalid license expiry date'),
-    body('verification_documents').optional().isObject().withMessage('Verification documents must be an object'),
+    body('first_name').isString().notEmpty(),
+    body('last_name').isString().notEmpty(),
+    body('phone_number').isString().notEmpty(),
+    body('email').optional().isEmail(),
+    body('vehicle_type').isIn(['bicycle', 'motorcycle', 'car', 'van', 'truck']),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
-      const courierData: CreateCourierRequest = {
-        ...req.body,
-        user_id: req.user!.id,
-      };
-
-      logger.info('Creating courier profile', {
-        user_id: req.user!.id,
-        request_id: req.requestId,
-      });
-
-      const courier = await courierService.createCourier(courierData, req.requestId || 'create-courier');
-
-      const response: APIResponse = {
+      const courierData: CreateCourierRequest = { ...req.body, user_id: req.user!.id };
+      const courier = await courierService.createCourier(
+        courierData,
+        req.requestId || 'create-courier'
+      );
+      res.status(201).json({
         success: true,
         data: courier,
         metadata: {
@@ -57,50 +74,59 @@ router.post(
           request_id: req.requestId || 'create-courier',
           version: '1.0.0',
         },
-      };
-
-      res.status(201).json(response);
-    } catch (error: any) {
-      logger.error('Error creating courier', {
-        error: error.message,
-        user_id: req.user?.id,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error creating courier', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to create courier',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
           request_id: req.requestId || 'create-courier',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * GET /couriers/:courierId
- * Get courier details by ID
+ * @swagger
+ * /couriers/{courierId}:
+ *   get:
+ *     tags: [Couriers]
+ *     summary: Get courier by ID
+ *     description: Retrieves courier profile details including location
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courierId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Courier details retrieved
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
   '/couriers/:courierId',
   requireAuth,
-  [param('courierId').isUUID().withMessage('Courier ID must be a valid UUID')],
+  [param('courierId').isUUID()],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { courierId } = req.params;
-
-      const courier = await courierService.getCourierById(courierId, req.requestId || 'get-courier');
-
-      const response: APIResponse = {
+      const courier = await courierService.getCourierById(
+        courierId,
+        req.requestId || 'get-courier'
+      );
+      res.json({
         success: true,
         data: courier,
         metadata: {
@@ -108,50 +134,56 @@ router.get(
           request_id: req.requestId || 'get-courier',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error fetching courier', {
-        error: error.message,
-        courier_id: req.params.courierId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error fetching courier', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to fetch courier',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
           request_id: req.requestId || 'get-courier',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * GET /couriers/user/:userId
- * Get courier profile by user ID
+ * @swagger
+ * /couriers/user/{userId}:
+ *   get:
+ *     tags: [Couriers]
+ *     summary: Get courier by user ID
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Courier details retrieved
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
  */
 router.get(
   '/couriers/user/:userId',
   requireAuth,
-  [param('userId').isUUID().withMessage('User ID must be a valid UUID')],
+  [param('userId').isUUID()],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { userId } = req.params;
-
-      const courier = await courierService.getCourierByUserId(userId, req.requestId || 'get-courier-by-user');
-
-      const response: APIResponse = {
+      const courier = await courierService.getCourierByUserId(
+        userId,
+        req.requestId || 'get-courier-by-user'
+      );
+      res.json({
         success: true,
         data: courier,
         metadata: {
@@ -159,84 +191,91 @@ router.get(
           request_id: req.requestId || 'get-courier-by-user',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error fetching courier by user ID', {
-        error: error.message,
-        user_id: req.params.userId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error fetching courier by user', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to fetch courier',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
           request_id: req.requestId || 'get-courier-by-user',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * GET /couriers
- * Get all couriers with optional filtering
+ * @swagger
+ * /couriers:
+ *   get:
+ *     tags: [Couriers]
+ *     summary: List all couriers
+ *     description: Retrieves all couriers with optional filtering
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: verification_status
+ *         schema:
+ *           type: string
+ *           enum: [pending, verified, rejected, suspended]
+ *       - in: query
+ *         name: availability_status
+ *         schema:
+ *           type: string
+ *           enum: [available, busy, offline, on_break]
+ *       - in: query
+ *         name: vehicle_type
+ *         schema:
+ *           type: string
+ *           enum: [bicycle, motorcycle, car, van, truck]
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *     responses:
+ *       200:
+ *         description: Couriers list retrieved
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
   '/couriers',
   requireAuth,
   [
-    query('verification_status')
-      .optional()
-      .isIn(['pending', 'verified', 'rejected', 'suspended'])
-      .withMessage('Invalid verification status'),
-    query('availability_status')
-      .optional()
-      .isIn(['available', 'busy', 'offline', 'on_break'])
-      .withMessage('Invalid availability status'),
-    query('is_online').optional().isBoolean().withMessage('is_online must be a boolean'),
-    query('vehicle_type')
-      .optional()
-      .isIn(['bicycle', 'motorcycle', 'car', 'van', 'truck'])
-      .withMessage('Invalid vehicle type'),
-    query('page')
-      .optional()
-      .isInt({ min: 1 })
-      .withMessage('Page must be a positive integer'),
-    query('limit')
-      .optional()
-      .isInt({ min: 1, max: config.pagination.maxLimit })
-      .withMessage(`Limit must be between 1 and ${config.pagination.maxLimit}`),
+    query('verification_status').optional().isIn(['pending', 'verified', 'rejected', 'suspended']),
+    query('availability_status').optional().isIn(['available', 'busy', 'offline', 'on_break']),
+    query('vehicle_type').optional().isIn(['bicycle', 'motorcycle', 'car', 'van', 'truck']),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: config.pagination.maxLimit }),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || config.pagination.defaultLimit;
-
       const filters: any = {};
-      if (req.query.verification_status) filters.verification_status = req.query.verification_status;
-      if (req.query.availability_status) filters.availability_status = req.query.availability_status;
-      if (req.query.is_online !== undefined) filters.is_online = req.query.is_online === 'true';
+      if (req.query.verification_status)
+        filters.verification_status = req.query.verification_status;
+      if (req.query.availability_status)
+        filters.availability_status = req.query.availability_status;
       if (req.query.vehicle_type) filters.vehicle_type = req.query.vehicle_type;
-
       const result = await courierService.getCouriers(
         filters,
         page,
         limit,
         req.requestId || 'get-couriers'
       );
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: result.couriers,
         metadata: {
@@ -249,71 +288,67 @@ router.get(
           limit,
           total: result.total,
           total_pages: Math.ceil(result.total / limit),
-          has_previous: page > 1,
-          has_next: page * limit < result.total,
-          previous_page: page > 1 ? page - 1 : undefined,
-          next_page: page * limit < result.total ? page + 1 : undefined,
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error fetching couriers', {
-        error: error.message,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error fetching couriers', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to fetch couriers',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
           request_id: req.requestId || 'get-couriers',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * PUT /couriers/:courierId
- * Update courier profile
+ * @swagger
+ * /couriers/{courierId}:
+ *   put:
+ *     tags: [Couriers]
+ *     summary: Update courier profile
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courierId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Courier updated successfully
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
  */
 router.put(
   '/couriers/:courierId',
   requireAuth,
   [
-    param('courierId').isUUID().withMessage('Courier ID must be a valid UUID'),
-    body('first_name').optional().isString().withMessage('First name must be a string'),
-    body('last_name').optional().isString().withMessage('Last name must be a string'),
-    body('phone_number').optional().isString().withMessage('Phone number must be a string'),
-    body('email').optional().isEmail().withMessage('Invalid email address'),
-    body('vehicle_type')
-      .optional()
-      .isIn(['bicycle', 'motorcycle', 'car', 'van', 'truck'])
-      .withMessage('Invalid vehicle type'),
-    body('vehicle_registration').optional().isString().withMessage('Vehicle registration must be a string'),
-    body('vehicle_capacity_kg').optional().isFloat({ min: 0 }).withMessage('Vehicle capacity must be positive'),
-    body('max_delivery_radius_km').optional().isFloat({ min: 0 }).withMessage('Delivery radius must be positive'),
+    param('courierId').isUUID(),
+    body('first_name').optional().isString(),
+    body('last_name').optional().isString(),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { courierId } = req.params;
-
       const courier = await courierService.updateCourier(
         courierId,
         req.body,
         req.requestId || 'update-courier'
       );
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: courier,
         metadata: {
@@ -321,238 +356,280 @@ router.put(
           request_id: req.requestId || 'update-courier',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error updating courier', {
-        error: error.message,
-        courier_id: req.params.courierId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error updating courier', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to update courier',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
           request_id: req.requestId || 'update-courier',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * POST /couriers/:courierId/location
- * Update courier location
+ * @swagger
+ * /couriers/{courierId}/location:
+ *   post:
+ *     tags: [Couriers]
+ *     summary: Update courier location
+ *     description: Updates the current GPS coordinates of a courier
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courierId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [latitude, longitude]
+ *             properties:
+ *               latitude:
+ *                 type: number
+ *                 minimum: -90
+ *                 maximum: 90
+ *               longitude:
+ *                 type: number
+ *                 minimum: -180
+ *                 maximum: 180
+ *     responses:
+ *       200:
+ *         description: Location updated successfully
+ *       400:
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.post(
   '/couriers/:courierId/location',
   requireAuth,
   [
-    param('courierId').isUUID().withMessage('Courier ID must be a valid UUID'),
-    body('latitude')
-      .isFloat({ min: -90, max: 90 })
-      .withMessage('Latitude must be between -90 and 90'),
-    body('longitude')
-      .isFloat({ min: -180, max: 180 })
-      .withMessage('Longitude must be between -180 and 180'),
+    param('courierId').isUUID(),
+    body('latitude').isFloat({ min: -90, max: 90 }),
+    body('longitude').isFloat({ min: -180, max: 180 }),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { courierId } = req.params;
       const { latitude, longitude } = req.body;
-
       await courierService.updateCourierLocation(
         courierId,
         latitude,
         longitude,
-        req.requestId || 'update-courier-location'
+        req.requestId || 'update-location'
       );
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: { message: 'Location updated successfully' },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'update-courier-location',
+          request_id: req.requestId || 'update-location',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error updating courier location', {
-        error: error.message,
-        courier_id: req.params.courierId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error updating courier location', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to update location',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'update-courier-location',
+          request_id: req.requestId || 'update-location',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * POST /couriers/:courierId/availability
- * Update courier availability status
+ * @swagger
+ * /couriers/{courierId}/availability:
+ *   post:
+ *     tags: [Couriers]
+ *     summary: Update courier availability
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courierId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [status]
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [available, busy, offline, on_break]
+ *     responses:
+ *       200:
+ *         description: Availability updated successfully
  */
 router.post(
   '/couriers/:courierId/availability',
   requireAuth,
-  [
-    param('courierId').isUUID().withMessage('Courier ID must be a valid UUID'),
-    body('status')
-      .isIn(['available', 'busy', 'offline', 'on_break'])
-      .withMessage('Invalid availability status'),
-  ],
+  [param('courierId').isUUID(), body('status').isIn(['available', 'busy', 'offline', 'on_break'])],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { courierId } = req.params;
       const { status } = req.body;
-
       const courier = await courierService.updateAvailabilityStatus(
         courierId,
         status,
-        req.requestId || 'update-courier-availability'
+        req.requestId || 'update-availability'
       );
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: courier,
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'update-courier-availability',
+          request_id: req.requestId || 'update-availability',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error updating courier availability', {
-        error: error.message,
-        courier_id: req.params.courierId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error updating availability', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to update availability',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'update-courier-availability',
+          request_id: req.requestId || 'update-availability',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * POST /couriers/:courierId/verification
- * Update courier verification status (Admin/Moderator only)
+ * @swagger
+ * /couriers/{courierId}/verification:
+ *   post:
+ *     tags: [Couriers]
+ *     summary: Update courier verification status
+ *     description: Admin/Moderator only
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courierId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [status]
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, verified, rejected, suspended]
+ *     responses:
+ *       200:
+ *         description: Verification status updated
+ *       403:
+ *         $ref: '#/components/responses/ForbiddenError'
  */
 router.post(
   '/couriers/:courierId/verification',
   requireAuth,
   requireRole(['admin', 'moderator']),
   [
-    param('courierId').isUUID().withMessage('Courier ID must be a valid UUID'),
-    body('status')
-      .isIn(['pending', 'verified', 'rejected', 'suspended'])
-      .withMessage('Invalid verification status'),
+    param('courierId').isUUID(),
+    body('status').isIn(['pending', 'verified', 'rejected', 'suspended']),
   ],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { courierId } = req.params;
       const { status } = req.body;
-
       const courier = await courierService.updateVerificationStatus(
         courierId,
         status,
-        req.requestId || 'update-courier-verification'
+        req.requestId || 'update-verification'
       );
-
-      const response: APIResponse = {
+      res.json({
         success: true,
         data: courier,
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'update-courier-verification',
+          request_id: req.requestId || 'update-verification',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error updating courier verification status', {
-        error: error.message,
-        courier_id: req.params.courierId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error updating verification', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to update verification status',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
-          request_id: req.requestId || 'update-courier-verification',
+          request_id: req.requestId || 'update-verification',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
 
 /**
- * GET /couriers/:courierId/stats
- * Get courier statistics and performance metrics
+ * @swagger
+ * /couriers/{courierId}/stats:
+ *   get:
+ *     tags: [Couriers]
+ *     summary: Get courier statistics
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: courierId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Courier statistics retrieved
+ *       404:
+ *         $ref: '#/components/responses/NotFoundError'
  */
 router.get(
   '/couriers/:courierId/stats',
   requireAuth,
-  [param('courierId').isUUID().withMessage('Courier ID must be a valid UUID')],
+  [param('courierId').isUUID()],
   handleValidationErrors,
   async (req: AuthenticatedRequest, res) => {
     try {
       const { courierId } = req.params;
-
-      const stats = await courierService.getCourierStats(courierId, req.requestId || 'get-courier-stats');
-
-      const response: APIResponse = {
+      const stats = await courierService.getCourierStats(
+        courierId,
+        req.requestId || 'get-courier-stats'
+      );
+      res.json({
         success: true,
         data: stats,
         metadata: {
@@ -560,30 +637,18 @@ router.get(
           request_id: req.requestId || 'get-courier-stats',
           version: '1.0.0',
         },
-      };
-
-      res.json(response);
-    } catch (error: any) {
-      logger.error('Error fetching courier stats', {
-        error: error.message,
-        courier_id: req.params.courierId,
       });
-
-      const response: APIResponse = {
+    } catch (error: any) {
+      logger.error('Error fetching courier stats', { error: error.message });
+      res.status(error.statusCode || 500).json({
         success: false,
-        error: {
-          code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR,
-          message: error.message || 'Failed to fetch courier stats',
-          details: error.details,
-        },
+        error: { code: error.code || ERROR_CODES.INTERNAL_SERVER_ERROR, message: error.message },
         metadata: {
           timestamp: new Date().toISOString(),
           request_id: req.requestId || 'get-courier-stats',
           version: '1.0.0',
         },
-      };
-
-      res.status(error.statusCode || 500).json(response);
+      });
     }
   }
 );
