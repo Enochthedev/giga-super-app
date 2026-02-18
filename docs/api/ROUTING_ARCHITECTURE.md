@@ -55,25 +55,28 @@ services:
 
 ### Supabase Services
 
-| Service ID         | Patterns                                 | Platform | Base URL     |
-| ------------------ | ---------------------------------------- | -------- | ------------ |
-| supabase-auth      | `/api/v1/auth/*`, `/api/v1/users/*`      | Supabase | Supabase URL |
-| supabase-hotels    | `/api/v1/hotels/*`, `/api/v1/bookings/*` | Supabase | Supabase URL |
-| supabase-payments  | `/api/v1/payments/*`, `/api/v1/wallet/*` | Supabase | Supabase URL |
-| supabase-ecommerce | `/api/v1/products/*`, `/api/v1/cart/*`   | Supabase | Supabase URL |
-| supabase-taxi      | `/api/v1/rides/*`, `/api/v1/drivers/*`   | Supabase | Supabase URL |
+| Service ID         | Patterns                              | Platform | Base URL     |
+| ------------------ | ------------------------------------- | -------- | ------------ |
+| supabase-auth      | `/api/v1/auth*`, `/api/v1/user*`      | Supabase | Supabase URL |
+| supabase-hotels    | `/api/v1/hotel*`, `/api/v1/booking*`  | Supabase | Supabase URL |
+| supabase-payments  | `/api/v1/payment*`, `/api/v1/wallet*` | Supabase | Supabase URL |
+| supabase-ecommerce | `/api/v1/product*`, `/api/v1/cart*`   | Supabase | Supabase URL |
+| supabase-taxi      | `/api/v1/ride*`, `/api/v1/driver*`    | Supabase | Supabase URL |
 
 ### Railway Services
 
-| Service ID            | Patterns                                    | Platform | Base URL                               |
-| --------------------- | ------------------------------------------- | -------- | -------------------------------------- |
-| railway-social        | `/api/v1/social/*`, `/api/v1/posts/*`       | Railway  | social-service.railway.internal        |
-| railway-admin         | `/api/v1/admin/*`, `/api/v1/dashboard/*`    | Railway  | admin-service.railway.internal         |
-| railway-search        | `/api/v1/search/*`                          | Railway  | search-service.railway.internal        |
-| railway-payment       | `/api/v1/payment-queue/*`                   | Railway  | payment-queue-service.railway.internal |
-| railway-delivery      | `/api/v1/delivery/*`, `/api/v1/courier/*`   | Railway  | delivery-service.railway.internal      |
-| railway-notifications | `/api/v1/notifications/*`, `/api/v1/push/*` | Railway  | notifications-service.railway.internal |
-| railway-taxi-realtime | `/api/v1/taxi-realtime/*`                   | Railway  | taxi-realtime-service.railway.internal |
+| Service ID            | Patterns                                  | Platform | Base URL                               |
+| --------------------- | ----------------------------------------- | -------- | -------------------------------------- |
+| railway-social        | `/api/v1/social*`, `/api/v1/post*`        | Railway  | social-service.railway.internal        |
+| railway-admin         | `/api/v1/admin*`, `/api/v1/dashboard*`    | Railway  | admin-service.railway.internal         |
+| railway-search        | `/api/v1/search*`                         | Railway  | search-service.railway.internal        |
+| railway-payment       | `/api/v1/payment-queue*`                  | Railway  | payment-queue-service.railway.internal |
+| railway-delivery      | `/api/v1/delivery*`, `/api/v1/courier*`   | Railway  | delivery-service.railway.internal      |
+| railway-notifications | `/api/v1/notifications*`, `/api/v1/push*` | Railway  | notifications-service.railway.internal |
+| railway-taxi-realtime | `/api/v1/taxi-realtime*`                  | Railway  | taxi-realtime-service.railway.internal |
+
+**Note**: Patterns use prefix matching (e.g., `/api/v1/courier*` matches both
+`/api/v1/couriers` and `/api/v1/couriers/123`).
 
 ## Authentication Flow
 

@@ -20,14 +20,14 @@ class ServiceRegistry {
   async initialize(): Promise<void> {
     logger.info('Initializing service registry');
 
-    // Register Supabase services
+    // Register Supabase services - using simplified patterns (prefix*)
     this.registerService('supabase-auth', {
       id: 'supabase-auth',
       name: 'Authentication Service',
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/auth/*', '/api/v1/users/*'],
+      patterns: ['/api/v1/auth*', '/api/v1/user*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -40,7 +40,7 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/hotels/*', '/api/v1/bookings/*', '/api/v1/rooms/*'],
+      patterns: ['/api/v1/hotel*', '/api/v1/booking*', '/api/v1/room*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -53,7 +53,7 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/payments/*', '/api/v1/wallet/*'],
+      patterns: ['/api/v1/payment*', '/api/v1/wallet*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -66,7 +66,7 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/products/*', '/api/v1/cart/*', '/api/v1/orders/*'],
+      patterns: ['/api/v1/product*', '/api/v1/cart*', '/api/v1/order*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -79,14 +79,14 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/rides/*', '/api/v1/drivers/*'],
+      patterns: ['/api/v1/ride*', '/api/v1/driver*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
       },
     });
 
-    // Register Railway services
+    // Register Railway services - using simplified patterns (prefix*)
     if (config.services.social) {
       this.registerService('railway-social', {
         id: 'railway-social',
@@ -95,13 +95,13 @@ class ServiceRegistry {
         healthEndpoint: '/health',
         platform: 'railway',
         patterns: [
-          '/api/v1/social/*',
-          '/api/v1/posts/*',
-          '/api/v1/comments/*',
-          '/api/v1/likes/*',
-          '/api/v1/feed/*',
-          '/api/v1/stories/*',
-          '/api/v1/shares/*',
+          '/api/v1/social*',
+          '/api/v1/post*',
+          '/api/v1/comment*',
+          '/api/v1/like*',
+          '/api/v1/feed*',
+          '/api/v1/stor*',
+          '/api/v1/share*',
         ],
       });
     }
@@ -114,23 +114,23 @@ class ServiceRegistry {
         healthEndpoint: '/health',
         platform: 'railway',
         patterns: [
-          '/api/v1/admin/*',
-          '/api/v1/dashboard/*',
-          '/api/v1/nipost/*',
-          '/api/v1/ads/*', // Ads management (both admin and public endpoints)
-          '/api/v1/campaigns/*',
-          '/api/v1/advertisers/*',
+          '/api/v1/admin*',
+          '/api/v1/dashboard*',
+          '/api/v1/nipost*',
+          '/api/v1/ads*',
+          '/api/v1/campaign*',
+          '/api/v1/advertiser*',
           // GIGA Dashboard API patterns
-          '/api/dashboard/*',
-          '/api/admin/*', // This covers /api/admin/users, /api/admin/national/*, etc.
-          '/api/ecommerce/*',
-          '/api/taxi/*',
-          '/api/hotel/*',
-          '/api/media/*',
-          '/api/postal-monitoring/*',
-          '/api/operations/*',
-          '/api/managers/*',
-          '/api/ads/*',
+          '/api/dashboard*',
+          '/api/admin*',
+          '/api/ecommerce*',
+          '/api/taxi*',
+          '/api/hotel*',
+          '/api/media*',
+          '/api/postal-monitoring*',
+          '/api/operations*',
+          '/api/managers*',
+          '/api/ads*',
         ],
       });
     }
@@ -142,7 +142,7 @@ class ServiceRegistry {
         baseUrl: config.services.search,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/search/*'],
+        patterns: ['/api/v1/search*'],
       });
     }
 
@@ -153,12 +153,11 @@ class ServiceRegistry {
         baseUrl: config.services.payment,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/payment-queue/*'],
+        patterns: ['/api/v1/payment-queue*'],
       });
     }
 
     // Note: Ads functionality is handled by the Admin Service
-    // Keeping this registration for future separation if needed
     if (config.services.ads) {
       this.registerService('railway-ads', {
         id: 'railway-ads',
@@ -166,7 +165,7 @@ class ServiceRegistry {
         baseUrl: config.services.ads,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/ads-future/*'], // Changed to avoid conflict with admin service
+        patterns: ['/api/v1/ads-future*'],
       });
     }
 
@@ -177,7 +176,7 @@ class ServiceRegistry {
         baseUrl: config.services.media,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/media/*', '/api/v1/files/*', '/api/v1/images/*'],
+        patterns: ['/api/v1/media*', '/api/v1/file*', '/api/v1/image*'],
       });
     }
 
@@ -188,7 +187,7 @@ class ServiceRegistry {
         baseUrl: config.services.communication,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/notifications/*', '/api/v1/sms/*', '/api/v1/email/*'],
+        patterns: ['/api/v1/notification*', '/api/v1/sms*', '/api/v1/email*'],
       });
     }
 
@@ -199,7 +198,13 @@ class ServiceRegistry {
         baseUrl: config.services.delivery,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/delivery/*', '/api/v1/courier/*', '/api/v1/tracking/*'],
+        patterns: [
+          '/api/v1/delivery*',
+          '/api/v1/courier*',
+          '/api/v1/package*',
+          '/api/v1/assignment*',
+          '/api/v1/tracking*',
+        ],
       });
     }
 
@@ -210,7 +215,7 @@ class ServiceRegistry {
         baseUrl: config.services.notifications,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/notifications/*', '/api/v1/push/*', '/api/v1/alerts/*'],
+        patterns: ['/api/v1/notifications*', '/api/v1/push*', '/api/v1/alert*'],
       });
     }
 
@@ -221,7 +226,7 @@ class ServiceRegistry {
         baseUrl: config.services.taxiRealtime,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/taxi-realtime/*', '/api/v1/driver-location/*'],
+        patterns: ['/api/v1/taxi-realtime*', '/api/v1/driver-location*'],
       });
     }
 
