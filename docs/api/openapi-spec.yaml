@@ -153,7 +153,14 @@ paths:
     put:
       tags: [User Management]
       summary: Update user profile
-      description: Update the authenticated user's profile information
+      description: |
+        Update the authenticated user's profile information.
+        All fields are optional - you can update just one field at a time.
+        
+        Examples:
+        - Update phone only: `{"phone": "123456789"}`
+        - Update name: `{"first_name": "John", "last_name": "Doe"}`
+        - Update multiple fields at once
       operationId: updateUserProfile
       requestBody:
         required: true
@@ -161,6 +168,22 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserProfileUpdate'
+            examples:
+              phoneOnly:
+                summary: Update phone number only
+                value:
+                  phone: "123456789"
+              nameOnly:
+                summary: Update name only
+                value:
+                  first_name: "John"
+                  last_name: "Doe"
+              fullUpdate:
+                summary: Update multiple fields
+                value:
+                  first_name: "John"
+                  last_name: "Doe"
+                  phone: "123456789"
       responses:
         '200':
           description: Profile updated successfully
@@ -854,18 +877,45 @@ components:
 
     UserProfileUpdate:
       type: object
+      description: |
+        All fields are optional. Send only the fields you want to update.
       properties:
         first_name:
           type: string
           minLength: 1
           maxLength: 50
+          example: "John"
         last_name:
           type: string
           minLength: 1
           maxLength: 50
+          example: "Doe"
         phone:
           type: string
-          pattern: '^\+[1-9]\d{1,14}$'
+          description: Phone number (any format accepted)
+          example: "123456789"
+        date_of_birth:
+          type: string
+          format: date
+          example: "1990-01-15"
+        gender:
+          type: string
+          enum: [male, female, other, prefer_not_to_say]
+        avatar:
+          type: string
+          description: Avatar URL
+        marital_status:
+          type: string
+        body_weight:
+          type: number
+        height:
+          type: number
+        age_group:
+          type: string
+        areas_of_interest:
+          type: array
+          items:
+            type: string$'
         date_of_birth:
           type: string
           format: date
