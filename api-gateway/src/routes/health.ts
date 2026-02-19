@@ -7,10 +7,19 @@ const router = Router();
 
 /**
  * @openapi
+ * tags:
+ *   - name: Health
+ *     description: Gateway and service health checks
+ */
+
+/**
+ * @openapi
  * /health:
  *   get:
  *     summary: Basic health check
  *     description: Returns the health status of the API Gateway
+ *     tags:
+ *       - Health
  *     responses:
  *       200:
  *         description: Service is healthy
@@ -48,6 +57,8 @@ router.get('/', (_req: Request, res: Response) => {
  *   get:
  *     summary: Readiness check
  *     description: Checks if the service registry is initialized
+ *     tags:
+ *       - Health
  *     responses:
  *       200:
  *         description: Service is ready
@@ -85,6 +96,8 @@ router.get('/ready', (_req: Request, res: Response) => {
  *   get:
  *     summary: Liveness check
  *     description: Simple check to see if the process is alive
+ *     tags:
+ *       - Health
  *     responses:
  *       200:
  *         description: Service is alive
@@ -105,6 +118,8 @@ router.get('/live', (_req: Request, res: Response) => {
  *   get:
  *     summary: Detailed health check
  *     description: Checks health of all downstream services
+ *     tags:
+ *       - Health
  *     responses:
  *       200:
  *         description: Detailed health status
@@ -144,6 +159,8 @@ router.get('/detailed', async (_req: Request, res: Response) => {
  *   get:
  *     summary: Service statistics
  *     description: Returns statistics about registered services
+ *     tags:
+ *       - Health
  *     responses:
  *       200:
  *         description: Service statistics

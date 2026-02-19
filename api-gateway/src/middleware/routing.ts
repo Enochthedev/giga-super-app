@@ -72,7 +72,41 @@ export const routingMiddleware = (
     proxyTimeout: 30000, // 30 second timeout for proxy
     pathRewrite:
       service.platform === 'supabase'
-        ? path => `/functions/v1${path.replace('/api/v1', '')}`
+        ? path => {
+            // Map API paths to Supabase function names
+            const functionMappings: Record<string, string> = {
+              // User management
+              '/api/v1/users/search': '/functions/v1/search-users',
+              '/api/v1/users/profile': '/functions/v1/get-user-profile',
+              '/api/v1/user/addresses': '/functions/v1/add-user-address',
+              '/api/v1/user/switch-role': '/functions/v1/switch-role',
+              // Hotels
+              '/api/v1/hotels/search': '/functions/v1/Search-hotels',
+              // Notifications
+              '/api/v1/notifications/history': '/functions/v1/get-notification-history',
+              // Ads
+              '/api/v1/ads/campaigns': '/functions/v1/get-ad-campaigns',
+              '/api/v1/ads/fetch': '/functions/v1/fetch-ads',
+              // Rides
+              '/api/v1/rides/request': '/functions/v1/request-ride',
+              '/api/v1/rides/estimate': '/functions/v1/get-ride-estimate',
+            };
+
+            // Check for exact match first
+            if (functionMappings[path]) {
+              return functionMappings[path];
+            }
+
+            // Check for prefix matches
+            for (const [apiPath, functionPath] of Object.entries(functionMappings)) {
+              if (path.startsWith(apiPath)) {
+                return path.replace(apiPath, functionPath);
+              }
+            }
+
+            // Default: convert /api/v1/xxx to /functions/v1/xxx
+            return `/functions/v1${path.replace('/api/v1', '')}`;
+          }
         : path => {
             // For Railway services, strip the service-specific prefix
             // Social service: /api/v1/social/posts -> /api/v1/posts

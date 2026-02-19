@@ -46,27 +46,55 @@ serve(async req => {
       );
     }
     // Get address data from request
-    const {
-      label,
-      name,
-      building_number,
-      street,
-      address2,
-      city,
-      state,
-      zip_code,
-      country,
-      phone,
-      latitude,
-      longitude,
-      is_default, // Optional: Set as default address
-    } = await req.json();
+    const body = await req.json();
+
+    // Support both naming conventions for flexibility
+    const label = body.label;
+    const name = body.name;
+    const building_number = body.building_number;
+    // Accept both 'street' and 'address_line1'
+    const street = body.street || body.address_line1;
+    // Accept both 'address2' and 'address_line2'
+    const address2 = body.address2 || body.address_line2;
+    const city = body.city;
+    const state = body.state;
+    // Accept both 'zip_code' and 'postal_code'
+    const zip_code = body.zip_code || body.postal_code;
+    const country = body.country;
+    const phone = body.phone;
+    const latitude = body.latitude;
+    const longitude = body.longitude;
+    const is_default = body.is_default;
+
     // Validate required fields
-    if (!label || !street || !city || !country) {
+    const missingFields = [];
+    if (!label) missingFields.push('label');
+    if (!street) missingFields.push('street (or address_line1)');
+    if (!city) missingFields.push('city');
+    if (!country) missingFields.push('country');
+
+    if (missingFields.length > 0) {
       return new Response(
         JSON.stringify({
           success: false,
-          error: 'Missing required fields: label, street, city, country',
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: `Missing required fields: ${missingFields.join(', ')}`,
+            details: {
+              missing_fields: missingFields,
+              received_fields: Object.keys(body),
+              example: {
+                label: 'Home',
+                street: '15 Admiralty Way',
+                city: 'Lagos',
+                country: 'Nigeria',
+              },
+            },
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            version: '1.0.0',
+          },
         }),
         {
           status: 400,
