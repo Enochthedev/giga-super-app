@@ -5,7 +5,7 @@
     "production": "22671702-ce5d8176-5a13-47da-acdc-22787e0817ea",
     "local": "22671702-1508cd02-9aff-4d8e-bce8-0dec6a3a83ff"
   },
-  "last_run": null,
+  "last_run": "2026-02-19T00:00:00.000Z",
   "auto_run_enabled": true,
   "collection_name": "Giga Platform API",
   "environments": {
