@@ -69,10 +69,12 @@ app.get('/api-docs.json', (req, res) => {
 });
 
 // API routes
+// Note: Routes with parameterized paths (like /:id) must be mounted with specific prefixes
+// to avoid catching requests meant for other routes
 app.use('/api/v1', trackingRoutes);
-app.use('/api/v1', assignmentRoutes);
-app.use('/api/v1', packageRoutes);
-app.use('/api/v1', courierRoutes);
+app.use('/api/v1/assignments', assignmentRoutes); // Mounted with /assignments prefix
+app.use('/api/v1/packages', packageRoutes); // Mounted with /packages prefix
+app.use('/api/v1', courierRoutes); // Couriers routes already have /couriers prefix
 app.use('/api/v1', websocketRoutes);
 app.use('/api/v1', schedulerRoutes);
 
