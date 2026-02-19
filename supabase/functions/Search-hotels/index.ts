@@ -23,7 +23,83 @@ serve(async req => {
         },
       }
     );
-    const params = await req.json();
+
+    // Support both GET with query params and POST with JSON body
+    let params: Record<string, any> = {};
+
+    if (req.method === 'GET') {
+      // Parse query parameters for GET requests
+      const url = new URL(req.url);
+      params = {
+        city: url.searchParams.get('city'),
+        userLat: url.searchParams.get('lat')
+          ? parseFloat(url.searchParams.get('lat')!)
+          : undefined,
+        userLng: url.searchParams.get('lng')
+          ? parseFloat(url.searchParams.get('lng')!)
+          : undefined,
+        radius: url.searchParams.get('radius')
+          ? parseInt(url.searchParams.get('radius')!)
+          : undefined,
+        checkInDate:
+          url.searchParams.get('check_in') || url.searchParams.get('checkInDate'),
+        checkOutDate:
+          url.searchParams.get('check_out') || url.searchParams.get('checkOutDate'),
+        rooms: url.searchParams.get('rooms')
+          ? parseInt(url.searchParams.get('rooms')!)
+          : undefined,
+        guests: url.searchParams.get('guests')
+          ? parseInt(url.searchParams.get('guests')!)
+          : undefined,
+        minPrice: url.searchParams.get('min_price')
+          ? parseFloat(url.searchParams.get('min_price')!)
+          : undefined,
+        maxPrice: url.searchParams.get('max_price')
+          ? parseFloat(url.searchParams.get('max_price')!)
+          : undefined,
+        sortBy: url.searchParams.get('sort_by') || url.searchParams.get('sortBy'),
+        sortOrder:
+          url.searchParams.get('sort_order') || url.searchParams.get('sortOrder'),
+        page: url.searchParams.get('page')
+          ? parseInt(url.searchParams.get('page')!)
+          : undefined,
+        limit: url.searchParams.get('limit')
+          ? parseInt(url.searchParams.get('limit')!)
+          : undefined,
+      };
+      // Remove undefined values
+      Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+    } else {
+      // Parse JSON body for POST requests
+      try {
+        params = await req.json();
+      } catch (e) {
+        return new Response(
+          JSON.stringify({
+            success: false,
+            error: {
+              code: 'VALIDATION_ERROR',
+              message:
+                'Invalid JSON body. For GET requests, use query parameters instead.',
+              details: {
+                hint: 'Use POST with JSON body or GET with query params like ?city=Lagos&page=1&limit=20',
+              },
+            },
+            metadata: {
+              timestamp: new Date().toISOString(),
+              version: '1.0.0',
+            },
+          }),
+          {
+            headers: {
+              ...corsHeaders,
+              'Content-Type': 'application/json',
+            },
+            status: 400,
+          }
+        );
+      }
+    }
     // Defaults
     const radius = params.radius || 25; // miles
     const page = params.page || 1;

@@ -1,7 +1,17 @@
 import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
 Deno.serve(async (req: Request) => {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
+
   try {
     const authHeader = req.headers.get('Authorization')!;
     const supabase = createClient(
@@ -15,7 +25,23 @@ Deno.serve(async (req: Request) => {
       error: userError,
     } = await supabase.auth.getUser();
     if (userError || !user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: {
+            code: 'AUTHENTICATION_ERROR',
+            message: 'Unauthorized - Please log in',
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            version: '1.0.0',
+          },
+        }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     const url = new URL(req.url);
@@ -24,8 +50,25 @@ Deno.serve(async (req: Request) => {
 
     if (!query || query.length < 2) {
       return new Response(
-        JSON.stringify({ error: 'Query must be at least 2 characters' }),
-        { status: 400 }
+        JSON.stringify({
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Query must be at least 2 characters',
+            details: {
+              received: query,
+              min_length: 2,
+            },
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            version: '1.0.0',
+          },
+        }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
       );
     }
 
@@ -58,10 +101,36 @@ Deno.serve(async (req: Request) => {
       connectionStatus: connectionMap[u.id] || 'none',
     }));
 
-    return new Response(JSON.stringify({ users: usersWithStatus }), {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({
+        success: true,
+        data: { users: usersWithStatus },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          version: '1.0.0',
+        },
+      }),
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: {
+          code: 'INTERNAL_ERROR',
+          message: error.message,
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          version: '1.0.0',
+        },
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    );
   }
 });

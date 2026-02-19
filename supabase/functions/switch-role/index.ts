@@ -41,11 +41,25 @@ serve(async req => {
         }
       );
     }
-    const { role } = await req.json();
+    const body = await req.json();
+    // Accept both 'role' and 'role_name' for flexibility
+    const role = body.role || body.role_name;
     if (!role) {
       return new Response(
         JSON.stringify({
-          error: 'Missing role parameter',
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Missing required field: role or role_name',
+            details: {
+              accepted_fields: ['role', 'role_name'],
+              example: { role: 'DRIVER' },
+            },
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            version: '1.0.0',
+          },
         }),
         {
           status: 400,

@@ -27,7 +27,12 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/auth*', '/api/v1/user*'],
+      patterns: [
+        '/api/v1/auth*',
+        '/api/v1/user*',
+        '/api/v1/users/search*',
+        '/api/v1/users/profile*',
+      ],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -40,7 +45,7 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/hotel*', '/api/v1/booking*', '/api/v1/room*'],
+      patterns: ['/api/v1/hotel*', '/api/v1/booking*', '/api/v1/room*', '/api/v1/hotels/search*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -79,7 +84,35 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/ride*', '/api/v1/driver*'],
+      patterns: ['/api/v1/ride*', '/api/v1/driver*', '/api/v1/rides*'],
+      headers: {
+        apikey: config.supabaseAnonKey,
+        Authorization: `Bearer ${config.supabaseAnonKey}`,
+      },
+    });
+
+    // Notifications service (Supabase functions)
+    this.registerService('supabase-notifications', {
+      id: 'supabase-notifications',
+      name: 'Notifications Service',
+      baseUrl: config.supabaseUrl,
+      healthEndpoint: '/rest/v1/',
+      platform: 'supabase',
+      patterns: ['/api/v1/notifications*'],
+      headers: {
+        apikey: config.supabaseAnonKey,
+        Authorization: `Bearer ${config.supabaseAnonKey}`,
+      },
+    });
+
+    // Ads service (Supabase functions)
+    this.registerService('supabase-ads', {
+      id: 'supabase-ads',
+      name: 'Ads Service',
+      baseUrl: config.supabaseUrl,
+      healthEndpoint: '/rest/v1/',
+      platform: 'supabase',
+      patterns: ['/api/v1/ads*', '/api/v1/campaigns*', '/api/v1/advertiser*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,

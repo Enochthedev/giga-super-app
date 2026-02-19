@@ -31,7 +31,23 @@ serve(async req => {
     } = await supabaseClient.auth.getUser();
 
     if (userError || !user) {
-      throw new Error('Unauthorized');
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: {
+            code: 'AUTHENTICATION_ERROR',
+            message: 'Unauthorized - Please log in to request a ride',
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            version: '1.0.0',
+          },
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 401,
+        }
+      );
     }
 
     const {

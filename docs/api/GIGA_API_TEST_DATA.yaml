@@ -1,0 +1,875 @@
+openapi: 3.0.3
+info:
+  title: GIGA Platform API - Test Data Reference
+  version: 2.0.0
+  description: |
+    # GIGA Platform API - Complete Test Data Reference
+
+    This document contains ready-to-use test data for all API endpoints.
+    Copy and paste the examples directly into your API testing tool.
+
+    ## 🔐 Authentication
+    All endpoints (except auth) require JWT authentication:
+    ```
+    Authorization: Bearer <jwt_token>
+    ```
+
+    ## 🌐 Base URLs
+    - **Production**: https://giga-giga-production.up.railway.app
+    - **Local**: http://localhost:3000
+
+    ## ⚠️ Known Issues & Workarounds
+
+    ### 1. Search Hotels (400 Error)
+    The `/api/v1/hotels/search` endpoint expects a JSON body, not query parameters.
+    Use POST with JSON body instead of GET with query params.
+
+    ### 2. User Search (404 Error)
+    Route `/api/v1/users/search` maps to Supabase function `search-users`.
+    Ensure the function is deployed.
+
+    ### 3. Notifications History (404 Error)
+    Route should be `/api/v1/notifications/history` not `/api/v1/history`.
+
+    ### 4. Ads Campaigns (404 Error)
+    Route `/api/v1/ads/campaigns` should map to `get-ad-campaigns` function.
+
+    ### 5. Ride Request (400 Unauthorized)
+    The error message says "Unauthorized" but returns 400. This is a bug in the function.
+
+servers:
+  - url: https://giga-giga-production.up.railway.app
+    description: Production API Gateway
+  - url: http://localhost:3000
+    description: Local Development
+
+tags:
+  - name: Authentication
+    description: User authentication endpoints
+  - name: User Profile
+    description: User profile management
+  - name: User Addresses
+    description: User address management
+  - name: User Roles
+    description: Role switching and management
+  - name: Hotels
+    description: Hotel search and booking
+  - name: Rides
+    description: Taxi/ride services
+  - name: Notifications
+    description: User notifications
+  - name: Ads
+    description: Advertisement management
+  - name: Social
+    description: Social media features
+
+paths:
+  # ============================================
+  # AUTHENTICATION
+  # ============================================
+  /api/v1/auth/login:
+    post:
+      tags: [Authentication]
+      summary: User Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+            examples:
+              testUser:
+                summary: Test User Login
+                value:
+                  email: 'enoch@finaltest.com'
+                  password: 'password123'
+              newUser:
+                summary: New User Login
+                value:
+                  email: 'newuser@test.com'
+                  password: 'securePassword123'
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  access_token: 'eyJhbGciOiJIUzI1NiIs...'
+                  refresh_token: 'refresh_token_here'
+                  user:
+                    id: '450bf331-d13a-4d94-b2b7-882ed4b6295c'
+                    email: 'enoch@finaltest.com'
+                  expires_in: 3600
+
+  /api/v1/auth/register:
+    post:
+      tags: [Authentication]
+      summary: User Registration
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+            examples:
+              newUser:
+                summary: Register New User
+                value:
+                  email: 'newuser@example.com'
+                  password: 'securePassword123'
+      responses:
+        201:
+          description: Registration successful
+
+  # ============================================
+  # USER PROFILE
+  # ============================================
+  /api/v1/users/profile:
+    get:
+      tags: [User Profile]
+      summary: Get Current User Profile
+      responses:
+        200:
+          description: Profile retrieved
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  id: '450bf331-d13a-4d94-b2b7-882ed4b6295c'
+                  email: 'enoch@finaltest.com'
+                  first_name: 'John'
+                  last_name: 'Doe'
+                  phone: '+2341344222493'
+
+    put:
+      tags: [User Profile]
+      summary: Update User Profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              updatePhone:
+                summary: Update Phone Only
+                value:
+                  phone: '+2348012345678'
+              updateName:
+                summary: Update Name Only
+                value:
+                  first_name: 'John'
+                  last_name: 'Smith'
+              fullUpdate:
+                summary: Full Profile Update
+                value:
+                  first_name: 'John'
+                  last_name: 'Smith'
+                  phone: '+2348012345678'
+                  date_of_birth: '1990-05-15'
+                  gender: 'male'
+      responses:
+        200:
+          description: Profile updated
+
+  # ============================================
+  # USER ADDRESSES
+  # ============================================
+  /api/v1/user/addresses:
+    post:
+      tags: [User Addresses]
+      summary: Add User Address
+      description: |
+        Add a new address for the user.
+
+        **Required fields**: label, street, city, country
+
+        **Note**: The API expects `street` not `address_line1`
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [label, street, city, country]
+              properties:
+                label:
+                  type: string
+                  description: Address label (Home, Work, etc.)
+                street:
+                  type: string
+                  description: Street address (REQUIRED)
+                building_number:
+                  type: string
+                address2:
+                  type: string
+                city:
+                  type: string
+                  description: City (REQUIRED)
+                state:
+                  type: string
+                zip_code:
+                  type: string
+                country:
+                  type: string
+                  description: Country (REQUIRED)
+                phone:
+                  type: string
+                latitude:
+                  type: number
+                longitude:
+                  type: number
+                is_default:
+                  type: boolean
+            examples:
+              homeAddress:
+                summary: Home Address (Lagos)
+                value:
+                  label: 'Home'
+                  street: '15 Admiralty Way, Lekki Phase 1'
+                  building_number: '15'
+                  city: 'Lagos'
+                  state: 'Lagos'
+                  zip_code: '101233'
+                  country: 'Nigeria'
+                  phone: '+2348012345678'
+                  latitude: 6.4541
+                  longitude: 3.4744
+                  is_default: true
+              workAddress:
+                summary: Work Address
+                value:
+                  label: 'Work'
+                  street: '25 Marina Street, Lagos Island'
+                  city: 'Lagos'
+                  state: 'Lagos'
+                  country: 'Nigeria'
+                  is_default: false
+              minimalAddress:
+                summary: Minimal Required Fields
+                value:
+                  label: 'Other'
+                  street: '123 Test Street'
+                  city: 'Abuja'
+                  country: 'Nigeria'
+      responses:
+        200:
+          description: Address added successfully
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  address:
+                    id: 'uuid-here'
+                    label: 'Home'
+                    street: '15 Admiralty Way, Lekki Phase 1'
+                    city: 'Lagos'
+                    country: 'Nigeria'
+        400:
+          description: Missing required fields
+          content:
+            application/json:
+              example:
+                success: false
+                error: 'Missing required fields: label, street, city, country'
+
+  # ============================================
+  # USER ROLES
+  # ============================================
+  /api/v1/user/switch-role:
+    post:
+      tags: [User Roles]
+      summary: Switch User Role
+      description: |
+        Switch the user's active role.
+
+        **Required field**: role (not role_name)
+
+        **Available roles**: USER, DRIVER, VENDOR, HOTEL_MANAGER, ADMIN
+
+        **Note**: User must have the role assigned before switching to it.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [role]
+              properties:
+                role:
+                  type: string
+                  enum: [USER, DRIVER, VENDOR, HOTEL_MANAGER, ADMIN]
+            examples:
+              switchToDriver:
+                summary: Switch to Driver Role
+                value:
+                  role: 'DRIVER'
+              switchToUser:
+                summary: Switch to User Role
+                value:
+                  role: 'USER'
+              switchToVendor:
+                summary: Switch to Vendor Role
+                value:
+                  role: 'VENDOR'
+      responses:
+        200:
+          description: Role switched successfully
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  active_role: 'DRIVER'
+        400:
+          description: Missing role parameter
+          content:
+            application/json:
+              example:
+                error: 'Missing role parameter'
+        403:
+          description: User does not have this role
+          content:
+            application/json:
+              example:
+                error: 'User does not have this role'
+
+  # ============================================
+  # HOTELS
+  # ============================================
+  /api/v1/hotels/search:
+    post:
+      tags: [Hotels]
+      summary: Search Hotels (POST with JSON body)
+      description: |
+        **IMPORTANT**: This endpoint expects a JSON body, NOT query parameters.
+
+        Use POST method with JSON body for searching hotels.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                city:
+                  type: string
+                userLat:
+                  type: number
+                userLng:
+                  type: number
+                radius:
+                  type: number
+                  default: 25
+                checkInDate:
+                  type: string
+                  format: date
+                checkOutDate:
+                  type: string
+                  format: date
+                rooms:
+                  type: integer
+                  default: 1
+                guests:
+                  type: integer
+                minPrice:
+                  type: number
+                maxPrice:
+                  type: number
+                starRating:
+                  type: array
+                  items:
+                    type: integer
+                amenities:
+                  type: array
+                  items:
+                    type: string
+                sortBy:
+                  type: string
+                  enum: [distance, price, rating, popular]
+                  default: distance
+                sortOrder:
+                  type: string
+                  enum: [asc, desc]
+                  default: asc
+                page:
+                  type: integer
+                  default: 1
+                limit:
+                  type: integer
+                  default: 20
+            examples:
+              searchByCity:
+                summary: Search by City
+                value:
+                  city: 'Lagos'
+                  page: 1
+                  limit: 20
+              searchByLocation:
+                summary: Search by Location
+                value:
+                  userLat: 6.4541
+                  userLng: 3.4744
+                  radius: 25
+                  page: 1
+                  limit: 20
+              searchWithDates:
+                summary: Search with Check-in/Check-out
+                value:
+                  city: 'Lagos'
+                  checkInDate: '2026-03-01'
+                  checkOutDate: '2026-03-05'
+                  rooms: 1
+                  guests: 2
+                  page: 1
+                  limit: 20
+              searchWithFilters:
+                summary: Search with Filters
+                value:
+                  city: 'Lagos'
+                  minPrice: 10000
+                  maxPrice: 50000
+                  starRating: [4, 5]
+                  amenities: ['wifi', 'pool', 'parking']
+                  sortBy: 'price'
+                  sortOrder: 'asc'
+                  page: 1
+                  limit: 20
+      responses:
+        200:
+          description: Hotels found
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - id: 'hotel-uuid'
+                    name: 'Grand Lagos Hotel'
+                    city: 'Lagos'
+                    star_rating: 5
+                    average_rating: 4.5
+                    min_price: 25000
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 15
+                  totalPages: 1
+
+  /api/v1/hotels:
+    get:
+      tags: [Hotels]
+      summary: List All Hotels
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: city
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Hotels list
+
+  /api/v1/hotels/{hotel_id}:
+    get:
+      tags: [Hotels]
+      summary: Get Hotel Details
+      parameters:
+        - name: hotel_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          example: '550e8400-e29b-41d4-a716-446655440000'
+      responses:
+        200:
+          description: Hotel details
+
+  # ============================================
+  # RIDES / TAXI
+  # ============================================
+  /api/v1/rides/request:
+    post:
+      tags: [Rides]
+      summary: Request a Ride
+      description: |
+        Request a new ride.
+
+        **Required fields**: pickup_lat, pickup_lng, dropoff_lat, dropoff_lng
+
+        **Note**: The function returns 400 with "Unauthorized" message if auth fails.
+        This is a bug - it should return 401.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pickup_lat, pickup_lng, dropoff_lat, dropoff_lng]
+              properties:
+                pickup_address:
+                  type: string
+                pickup_lat:
+                  type: number
+                pickup_lng:
+                  type: number
+                dropoff_address:
+                  type: string
+                dropoff_lat:
+                  type: number
+                dropoff_lng:
+                  type: number
+                vehicle_type:
+                  type: string
+                  enum: [standard, comfort, premium]
+                  default: standard
+                payment_method_id:
+                  type: string
+                notes:
+                  type: string
+                scheduled_time:
+                  type: string
+                  format: date-time
+            examples:
+              immediateRide:
+                summary: Immediate Ride Request
+                value:
+                  pickup_address: 'Lekki Phase 1, Lagos'
+                  pickup_lat: 6.4541
+                  pickup_lng: 3.4744
+                  dropoff_address: 'Victoria Island, Lagos'
+                  dropoff_lat: 6.4281
+                  dropoff_lng: 3.4219
+                  vehicle_type: 'comfort'
+              scheduledRide:
+                summary: Scheduled Ride
+                value:
+                  pickup_address: 'Ikeja, Lagos'
+                  pickup_lat: 6.6018
+                  pickup_lng: 3.3515
+                  dropoff_address: 'Murtala Muhammed Airport'
+                  dropoff_lat: 6.5774
+                  dropoff_lng: 3.3212
+                  vehicle_type: 'premium'
+                  scheduled_time: '2026-02-20T08:00:00Z'
+                  notes: 'Flight at 10am, please be on time'
+      responses:
+        200:
+          description: Ride requested successfully
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  ride:
+                    id: 'ride-uuid'
+                    status: 'pending'
+                    estimated_fare: 2500
+                    estimated_distance_km: 8.5
+                    estimated_duration_minutes: 25
+                  drivers_notified: 5
+                  message: 'Finding you a driver... 5 drivers nearby'
+
+  /api/v1/rides/estimate:
+    post:
+      tags: [Rides]
+      summary: Get Ride Estimate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              estimate:
+                summary: Get Fare Estimate
+                value:
+                  pickup_lat: 6.4541
+                  pickup_lng: 3.4744
+                  dropoff_lat: 6.4281
+                  dropoff_lng: 3.4219
+                  vehicle_type: 'comfort'
+      responses:
+        200:
+          description: Estimate calculated
+
+  # ============================================
+  # NOTIFICATIONS
+  # ============================================
+  /api/v1/notifications/history:
+    get:
+      tags: [Notifications]
+      summary: Get Notification History
+      description: |
+        Get user's notification history.
+
+        **Note**: The correct path is `/api/v1/notifications/history`, 
+        NOT `/api/v1/history`.
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [sent, delivered, read, failed]
+      responses:
+        200:
+          description: Notifications retrieved
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  logs:
+                    - id: 'notif-uuid'
+                      type: 'ride_request'
+                      title: 'New Ride Request'
+                      message: 'New ride request 5km away'
+                      status: 'delivered'
+                      created_at: '2026-02-19T10:00:00Z'
+                  total: 50
+                  limit: 20
+                  offset: 0
+
+  # ============================================
+  # ADS / CAMPAIGNS
+  # ============================================
+  /api/v1/ads/campaigns:
+    get:
+      tags: [Ads]
+      summary: Get Advertiser's Campaigns
+      description: |
+        Get campaigns for the authenticated advertiser.
+
+        **Prerequisite**: User must have an advertiser profile.
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [draft, pending_approval, active, paused, completed, cancelled, rejected]
+      responses:
+        200:
+          description: Campaigns retrieved
+          content:
+            application/json:
+              example:
+                data:
+                  - id: 'campaign-uuid'
+                    campaign_name: 'Summer Sale'
+                    status: 'active'
+                    budget: 100000
+                    spent_amount: 25000
+                meta:
+                  page: 1
+                  limit: 10
+                  total: 5
+                  total_pages: 1
+
+  /api/v1/ads/fetch:
+    post:
+      tags: [Ads]
+      summary: Fetch Relevant Ads
+      description: |
+        Fetch ads for display. This endpoint can be called without authentication.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              fetchHomeAds:
+                summary: Fetch Home Page Ads
+                value:
+                  placement_type: 'home'
+                  limit: 3
+              fetchSearchAds:
+                summary: Fetch Search Page Ads
+                value:
+                  placement_type: 'search'
+                  limit: 2
+      responses:
+        200:
+          description: Ads fetched
+          content:
+            application/json:
+              example:
+                ads:
+                  - campaign_id: 'uuid'
+                    title: 'Summer Sale'
+                    description: '50% off all items'
+                    landing_url: 'https://example.com/sale'
+                    cta_text: 'Learn More'
+
+  # ============================================
+  # SOCIAL
+  # ============================================
+  /api/v1/users/search:
+    get:
+      tags: [Social]
+      summary: Search Users
+      description: |
+        Search for users by name or email.
+
+        **Minimum query length**: 2 characters
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 2
+          example: 'John'
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        200:
+          description: Users found
+          content:
+            application/json:
+              example:
+                users:
+                  - id: 'user-uuid'
+                    first_name: 'John'
+                    last_name: 'Doe'
+                    avatar_url: 'https://...'
+                    connectionStatus: 'none'
+        400:
+          description: Query too short
+          content:
+            application/json:
+              example:
+                error: 'Query must be at least 2 characters'
+
+  /api/v1/social/posts:
+    get:
+      tags: [Social]
+      summary: Get Social Feed
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        200:
+          description: Feed retrieved
+
+    post:
+      tags: [Social]
+      summary: Create Social Post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              textPost:
+                summary: Text Post
+                value:
+                  content: 'Hello world! This is my first post.'
+                  visibility: 'public'
+              postWithMedia:
+                summary: Post with Media
+                value:
+                  content: 'Check out this amazing view!'
+                  media_urls: ['https://example.com/image.jpg']
+                  visibility: 'friends'
+      responses:
+        201:
+          description: Post created
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT token from Supabase Auth.
+
+        Example:
+        ```
+        Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+        ```
+
+  schemas:
+    StandardError:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          oneOf:
+            - type: string
+            - type: object
+              properties:
+                code:
+                  type: string
+                message:
+                  type: string
+        metadata:
+          type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+            version:
+              type: string
+
+security:
+  - BearerAuth: []
+
+
