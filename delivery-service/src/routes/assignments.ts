@@ -66,6 +66,7 @@ const deliveryService = new DeliveryAssignmentService(database.getClient());
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
+// Note: This route is mounted at /api/v1/assignments, so '/' maps to /api/v1/assignments
 router.post(
   '/',
   [
@@ -148,37 +149,42 @@ router.post(
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
-router.get('/:id', [param('id').isUUID()], async (req: AuthenticatedRequest, res: Response) => {
-  const requestId = req.requestId || uuidv4();
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw createValidationError('Validation failed', { errors: errors.array() });
+// Note: This route is mounted at /api/v1/assignments, so '/:id' maps to /api/v1/assignments/:id
+router.get(
+  '/:id',
+  [param('id').isUUID().withMessage('Assignment ID must be a valid UUID')],
+  async (req: AuthenticatedRequest, res: Response) => {
+    const requestId = req.requestId || uuidv4();
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        throw createValidationError('Validation failed', { errors: errors.array() });
+      }
+      const { id } = req.params;
+      const { data: assignment, error } = await database
+        .getClient()
+        .from('delivery_assignments')
+        .select(
+          `*, courier:courier_profiles(id, first_name, last_name, phone_number, vehicle_type, rating), order:ecommerce_orders(id, order_number, status, total_amount)`
+        )
+        .eq('id', id)
+        .is('deleted_at', null)
+        .single();
+      if (error || !assignment) {
+        throw createNotFoundError('Delivery assignment not found');
+      }
+      res.json({
+        success: true,
+        data: assignment,
+        metadata: { timestamp: new Date().toISOString(), request_id: requestId, version: '1.0.0' },
+      });
+    } catch (error) {
+      logger.error('Failed to fetch assignment', { requestId, error: (error as Error).message });
+      const errorResponse = createErrorResponse(error as Error, requestId);
+      res.status((error as any).statusCode || 500).json(errorResponse);
     }
-    const { id } = req.params;
-    const { data: assignment, error } = await database
-      .getClient()
-      .from('delivery_assignments')
-      .select(
-        `*, courier:courier_profiles(id, first_name, last_name, phone_number, vehicle_type, rating), order:ecommerce_orders(id, order_number, status, total_amount)`
-      )
-      .eq('id', id)
-      .is('deleted_at', null)
-      .single();
-    if (error || !assignment) {
-      throw createNotFoundError('Delivery assignment not found');
-    }
-    res.json({
-      success: true,
-      data: assignment,
-      metadata: { timestamp: new Date().toISOString(), request_id: requestId, version: '1.0.0' },
-    });
-  } catch (error) {
-    logger.error('Failed to fetch assignment', { requestId, error: (error as Error).message });
-    const errorResponse = createErrorResponse(error as Error, requestId);
-    res.status((error as any).statusCode || 500).json(errorResponse);
   }
-});
+);
 
 /**
  * @swagger
@@ -232,6 +238,7 @@ router.get('/:id', [param('id').isUUID()], async (req: AuthenticatedRequest, res
  *       401:
  *         $ref: '#/components/responses/UnauthorizedError'
  */
+// Note: This route is mounted at /api/v1/assignments, so '/find-couriers' maps to /api/v1/assignments/find-couriers
 router.post(
   '/find-couriers',
   [

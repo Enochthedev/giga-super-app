@@ -18,7 +18,7 @@ const packageService = new PackageService(db);
  *   post:
  *     tags: [Packages]
  *     summary: Create a new delivery package
- *     description: Creates a new package for delivery with sender and recipient details
+ *     description: Creates a new package for delivery with sender and recipient details. Route mounted at /api/v1/packages.
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -36,7 +36,7 @@ const packageService = new PackageService(db);
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.post(
-  '/packages',
+  '/',
   requireAuth,
   [
     body('sender_name').isString().notEmpty().withMessage('Sender name is required'),
@@ -119,7 +119,7 @@ router.post(
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
-  '/packages/:packageId',
+  '/:packageId',
   requireAuth,
   [param('packageId').isUUID().withMessage('Package ID must be a valid UUID')],
   handleValidationErrors,
@@ -193,7 +193,7 @@ router.get(
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
-  '/packages/sender/:senderId',
+  '/sender/:senderId',
   requireAuth,
   [
     param('senderId').isUUID().withMessage('Sender ID must be a valid UUID'),
@@ -286,7 +286,7 @@ router.get(
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.get(
-  '/packages/status/:status',
+  '/status/:status',
   requireAuth,
   [
     param('status').isIn([
@@ -385,7 +385,7 @@ router.get(
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.put(
-  '/packages/:packageId',
+  '/:packageId',
   requireAuth,
   [
     param('packageId').isUUID().withMessage('Package ID must be a valid UUID'),
@@ -470,7 +470,7 @@ router.put(
  *         $ref: '#/components/responses/NotFoundError'
  */
 router.post(
-  '/packages/:packageId/cancel',
+  '/:packageId/cancel',
   requireAuth,
   [param('packageId').isUUID().withMessage('Package ID must be a valid UUID')],
   handleValidationErrors,
@@ -536,7 +536,7 @@ router.post(
  *         $ref: '#/components/responses/UnauthorizedError'
  */
 router.delete(
-  '/packages/:packageId',
+  '/:packageId',
   requireAuth,
   [param('packageId').isUUID().withMessage('Package ID must be a valid UUID')],
   handleValidationErrors,
