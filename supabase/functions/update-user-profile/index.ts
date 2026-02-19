@@ -67,13 +67,43 @@ serve(async req => {
     }
     // Add updated_at
     filteredData.updated_at = new Date().toISOString();
-    // Update profile
-    const { data: profile, error: updateError } = await supabaseClient
+
+    // First check if profile exists
+    const { data: existingProfile } = await supabaseClient
       .from('user_profiles')
-      .update(filteredData)
+      .select('id')
       .eq('id', user.id)
-      .select()
-      .single();
+      .maybeSingle();
+
+    let profile;
+    let updateError;
+
+    if (existingProfile) {
+      // Update existing profile
+      const result = await supabaseClient
+        .from('user_profiles')
+        .update(filteredData)
+        .eq('id', user.id)
+        .select()
+        .single();
+      profile = result.data;
+      updateError = result.error;
+    } else {
+      // Create new profile with user data
+      const result = await supabaseClient
+        .from('user_profiles')
+        .insert({
+          id: user.id,
+          email: user.email,
+          ...filteredData,
+          created_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
+      profile = result.data;
+      updateError = result.error;
+    }
+
     if (updateError) {
       console.error('Update error:', updateError);
       throw new Error(`Profile update failed: ${updateError.message}`);
