@@ -8,6 +8,7 @@ import { advertisingService } from './advertising.service.js';
 import { bookingService } from './booking.service.js';
 import { chatService } from './chat.service.js';
 import { deliveryService } from './delivery.service.js';
+import { ecommerceService } from './ecommerce.service.js';
 import { hotelService } from './hotel.service.js';
 import { notificationService } from './notification.service.js';
 import { paymentService } from './payment.service.js';
@@ -29,6 +30,7 @@ export const allServices = [
   paymentService,
   notificationService,
   coreService,
+  ecommerceService,
 ];
 
 // Export individual services for testing if needed
@@ -39,6 +41,7 @@ export {
   chatService,
   coreService,
   deliveryService,
+  ecommerceService,
   hotelService,
   notificationService,
   paymentService,
