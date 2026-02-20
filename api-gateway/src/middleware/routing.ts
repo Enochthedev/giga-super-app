@@ -257,22 +257,44 @@ export const routingMiddleware = (
     },
     onError: (err, clientReq, clientRes) => {
       const authReq = clientReq as AuthenticatedRequest;
+      const errorMessage = (err as Error).message;
+      const errorCode = (err as NodeJS.ErrnoException).code;
+
+      // Log the error with details
       logger.error('Proxy error', {
         requestId: authReq.id,
         serviceId: service.id,
-        error: (err as Error).message,
+        serviceName: service.name,
+        error: errorMessage,
+        errorCode,
+        targetUrl: service.baseUrl,
       });
+
+      // Determine appropriate error response based on error type
+      let statusCode = 502;
+      let responseCode = 'PROXY_ERROR';
+      let responseMessage = `Error communicating with ${service.name}`;
+
+      if (errorCode === 'ECONNRESET' || errorCode === 'ECONNREFUSED' || errorCode === 'ETIMEDOUT') {
+        statusCode = 503;
+        responseCode = 'SERVICE_UNAVAILABLE';
+        responseMessage = `${service.name} is temporarily unavailable. Please try again in a moment.`;
+
+        // Mark service as potentially unhealthy for circuit breaker
+        logger.warn('Service connection failed - may be restarting', {
+          serviceId: service.id,
+          errorCode,
+        });
+      } else if (errorCode === 'ENOTFOUND') {
+        statusCode = 503;
+        responseCode = 'SERVICE_NOT_REACHABLE';
+        responseMessage = `${service.name} could not be reached. Service may be deploying.`;
+      }
 
       if (clientRes && 'headersSent' in clientRes && !(clientRes as Response).headersSent) {
         (clientRes as Response)
-          .status(502)
-          .json(
-            createErrorResponse(
-              'PROXY_ERROR',
-              `Error communicating with service: ${(err as Error).message}`,
-              authReq.id
-            )
-          );
+          .status(statusCode)
+          .json(createErrorResponse(responseCode, responseMessage, authReq.id));
       }
     },
   };
