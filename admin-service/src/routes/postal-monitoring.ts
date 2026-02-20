@@ -14,6 +14,174 @@ const logger = winston.createLogger({
 
 /**
  * @swagger
+ * /api/postal-monitoring/dashboard:
+ *   get:
+ *     tags: [Postal Monitoring]
+ *     summary: Get postal managers dashboard data
+ *     description: Retrieve dashboard statistics and revenue chart data for postal managers
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: integer
+ *           default: 30
+ *           minimum: 7
+ *           maximum: 90
+ *         description: Number of days for revenue chart
+ *     responses:
+ *       200:
+ *         description: Dashboard data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     stats:
+ *                       type: object
+ *                       properties:
+ *                         total_packages:
+ *                           type: integer
+ *                         pending_packages:
+ *                           type: integer
+ *                         delivered_packages:
+ *                           type: integer
+ *                         total_revenue:
+ *                           type: number
+ *                         total_staff:
+ *                           type: integer
+ *                     revenue_chart:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           date:
+ *                             type: string
+ *                             format: date
+ *                           revenue:
+ *                             type: number
+ *             example:
+ *               success: true
+ *               data:
+ *                 stats:
+ *                   total_packages: 1250
+ *                   pending_packages: 45
+ *                   delivered_packages: 1180
+ *                   total_revenue: 2500000
+ *                   total_staff: 150
+ *                 revenue_chart:
+ *                   - date: "2026-01-20"
+ *                     revenue: 3500
+ *                   - date: "2026-01-21"
+ *                     revenue: 4200
+ *                   - date: "2026-01-22"
+ *                     revenue: 5000
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/dashboard',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const days = Math.min(Math.max(parseInt(req.query.days as string, 10) || 30, 7), 90);
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(endDate.getDate() - days);
+
+      // Get package statistics
+      const [totalPackages, pendingPackages, deliveredPackages, totalStaff] = await Promise.all([
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .is('deleted_at', null),
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .in('status', ['pending', 'in_transit', 'out_for_delivery'])
+          .is('deleted_at', null),
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'delivered')
+          .is('deleted_at', null),
+        supabase
+          .from('nipost_officials')
+          .select('id', { count: 'exact', head: true })
+          .eq('is_active', true),
+      ]);
+
+      // Get total revenue
+      const { data: revenueData } = await supabase
+        .from('delivery_packages')
+        .select('delivery_fee')
+        .is('deleted_at', null);
+
+      const totalRevenue = (revenueData || []).reduce(
+        (sum, pkg) => sum + (Number(pkg.delivery_fee) || 0),
+        0
+      );
+
+      // Get daily revenue for chart
+      const revenueChart: { date: string; revenue: number }[] = [];
+
+      for (let i = 0; i < days; i++) {
+        const dayStart = new Date(startDate);
+        dayStart.setDate(startDate.getDate() + i);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setDate(dayEnd.getDate() + 1);
+
+        const { data: dayRevenue } = await supabase
+          .from('delivery_packages')
+          .select('delivery_fee')
+          .gte('created_at', dayStart.toISOString())
+          .lt('created_at', dayEnd.toISOString())
+          .is('deleted_at', null);
+
+        const dailyTotal = (dayRevenue || []).reduce(
+          (sum, pkg) => sum + (Number(pkg.delivery_fee) || 0),
+          0
+        );
+
+        revenueChart.push({
+          date: dayStart.toISOString().split('T')[0],
+          revenue: Math.round(dailyTotal * 100) / 100,
+        });
+      }
+
+      await createAudit(req, 'view_postal_dashboard', 'postal_monitoring');
+
+      res.json({
+        success: true,
+        data: {
+          stats: {
+            total_packages: totalPackages.count || 0,
+            pending_packages: pendingPackages.count || 0,
+            delivered_packages: deliveredPackages.count || 0,
+            total_revenue: Math.round(totalRevenue * 100) / 100,
+            total_staff: totalStaff.count || 0,
+          },
+          revenue_chart: revenueChart,
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to get postal dashboard', { error: error.message });
+      res.status(500).json({ error: 'Failed to fetch postal dashboard data' });
+    }
+  }
+);
+
+/**
+ * @swagger
  * /api/postal-monitoring/staff:
  *   get:
  *     tags: [Postal Monitoring]

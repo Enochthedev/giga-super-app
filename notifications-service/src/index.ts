@@ -22,17 +22,39 @@ const REDIS_URL = process.env.REDIS_URL || process.env.RAILWAY_REDIS_URL || '';
 
 /**
  * Check if Redis should be used
- * Disable in development to save Upstash free tier commands
+ * Disable for free tiers to avoid connection issues
  */
 const shouldUseRedis = (): boolean => {
   const forceDisable = process.env.DISABLE_REDIS === 'true';
+  const forceEnable = process.env.FORCE_REDIS === 'true';
   const isDev = process.env.NODE_ENV === 'development';
+
+  // Force enable overrides everything
+  if (forceEnable && REDIS_URL) {
+    console.log('Redis force-enabled via FORCE_REDIS=true');
+    return true;
+  }
 
   // Disable if explicitly disabled, no URL, or local dev URL
   if (forceDisable || !REDIS_URL || REDIS_URL === 'redis://localhost:6379') {
-    if (isDev) {
-      console.log('Redis disabled for development - using in-memory queue fallback');
-    }
+    console.log('Redis disabled - using in-memory queue fallback');
+    return false;
+  }
+
+  // Auto-disable for known free tier Redis providers (unreliable for production queues)
+  const freeRedisPatterns = [
+    'redis-cloud.com', // Redis Cloud free tier
+    'redis.cloud', // Redis Cloud
+    'upstash.io', // Upstash (has command limits)
+    'redislabs.com', // RedisLabs free tier
+  ];
+
+  const isFreeTier = freeRedisPatterns.some(pattern => REDIS_URL.includes(pattern));
+
+  if (isFreeTier && !forceEnable) {
+    console.log('⚠️  Free Redis tier detected - disabling Redis to prevent connection errors');
+    console.log('   Set FORCE_REDIS=true to override, or use a paid Redis instance');
+    console.log('   Notifications will be processed directly without queuing');
     return false;
   }
 
@@ -63,27 +85,38 @@ if (useRedis) {
   connection = new IORedis(REDIS_URL, {
     maxRetriesPerRequest: null,
     lazyConnect: true, // Don't connect until first command
-    enableReadyCheck: false, // CRITICAL: Reduce health check requests
+    enableReadyCheck: true, // Enable ready check for proper connection state
     connectTimeout: 10000,
-    enableOfflineQueue: false, // Don't queue commands when offline
+    enableOfflineQueue: true, // Queue commands when offline to prevent errors
     retryStrategy: (times: number) => {
-      if (times > 3) {
-        // Reduce retry attempts
-        logger.error('Redis connection failed after 3 retries');
-        return null;
+      if (times > 5) {
+        logger.error('Redis connection failed after 5 retries, giving up');
+        return null; // Stop retrying
       }
-      const delay = Math.min(times * 500, 2000);
+      const delay = Math.min(times * 1000, 5000); // Exponential backoff up to 5s
       logger.info(`Redis retry attempt ${times}, waiting ${delay}ms`);
       return delay;
+    },
+    reconnectOnError: (err: Error) => {
+      const targetErrors = ['READONLY', 'ECONNRESET', 'ETIMEDOUT'];
+      if (targetErrors.some(e => err.message.includes(e))) {
+        return true; // Reconnect on these errors
+      }
+      return false;
     },
   });
 
   connection.on('error', err => {
-    logger.error('Redis connection error', { error: err.message });
+    // Only log once per error type to avoid log spam
+    if (!connection?.lastErrorLogged || connection.lastErrorLogged !== err.message) {
+      logger.error('Redis connection error', { error: err.message });
+      (connection as any).lastErrorLogged = err.message;
+    }
   });
 
   connection.on('connect', () => {
     logger.info('Redis connected');
+    (connection as any).lastErrorLogged = null;
   });
 
   connection.on('ready', () => {
@@ -92,6 +125,10 @@ if (useRedis) {
 
   connection.on('close', () => {
     logger.warn('Redis connection closed');
+  });
+
+  connection.on('reconnecting', () => {
+    logger.info('Redis reconnecting...');
   });
 } else {
   logger.info('Redis disabled - notifications will use in-memory processing');
@@ -137,13 +174,37 @@ const twilioClient =
 let notificationQueue: Queue | null = null;
 
 if (useRedis && connection) {
+  // Test Redis connection before creating queue
+  const testConnection = async () => {
+    try {
+      await connection!.ping();
+      logger.info('Redis connection verified');
+      return true;
+    } catch (error: any) {
+      logger.error('Redis connection test failed', { error: error.message });
+      return false;
+    }
+  };
+
+  // Create queue with connection
   notificationQueue = new Queue('notifications', {
     connection: connection as any,
     defaultJobOptions: {
       removeOnComplete: 100, // Keep only last 100 completed jobs
       removeOnFail: 50, // Keep only last 50 failed jobs
+      attempts: 3,
+      backoff: {
+        type: 'exponential',
+        delay: 2000,
+      },
     },
   });
+
+  // Handle queue errors
+  notificationQueue.on('error', error => {
+    logger.error('Queue error', { error: error.message });
+  });
+
   logger.info('Notification queue initialized with Redis/BullMQ');
 } else {
   logger.info('Notification queue disabled - using direct processing');
@@ -348,6 +409,20 @@ let enhancedEmailWorker: Worker | null = null;
 let enhancedSmsWorker: Worker | null = null;
 let bulkWorker: Worker | null = null;
 
+// Worker options with better error handling
+const workerOptions = {
+  connection: connection as any,
+  concurrency: 5,
+  lockDuration: 30000, // 30 seconds
+  stalledInterval: 30000,
+  maxStalledCount: 2,
+  settings: {
+    backoffStrategy: (attemptsMade: number) => {
+      return Math.min(attemptsMade * 1000, 30000); // Max 30s backoff
+    },
+  },
+};
+
 if (useRedis && connection) {
   enhancedEmailWorker = new Worker(
     'notifications', // Use consolidated queue name
@@ -450,7 +525,7 @@ if (useRedis && connection) {
         throw error;
       }
     },
-    { connection: connection as any, concurrency: 5 }
+    { connection: connection as any, concurrency: 5, lockDuration: 30000 }
   );
 
   // Enhanced SMS Worker
@@ -545,7 +620,7 @@ if (useRedis && connection) {
         throw error;
       }
     },
-    { connection: connection as any, concurrency: 10 }
+    { connection: connection as any, concurrency: 10, lockDuration: 30000 }
   );
 
   // Bulk notification worker
@@ -659,7 +734,7 @@ if (useRedis && connection) {
         throw error;
       }
     },
-    { connection: connection as any, concurrency: 2 }
+    { connection: connection as any, concurrency: 2, lockDuration: 60000 }
   );
 
   logger.info('BullMQ workers initialized');
@@ -936,6 +1011,19 @@ workers.forEach(worker => {
       jobId: job?.id,
       error: error.message,
     });
+  });
+
+  worker.on('error', error => {
+    // Handle worker-level errors (like Redis connection issues)
+    if (error.message.includes("Stream isn't writeable")) {
+      logger.warn(`${worker.name} Redis connection lost, will retry...`);
+    } else {
+      logger.error(`${worker.name} worker error`, { error: error.message });
+    }
+  });
+
+  worker.on('stalled', jobId => {
+    logger.warn(`${worker.name} job stalled`, { jobId });
   });
 });
 
