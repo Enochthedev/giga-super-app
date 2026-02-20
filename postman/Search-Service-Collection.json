@@ -1,0 +1,76 @@
+{
+  "info": {
+    "name": "GIGA Search Service API",
+    "description": "Search Service API for browsing hotels, products, and drivers. Most endpoints are PUBLIC.",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "{{gateway_url}}/api/v1/search" },
+    { "key": "gateway_url", "value": "http://localhost:3000" }
+  ],
+  "item": [
+    {
+      "name": "Hotels - PUBLIC",
+      "item": [
+        {
+          "name": "Search Hotels (POST)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/hotels",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"q\":\"luxury\",\"location\":\"Lagos\",\"min_price\":100,\"max_price\":500}"
+            }
+          }
+        },
+        {
+          "name": "Search Hotels (GET)",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/hotels?q=beach&location=Lagos&page=1&limit=20"
+          }
+        },
+        {
+          "name": "Get Popular Hotels",
+          "request": { "method": "GET", "url": "{{base_url}}/hotels/popular?location=Lagos&limit=10" }
+        },
+        {
+          "name": "Get Nearby Hotels",
+          "request": { "method": "GET", "url": "{{base_url}}/hotels/nearby?latitude=6.5244&longitude=3.3792&radius=10" }
+        }
+      ]
+    },
+    {
+      "name": "Products - PUBLIC",
+      "item": [
+        {
+          "name": "Search Products (POST)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/products",
+            "body": { "mode": "raw", "raw": "{\"q\":\"iPhone\",\"category\":\"Electronics\",\"in_stock\":true}" }
+          }
+        },
+        {
+          "name": "Search Products (GET)",
+          "request": { "method": "GET", "url": "{{base_url}}/products?q=laptop&category=Electronics&page=1&limit=20" }
+        },
+        {
+          "name": "Get Categories",
+          "request": { "method": "GET", "url": "{{base_url}}/products/categories" }
+        },
+        {
+          "name": "Get Trending Products",
+          "request": { "method": "GET", "url": "{{base_url}}/products/trending?limit=10" }
+        },
+        {
+          "name": "Get Brands",
+          "request": { "method": "GET", "url": "{{base_url}}/products/brands?category=Electronics" }
+        }
+      ]
+    }
+  ]
+}

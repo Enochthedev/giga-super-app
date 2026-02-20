@@ -1,15 +1,24 @@
 {
   "workspace_id": "19dd9cc4-a6f7-4755-8b82-e12f70ef776e",
-  "collection_id": "22671702-837b1728-5044-49f2-a7d9-fb6fc28f2556",
+  "collection_id": "22671702-6147c999-cb58-4c5d-973a-ee9822b621ea",
   "environment_ids": {
-    "production": "22671702-ce5d8176-5a13-47da-acdc-22787e0817ea",
-    "local": "22671702-1508cd02-9aff-4d8e-bce8-0dec6a3a83ff"
+    "production": "22671702-051249bf-9381-4956-9bd3-7099119960f8",
+    "local": "22671702-5f5b6ec0-4115-4075-b203-733b657185a0"
   },
-  "last_run": "2026-02-19T00:00:00.000Z",
+  "last_run": "2026-02-20T00:00:00.000Z",
   "auto_run_enabled": true,
-  "collection_name": "Giga Platform API",
+  "collection_name": "GIGA API Gateway",
   "environments": {
     "production": "Giga - Production",
     "local": "Giga - Local"
+  },
+  "additional_collections": {
+    "admin": "22671702-7d87a4c5-1e3f-4831-b26d-3f1c949b04b3",
+    "delivery": "22671702-6caa3777-05e4-4a90-b83c-5cb92c42a891",
+    "notifications": "22671702-8c1abba5-ef68-4573-9a86-48a4e5ee6205",
+    "payment": "22671702-258d24ec-147b-45ad-9bf8-b8304a56dede",
+    "realtime": "22671702-1901502f-fa41-483c-9f45-63502d45cb77",
+    "social": "22671702-1914fa9d-be3c-4345-a003-551d765204a4",
+    "taxi": "22671702-b14e262b-af2a-488f-9681-db098e13ed64"
   }
 }

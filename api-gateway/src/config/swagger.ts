@@ -81,6 +81,20 @@ These are routed through the gateway but executed on Supabase.
           description: 'JWT token from Supabase Auth',
         },
       },
+      parameters: {
+        Page: {
+          in: 'query',
+          name: 'page',
+          schema: { type: 'integer', default: 1, minimum: 1 },
+          description: 'Page number',
+        },
+        Limit: {
+          in: 'query',
+          name: 'limit',
+          schema: { type: 'integer', default: 20, minimum: 1, maximum: 100 },
+          description: 'Items per page',
+        },
+      },
       responses: {
         Unauthorized: {
           description: 'Unauthorized - invalid or missing JWT token',
@@ -95,6 +109,66 @@ These are routed through the gateway but executed on Supabase.
                     properties: {
                       code: { type: 'string', example: 'AUTHENTICATION_ERROR' },
                       message: { type: 'string', example: 'Authentication required' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        Forbidden: {
+          description: 'Forbidden - insufficient permissions',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: {
+                      code: { type: 'string', example: 'FORBIDDEN' },
+                      message: { type: 'string', example: 'Access denied' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        NotFound: {
+          description: 'Resource not found',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: {
+                      code: { type: 'string', example: 'NOT_FOUND' },
+                      message: { type: 'string', example: 'Resource not found' },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        BadRequest: {
+          description: 'Bad Request',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  success: { type: 'boolean', example: false },
+                  error: {
+                    type: 'object',
+                    properties: {
+                      code: { type: 'string', example: 'BAD_REQUEST' },
+                      message: { type: 'string', example: 'Invalid input' },
                     },
                   },
                 },
@@ -135,6 +209,16 @@ These are routed through the gateway but executed on Supabase.
             lastCheck: { type: 'string', format: 'date-time' },
           },
         },
+        // Placeholders for missing schemas
+        UpdateProfileRequest: { type: 'object' },
+        MediaUploadResponse: { type: 'object' },
+        AddAddressRequest: { type: 'object' },
+        ApplyForRoleRequest: { type: 'object' },
+        RideRequest: { type: 'object' },
+        PaginatedResponse: { type: 'object' },
+        AddToCartRequest: { type: 'object' },
+        CheckoutRequest: { type: 'object' },
+        InitiateCallRequest: { type: 'object' },
       },
     },
     security: [{ BearerAuth: [] }],

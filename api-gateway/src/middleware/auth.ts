@@ -37,16 +37,57 @@ export const authMiddleware = async (
 ): Promise<void> => {
   try {
     // Skip auth for health checks, public endpoints, and API documentation
-    if (
-      req.path.startsWith('/health') ||
-      req.path.endsWith('/health') ||
-      req.path.startsWith('/public') ||
-      req.path.includes('/api-docs') ||
-      req.path.includes('/swagger') ||
-      req.path.endsWith('/docs') ||
-      req.path === '/api/ads/fetch' ||
-      req.path === '/api/v1/ads/fetch'
-    ) {
+    const publicPaths = [
+      // Health and docs
+      '/health',
+      '/api-docs',
+      '/swagger',
+      '/docs',
+      '/public',
+
+      // Ads (public for display)
+      '/api/ads/fetch',
+      '/api/v1/ads/fetch',
+
+      // Hotels - browsing (public for anonymous users)
+      '/api/v1/hotels/search',
+      '/api/v1/hotels/recommended',
+      '/api/v1/hotels/details',
+      '/api/v1/hotels/reviews',
+      '/api/v1/rooms/availability',
+
+      // Products - browsing (public for anonymous users)
+      '/api/v1/products/search',
+      '/api/v1/products/categories',
+      '/api/v1/products/trending',
+      '/api/v1/products/brands',
+      '/api/v1/products/details',
+
+      // Search service (public for browsing)
+      '/api/v1/search/hotels',
+      '/api/v1/search/products',
+      '/api/v1/search/hotels/popular',
+      '/api/v1/search/hotels/nearby',
+      '/api/v1/search/products/trending',
+      '/api/v1/search/products/categories',
+      '/api/v1/search/products/brands',
+
+      // Ride estimates (public for price checking)
+      '/api/v1/rides/estimate',
+      '/api/v1/drivers/nearby',
+    ];
+
+    const isPublicPath = publicPaths.some(
+      publicPath =>
+        req.path === publicPath ||
+        req.path.startsWith(`${publicPath}/`) ||
+        req.path.startsWith('/health') ||
+        req.path.endsWith('/health') ||
+        req.path.includes('/api-docs') ||
+        req.path.includes('/swagger')
+    );
+
+    if (isPublicPath) {
       next();
       return;
     }

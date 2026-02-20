@@ -610,75 +610,73 @@ Most list endpoints support:
         },
       },
       responses: {
-        UnauthorizedError: {
+        Unauthorized: {
           description: 'Unauthorized - invalid or missing JWT token',
           content: {
             'application/json': {
-              schema: {
-                $ref: '#/components/schemas/ErrorResponse',
-              },
-              example: {
-                success: false,
-                error: 'Invalid token',
-              },
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { success: false, error: 'Invalid token' },
             },
           },
         },
-        ForbiddenError: {
+        UnauthorizedError: { $ref: '#/components/responses/Unauthorized' },
+
+        Forbidden: {
           description: 'Forbidden - insufficient permissions',
           content: {
             'application/json': {
-              schema: {
-                $ref: '#/components/schemas/ErrorResponse',
-              },
-              example: {
-                success: false,
-                error: 'National access required',
-              },
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { success: false, error: 'National access required' },
             },
           },
         },
-        NotFoundError: {
+        ForbiddenError: { $ref: '#/components/responses/Forbidden' },
+
+        NotFound: {
           description: 'Resource not found',
           content: {
             'application/json': {
-              schema: {
-                $ref: '#/components/schemas/ErrorResponse',
-              },
-              example: {
-                success: false,
-                error: 'Resource not found',
-              },
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { success: false, error: 'Resource not found' },
             },
           },
         },
-        BadRequestError: {
+        NotFoundError: { $ref: '#/components/responses/NotFound' },
+
+        BadRequest: {
           description: 'Bad request - validation error',
           content: {
             'application/json': {
-              schema: {
-                $ref: '#/components/schemas/ErrorResponse',
-              },
-              example: {
-                success: false,
-                error: 'Invalid request parameters',
-              },
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { success: false, error: 'Invalid request parameters' },
             },
           },
         },
-        InternalServerError: {
+        BadRequestError: { $ref: '#/components/responses/BadRequest' },
+
+        InternalError: {
           description: 'Internal server error',
           content: {
             'application/json': {
-              schema: {
-                $ref: '#/components/schemas/ErrorResponse',
-              },
-              example: {
-                success: false,
-                error: 'An unexpected error occurred',
-              },
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { success: false, error: 'An unexpected error occurred' },
             },
           },
+        },
+        InternalServerError: { $ref: '#/components/responses/InternalError' },
+      },
+      parameters: {
+        Page: {
+          in: 'query',
+          name: 'page',
+          schema: { type: 'integer', default: 1, minimum: 1 },
+          description: 'Page number for pagination',
+        },
+        Limit: {
+          in: 'query',
+          name: 'limit',
+          schema: { type: 'integer', default: 20, minimum: 1, maximum: 100 },
+          description: 'Number of items per page',
         },
       },
     },

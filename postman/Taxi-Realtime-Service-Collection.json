@@ -1,0 +1,2753 @@
+{
+  "item": [
+    {
+      "id": "1f9932ca-cc8f-46b1-813b-55c9b10f72fc",
+      "name": "Health check",
+      "request": {
+        "name": "Health check",
+        "description": {},
+        "url": {
+          "path": [
+            "health"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": null
+      },
+      "response": [
+        {
+          "id": "b18d3a3b-4ccf-4a1f-8d83-83668e022341",
+          "name": "Service is healthy",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: bearer",
+                  "type": "text/plain"
+                },
+                "key": "Authorization",
+                "value": "Bearer <token>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"status\": \"healthy\",\n  \"service\": \"taxi-realtime-service\",\n  \"timestamp\": \"1952-02-03T10:17:46.295Z\",\n  \"uptime\": 3600\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "f6f5772e-2a32-40f6-944a-f17ee84410ca",
+      "name": "api",
+      "item": [
+        {
+          "id": "54c496aa-031f-4059-a0ae-b01d1b7e5da6",
+          "name": "drivers",
+          "item": [
+            {
+              "id": "dad61788-7604-41cd-99af-963051a87d1b",
+              "name": "Get current driver's profile",
+              "request": {
+                "name": "Get current driver's profile",
+                "description": {
+                  "content": "Returns the authenticated driver's full profile including user details",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "drivers",
+                    "profile"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "14c96d83-002b-41e2-9f51-79d1fafc523e",
+                  "name": "Driver profile retrieved successfully",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "profile"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"cd37d230-8016-9e0b-65d7-610346ba26ac\",\n    \"user_id\": \"fefa06bb-17da-2f48-5f8e-aa8fd83463fa\",\n    \"license_number\": \"DRV-12345\",\n    \"vehicle_info\": {\n      \"make\": \"Toyota\",\n      \"model\": \"Camry\",\n      \"year\": 2020,\n      \"color\": \"Black\",\n      \"plate_number\": \"ABC-123-XY\"\n    },\n    \"is_online\": true,\n    \"is_verified\": true,\n    \"rating\": 4.8,\n    \"total_rides\": 256,\n    \"vehicle_type\": \"standard\",\n    \"current_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"user\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"email\": \"KUwk7xDz5@OJFPZKxqwH.rpqv\",\n      \"phone\": \"+2348012345678\",\n      \"avatar_url\": \"https://Ro.tvxf1LYaDSuGWuhpGweuS8btmX-5Qd1pfH.FOGMCBJI5lZgqVgiv1uvOh\"\n    }\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "0d6723df-5894-4676-8e0d-f2aad4af4725",
+                  "name": "Authentication required",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "profile"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "b8dbe808-9927-4ef6-a8df-55b904244a7f",
+                  "name": "Resource not found",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "profile"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"Resource not found\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "939e4743-f3cf-4156-9d09-1e35d618763e",
+              "name": "Update driver availability status",
+              "request": {
+                "name": "Update driver availability status",
+                "description": {
+                  "content": "Toggle driver online/offline status",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "drivers",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"is_online\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [
+                {
+                  "id": "71776546-c09d-4a3c-bb1d-c8e84a595d57",
+                  "name": "Availability updated successfully",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "availability"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "PUT",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"is_online\": true\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"data\": {\n    \"id\": \"e7bdaa50-437b-f784-2931-27e603b1d32b\",\n    \"user_id\": \"5bd17155-ae13-78ce-e3fc-d87eb9356a7b\",\n    \"license_number\": \"DRV-12345\",\n    \"vehicle_info\": {\n      \"make\": \"Toyota\",\n      \"model\": \"Camry\",\n      \"year\": 2020,\n      \"color\": \"Black\",\n      \"plate_number\": \"ABC-123-XY\"\n    },\n    \"is_online\": true,\n    \"is_verified\": true,\n    \"rating\": 4.8,\n    \"total_rides\": 256,\n    \"vehicle_type\": \"standard\",\n    \"current_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"user\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"email\": \"EYzX5uhumPX@ypDTbRq.tmeg\",\n      \"phone\": \"+2348012345678\",\n      \"avatar_url\": \"http://iROdavzRgMOTjgyfdZEFPNHUWIXMnGc.hbcvtalMEz1tToJ2+uhZ8.huZp-i1mWbcMw9ppOtNWWSiNIq-5r51YOM,iT1atkDV,t,\"\n    }\n  },\n  \"message\": \"string\"\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "dbf70e94-b248-4456-b95e-53c63eb4cc78",
+                  "name": "Authentication required",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "availability"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "PUT",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"is_online\": true\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "f97ef84a-c215-4a9f-9d74-392cc84db25a",
+              "name": "Update driver's current location",
+              "request": {
+                "name": "Update driver's current location",
+                "description": {
+                  "content": "Update driver's current GPS coordinates. Call every 5 seconds while online.",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "drivers",
+                    "location"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"latitude\": \"<double>\",\n  \"longitude\": \"<double>\",\n  \"heading\": \"<number>\",\n  \"speed\": \"<number>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [
+                {
+                  "id": "15eb7113-948c-42fe-9496-d3b010362484",
+                  "name": "Location updated successfully",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "location"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      }
+                    ],
+                    "method": "PUT",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"latitude\": 6.5244,\n  \"longitude\": 3.3792,\n  \"heading\": 45,\n  \"speed\": 35.5\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "text/plain"
+                    }
+                  ],
+                  "body": "",
+                  "cookie": [],
+                  "_postman_previewlanguage": "text"
+                },
+                {
+                  "id": "3746a816-ffca-47ba-a86f-b35027febe76",
+                  "name": "Authentication required",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "location"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "PUT",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"latitude\": 6.5244,\n  \"longitude\": 3.3792,\n  \"heading\": 45,\n  \"speed\": 35.5\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "6c1926ae-7941-4e1e-a7da-d37830e4c73f",
+              "name": "Find nearby available drivers",
+              "request": {
+                "name": "Find nearby available drivers",
+                "description": {
+                  "content": "Find available drivers within a radius. Returns drivers sorted by distance.",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "drivers",
+                    "nearby"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": false,
+                      "key": "latitude",
+                      "value": "<number>",
+                      "description": "(Required) User's latitude"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "longitude",
+                      "value": "<number>",
+                      "description": "(Required) User's longitude"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "radius",
+                      "value": "5",
+                      "description": "Search radius in kilometers"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vehicle_type",
+                      "value": "<string>",
+                      "description": "Filter by vehicle type"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "c4613349-d512-4cc8-9230-4609b37b4b0e",
+                  "name": "List of nearby drivers",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        "nearby"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [
+                        {
+                          "key": "latitude",
+                          "value": "<number>"
+                        },
+                        {
+                          "key": "longitude",
+                          "value": "<number>"
+                        },
+                        {
+                          "key": "radius",
+                          "value": "5"
+                        },
+                        {
+                          "key": "vehicle_type",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"data\": [\n    {\n      \"distance_km\": 1.5,\n      \"eta_minutes\": 5,\n      \"id\": \"f6bd1831-29e0-b9d8-ad5a-009067abc787\",\n      \"user_id\": \"e70c77e7-56bf-1e91-f140-9f9a661d4b87\",\n      \"license_number\": \"DRV-12345\",\n      \"vehicle_info\": {\n        \"make\": \"Toyota\",\n        \"model\": \"Camry\",\n        \"year\": 2020,\n        \"color\": \"Black\",\n        \"plate_number\": \"ABC-123-XY\"\n      },\n      \"is_online\": true,\n      \"is_verified\": true,\n      \"rating\": 4.8,\n      \"total_rides\": 256,\n      \"vehicle_type\": \"motorcycle\",\n      \"current_location\": {\n        \"latitude\": 6.5244,\n        \"longitude\": 3.3792\n      },\n      \"user\": {\n        \"first_name\": \"John\",\n        \"last_name\": \"Doe\",\n        \"email\": \"QoGOHtUv6WE@rsLiKxCjVDOQAbyINOldZOervCqoJi.vxgj\",\n        \"phone\": \"+2348012345678\",\n        \"avatar_url\": \"http://SBTXrp.tynicOX7Bi.6ZJp.k,gfXbpmqpYJWJ+JdRUwpu1zOrTB0MaJnp-a\"\n      }\n    },\n    {\n      \"distance_km\": 1.5,\n      \"eta_minutes\": 5,\n      \"id\": \"6cc6d2ea-2358-7afa-fba5-701733d136e3\",\n      \"user_id\": \"c5aa31ab-4026-4f7a-ffde-da4262158d8f\",\n      \"license_number\": \"DRV-12345\",\n      \"vehicle_info\": {\n        \"make\": \"Toyota\",\n        \"model\": \"Camry\",\n        \"year\": 2020,\n        \"color\": \"Black\",\n        \"plate_number\": \"ABC-123-XY\"\n      },\n      \"is_online\": true,\n      \"is_verified\": true,\n      \"rating\": 4.8,\n      \"total_rides\": 256,\n      \"vehicle_type\": \"motorcycle\",\n      \"current_location\": {\n        \"latitude\": 6.5244,\n        \"longitude\": 3.3792\n      },\n      \"user\": {\n        \"first_name\": \"John\",\n        \"last_name\": \"Doe\",\n        \"email\": \"OcGZmXB7D7r@gZRXaRaXckSd.gsjb\",\n        \"phone\": \"+2348012345678\",\n        \"avatar_url\": \"https://uguqlR.dffgKSDF,gJqVPKtXXnuG6PxnhCB5DjrA+20.dblv.bva8\"\n      }\n    }\n  ],\n  \"count\": 3423\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "ac100859-e96d-43e8-bdb1-3c58c9836e49",
+              "name": "Get a specific driver's public profile",
+              "request": {
+                "name": "Get a specific driver's public profile",
+                "description": {
+                  "content": "Get a specific driver's public profile",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "drivers",
+                    ":driverId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "driverId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "auth": null
+              },
+              "response": [
+                {
+                  "id": "c8173bc3-93c3-49b6-b9b1-0006ea2a40c8",
+                  "name": "Driver profile",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        ":driverId"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": [
+                        {
+                          "disabled": false,
+                          "type": "any",
+                          "value": "<uuid>",
+                          "key": "driverId",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"cd37d230-8016-9e0b-65d7-610346ba26ac\",\n    \"user_id\": \"fefa06bb-17da-2f48-5f8e-aa8fd83463fa\",\n    \"license_number\": \"DRV-12345\",\n    \"vehicle_info\": {\n      \"make\": \"Toyota\",\n      \"model\": \"Camry\",\n      \"year\": 2020,\n      \"color\": \"Black\",\n      \"plate_number\": \"ABC-123-XY\"\n    },\n    \"is_online\": true,\n    \"is_verified\": true,\n    \"rating\": 4.8,\n    \"total_rides\": 256,\n    \"vehicle_type\": \"standard\",\n    \"current_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"user\": {\n      \"first_name\": \"John\",\n      \"last_name\": \"Doe\",\n      \"email\": \"KUwk7xDz5@OJFPZKxqwH.rpqv\",\n      \"phone\": \"+2348012345678\",\n      \"avatar_url\": \"https://Ro.tvxf1LYaDSuGWuhpGweuS8btmX-5Qd1pfH.FOGMCBJI5lZgqVgiv1uvOh\"\n    }\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "292d8aa5-2f6a-4819-b431-55ee2007c357",
+                  "name": "Resource not found",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "drivers",
+                        ":driverId"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": [
+                        {
+                          "disabled": false,
+                          "type": "any",
+                          "value": "<uuid>",
+                          "key": "driverId",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "Not Found",
+                  "code": 404,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"Resource not found\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            }
+          ],
+          "event": []
+        },
+        {
+          "id": "9bb42360-b5cb-4514-bd65-a0d29c99ea11",
+          "name": "rides",
+          "item": [
+            {
+              "id": "8d0aa059-5d5a-4967-b049-0ce133a7a307",
+              "name": "Request a new ride",
+              "request": {
+                "name": "Request a new ride",
+                "description": {
+                  "content": "Create a new ride request",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "rides"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pickup_lat\": \"<number>\",\n  \"pickup_lng\": \"<number>\",\n  \"dropoff_lat\": \"<number>\",\n  \"dropoff_lng\": \"<number>\",\n  \"pickup_address\": \"<string>\",\n  \"dropoff_address\": \"<string>\",\n  \"driver_id\": \"<uuid>\",\n  \"scheduled_time\": \"<dateTime>\",\n  \"passenger_notes\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [
+                {
+                  "id": "0e070ca6-35e7-4917-9c3d-d56c4849a585",
+                  "name": "Ride created successfully",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.6018,\n  \"dropoff_lng\": 3.3515,\n  \"pickup_address\": \"Victoria Island, Lagos\",\n  \"dropoff_address\": \"Ikeja, Lagos\",\n  \"driver_id\": \"<uuid>\",\n  \"scheduled_time\": \"<dateTime>\",\n  \"passenger_notes\": \"I am at the main entrance\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Created",
+                  "code": 201,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"4ad00144-7f03-52fb-a740-175009d89356\",\n    \"ride_number\": \"RIDE-ABC123\",\n    \"passenger_id\": \"ee9517fd-6c8a-189d-088f-52050644cb19\",\n    \"driver_id\": \"c91daa9e-8a9c-d1eb-9c70-4e47e0a68423\",\n    \"status\": \"in_progress\",\n    \"pickup_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"pickup_address\": \"Victoria Island, Lagos\",\n    \"dropoff_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"dropoff_address\": \"Ikeja, Lagos\",\n    \"distance_km\": 12.5,\n    \"estimated_duration_minutes\": 30,\n    \"base_fare\": 500,\n    \"total_fare\": 2350,\n    \"final_amount\": 2350,\n    \"rating\": 4,\n    \"review_comment\": \"string\",\n    \"passenger_notes\": \"string\",\n    \"driver_eta_minutes\": 7570,\n    \"created_at\": \"2007-10-27T15:13:28.257Z\",\n    \"accepted_at\": \"1957-12-29T11:01:17.989Z\",\n    \"pickup_time\": \"1995-08-27T15:47:44.600Z\",\n    \"dropoff_time\": \"1949-05-27T12:02:19.245Z\",\n    \"completed_at\": \"2002-08-03T08:32:07.526Z\",\n    \"cancelled_at\": \"1972-12-13T22:15:06.568Z\",\n    \"cancellation_reason\": \"string\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "b4027ab7-09db-4e8e-a2c5-a03d976ae79e",
+                  "name": "Invalid input",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.6018,\n  \"dropoff_lng\": 3.3515,\n  \"pickup_address\": \"Victoria Island, Lagos\",\n  \"dropoff_address\": \"Ikeja, Lagos\",\n  \"driver_id\": \"<uuid>\",\n  \"scheduled_time\": \"<dateTime>\",\n  \"passenger_notes\": \"I am at the main entrance\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"Invalid input\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "b7f0c98d-fc9c-41e4-85a4-cdecaf38b80e",
+                  "name": "Authentication required",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.6018,\n  \"dropoff_lng\": 3.3515,\n  \"pickup_address\": \"Victoria Island, Lagos\",\n  \"dropoff_address\": \"Ikeja, Lagos\",\n  \"driver_id\": \"<uuid>\",\n  \"scheduled_time\": \"<dateTime>\",\n  \"passenger_notes\": \"I am at the main entrance\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "a99324b2-8d1d-4cf3-b2f1-e6744842971e",
+              "name": "Get fare estimate for a ride",
+              "request": {
+                "name": "Get fare estimate for a ride",
+                "description": {
+                  "content": "Calculate fare estimate for a ride. No authentication required.",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "rides",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "auth": null,
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"pickup_lat\": \"<number>\",\n  \"pickup_lng\": \"<number>\",\n  \"dropoff_lat\": \"<number>\",\n  \"dropoff_lng\": \"<number>\",\n  \"vehicle_type\": \"standard\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "response": [
+                {
+                  "id": "22348b59-7ec8-43c8-93ad-10313f841f83",
+                  "name": "Fare estimate",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        "estimate"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.6018,\n  \"dropoff_lng\": 3.3515,\n  \"vehicle_type\": \"standard\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"data\": {\n    \"distance_km\": 12.5,\n    \"duration_minutes\": 30,\n    \"base_fare\": 500,\n    \"distance_fare\": 1250,\n    \"time_fare\": 600,\n    \"estimated_total\": 2350,\n    \"currency\": \"NGN\",\n    \"vehicle_type\": \"standard\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "17f5a60a-d549-4d07-a8f4-61b2f378e373",
+                  "name": "Invalid input",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        "estimate"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"pickup_lat\": 6.5244,\n  \"pickup_lng\": 3.3792,\n  \"dropoff_lat\": 6.6018,\n  \"dropoff_lng\": 3.3515,\n  \"vehicle_type\": \"standard\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "status": "Bad Request",
+                  "code": 400,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"VALIDATION_ERROR\",\n    \"message\": \"Invalid input\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "fc1c76df-10af-4cc4-8f9d-a8aa81488eae",
+              "name": "Get user's ride history",
+              "request": {
+                "name": "Get user's ride history",
+                "description": {
+                  "content": "Get paginated ride history for the authenticated user",
+                  "type": "text/plain"
+                },
+                "url": {
+                  "path": [
+                    "api",
+                    "rides",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "disabled": false,
+                      "key": "role",
+                      "value": "passenger",
+                      "description": "Filter by role (default based on user type)"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>",
+                      "description": "Filter by status"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "offset",
+                      "value": "0"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{bearerToken}}"
+                    }
+                  ]
+                }
+              },
+              "response": [
+                {
+                  "id": "ca95943a-ba02-40c6-beb5-9f736c92e332",
+                  "name": "Ride history",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        "history"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [
+                        {
+                          "key": "role",
+                          "value": "passenger"
+                        },
+                        {
+                          "key": "status",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "20"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "0"
+                        }
+                      ],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "OK",
+                  "code": 200,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"data\": [\n    {\n      \"id\": \"46bb89a0-bcd8-5ff6-43f2-27c8de9e9e6a\",\n      \"ride_number\": \"RIDE-ABC123\",\n      \"passenger_id\": \"3582c3d4-e9fd-4fe4-6f40-57781904cdaa\",\n      \"driver_id\": \"9ef52308-2ae8-0bfb-d133-c660afc61acd\",\n      \"status\": \"in_progress\",\n      \"pickup_location\": {\n        \"latitude\": 6.5244,\n        \"longitude\": 3.3792\n      },\n      \"pickup_address\": \"Victoria Island, Lagos\",\n      \"dropoff_location\": {\n        \"latitude\": 6.5244,\n        \"longitude\": 3.3792\n      },\n      \"dropoff_address\": \"Ikeja, Lagos\",\n      \"distance_km\": 12.5,\n      \"estimated_duration_minutes\": 30,\n      \"base_fare\": 500,\n      \"total_fare\": 2350,\n      \"final_amount\": 2350,\n      \"rating\": 1,\n      \"review_comment\": \"string\",\n      \"passenger_notes\": \"string\",\n      \"driver_eta_minutes\": 661,\n      \"created_at\": \"1986-05-04T20:32:11.100Z\",\n      \"accepted_at\": \"2024-05-28T19:13:20.799Z\",\n      \"pickup_time\": \"1952-03-20T10:09:19.340Z\",\n      \"dropoff_time\": \"2002-11-11T23:21:52.424Z\",\n      \"completed_at\": \"1977-04-14T04:33:51.283Z\",\n      \"cancelled_at\": \"1975-04-13T08:24:55.489Z\",\n      \"cancellation_reason\": \"string\"\n    },\n    {\n      \"id\": \"eacb8882-21c5-5886-0c84-b1a16776f46b\",\n      \"ride_number\": \"RIDE-ABC123\",\n      \"passenger_id\": \"cd66c23b-baa6-b909-219d-30159f94171f\",\n      \"driver_id\": \"1dc4872d-d2ff-ab73-86ad-d082e69b4241\",\n      \"status\": \"in_progress\",\n      \"pickup_location\": {\n        \"latitude\": 6.5244,\n        \"longitude\": 3.3792\n      },\n      \"pickup_address\": \"Victoria Island, Lagos\",\n      \"dropoff_location\": {\n        \"latitude\": 6.5244,\n        \"longitude\": 3.3792\n      },\n      \"dropoff_address\": \"Ikeja, Lagos\",\n      \"distance_km\": 12.5,\n      \"estimated_duration_minutes\": 30,\n      \"base_fare\": 500,\n      \"total_fare\": 2350,\n      \"final_amount\": 2350,\n      \"rating\": 2,\n      \"review_comment\": \"string\",\n      \"passenger_notes\": \"string\",\n      \"driver_eta_minutes\": 1254,\n      \"created_at\": \"2013-09-18T20:06:36.411Z\",\n      \"accepted_at\": \"1959-07-13T08:26:46.829Z\",\n      \"pickup_time\": \"1974-09-07T13:08:33.320Z\",\n      \"dropoff_time\": \"1989-06-08T08:11:13.146Z\",\n      \"completed_at\": \"1963-11-14T06:26:53.704Z\",\n      \"cancelled_at\": \"1954-03-23T19:40:16.041Z\",\n      \"cancellation_reason\": \"string\"\n    }\n  ],\n  \"pagination\": {\n    \"total\": 7135,\n    \"limit\": 5747,\n    \"offset\": 6232\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                },
+                {
+                  "id": "c56ecdba-be6d-4055-8096-9b116845a86b",
+                  "name": "Authentication required",
+                  "originalRequest": {
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        "history"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [
+                        {
+                          "key": "role",
+                          "value": "passenger"
+                        },
+                        {
+                          "key": "status",
+                          "value": "<string>"
+                        },
+                        {
+                          "key": "limit",
+                          "value": "20"
+                        },
+                        {
+                          "key": "offset",
+                          "value": "0"
+                        }
+                      ],
+                      "variable": []
+                    },
+                    "header": [
+                      {
+                        "description": {
+                          "content": "Added as a part of security scheme: bearer",
+                          "type": "text/plain"
+                        },
+                        "key": "Authorization",
+                        "value": "Bearer <token>"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "body": {}
+                  },
+                  "status": "Unauthorized",
+                  "code": 401,
+                  "header": [
+                    {
+                      "key": "Content-Type",
+                      "value": "application/json"
+                    }
+                  ],
+                  "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                  "cookie": [],
+                  "_postman_previewlanguage": "json"
+                }
+              ],
+              "event": [],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              }
+            },
+            {
+              "id": "274d9819-9b40-47c1-80db-5cd583150e61",
+              "name": "{rideId}",
+              "item": [
+                {
+                  "id": "16f46d07-f15c-43f0-9fae-c6099c65ab45",
+                  "name": "Get ride details",
+                  "request": {
+                    "name": "Get ride details",
+                    "description": {
+                      "content": "Get full details of a specific ride including driver and passenger info",
+                      "type": "text/plain"
+                    },
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        ":rideId"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": [
+                        {
+                          "disabled": false,
+                          "type": "any",
+                          "value": "<uuid>",
+                          "key": "rideId",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "GET",
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}"
+                        }
+                      ]
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "af18c847-70d5-4344-bbc5-a54f09ce4589",
+                      "name": "Ride details",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "GET",
+                        "body": {}
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"4ad00144-7f03-52fb-a740-175009d89356\",\n    \"ride_number\": \"RIDE-ABC123\",\n    \"passenger_id\": \"ee9517fd-6c8a-189d-088f-52050644cb19\",\n    \"driver_id\": \"c91daa9e-8a9c-d1eb-9c70-4e47e0a68423\",\n    \"status\": \"in_progress\",\n    \"pickup_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"pickup_address\": \"Victoria Island, Lagos\",\n    \"dropoff_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"dropoff_address\": \"Ikeja, Lagos\",\n    \"distance_km\": 12.5,\n    \"estimated_duration_minutes\": 30,\n    \"base_fare\": 500,\n    \"total_fare\": 2350,\n    \"final_amount\": 2350,\n    \"rating\": 4,\n    \"review_comment\": \"string\",\n    \"passenger_notes\": \"string\",\n    \"driver_eta_minutes\": 7570,\n    \"created_at\": \"2007-10-27T15:13:28.257Z\",\n    \"accepted_at\": \"1957-12-29T11:01:17.989Z\",\n    \"pickup_time\": \"1995-08-27T15:47:44.600Z\",\n    \"dropoff_time\": \"1949-05-27T12:02:19.245Z\",\n    \"completed_at\": \"2002-08-03T08:32:07.526Z\",\n    \"cancelled_at\": \"1972-12-13T22:15:06.568Z\",\n    \"cancellation_reason\": \"string\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "772e2015-49cc-4fa2-8e1e-42623d967d65",
+                      "name": "Authentication required",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "GET",
+                        "body": {}
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "e6f82d46-8597-48ac-b136-b3d27c42b00b",
+                      "name": "Insufficient permissions",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "GET",
+                        "body": {}
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"Access denied\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "cc2b47fd-eb67-47b1-acd0-4c5775bb870f",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "GET",
+                        "body": {}
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"Resource not found\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    }
+                  ],
+                  "event": [],
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  }
+                },
+                {
+                  "id": "9d272644-04ad-4671-8f24-39d9ed57dfe0",
+                  "name": "Update ride status",
+                  "request": {
+                    "name": "Update ride status",
+                    "description": {
+                      "content": "Update the status of a ride. Status flow: requested → accepted → arrived → picked_up → in_progress → completed",
+                      "type": "text/plain"
+                    },
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        ":rideId",
+                        "status"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": [
+                        {
+                          "disabled": false,
+                          "type": "any",
+                          "value": "<uuid>",
+                          "key": "rideId",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "PUT",
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"status\": \"<string>\",\n  \"cancellation_reason\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "ee89e24c-0e59-4bd5-8ddc-211ae474d6a2",
+                      "name": "Status updated",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "status"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"<string>\",\n  \"cancellation_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"4ad00144-7f03-52fb-a740-175009d89356\",\n    \"ride_number\": \"RIDE-ABC123\",\n    \"passenger_id\": \"ee9517fd-6c8a-189d-088f-52050644cb19\",\n    \"driver_id\": \"c91daa9e-8a9c-d1eb-9c70-4e47e0a68423\",\n    \"status\": \"in_progress\",\n    \"pickup_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"pickup_address\": \"Victoria Island, Lagos\",\n    \"dropoff_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"dropoff_address\": \"Ikeja, Lagos\",\n    \"distance_km\": 12.5,\n    \"estimated_duration_minutes\": 30,\n    \"base_fare\": 500,\n    \"total_fare\": 2350,\n    \"final_amount\": 2350,\n    \"rating\": 4,\n    \"review_comment\": \"string\",\n    \"passenger_notes\": \"string\",\n    \"driver_eta_minutes\": 7570,\n    \"created_at\": \"2007-10-27T15:13:28.257Z\",\n    \"accepted_at\": \"1957-12-29T11:01:17.989Z\",\n    \"pickup_time\": \"1995-08-27T15:47:44.600Z\",\n    \"dropoff_time\": \"1949-05-27T12:02:19.245Z\",\n    \"completed_at\": \"2002-08-03T08:32:07.526Z\",\n    \"cancelled_at\": \"1972-12-13T22:15:06.568Z\",\n    \"cancellation_reason\": \"string\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "6fb8ac8a-591c-48a2-b073-b55f2903dd08",
+                      "name": "Authentication required",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "status"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"<string>\",\n  \"cancellation_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "c5858ee5-c757-4bda-b936-63eace97ea14",
+                      "name": "Insufficient permissions",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "status"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"<string>\",\n  \"cancellation_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"Access denied\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "6b05d0e6-0633-4bf9-88a9-20e84ad50052",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "status"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"status\": \"<string>\",\n  \"cancellation_reason\": \"<string>\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"Resource not found\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    }
+                  ],
+                  "event": [],
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  }
+                },
+                {
+                  "id": "dd3c56f3-395c-4e90-a8ad-0df6f8b19dce",
+                  "name": "Driver accepts a ride request",
+                  "request": {
+                    "name": "Driver accepts a ride request",
+                    "description": {
+                      "content": "Driver accepts a ride request. Only verified drivers can accept rides.",
+                      "type": "text/plain"
+                    },
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        ":rideId",
+                        "accept"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": [
+                        {
+                          "disabled": false,
+                          "type": "any",
+                          "value": "<uuid>",
+                          "key": "rideId",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"driver_eta_minutes\": \"<integer>\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "46b560f9-95d7-48ef-a285-70fa8ff290e5",
+                      "name": "Ride accepted",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "accept"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"driver_eta_minutes\": 5\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"13ad198d-9920-b09b-aa1c-e19554f7001a\",\n    \"ride_number\": \"RIDE-ABC123\",\n    \"passenger_id\": \"d2c250ca-3503-e9f2-4bb9-2a9334af5218\",\n    \"driver_id\": \"6d96f6ca-21b6-a38f-79d8-3071925edcb0\",\n    \"status\": \"in_progress\",\n    \"pickup_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"pickup_address\": \"Victoria Island, Lagos\",\n    \"dropoff_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"dropoff_address\": \"Ikeja, Lagos\",\n    \"distance_km\": 12.5,\n    \"estimated_duration_minutes\": 30,\n    \"base_fare\": 500,\n    \"total_fare\": 2350,\n    \"final_amount\": 2350,\n    \"rating\": 3,\n    \"review_comment\": \"string\",\n    \"passenger_notes\": \"string\",\n    \"driver_eta_minutes\": 2551,\n    \"created_at\": \"2007-11-17T17:09:30.350Z\",\n    \"accepted_at\": \"2011-07-31T10:52:19.949Z\",\n    \"pickup_time\": \"1948-01-25T07:31:41.562Z\",\n    \"dropoff_time\": \"2015-09-28T05:51:08.428Z\",\n    \"completed_at\": \"1998-08-28T14:27:20.799Z\",\n    \"cancelled_at\": \"2018-08-25T09:39:19.803Z\",\n    \"cancellation_reason\": \"string\"\n  },\n  \"message\": \"string\"\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "80294a14-012c-41cc-b91f-57cb690dbe26",
+                      "name": "Ride unavailable",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "accept"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"driver_eta_minutes\": 5\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"RIDE_UNAVAILABLE\",\n    \"message\": \"Ride is no longer available\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "30211039-0d0d-4c45-ab97-f25b30b333ce",
+                      "name": "Authentication required",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "accept"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"driver_eta_minutes\": 5\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "e1ff3052-a684-460f-bec8-4dad65da86d1",
+                      "name": "Insufficient permissions",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "accept"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"driver_eta_minutes\": 5\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"Access denied\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    }
+                  ],
+                  "event": [],
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  }
+                },
+                {
+                  "id": "0f2bf268-bcb9-4704-9acc-09654df653c3",
+                  "name": "Rate a completed ride",
+                  "request": {
+                    "name": "Rate a completed ride",
+                    "description": {
+                      "content": "Passenger rates a completed ride. Updates driver's average rating.",
+                      "type": "text/plain"
+                    },
+                    "url": {
+                      "path": [
+                        "api",
+                        "rides",
+                        ":rideId",
+                        "rate"
+                      ],
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "query": [],
+                      "variable": [
+                        {
+                          "disabled": false,
+                          "type": "any",
+                          "value": "<uuid>",
+                          "key": "rideId",
+                          "description": "(Required) "
+                        }
+                      ]
+                    },
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "method": "POST",
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{bearerToken}}"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"rating\": \"<integer>\",\n  \"review_comment\": \"<string>\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    }
+                  },
+                  "response": [
+                    {
+                      "id": "dc4923a8-0472-46ff-96e6-9558f0916e50",
+                      "name": "Rating submitted",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "rate"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"rating\": 5,\n  \"review_comment\": \"Great driver, very professional!\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"13ad198d-9920-b09b-aa1c-e19554f7001a\",\n    \"ride_number\": \"RIDE-ABC123\",\n    \"passenger_id\": \"d2c250ca-3503-e9f2-4bb9-2a9334af5218\",\n    \"driver_id\": \"6d96f6ca-21b6-a38f-79d8-3071925edcb0\",\n    \"status\": \"in_progress\",\n    \"pickup_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"pickup_address\": \"Victoria Island, Lagos\",\n    \"dropoff_location\": {\n      \"latitude\": 6.5244,\n      \"longitude\": 3.3792\n    },\n    \"dropoff_address\": \"Ikeja, Lagos\",\n    \"distance_km\": 12.5,\n    \"estimated_duration_minutes\": 30,\n    \"base_fare\": 500,\n    \"total_fare\": 2350,\n    \"final_amount\": 2350,\n    \"rating\": 3,\n    \"review_comment\": \"string\",\n    \"passenger_notes\": \"string\",\n    \"driver_eta_minutes\": 2551,\n    \"created_at\": \"2007-11-17T17:09:30.350Z\",\n    \"accepted_at\": \"2011-07-31T10:52:19.949Z\",\n    \"pickup_time\": \"1948-01-25T07:31:41.562Z\",\n    \"dropoff_time\": \"2015-09-28T05:51:08.428Z\",\n    \"completed_at\": \"1998-08-28T14:27:20.799Z\",\n    \"cancelled_at\": \"2018-08-25T09:39:19.803Z\",\n    \"cancellation_reason\": \"string\"\n  },\n  \"message\": \"string\"\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "285dc48d-e8ba-4f15-9d39-c91220d08ddf",
+                      "name": "Invalid state",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "rate"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"rating\": 5,\n  \"review_comment\": \"Great driver, very professional!\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_STATE\",\n    \"message\": \"Can only rate completed rides\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "1a011d4d-d76d-4e88-83d4-1564f423f18e",
+                      "name": "Authentication required",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "rate"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"rating\": 5,\n  \"review_comment\": \"Great driver, very professional!\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"UNAUTHORIZED\",\n    \"message\": \"Authentication required\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "6395ddda-435e-46b6-9f4a-fa0a31b699a1",
+                      "name": "Insufficient permissions",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "rate"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"rating\": 5,\n  \"review_comment\": \"Great driver, very professional!\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"FORBIDDEN\",\n    \"message\": \"Access denied\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    },
+                    {
+                      "id": "9fc2897c-fa79-4ce5-a0c0-68f48224aa72",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "url": {
+                          "path": [
+                            "api",
+                            "rides",
+                            ":rideId",
+                            "rate"
+                          ],
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "query": [],
+                          "variable": [
+                            {
+                              "disabled": false,
+                              "type": "any",
+                              "value": "<uuid>",
+                              "key": "rideId",
+                              "description": "(Required) "
+                            }
+                          ]
+                        },
+                        "header": [
+                          {
+                            "description": {
+                              "content": "Added as a part of security scheme: bearer",
+                              "type": "text/plain"
+                            },
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "method": "POST",
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"rating\": 5,\n  \"review_comment\": \"Great driver, very professional!\"\n}",
+                          "options": {
+                            "raw": {
+                              "language": "json"
+                            }
+                          }
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "body": "{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"NOT_FOUND\",\n    \"message\": \"Resource not found\"\n  }\n}",
+                      "cookie": [],
+                      "_postman_previewlanguage": "json"
+                    }
+                  ],
+                  "event": [],
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  }
+                }
+              ],
+              "event": []
+            }
+          ],
+          "event": []
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a7090467-084e-40a1-9a21-dcdc5101c0be",
+    "name": "Taxi Realtime Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\n## Taxi Realtime Service\n\nReal-time taxi tracking and ride management service with REST API and WebSocket support.\n\n### Base URLs\n- **REST API**: `https://taxi-realtime.giga.railway.app/api`\n- **WebSocket**: `wss://taxi-realtime.giga.railway.app`\n- **Swagger UI**: `/api-docs`\n\n### Authentication\nAll protected endpoints require JWT Bearer token from Supabase Auth:\n```\nAuthorization: Bearer <your-jwt-token>\n```\n\n### WebSocket Connection\n```javascript\nconst socket = io('wss://taxi-realtime.giga.railway.app', {\n  auth: { token: 'your-jwt-token' }\n});\n```\n\n### WebSocket Events\n\n#### Driver Events (emit)\n| Event | Payload | Description |\n|-------|---------|-------------|\n| `driver:location:update` | `{ lat, lng }` | Update driver location |\n| `trip:accept` | `{ tripId }` | Accept a trip request |\n| `trip:status:update` | `{ tripId, status }` | Update trip status |\n\n#### Driver Events (listen)\n| Event | Payload | Description |\n|-------|---------|-------------|\n| `trip:new-request` | `{ tripId, riderId, pickupLocation, dropoffLocation }` | New trip request |\n| `trip:accept:confirmed` | `{ tripId }` | Trip acceptance confirmed |\n\n#### Rider Events (emit)\n| Event | Payload | Description |\n|-------|---------|-------------|\n| `rider:request:nearby-drivers` | `{ lat, lng, radius }` | Find nearby drivers |\n| `trip:request` | `{ driverId, pickupLat, pickupLng, dropoffLat, dropoffLng }` | Request a trip |\n| `rider:track:driver` | `{ driverId }` | Start tracking driver |\n| `rider:untrack:driver` | `{ driverId }` | Stop tracking driver |\n\n#### Rider Events (listen)\n| Event | Payload | Description |\n|-------|---------|-------------|\n| `rider:nearby-drivers` | `{ drivers: [...] }` | List of nearby drivers |\n| `trip:request:sent` | `{ tripId }` | Trip request created |\n| `trip:accepted` | `{ tripId, driverId }` | Trip was accepted |\n| `driver:location` | `{ driverId, lat, lng, timestamp }` | Driver location update |\n| `trip:status` | `{ tripId, status, timestamp }` | Trip status changed |\n      \n\nContact Support:\n Name: Giga Platform Team\n Email: api@giga.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "info": {
+    "name": "GIGA Customer-Facing API",
+    "description": "Customer-facing endpoints for browsing hotels, products, cart, and bookings via Supabase functions.",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "{{gateway_url}}/api/v1" },
+    { "key": "gateway_url", "value": "http://localhost:3000" },
+    { "key": "auth_token", "value": "" }
+  ],
+  "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{auth_token}}" }] },
+  "item": [
+    {
+      "name": "Hotels - PUBLIC",
+      "description": "Hotel browsing - no auth required",
+      "item": [
+        {
+          "name": "Get Hotel Details",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/hotels/details?hotelId={{hotel_id}}"
+          }
+        },
+        {
+          "name": "Get Hotel by Slug",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/hotels/details?slug=eko-hotels-lagos"
+          }
+        },
+        {
+          "name": "Get Recommended Hotels",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/hotels/recommended"
+          }
+        },
+        {
+          "name": "Search Hotels",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/hotels/search?city=Lagos&min_price=50&max_price=500"
+          }
+        },
+        {
+          "name": "Get Hotel Reviews",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/hotels/reviews?hotelId={{hotel_id}}&page=1&limit=10"
+          }
+        },
+        {
+          "name": "Check Room Availability",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/rooms/availability?hotelId={{hotel_id}}&check_in=2026-03-01&check_out=2026-03-05"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hotels - AUTH REQUIRED",
+      "description": "Hotel operations requiring authentication",
+      "item": [
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/hotels/favorites/add",
+            "body": { "mode": "raw", "raw": "{\"hotel_id\":\"{{hotel_id}}\"}" }
+          }
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/hotels/favorites/remove",
+            "body": { "mode": "raw", "raw": "{\"hotel_id\":\"{{hotel_id}}\"}" }
+          }
+        },
+        {
+          "name": "Get My Favorites",
+          "request": { "method": "GET", "url": "{{base_url}}/hotels/favorites" }
+        },
+        {
+          "name": "Create Hotel Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/hotels/reviews/create",
+            "body": { "mode": "raw", "raw": "{\"hotel_id\":\"{{hotel_id}}\",\"rating\":5,\"comment\":\"Great stay!\"}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings - AUTH REQUIRED",
+      "item": [
+        {
+          "name": "Calculate Booking Price",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/bookings/price",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"hotel_id\":\"{{hotel_id}}\",\"room_type_id\":\"{{room_type_id}}\",\"check_in\":\"2026-03-01\",\"check_out\":\"2026-03-05\",\"guests\":2}"
+            }
+          }
+        },
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/bookings/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"hotel_id\":\"{{hotel_id}}\",\"room_type_id\":\"{{room_type_id}}\",\"check_in\":\"2026-03-01\",\"check_out\":\"2026-03-05\",\"guests\":2,\"special_requests\":\"Late check-in\"}"
+            }
+          }
+        },
+        {
+          "name": "Get My Bookings",
+          "request": { "method": "GET", "url": "{{base_url}}/bookings?status=all&page=1&limit=10" }
+        },
+        {
+          "name": "Get Booking Details",
+          "request": { "method": "GET", "url": "{{base_url}}/bookings/details?booking_id={{booking_id}}" }
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/bookings/cancel",
+            "body": { "mode": "raw", "raw": "{\"booking_id\":\"{{booking_id}}\",\"reason\":\"Change of plans\"}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cart & Checkout - AUTH REQUIRED",
+      "item": [
+        {
+          "name": "Get My Cart",
+          "request": { "method": "GET", "url": "{{base_url}}/cart" }
+        },
+        {
+          "name": "Add to Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/cart/add",
+            "body": { "mode": "raw", "raw": "{\"product_id\":\"{{product_id}}\",\"quantity\":1}" }
+          }
+        },
+        {
+          "name": "Checkout Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/cart/checkout",
+            "body": { "mode": "raw", "raw": "{\"shipping_address_id\":\"{{address_id}}\",\"payment_method\":\"card\"}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payments - AUTH REQUIRED",
+      "item": [
+        {
+          "name": "Initialize Payment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/payments/initialize",
+            "body": { "mode": "raw", "raw": "{\"amount\":50000,\"currency\":\"NGN\",\"reference\":\"booking_123\"}" }
+          }
+        },
+        {
+          "name": "Verify Payment",
+          "request": { "method": "GET", "url": "{{base_url}}/payments/verify?reference={{payment_reference}}" }
+        },
+        {
+          "name": "Wallet Top-up",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/wallet/topup",
+            "body": { "mode": "raw", "raw": "{\"amount\":10000,\"currency\":\"NGN\"}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rides - PUBLIC/AUTH",
+      "item": [
+        {
+          "name": "Get Ride Estimate (PUBLIC)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/rides/estimate",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"pickup\":{\"lat\":6.5244,\"lng\":3.3792},\"dropoff\":{\"lat\":6.4541,\"lng\":3.3947}}"
+            }
+          }
+        },
+        {
+          "name": "Get Nearby Drivers (PUBLIC)",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": "{{base_url}}/drivers/nearby?latitude=6.5244&longitude=3.3792&radius=5"
+          }
+        },
+        {
+          "name": "Request Ride (AUTH)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/rides/request",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"pickup\":{\"lat\":6.5244,\"lng\":3.3792,\"address\":\"Victoria Island\"},\"dropoff\":{\"lat\":6.4541,\"lng\":3.3947,\"address\":\"Lekki Phase 1\"},\"vehicle_type\":\"standard\"}"
+            }
+          }
+        },
+        {
+          "name": "Get Active Ride (AUTH)",
+          "request": { "method": "GET", "url": "{{base_url}}/rides/active" }
+        },
+        {
+          "name": "Get Ride History (AUTH)",
+          "request": { "method": "GET", "url": "{{base_url}}/rides/history?page=1&limit=10" }
+        }
+      ]
+    }
+  ]
+}
