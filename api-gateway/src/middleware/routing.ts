@@ -128,13 +128,49 @@ export const routingMiddleware = (
               '/api/v1/ads/fetch': '/functions/v1/fetch-ads',
               '/api/v1/ads/my-campaigns': '/functions/v1/get-my-campaigns',
 
-              // Rides/Taxi
+              // Rides/Taxi - Passenger
               '/api/v1/rides/request': '/functions/v1/request-ride',
               '/api/v1/rides/estimate': '/functions/v1/get-ride-estimate',
               '/api/v1/rides/active': '/functions/v1/get-active-ride',
               '/api/v1/rides/history': '/functions/v1/get-ride-history',
               '/api/v1/rides/cancel': '/functions/v1/cancel-ride',
+              '/api/v1/rides/rate': '/functions/v1/rate-driver',
               '/api/v1/drivers/nearby': '/functions/v1/get-nearby-drivers',
+
+              // Rides/Taxi - Driver
+              '/api/v1/driver/rides/requests': '/functions/v1/get-ride-requests',
+              '/api/v1/driver/rides/accept': '/functions/v1/accept-ride',
+              '/api/v1/driver/rides/reject': '/functions/v1/reject-ride',
+              '/api/v1/driver/rides/start': '/functions/v1/start-ride',
+              '/api/v1/driver/rides/complete': '/functions/v1/complete-ride',
+              '/api/v1/driver/location': '/functions/v1/update-location',
+              '/api/v1/driver/availability': '/functions/v1/toggle-availability',
+              '/api/v1/driver/earnings': '/functions/v1/get-earnings',
+              '/api/v1/driver/analytics': '/functions/v1/get-ride-analytics',
+
+              // Hotel Management (Host/Admin)
+              '/api/v1/hotels/create': '/functions/v1/create-hotel',
+              '/api/v1/hotels/update': '/functions/v1/update-hotel',
+              '/api/v1/hotels/delete': '/functions/v1/delete-hotel',
+              '/api/v1/hotels/analytics': '/functions/v1/get-hotel-analytics',
+              '/api/v1/hotels/promo-codes/create': '/functions/v1/create-hotel-promo-code',
+              '/api/v1/hotels/promo-codes/validate': '/functions/v1/validate-hotel-promo-code',
+              '/api/v1/hotels/reviews/respond': '/functions/v1/respond-to-review',
+              '/api/v1/hotels/reviews/create': '/functions/v1/create-hotel-review',
+              '/api/v1/hotels/reviews/helpful': '/functions/v1/mark-review-helpful',
+
+              // Room Management (Host/Admin)
+              '/api/v1/rooms/create': '/functions/v1/create-room-type',
+              '/api/v1/rooms/update': '/functions/v1/update-room-type',
+              '/api/v1/rooms/delete': '/functions/v1/delete-room-type',
+              '/api/v1/rooms/availability/update': '/functions/v1/update-room-availability',
+              '/api/v1/rooms/pricing/bulk': '/functions/v1/bulk-update-pricing',
+
+              // Booking Management (Host/Admin)
+              '/api/v1/bookings/calendar': '/functions/v1/get-booking-calendar',
+              '/api/v1/bookings/check-in': '/functions/v1/check-in-guest',
+              '/api/v1/bookings/check-out': '/functions/v1/Checkout-guest',
+              '/api/v1/bookings/status': '/functions/v1/update-booking-status',
 
               // Social
               '/api/v1/social/feed': '/functions/v1/get-social-feed',
@@ -151,6 +187,36 @@ export const routingMiddleware = (
             // Check for exact match first
             if (functionMappings[path]) {
               return functionMappings[path];
+            }
+
+            // Handle dynamic path parameters for hotels
+            // /api/v1/hotels/:hotel_id -> /functions/v1/Get-hotel-details?hotelId=:hotel_id
+            const hotelDetailMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})$/i);
+            if (hotelDetailMatch) {
+              return `/functions/v1/Get-hotel-details?hotelId=${hotelDetailMatch[1]}`;
+            }
+
+            // Handle hotel reviews with hotel_id
+            // /api/v1/hotels/:hotel_id/reviews -> /functions/v1/get-hotel-reviews?hotelId=:hotel_id
+            const hotelReviewsMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})\/reviews$/i);
+            if (hotelReviewsMatch) {
+              return `/functions/v1/get-hotel-reviews?hotelId=${hotelReviewsMatch[1]}`;
+            }
+
+            // Handle hotel availability with hotel_id
+            // /api/v1/hotels/:hotel_id/availability -> /functions/v1/check-room-availability?hotelId=:hotel_id
+            const hotelAvailabilityMatch = path.match(
+              /^\/api\/v1\/hotels\/([a-f0-9-]{36})\/availability$/i
+            );
+            if (hotelAvailabilityMatch) {
+              return `/functions/v1/check-room-availability?hotelId=${hotelAvailabilityMatch[1]}`;
+            }
+
+            // Handle hotel price calculation
+            // /api/v1/hotels/:hotel_id/price -> /functions/v1/Calculate-booking-price?hotelId=:hotel_id
+            const hotelPriceMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})\/price$/i);
+            if (hotelPriceMatch) {
+              return `/functions/v1/Calculate-booking-price?hotelId=${hotelPriceMatch[1]}`;
             }
 
             // Check for prefix matches

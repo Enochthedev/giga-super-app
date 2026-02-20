@@ -45,7 +45,7 @@ serve(async req => {
     // Verify user is the hotel owner
     if (review.hotel.host_id !== user.id) {
       const { data: profile } = await supabaseClient
-        .from('profiles')
+        .from('user_profiles')
         .select('role')
         .eq('id', user.id)
         .single();

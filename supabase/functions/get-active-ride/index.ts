@@ -50,17 +50,10 @@ serve(async req => {
           rating,
           last_location,
           heading
-        ),
-        rider:user_profiles!rides_rider_id_fkey(
-          first_name,
-          last_name,
-          phone,
-          avatar_url,
-          rating
         )
       `
       )
-      .or(`rider_id.eq.${user.id},driver_id.eq.${user.id}`)
+      .or(`passenger_id.eq.${user.id},driver_id.eq.${user.id}`)
       .in('status', ['pending', 'accepted', 'in_progress'])
       .order('created_at', { ascending: false })
       .limit(1)
@@ -84,6 +77,13 @@ serve(async req => {
         }
       );
     }
+
+    // Get rider profile separately (passenger_id references auth.users)
+    const { data: riderProfile } = await supabaseClient
+      .from('user_profiles')
+      .select('first_name, last_name, phone, avatar_url, rating')
+      .eq('id', ride.passenger_id)
+      .single();
 
     // If ride is accepted/in_progress, calculate current ETA/Distance to destination
     let driverLocation = null;
@@ -135,12 +135,14 @@ serve(async req => {
                 location: driverLocation,
               }
             : null,
-          rider: {
-            name: `${ride.rider.first_name} ${ride.rider.last_name}`,
-            phone: ride.rider.phone,
-            avatar_url: ride.rider.avatar_url,
-            rating: ride.rider.rating,
-          },
+          rider: riderProfile
+            ? {
+                name: `${riderProfile.first_name} ${riderProfile.last_name}`,
+                phone: riderProfile.phone,
+                avatar_url: riderProfile.avatar_url,
+                rating: riderProfile.rating,
+              }
+            : null,
         },
       }),
       {

@@ -88,15 +88,21 @@ export const authMiddleware = async (
       '/api/v1/social/posts/public',
     ];
 
-    const isPublicPath = publicPaths.some(
-      publicPath =>
-        req.path === publicPath ||
-        req.path.startsWith(`${publicPath}/`) ||
-        req.path.startsWith('/health') ||
-        req.path.endsWith('/health') ||
-        req.path.includes('/api-docs') ||
-        req.path.includes('/swagger')
-    );
+    // Check for UUID-based hotel paths (public for browsing)
+    const hotelUuidPattern = /^\/api\/v1\/hotels\/[a-f0-9-]{36}(\/reviews|\/availability)?$/i;
+    const isHotelPublicPath = hotelUuidPattern.test(req.path);
+
+    const isPublicPath =
+      isHotelPublicPath ||
+      publicPaths.some(
+        publicPath =>
+          req.path === publicPath ||
+          req.path.startsWith(`${publicPath}/`) ||
+          req.path.startsWith('/health') ||
+          req.path.endsWith('/health') ||
+          req.path.includes('/api-docs') ||
+          req.path.includes('/swagger')
+      );
 
     if (isPublicPath) {
       next();

@@ -47,19 +47,29 @@ serve(async req => {
     // For now, we return the latest 20 pending rides
     const { data: rides, error } = await supabaseClient
       .from('rides')
-      .select(
-        '*, passenger:user_profiles!passenger_id(first_name, last_name, rating, avatar_url)'
-      )
+      .select('*')
       .eq('status', 'pending')
       .order('created_at', { ascending: false })
       .limit(20);
 
     if (error) throw error;
 
+    // Get passenger profiles for each ride
+    const ridesWithPassengers = await Promise.all(
+      (rides || []).map(async ride => {
+        const { data: passenger } = await supabaseClient
+          .from('user_profiles')
+          .select('first_name, last_name, rating, avatar_url')
+          .eq('id', ride.passenger_id)
+          .single();
+        return { ...ride, passenger };
+      })
+    );
+
     return new Response(
       JSON.stringify({
         success: true,
-        data: rides,
+        data: ridesWithPassengers,
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

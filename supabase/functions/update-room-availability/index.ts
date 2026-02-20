@@ -47,7 +47,7 @@ serve(async req => {
     if (!isHost) {
       // Check admin
       const { data: profile } = await supabaseClient
-        .from('profiles')
+        .from('user_profiles')
         .select('role')
         .eq('id', user.id)
         .single();
