@@ -244,8 +244,12 @@ export const routingMiddleware = (
 
       // Re-stream the body for POST/PUT/PATCH requests
       // This is needed because express.json() consumes the body
-      if (['POST', 'PUT', 'PATCH'].includes(authReq.method || '')) {
-        const bodyData = JSON.stringify(authReq.body || {});
+      if (
+        ['POST', 'PUT', 'PATCH'].includes(authReq.method || '') &&
+        authReq.body &&
+        Object.keys(authReq.body).length > 0
+      ) {
+        const bodyData = JSON.stringify(authReq.body);
         proxyReq.setHeader('Content-Type', 'application/json');
         proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));
         proxyReq.write(bodyData);

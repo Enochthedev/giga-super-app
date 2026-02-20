@@ -1566,4 +1566,899 @@ router.get(
   }
 );
 
+// ============================================================================
+// PENDING ENTRIES - NEW BUSINESS MODULE APPROVALS
+// ============================================================================
+
+/**
+ * @swagger
+ * /api/pending-entries:
+ *   get:
+ *     tags: [Pending Entries]
+ *     summary: Get all pending entries across business modules
+ *     description: Retrieve pending entries for products, hotels, drivers, and media content awaiting approval
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: module
+ *         schema:
+ *           type: string
+ *           enum: [ecommerce, hotels, taxi, media]
+ *         description: Filter by specific module
+ *     responses:
+ *       200:
+ *         description: List of pending entries
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     products:
+ *                       type: array
+ *                     hotels:
+ *                       type: array
+ *                     drivers:
+ *                       type: array
+ *                     media:
+ *                       type: array
+ *                 metadata:
+ *                   type: object
+ *                   properties:
+ *                     counts:
+ *                       type: object
+ */
+router.get(
+  '/pending-entries',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { module } = req.query;
+      const results: Record<string, unknown[]> = {};
+
+      // Get pending products
+      if (!module || module === 'ecommerce') {
+        const { data: products } = await supabase
+          .from('ecommerce_products')
+          .select(
+            'id, name, description, final_price, vendor_id, category_id, approval_status, created_at'
+          )
+          .eq('approval_status', 'pending')
+          .is('deleted_at', null)
+          .order('created_at', { ascending: false });
+        results.products = products || [];
+      }
+
+      // Get pending hotels
+      if (!module || module === 'hotels') {
+        const { data: hotels } = await supabase
+          .from('hotels')
+          .select('id, name, description, city, state, star_rating, approval_status, created_at')
+          .eq('approval_status', 'pending')
+          .is('deleted_at', null)
+          .order('created_at', { ascending: false });
+        results.hotels = hotels || [];
+      }
+
+      // Get pending taxi drivers
+      if (!module || module === 'taxi') {
+        const { data: drivers } = await supabase
+          .from('taxi_drivers')
+          .select(
+            'id, first_name, last_name, email, phone, city, license_number, vehicle_make, vehicle_model, plate_number, approval_status, created_at'
+          )
+          .eq('approval_status', 'pending')
+          .is('deleted_at', null)
+          .order('created_at', { ascending: false });
+        results.drivers = drivers || [];
+      }
+
+      // Get pending media content
+      if (!module || module === 'media') {
+        const { data: media } = await supabase
+          .from('media_content')
+          .select(
+            'id, title, description, content_type, file_name, category, publisher_name, publisher_email, approval_status, created_at'
+          )
+          .eq('approval_status', 'pending')
+          .is('deleted_at', null)
+          .order('created_at', { ascending: false });
+        results.media = media || [];
+      }
+
+      await createAudit(req, 'view_pending_entries', 'pending_entries');
+
+      res.json({
+        success: true,
+        data: results,
+        metadata: {
+          timestamp: new Date().toISOString(),
+          counts: {
+            products: results.products?.length || 0,
+            hotels: results.hotels?.length || 0,
+            drivers: results.drivers?.length || 0,
+            media: results.media?.length || 0,
+          },
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to fetch pending entries', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch pending entries' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/pending-entries/{module}/{id}/approve:
+ *   post:
+ *     tags: [Pending Entries]
+ *     summary: Approve a pending entry
+ *     description: Approve a pending product, hotel, driver, or media content
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: module
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [products, hotels, drivers, media]
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Entry approved successfully
+ */
+router.post(
+  '/pending-entries/:module/:id/approve',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { module, id } = req.params;
+      const approvedBy = req.user?.id || 'system';
+
+      const tableMap: Record<string, string> = {
+        products: 'ecommerce_products',
+        hotels: 'hotels',
+        drivers: 'taxi_drivers',
+        media: 'media_content',
+      };
+
+      const tableName = tableMap[module];
+      if (!tableName) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid module. Valid modules: products, hotels, drivers, media',
+        });
+      }
+
+      const { data, error } = await supabase
+        .from(tableName)
+        .update({
+          approval_status: 'approved',
+          approved_at: new Date().toISOString(),
+          approved_by: approvedBy,
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await createAudit(req, `approve_${module}`, tableName, id);
+
+      res.json({
+        success: true,
+        message: `${module} entry approved successfully`,
+        data,
+      });
+    } catch (error: any) {
+      logger.error('Failed to approve entry', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to approve entry' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/pending-entries/{module}/{id}/reject:
+ *   post:
+ *     tags: [Pending Entries]
+ *     summary: Reject a pending entry
+ *     description: Reject a pending product, hotel, driver, or media content with a reason
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: module
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [products, hotels, drivers, media]
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Entry rejected successfully
+ */
+router.post(
+  '/pending-entries/:module/:id/reject',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { module, id } = req.params;
+      const { reason } = req.body;
+      const rejectedBy = req.user?.id || 'system';
+
+      const tableMap: Record<string, string> = {
+        products: 'ecommerce_products',
+        hotels: 'hotels',
+        drivers: 'taxi_drivers',
+        media: 'media_content',
+      };
+
+      const tableName = tableMap[module];
+      if (!tableName) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid module. Valid modules: products, hotels, drivers, media',
+        });
+      }
+
+      const { data, error } = await supabase
+        .from(tableName)
+        .update({
+          approval_status: 'rejected',
+          approved_by: rejectedBy,
+          rejection_reason: reason || 'No reason provided',
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await createAudit(req, `reject_${module}`, tableName, id);
+
+      res.json({
+        success: true,
+        message: `${module} entry rejected successfully`,
+        data,
+      });
+    } catch (error: any) {
+      logger.error('Failed to reject entry', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to reject entry' });
+    }
+  }
+);
+
+// ============================================================================
+// POSTAL STAFF MANAGEMENT - Director of Operations
+// ============================================================================
+
+/**
+ * @swagger
+ * /api/postal/staff:
+ *   get:
+ *     tags: [Postal Staff]
+ *     summary: Get all postal staff
+ *     description: Retrieve paginated list of postal staff (postmasters, regional managers, admin staff)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: staff_type
+ *         schema:
+ *           type: string
+ *           enum: [postmaster, regional_manager, admin_staff]
+ *       - in: query
+ *         name: approval_status
+ *         schema:
+ *           type: string
+ *           enum: [pending, approved, rejected]
+ *     responses:
+ *       200:
+ *         description: Staff list retrieved successfully
+ */
+router.get(
+  '/postal/staff',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { page = '1', limit = '20', staff_type, approval_status } = req.query;
+      const { from, to } = getPaginationRange(page as string, limit as string);
+
+      let query = supabase
+        .from('postal_staff')
+        .select('*', { count: 'exact' })
+        .is('deleted_at', null)
+        .range(from, to)
+        .order('created_at', { ascending: false });
+
+      if (staff_type) {
+        query = query.eq('staff_type', staff_type);
+      }
+
+      if (approval_status) {
+        query = query.eq('approval_status', approval_status);
+      }
+
+      const { data: staff, count, error } = await query;
+
+      if (error) throw error;
+
+      await createAudit(req, 'view_postal_staff', 'postal_staff');
+
+      res.json({
+        success: true,
+        data: { staff },
+        pagination: calculatePagination(page as string, limit as string, count || 0),
+      });
+    } catch (error: any) {
+      logger.error('Failed to get postal staff', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch postal staff' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff/{id}:
+ *   get:
+ *     tags: [Postal Staff]
+ *     summary: Get postal staff details
+ *     description: Retrieve detailed information about a specific postal staff member
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Staff details retrieved successfully
+ *       404:
+ *         description: Staff not found
+ */
+router.get(
+  '/postal/staff/:id',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const { data: staff, error } = await supabase
+        .from('postal_staff')
+        .select('*')
+        .eq('id', id)
+        .is('deleted_at', null)
+        .single();
+
+      if (error || !staff) {
+        return res.status(404).json({
+          success: false,
+          error: 'Staff not found',
+          code: 'STAFF_NOT_FOUND',
+        });
+      }
+
+      // Calculate age from date_of_birth
+      const dob = new Date(staff.date_of_birth);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      await createAudit(req, 'view_postal_staff_details', 'postal_staff', id);
+
+      res.json({
+        success: true,
+        data: {
+          staff: {
+            ...staff,
+            age,
+          },
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to get staff details', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch staff details' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff:
+ *   post:
+ *     tags: [Postal Staff]
+ *     summary: Create new postal staff
+ *     description: Create a new postal staff member (postmaster, regional manager, or admin staff)
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - staff_type
+ *               - first_name
+ *               - last_name
+ *               - email
+ *             properties:
+ *               staff_type:
+ *                 type: string
+ *                 enum: [postmaster, regional_manager, admin_staff]
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               date_of_birth:
+ *                 type: string
+ *                 format: date
+ *               gender:
+ *                 type: string
+ *               residential_address:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *               postal_code:
+ *                 type: string
+ *               assigned_region:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Staff created successfully
+ */
+router.post(
+  '/postal/staff',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const {
+        staff_type,
+        first_name,
+        last_name,
+        email,
+        phone,
+        date_of_birth,
+        gender,
+        residential_address,
+        city,
+        state,
+        country = 'Nigeria',
+        postal_code,
+        assigned_region,
+        assigned_post_office_id,
+      } = req.body;
+
+      // Validate required fields
+      if (!staff_type || !first_name || !last_name || !email) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: staff_type, first_name, last_name, email',
+          code: 'VALIDATION_ERROR',
+        });
+      }
+
+      // Validate staff_type
+      const validTypes = ['postmaster', 'regional_manager', 'admin_staff'];
+      if (!validTypes.includes(staff_type)) {
+        return res.status(400).json({
+          success: false,
+          error: 'Invalid staff_type. Must be: postmaster, regional_manager, or admin_staff',
+          code: 'VALIDATION_ERROR',
+        });
+      }
+
+      const { data: staff, error } = await supabase
+        .from('postal_staff')
+        .insert({
+          staff_type,
+          first_name,
+          last_name,
+          email,
+          phone,
+          date_of_birth,
+          gender,
+          residential_address,
+          city,
+          state,
+          country,
+          postal_code,
+          assigned_region,
+          assigned_post_office_id,
+          admission_date: new Date().toISOString().split('T')[0],
+          approval_status: 'pending',
+        })
+        .select()
+        .single();
+
+      if (error) {
+        if (error.code === '23505') {
+          return res.status(400).json({
+            success: false,
+            error: 'Email already exists',
+            code: 'DUPLICATE_EMAIL',
+          });
+        }
+        throw error;
+      }
+
+      await createAudit(req, 'create_postal_staff', 'postal_staff', staff.id);
+
+      res.status(201).json({
+        success: true,
+        message: 'Staff created successfully',
+        data: { staff },
+      });
+    } catch (error: any) {
+      logger.error('Failed to create postal staff', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to create postal staff' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff/{id}:
+ *   put:
+ *     tags: [Postal Staff]
+ *     summary: Update postal staff
+ *     description: Update postal staff member details
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       200:
+ *         description: Staff updated successfully
+ */
+router.put(
+  '/postal/staff/:id',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { id } = req.params;
+      const updates = req.body;
+
+      // Remove fields that shouldn't be updated directly
+      delete updates.id;
+      delete updates.created_at;
+      delete updates.approval_status;
+      delete updates.approved_at;
+      delete updates.approved_by;
+
+      updates.updated_at = new Date().toISOString();
+
+      const { data: staff, error } = await supabase
+        .from('postal_staff')
+        .update(updates)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await createAudit(req, 'update_postal_staff', 'postal_staff', id);
+
+      res.json({
+        success: true,
+        message: 'Staff updated successfully',
+        data: { staff },
+      });
+    } catch (error: any) {
+      logger.error('Failed to update postal staff', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to update postal staff' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff/{id}/approve:
+ *   post:
+ *     tags: [Postal Staff]
+ *     summary: Approve postal staff
+ *     description: Approve a pending postal staff member
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Staff approved successfully
+ */
+router.post(
+  '/postal/staff/:id/approve',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { id } = req.params;
+      const approvedBy = req.user?.id || 'system';
+
+      const { data: staff, error } = await supabase
+        .from('postal_staff')
+        .update({
+          approval_status: 'approved',
+          approved_at: new Date().toISOString(),
+          approved_by: approvedBy,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await createAudit(req, 'approve_postal_staff', 'postal_staff', id);
+
+      res.json({
+        success: true,
+        message: 'Staff approved successfully',
+        data: { staff },
+      });
+    } catch (error: any) {
+      logger.error('Failed to approve postal staff', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to approve postal staff' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff/{id}/reject:
+ *   post:
+ *     tags: [Postal Staff]
+ *     summary: Reject postal staff
+ *     description: Reject a pending postal staff member with a reason
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Staff rejected successfully
+ */
+router.post(
+  '/postal/staff/:id/reject',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { reason } = req.body;
+      const rejectedBy = req.user?.id || 'system';
+
+      const { data: staff, error } = await supabase
+        .from('postal_staff')
+        .update({
+          approval_status: 'rejected',
+          approved_by: rejectedBy,
+          rejection_reason: reason || 'No reason provided',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await createAudit(req, 'reject_postal_staff', 'postal_staff', id);
+
+      res.json({
+        success: true,
+        message: 'Staff rejected successfully',
+        data: { staff },
+      });
+    } catch (error: any) {
+      logger.error('Failed to reject postal staff', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to reject postal staff' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff/{id}:
+ *   delete:
+ *     tags: [Postal Staff]
+ *     summary: Delete postal staff (soft delete)
+ *     description: Soft delete a postal staff member
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: Staff deleted successfully
+ */
+router.delete(
+  '/postal/staff/:id',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { id } = req.params;
+
+      const { error } = await supabase
+        .from('postal_staff')
+        .update({
+          deleted_at: new Date().toISOString(),
+          is_active: false,
+        })
+        .eq('id', id);
+
+      if (error) throw error;
+
+      await createAudit(req, 'delete_postal_staff', 'postal_staff', id);
+
+      res.json({
+        success: true,
+        message: 'Staff deleted successfully',
+      });
+    } catch (error: any) {
+      logger.error('Failed to delete postal staff', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to delete postal staff' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/postal/staff/stats:
+ *   get:
+ *     tags: [Postal Staff]
+ *     summary: Get postal staff statistics
+ *     description: Get statistics about postal staff by type and approval status
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Staff statistics retrieved successfully
+ */
+router.get(
+  '/postal/staff-stats',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      // Get counts by staff type
+      const { data: byType } = await supabase
+        .from('postal_staff')
+        .select('staff_type')
+        .is('deleted_at', null);
+
+      // Get counts by approval status
+      const { data: byStatus } = await supabase
+        .from('postal_staff')
+        .select('approval_status')
+        .is('deleted_at', null);
+
+      // Calculate statistics
+      const typeStats = {
+        postmaster: 0,
+        regional_manager: 0,
+        admin_staff: 0,
+      };
+
+      const statusStats = {
+        pending: 0,
+        approved: 0,
+        rejected: 0,
+      };
+
+      (byType || []).forEach((item: any) => {
+        if (Object.prototype.hasOwnProperty.call(typeStats, item.staff_type)) {
+          typeStats[item.staff_type as keyof typeof typeStats]++;
+        }
+      });
+
+      (byStatus || []).forEach((item: any) => {
+        if (Object.prototype.hasOwnProperty.call(statusStats, item.approval_status)) {
+          statusStats[item.approval_status as keyof typeof statusStats]++;
+        }
+      });
+
+      res.json({
+        success: true,
+        data: {
+          total: (byType || []).length,
+          by_type: typeStats,
+          by_status: statusStats,
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to get staff stats', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch staff statistics' });
+    }
+  }
+);
+
 export default router;

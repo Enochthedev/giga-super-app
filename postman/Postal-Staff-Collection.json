@@ -1,0 +1,683 @@
+{
+  "info": {
+    "_postman_id": "postal-staff-collection-2026",
+    "name": "Postal Staff & Pending Entries API",
+    "description": "API collection for Director of Operations dashboard - Postal Staff management and Business Module pending entries",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3002",
+      "type": "string"
+    },
+    {
+      "key": "bearerToken",
+      "value": "your-jwt-token-here",
+      "type": "string"
+    },
+    {
+      "key": "staffId",
+      "value": "use-actual-staff-uuid",
+      "type": "string",
+      "description": "Sample postal staff UUID for testing"
+    },
+    {
+      "key": "entryId",
+      "value": "use-actual-entry-uuid",
+      "type": "string",
+      "description": "Sample pending entry UUID for testing"
+    },
+    {
+      "key": "orderId",
+      "value": "use-actual-order-uuid",
+      "type": "string",
+      "description": "Sample order UUID for testing"
+    }
+  ],
+  "item": [
+    {
+      "name": "Postal Staff",
+      "description": "Endpoints for managing postal staff (postmasters, regional managers, admin staff)",
+      "item": [
+        {
+          "name": "Get All Postal Staff",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "staff_type",
+                  "value": "postmaster",
+                  "description": "Filter by staff type: postmaster, regional_manager, admin_staff",
+                  "disabled": true
+                },
+                {
+                  "key": "approval_status",
+                  "value": "pending",
+                  "description": "Filter by approval status: pending, approved, rejected",
+                  "disabled": true
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Retrieve paginated list of postal staff with optional filtering"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Postal Staff by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{staffId}}",
+                  "description": "Staff UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get detailed information about a specific postal staff member including calculated age"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Postal Staff",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"staff_type\": \"postmaster\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"email\": \"john.doe@nipost.gov.ng\",\n  \"phone\": \"+2348012345678\",\n  \"date_of_birth\": \"1985-06-15\",\n  \"gender\": \"male\",\n  \"residential_address\": \"123 Main Street\",\n  \"city\": \"Lagos\",\n  \"state\": \"Lagos\",\n  \"country\": \"Nigeria\",\n  \"postal_code\": \"100001\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff"]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Create a new postal staff member (postmaster, regional_manager, or admin_staff)"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Postal Staff",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+2348098765432\",\n  \"residential_address\": \"456 New Address\",\n  \"city\": \"Abuja\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{staffId}}",
+                  "description": "Staff UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Update postal staff member details"
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Postal Staff",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff/:id/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff", ":id", "approve"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{staffId}}",
+                  "description": "Staff UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Approve a pending postal staff member"
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Postal Staff",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Incomplete documentation - missing security clearance certificate\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff/:id/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff", ":id", "reject"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{staffId}}",
+                  "description": "Staff UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Reject a pending postal staff member with a reason"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Postal Staff",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{staffId}}",
+                  "description": "Staff UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Soft delete a postal staff member"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Postal Staff Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/postal/staff-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "postal", "staff-stats"]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get statistics about postal staff by type and approval status"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pending Entries",
+      "description": "Endpoints for managing pending business module entries (products, hotels, drivers, media)",
+      "item": [
+        {
+          "name": "Get All Pending Entries",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pending-entries",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pending-entries"],
+              "query": [
+                {
+                  "key": "module",
+                  "value": "ecommerce",
+                  "description": "Filter by module: ecommerce, hotels, taxi, media",
+                  "disabled": true
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Retrieve all pending entries across business modules (products, hotels, drivers, media)"
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Pending Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pending-entries/:module/:id/approve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pending-entries", ":module", ":id", "approve"],
+              "variable": [
+                {
+                  "key": "module",
+                  "value": "products",
+                  "description": "Module type: products, hotels, drivers, media"
+                },
+                {
+                  "key": "id",
+                  "value": "{{entryId}}",
+                  "description": "Entry UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Approve a pending product, hotel, driver, or media entry"
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Pending Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Entry does not meet quality standards\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pending-entries/:module/:id/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pending-entries", ":module", ":id", "reject"],
+              "variable": [
+                {
+                  "key": "module",
+                  "value": "products",
+                  "description": "Module type: products, hotels, drivers, media"
+                },
+                {
+                  "key": "id",
+                  "value": "{{entryId}}",
+                  "description": "Entry UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Reject a pending product, hotel, driver, or media entry with a reason"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Manager Dashboard",
+      "description": "Endpoints for Post Office Manager dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/dashboard-stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "dashboard-stats"]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get dashboard statistics for post office managers"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chart Data",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/chart-data?period=daily&days=7",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "chart-data"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "daily",
+                  "description": "Time period: daily, weekly, monthly"
+                },
+                {
+                  "key": "days",
+                  "value": "7",
+                  "description": "Number of days (1-30)"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get chart data formatted for bar charts showing orders, revenue, and deliveries"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Performance Metrics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/performance-metrics",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "performance-metrics"]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get performance metrics including staff performance, delivery rates, and customer satisfaction"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Latest Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/latest-orders?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "latest-orders"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                },
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by status: pending, processing, completed, cancelled",
+                  "disabled": true
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get latest orders for post office managers"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"processing\",\n  \"notes\": \"Order is being prepared for shipment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/orders/:orderId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "orders", ":orderId"],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "{{orderId}}",
+                  "description": "Order UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Update order status and add notes"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Order (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Customer requested cancellation\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/orders/:orderId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "orders", ":orderId"],
+              "variable": [
+                {
+                  "key": "orderId",
+                  "value": "{{orderId}}",
+                  "description": "Order UUID"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Soft delete an order with a reason"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "E-commerce Manager",
+      "description": "Endpoints for E-commerce manager operations",
+      "item": [
+        {
+          "name": "Get Latest E-commerce Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/managers/ecommerce/orders/latest?page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "managers", "ecommerce", "orders", "latest"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                }
+              ]
+            },
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{bearerToken}}" }]
+            },
+            "description": "Get latest e-commerce orders with customer details and order items"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  }
+}
