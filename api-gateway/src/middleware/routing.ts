@@ -68,8 +68,8 @@ export const routingMiddleware = (
   const proxyOptions: Options = {
     target: service.baseUrl,
     changeOrigin: true,
-    timeout: 30000, // 30 second timeout for backend requests
-    proxyTimeout: 30000, // 30 second timeout for proxy
+    timeout: 60000, // 60 second timeout for backend requests
+    proxyTimeout: 60000, // 60 second timeout for proxy
     pathRewrite:
       service.platform === 'supabase'
         ? path => {

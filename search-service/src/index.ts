@@ -164,6 +164,6 @@ const server = app.listen(PORT, () => {
 });
 
 // Set server timeout
-server.timeout = 30000; // 30 seconds
+server.timeout = 60000; // 60 seconds
 
 export default app;

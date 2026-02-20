@@ -30,7 +30,7 @@ export class DatabaseService {
         fetch: (url, options = {}) => {
           // Add timeout to all fetch requests
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+          const timeoutId = setTimeout(() => controller.abort(), 20000); // 20 second timeout
 
           return fetch(url, {
             ...options,
@@ -136,80 +136,90 @@ export class DatabaseService {
   async searchProducts(
     query: SearchQuery
   ): Promise<{ results: SearchResult<EcommerceProduct>[]; total: number }> {
-    let dbQuery = this.supabase
-      .from('ecommerce_products')
-      .select('*', { count: 'exact' })
-      .eq('is_active', true)
-      .is('deleted_at', null);
+    const startTime = Date.now();
+    console.log('[DB] Starting product search query...');
 
-    // Text search
-    if (query.q) {
-      dbQuery = dbQuery.or(
-        `name.ilike.%${query.q}%,description.ilike.%${query.q}%,short_description.ilike.%${query.q}%`
+    try {
+      let dbQuery = this.supabase
+        .from('ecommerce_products')
+        .select('*', { count: 'exact' })
+        .eq('is_active', true)
+        .is('deleted_at', null);
+
+      // Text search
+      if (query.q) {
+        dbQuery = dbQuery.or(
+          `name.ilike.%${query.q}%,description.ilike.%${query.q}%,short_description.ilike.%${query.q}%`
+        );
+      }
+
+      // Price filters (using final_price which is the discounted price)
+      if (query.min_price) {
+        dbQuery = dbQuery.gte('final_price', query.min_price);
+      }
+      if (query.max_price) {
+        dbQuery = dbQuery.lte('final_price', query.max_price);
+      }
+
+      // In stock filter
+      dbQuery = dbQuery.gt('stock_quantity', 0);
+
+      // Sorting
+      const sortColumn = this.mapSortColumn(query.sort || 'relevance', 'products');
+      dbQuery = dbQuery.order(sortColumn, { ascending: query.order === 'asc' });
+
+      // Pagination
+      const offset = ((query.page || 1) - 1) * (query.limit || 20);
+      dbQuery = dbQuery.range(offset, offset + (query.limit || 20) - 1);
+
+      // Execute query with timeout using Promise.race
+      const queryPromise = dbQuery;
+      const timeoutPromise = new Promise<never>((_resolve, reject) => {
+        setTimeout(() => reject(new Error('Database query timeout after 15 seconds')), 15000);
+      });
+
+      const { data, count, error } = await Promise.race([queryPromise, timeoutPromise]);
+
+      const queryTime = Date.now() - startTime;
+      console.log(
+        `[DB] Product search query completed in ${queryTime}ms, found ${count || 0} results`
       );
+
+      if (error) {
+        console.error('[DB] Product search error:', error);
+        throw new Error(`Product search failed: ${error.message}`);
+      }
+
+      const results: SearchResult<EcommerceProduct>[] = (data || []).map((product: any) => ({
+        id: product.id,
+        type: 'products' as SearchCategory,
+        title: product.name,
+        description: product.description,
+        image_url: product.images?.[0] || product.thumbnail,
+        price: product.final_price, // Use final_price (discounted price)
+        currency: 'NGN', // Default currency
+        location: undefined,
+        relevance_score: this.calculateRelevanceScore(
+          query.q || '',
+          `${product.name} ${product.description || ''}`
+        ),
+        data: {
+          ...product,
+          price: product.final_price, // Map final_price to price for compatibility
+          original_price: product.base_price, // Map base_price to original_price
+          image_urls: product.images || [],
+          category: product.category_id, // Map category_id to category
+        },
+        created_at: product.created_at,
+        updated_at: product.updated_at,
+      }));
+
+      return { results, total: count || 0 };
+    } catch (err) {
+      const queryTime = Date.now() - startTime;
+      console.error(`[DB] Product search failed after ${queryTime}ms:`, err);
+      throw err;
     }
-
-    // Price filters (using final_price which is the discounted price)
-    if (query.min_price) {
-      dbQuery = dbQuery.gte('final_price', query.min_price);
-    }
-    if (query.max_price) {
-      dbQuery = dbQuery.lte('final_price', query.max_price);
-    }
-
-    // Brand filter - check in attributes JSONB if brand exists
-    // Note: brand is not a direct column, may be in attributes
-    // if (query.filters?.brand) {
-    //   dbQuery = dbQuery.contains('attributes', { brand: query.filters.brand });
-    // }
-
-    // Condition filter - not a direct column in the schema
-    // if (query.filters?.condition) {
-    //   dbQuery = dbQuery.eq('condition', query.filters.condition);
-    // }
-
-    // In stock filter
-    dbQuery = dbQuery.gt('stock_quantity', 0);
-
-    // Sorting
-    const sortColumn = this.mapSortColumn(query.sort || 'relevance', 'products');
-    dbQuery = dbQuery.order(sortColumn, { ascending: query.order === 'asc' });
-
-    // Pagination
-    const offset = ((query.page || 1) - 1) * (query.limit || 20);
-    dbQuery = dbQuery.range(offset, offset + (query.limit || 20) - 1);
-
-    const { data, count, error } = await dbQuery;
-
-    if (error) {
-      throw new Error(`Product search failed: ${error.message}`);
-    }
-
-    const results: SearchResult<EcommerceProduct>[] = (data || []).map((product: any) => ({
-      id: product.id,
-      type: 'products' as SearchCategory,
-      title: product.name,
-      description: product.description,
-      image_url: product.images?.[0] || product.thumbnail,
-      price: product.final_price, // Use final_price (discounted price)
-      currency: 'NGN', // Default currency
-      location: undefined,
-      relevance_score: this.calculateRelevanceScore(
-        query.q || '',
-        `${product.name} ${product.description || ''}`
-      ),
-      data: {
-        ...product,
-        price: product.final_price, // Map final_price to price for compatibility
-        original_price: product.base_price, // Map base_price to original_price
-        image_urls: product.images || [],
-        category: product.category_id, // Map category_id to category
-      },
-      created_at: product.created_at,
-      updated_at: product.updated_at,
-    }));
-
-    return { results, total: count || 0 };
   }
 
   /**
