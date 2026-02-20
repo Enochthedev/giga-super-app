@@ -1,41 +1,37 @@
-# Multi-stage build for Hotels Service
-# This Dockerfile is designed to be built from the repo root with:
-# docker build -f hotels-service/Dockerfile .
-FROM node:20-alpine AS builder
-
-WORKDIR /app
-
-# Copy package files from hotels-service
-COPY hotels-service/package*.json ./
-COPY hotels-service/tsconfig.json ./
-
-# Install dependencies (skip prepare scripts like husky)
-RUN npm ci --ignore-scripts
-
-# Copy source code from hotels-service
-COPY hotels-service/src ./src
-
-# Build TypeScript
-RUN npm run build
-
-# Production stage
+# Fast Dockerfile for hotels-service - single stage with pre-compilation
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files and install production dependencies
-COPY hotels-service/package*.json ./
-RUN npm ci --only=production --ignore-scripts
+# Copy root package files for workspace
+COPY package*.json ./
+COPY tsconfig.base.json ./
 
-# Copy built files
-COPY --from=builder /app/dist ./dist
+# Copy shared code first (changes less frequently)
+COPY shared ./shared
 
-# Expose port
+# Install shared dependencies
+WORKDIR /app/shared
+RUN npm ci --omit=dev
+
+# Copy service code
+WORKDIR /app
+COPY hotels-service ./hotels-service
+
+# Install service dependencies and build
+WORKDIR /app/hotels-service
+RUN npm ci && npm run build && npm prune --production
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=3008
+ENV SERVICE_NAME=hotels-service
+
 EXPOSE 3008
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:3008/health || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3008/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start the service
+# Run pre-compiled JavaScript - instant startup
 CMD ["node", "dist/index.js"]
