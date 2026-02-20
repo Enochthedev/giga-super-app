@@ -1,23 +1,26 @@
-# Simple Dockerfile for search-service using tsx
+# Fast Dockerfile for search-service - single stage with pre-compilation
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
+# Copy root package files for workspace
 COPY package*.json ./
 COPY tsconfig.base.json ./
 
-# Copy shared code and service code
+# Copy shared code first (changes less frequently)
 COPY shared ./shared
-COPY search-service ./search-service
 
-# Install shared dependencies first
+# Install shared dependencies
 WORKDIR /app/shared
 RUN npm ci --omit=dev
 
-# Install service dependencies
+# Copy service code
+WORKDIR /app
+COPY search-service ./search-service
+
+# Install service dependencies and build
 WORKDIR /app/search-service
-RUN npm ci
+RUN npm ci && npm run build && npm prune --production
 
 # Set environment
 ENV NODE_ENV=production
@@ -27,8 +30,8 @@ ENV SERVICE_NAME=search-service
 EXPOSE 8080
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+HEALTHCHECK --interval=15s --timeout=5s --start-period=10s --retries=3 \
   CMD node -e "require('http').get('http://localhost:8080/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Run TypeScript directly with tsx
-CMD ["npx", "tsx", "src/index.ts"]
+# Run pre-compiled JavaScript - instant startup
+CMD ["node", "dist/index.js"]
