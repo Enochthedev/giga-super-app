@@ -1,5 +1,7 @@
 /**
- * Authentication middleware for Booking Service
+ * Authentication middleware for Hotels Service
+ * Trusts user context from API Gateway headers (X-User-ID, X-User-Email, X-User-Role)
+ * Falls back to direct Supabase token validation if headers not present
  */
 
 import { NextFunction, Request, Response } from 'express';
@@ -21,6 +23,32 @@ export const authMiddleware = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    // First, check for user context from API Gateway headers
+    // The gateway validates the token and forwards user info
+    const userId = req.headers['x-user-id'] as string;
+    const userEmail = req.headers['x-user-email'] as string;
+    const userRole = req.headers['x-user-role'] as string;
+
+    if (userId) {
+      // Trust the gateway's authentication
+      req.user = {
+        id: userId,
+        email: userEmail || '',
+        role: userRole || 'user',
+      };
+
+      // Store the auth token if present
+      const authHeader = req.headers.authorization;
+      if (authHeader?.startsWith('Bearer ')) {
+        req.authToken = authHeader.substring(7);
+      }
+
+      console.log(`[Auth] User authenticated via gateway: ${userId}`);
+      next();
+      return;
+    }
+
+    // Fallback: Direct token validation (for local development or direct access)
     const authHeader = req.headers.authorization || req.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -42,6 +70,7 @@ export const authMiddleware = async (
     } = await userClient.auth.getUser();
 
     if (error || !user) {
+      console.error('[Auth] Token validation failed:', error?.message);
       res.status(401).json({
         success: false,
         error: 'Invalid or expired token',
@@ -55,6 +84,7 @@ export const authMiddleware = async (
       role: user.app_metadata?.role || 'user',
     };
 
+    console.log(`[Auth] User authenticated via token: ${user.id}`);
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
