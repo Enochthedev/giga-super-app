@@ -389,14 +389,13 @@ router.get('/rides', authenticate, requireAnyAccess, async (req: AuthRequest, re
     const { page = '1', limit = '20', status, driver_id, start_date, end_date } = req.query;
     const { from, to } = getPaginationRange(page as string, limit as string);
 
+    // Query rides without FK joins (FKs point to auth.users, not user_profiles)
     let query = supabase
       .from('rides')
       .select(
-        `id, user_id, driver_id, pickup_location, dropoff_location, pickup_address, dropoff_address,
-         estimated_amount, final_amount, distance_km, duration_minutes, status,
-         pickup_time, dropoff_time, created_at,
-         user_profiles!rides_user_id_fkey(first_name, last_name, phone),
-         driver:driver_profiles!rides_driver_id_fkey(user_profiles(first_name, last_name))`,
+        `id, passenger_id, driver_id, pickup_location, dropoff_location, pickup_address, dropoff_address,
+         total_fare, final_amount, distance_km, actual_duration_minutes, status,
+         pickup_time, dropoff_time, created_at`,
         { count: 'exact' }
       )
       .range(from, to)
@@ -410,10 +409,62 @@ router.get('/rides', authenticate, requireAnyAccess, async (req: AuthRequest, re
     const { data: rides, count, error } = await query;
     if (error) throw error;
 
+    // Fetch passenger profiles separately (passenger_id references auth.users, not user_profiles)
+    const passengerIds = [...new Set(rides?.map(r => r.passenger_id).filter(Boolean) || [])];
+    const driverIds = [...new Set(rides?.map(r => r.driver_id).filter(Boolean) || [])];
+
+    let passengerProfiles: Record<string, any> = {};
+    let driverProfiles: Record<string, any> = {};
+
+    if (passengerIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, phone')
+        .in('id', passengerIds);
+
+      if (profiles) {
+        passengerProfiles = profiles.reduce((acc: Record<string, any>, profile: any) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+      }
+    }
+
+    if (driverIds.length > 0) {
+      const { data: drivers } = await supabase
+        .from('driver_profiles')
+        .select('user_id')
+        .in('user_id', driverIds);
+
+      if (drivers) {
+        const driverUserIds = drivers.map(d => d.user_id);
+        const { data: driverUserProfiles } = await supabase
+          .from('user_profiles')
+          .select('id, first_name, last_name')
+          .in('id', driverUserIds);
+
+        if (driverUserProfiles) {
+          driverProfiles = driverUserProfiles.reduce((acc: Record<string, any>, profile: any) => {
+            acc[profile.id] = profile;
+            return acc;
+          }, {});
+        }
+      }
+    }
+
+    // Attach profiles to rides
+    const ridesWithProfiles = (rides || []).map((ride: any) => ({
+      ...ride,
+      user_profiles: passengerProfiles[ride.passenger_id] || null,
+      driver: driverProfiles[ride.driver_id]
+        ? { user_profiles: driverProfiles[ride.driver_id] }
+        : null,
+    }));
+
     await createAudit(req, 'view_rides', 'rides');
     res.json({
       success: true,
-      data: { rides },
+      data: { rides: ridesWithProfiles },
       pagination: calculatePagination(page as string, limit as string, count || 0),
     });
   } catch (error: unknown) {

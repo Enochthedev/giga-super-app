@@ -72,8 +72,7 @@ router.get('/', async (req: Request, res: Response) => {
         connected_user_id,
         status,
         connection_type,
-        created_at,
-        user_profiles!user_connections_connected_user_id_fkey(id, first_name, last_name, avatar_url)
+        created_at
       `,
         { count: 'exact' }
       )
@@ -90,8 +89,32 @@ router.get('/', async (req: Request, res: Response) => {
 
     if (error) throw error;
 
+    // Fetch user profiles separately (FK points to auth.users, not user_profiles)
+    const userIds = [...new Set(connections?.map(c => c.connected_user_id).filter(Boolean) || [])];
+    let userProfiles: Record<string, any> = {};
+
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .in('id', userIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce((acc: Record<string, any>, profile: any) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+      }
+    }
+
+    // Attach user profiles to connections
+    const connectionsWithProfiles = (connections ?? []).map((conn: any) => ({
+      ...conn,
+      user_profiles: userProfiles[conn.connected_user_id] || null,
+    }));
+
     const pagination = calculatePagination(page, limit, count ?? 0);
-    sendSuccess(res, { data: connections ?? [], pagination, requestId: req.requestId });
+    sendSuccess(res, { data: connectionsWithProfiles, pagination, requestId: req.requestId });
   } catch (error) {
     if (error instanceof ZodError) {
       sendValidationError(res, 'Invalid query parameters', error.issues, req.requestId);
@@ -133,8 +156,7 @@ router.get('/requests', async (req: Request, res: Response) => {
         id,
         user_id,
         connection_type,
-        created_at,
-        user_profiles!user_connections_user_id_fkey(id, first_name, last_name, avatar_url)
+        created_at
       `
       )
       .eq('connected_user_id', req.user.id)
@@ -143,7 +165,31 @@ router.get('/requests', async (req: Request, res: Response) => {
 
     if (error) throw error;
 
-    sendSuccess(res, { data: requests ?? [], requestId: req.requestId });
+    // Fetch user profiles separately (FK points to auth.users, not user_profiles)
+    const userIds = [...new Set(requests?.map(r => r.user_id).filter(Boolean) || [])];
+    let userProfiles: Record<string, any> = {};
+
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .in('id', userIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce((acc: Record<string, any>, profile: any) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+      }
+    }
+
+    // Attach user profiles to requests
+    const requestsWithProfiles = (requests ?? []).map((req: any) => ({
+      ...req,
+      user_profiles: userProfiles[req.user_id] || null,
+    }));
+
+    sendSuccess(res, { data: requestsWithProfiles, requestId: req.requestId });
   } catch (error) {
     logger.error('Error fetching connection requests', { error });
     sendInternalError(res, 'Failed to fetch connection requests', req.requestId);

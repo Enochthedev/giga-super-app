@@ -213,8 +213,7 @@ router.get('/users', async (req: Request, res: Response) => {
       .select(
         `
         user_id,
-        created_at,
-        user_profiles!post_likes_user_id_fkey(id, first_name, last_name, avatar_url)
+        created_at
       `
       )
       .eq('post_id', postId)
@@ -223,13 +222,34 @@ router.get('/users', async (req: Request, res: Response) => {
 
     if (error) throw error;
 
-    const users = likes?.map((like: any) => ({
-      id: like.user_profiles.id,
-      first_name: like.user_profiles.first_name,
-      last_name: like.user_profiles.last_name,
-      avatar_url: like.user_profiles.avatar_url,
-      liked_at: like.created_at,
-    }));
+    // Fetch user profiles separately (FK points to auth.users, not user_profiles)
+    const userIds = [...new Set(likes?.map(l => l.user_id).filter(Boolean) || [])];
+    let userProfiles: Record<string, any> = {};
+
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .in('id', userIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce((acc: Record<string, any>, profile: any) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+      }
+    }
+
+    const users = likes?.map((like: any) => {
+      const profile = userProfiles[like.user_id];
+      return {
+        id: profile?.id || like.user_id,
+        first_name: profile?.first_name,
+        last_name: profile?.last_name,
+        avatar_url: profile?.avatar_url,
+        liked_at: like.created_at,
+      };
+    });
 
     sendSuccess(res, { data: users ?? [], requestId: req.requestId });
   } catch (error) {

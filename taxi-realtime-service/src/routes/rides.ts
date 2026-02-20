@@ -79,12 +79,10 @@ router.post('/estimate', async (req: Request, res: Response) => {
     } = req.body;
 
     if (!pickup_lat || !pickup_lng || !dropoff_lat || !dropoff_lng) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'VALIDATION_ERROR', message: 'All coordinates are required' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_ERROR', message: 'All coordinates are required' },
+      });
     }
 
     const distance_km = calculateDistance(pickup_lat, pickup_lng, dropoff_lat, dropoff_lng);
@@ -158,12 +156,10 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     const {
@@ -179,15 +175,13 @@ router.post('/', async (req: Request, res: Response) => {
     } = req.body;
 
     if (!pickup_lat || !pickup_lng || !dropoff_lat || !dropoff_lng) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: {
-            code: 'VALIDATION_ERROR',
-            message: 'Pickup and dropoff coordinates are required',
-          },
-        });
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Pickup and dropoff coordinates are required',
+        },
+      });
     }
 
     const distance_km = calculateDistance(pickup_lat, pickup_lng, dropoff_lat, dropoff_lng);
@@ -255,6 +249,7 @@ router.get('/:rideId', async (req: Request, res: Response) => {
     const userId = req.user?.id;
     const { rideId } = req.params;
 
+    // Query ride without FK join for passenger (FK points to auth.users, not user_profiles)
     const { data: ride, error } = await supabase
       .from('rides')
       .select(
@@ -263,8 +258,7 @@ router.get('/:rideId', async (req: Request, res: Response) => {
         driver:driver_profiles(
           id, user_id, vehicle_info, rating, total_rides, vehicle_type,
           user:user_profiles(first_name, last_name, avatar_url, phone)
-        ),
-        passenger:user_profiles!rides_passenger_id_fkey(first_name, last_name, avatar_url, phone)
+        )
       `
       )
       .eq('id', rideId)
@@ -283,7 +277,18 @@ router.get('/:rideId', async (req: Request, res: Response) => {
         .json({ success: false, error: { code: 'FORBIDDEN', message: 'Access denied' } });
     }
 
-    res.json({ success: true, data: ride });
+    // Fetch passenger profile separately (passenger_id references auth.users, not user_profiles)
+    let passengerProfile = null;
+    if (ride.passenger_id) {
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('first_name, last_name, avatar_url, phone')
+        .eq('id', ride.passenger_id)
+        .single();
+      passengerProfile = profile;
+    }
+
+    res.json({ success: true, data: { ...ride, passenger: passengerProfile } });
   } catch (error: any) {
     res
       .status(500)
@@ -324,12 +329,10 @@ router.put('/:rideId/status', async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     const { rideId } = req.params;
@@ -438,12 +441,10 @@ router.post('/:rideId/accept', async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     const { rideId } = req.params;
@@ -457,12 +458,10 @@ router.post('/:rideId/accept', async (req: Request, res: Response) => {
       .single();
 
     if (!driver || !driver.is_verified) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          error: { code: 'FORBIDDEN', message: 'Only verified drivers can accept rides' },
-        });
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Only verified drivers can accept rides' },
+      });
     }
 
     // Check ride is still available
@@ -473,12 +472,10 @@ router.post('/:rideId/accept', async (req: Request, res: Response) => {
       .single();
 
     if (!currentRide || currentRide.status !== 'requested') {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'RIDE_UNAVAILABLE', message: 'Ride is no longer available' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'RIDE_UNAVAILABLE', message: 'Ride is no longer available' },
+      });
     }
 
     const { data: ride, error } = await supabase
@@ -541,24 +538,20 @@ router.post('/:rideId/rate', async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     const { rideId } = req.params;
     const { rating, review_comment } = req.body;
 
     if (!rating || rating < 1 || rating > 5) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'VALIDATION_ERROR', message: 'Rating must be 1-5' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_ERROR', message: 'Rating must be 1-5' },
+      });
     }
 
     const { data: ride, error: fetchError } = await supabase
@@ -574,21 +567,17 @@ router.post('/:rideId/rate', async (req: Request, res: Response) => {
     }
 
     if (ride.status !== 'completed') {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'INVALID_STATE', message: 'Can only rate completed rides' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_STATE', message: 'Can only rate completed rides' },
+      });
     }
 
     if (ride.passenger_id !== userId) {
-      return res
-        .status(403)
-        .json({
-          success: false,
-          error: { code: 'FORBIDDEN', message: 'Only passengers can rate rides' },
-        });
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Only passengers can rate rides' },
+      });
     }
 
     const { data: updatedRide, error } = await supabase
@@ -657,12 +646,10 @@ router.get('/history', async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     if (!userId) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
     }
 
     const { role, status, limit = 20, offset = 0 } = req.query;
