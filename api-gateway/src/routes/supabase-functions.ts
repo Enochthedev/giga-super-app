@@ -1549,6 +1549,7 @@
  *                   example: true
  *       400:
  *         description: Invalid item_id
+ */
 
 // =====================================================
 // CALLING SYSTEM

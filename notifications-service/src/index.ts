@@ -22,12 +22,11 @@ const REDIS_URL = process.env.REDIS_URL || process.env.RAILWAY_REDIS_URL || '';
 
 /**
  * Check if Redis should be used
- * Disable for free tiers to avoid connection issues
+ * Disable for free tiers to avoid connection issues and eviction policy warnings
  */
 const shouldUseRedis = (): boolean => {
   const forceDisable = process.env.DISABLE_REDIS === 'true';
   const forceEnable = process.env.FORCE_REDIS === 'true';
-  const isDev = process.env.NODE_ENV === 'development';
 
   // Force enable overrides everything
   if (forceEnable && REDIS_URL) {
@@ -41,7 +40,8 @@ const shouldUseRedis = (): boolean => {
     return false;
   }
 
-  // Auto-disable for known free tier Redis providers (unreliable for production queues)
+  // Auto-disable for known free tier Redis providers
+  // Free tiers have eviction policies (volatile-lru) that break BullMQ (requires noeviction)
   const freeRedisPatterns = [
     'redis-cloud.com', // Redis Cloud free tier
     'redis.cloud', // Redis Cloud
@@ -52,9 +52,9 @@ const shouldUseRedis = (): boolean => {
   const isFreeTier = freeRedisPatterns.some(pattern => REDIS_URL.includes(pattern));
 
   if (isFreeTier && !forceEnable) {
-    console.log('⚠️  Free Redis tier detected - disabling Redis to prevent connection errors');
-    console.log('   Set FORCE_REDIS=true to override, or use a paid Redis instance');
-    console.log('   Notifications will be processed directly without queuing');
+    console.log('⚠️  Free Redis tier detected - disabling Redis');
+    console.log('   Free tiers use volatile-lru eviction which breaks BullMQ');
+    console.log('   Set FORCE_REDIS=true to override, or use Railway Redis add-on');
     return false;
   }
 

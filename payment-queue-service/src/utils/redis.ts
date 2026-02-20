@@ -6,18 +6,35 @@ import logger from './logger';
 
 /**
  * Check if Redis is enabled
- * Disable Redis in development to save Upstash free tier commands
+ * Disable Redis for free tiers to avoid eviction policy issues
  */
 export const isRedisEnabled = (): boolean => {
   const redisUrl = config.redisUrl;
   const forceDisable = process.env.DISABLE_REDIS === 'true';
-  const isDev = process.env.NODE_ENV === 'development';
+  const forceEnable = process.env.FORCE_REDIS === 'true';
+
+  // Force enable overrides everything
+  if (forceEnable && redisUrl) {
+    logger.info('Redis force-enabled via FORCE_REDIS=true');
+    return true;
+  }
 
   // Disable if explicitly disabled or no URL provided
   if (forceDisable || !redisUrl || redisUrl === 'redis://localhost:6379') {
-    if (isDev) {
-      logger.info('Redis disabled for development - using in-memory fallback');
-    }
+    logger.info('Redis disabled - using in-memory fallback');
+    return false;
+  }
+
+  // Auto-disable for known free tier Redis providers
+  // Free tiers use volatile-lru eviction which breaks BullMQ (requires noeviction)
+  const freeRedisPatterns = ['redis-cloud.com', 'redis.cloud', 'upstash.io', 'redislabs.com'];
+
+  const isFreeTier = freeRedisPatterns.some(pattern => redisUrl.includes(pattern));
+
+  if (isFreeTier && !forceEnable) {
+    logger.warn('Free Redis tier detected - disabling Redis');
+    logger.warn('Free tiers use volatile-lru eviction which breaks BullMQ');
+    logger.warn('Set FORCE_REDIS=true to override, or use Railway Redis add-on');
     return false;
   }
 

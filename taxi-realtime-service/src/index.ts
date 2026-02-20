@@ -27,17 +27,33 @@ const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
 /**
  * Check if Redis should be used
- * Disable in development to save Upstash free tier commands
+ * Disable for free tiers to avoid eviction policy issues
  */
 const shouldUseRedis = (): boolean => {
   const forceDisable = process.env.DISABLE_REDIS === 'true';
-  const isDev = process.env.NODE_ENV === 'development';
+  const forceEnable = process.env.FORCE_REDIS === 'true';
+
+  // Force enable overrides everything
+  if (forceEnable && REDIS_URL) {
+    console.log('Redis force-enabled via FORCE_REDIS=true');
+    return true;
+  }
 
   // Disable if explicitly disabled, no URL, or local dev URL
   if (forceDisable || !REDIS_URL || REDIS_URL === 'redis://localhost:6379') {
-    if (isDev) {
-      console.log('Redis disabled for development - Socket.IO will run in single-instance mode');
-    }
+    console.log('Redis disabled - Socket.IO will run in single-instance mode');
+    return false;
+  }
+
+  // Auto-disable for known free tier Redis providers
+  // Free tiers use volatile-lru eviction which can cause issues
+  const freeRedisPatterns = ['redis-cloud.com', 'redis.cloud', 'upstash.io', 'redislabs.com'];
+
+  const isFreeTier = freeRedisPatterns.some(pattern => REDIS_URL.includes(pattern));
+
+  if (isFreeTier && !forceEnable) {
+    console.log('⚠️  Free Redis tier detected - disabling Redis');
+    console.log('   Set FORCE_REDIS=true to override, or use Railway Redis add-on');
     return false;
   }
 
