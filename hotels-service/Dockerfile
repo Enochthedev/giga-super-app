@@ -1,17 +1,19 @@
 # Multi-stage build for Hotels Service
+# This Dockerfile is designed to be built from the repo root with:
+# docker build -f hotels-service/Dockerfile .
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY tsconfig.json ./
+# Copy package files from hotels-service
+COPY hotels-service/package*.json ./
+COPY hotels-service/tsconfig.json ./
 
 # Install dependencies (skip prepare scripts like husky)
 RUN npm ci --ignore-scripts
 
-# Copy source code
-COPY src ./src
+# Copy source code from hotels-service
+COPY hotels-service/src ./src
 
 # Build TypeScript
 RUN npm run build
@@ -22,7 +24,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package files and install production dependencies
-COPY package*.json ./
+COPY hotels-service/package*.json ./
 RUN npm ci --only=production --ignore-scripts
 
 # Copy built files
