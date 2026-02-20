@@ -219,6 +219,87 @@ export const routingMiddleware = (
               return `/functions/v1/Calculate-booking-price?hotelId=${hotelPriceMatch[1]}`;
             }
 
+            // Handle booking details with booking_id
+            // /api/v1/bookings/:booking_id -> /functions/v1/get-booking-details?bookingId=:booking_id
+            const bookingDetailMatch = path.match(/^\/api\/v1\/bookings\/([a-f0-9-]{36})$/i);
+            if (bookingDetailMatch) {
+              return `/functions/v1/get-booking-details?bookingId=${bookingDetailMatch[1]}`;
+            }
+
+            // Handle booking cancellation with booking_id
+            // /api/v1/bookings/:booking_id/cancel -> /functions/v1/cancel-booking?bookingId=:booking_id
+            const bookingCancelMatch = path.match(
+              /^\/api\/v1\/bookings\/([a-f0-9-]{36})\/cancel$/i
+            );
+            if (bookingCancelMatch) {
+              return `/functions/v1/cancel-booking?bookingId=${bookingCancelMatch[1]}`;
+            }
+
+            // Handle ride details with ride_id
+            // /api/v1/rides/:ride_id -> /functions/v1/get-ride-details?ride_id=:ride_id
+            const rideDetailMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})$/i);
+            if (rideDetailMatch) {
+              return `/functions/v1/get-ride-details?ride_id=${rideDetailMatch[1]}`;
+            }
+
+            // Handle ride accept with ride_id
+            // /api/v1/rides/:ride_id/accept -> /functions/v1/accept-ride?ride_id=:ride_id
+            const rideAcceptMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})\/accept$/i);
+            if (rideAcceptMatch) {
+              return `/functions/v1/accept-ride?ride_id=${rideAcceptMatch[1]}`;
+            }
+
+            // Handle ride start with ride_id
+            // /api/v1/rides/:ride_id/start -> /functions/v1/start-ride?ride_id=:ride_id
+            const rideStartMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})\/start$/i);
+            if (rideStartMatch) {
+              return `/functions/v1/start-ride?ride_id=${rideStartMatch[1]}`;
+            }
+
+            // Handle ride complete with ride_id
+            // /api/v1/rides/:ride_id/complete -> /functions/v1/complete-ride?ride_id=:ride_id
+            const rideCompleteMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})\/complete$/i);
+            if (rideCompleteMatch) {
+              return `/functions/v1/complete-ride?ride_id=${rideCompleteMatch[1]}`;
+            }
+
+            // Handle ride cancel with ride_id
+            // /api/v1/rides/:ride_id/cancel -> /functions/v1/cancel-ride?ride_id=:ride_id
+            const rideCancelMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})\/cancel$/i);
+            if (rideCancelMatch) {
+              return `/functions/v1/cancel-ride?ride_id=${rideCancelMatch[1]}`;
+            }
+
+            // Handle payment verification with transaction_id
+            // /api/v1/payments/:transaction_id/verify -> /functions/v1/Verify-payment?transactionId=:transaction_id
+            const paymentVerifyMatch = path.match(
+              /^\/api\/v1\/payments\/([a-zA-Z0-9_-]+)\/verify$/i
+            );
+            if (paymentVerifyMatch) {
+              return `/functions/v1/Verify-payment?transactionId=${paymentVerifyMatch[1]}`;
+            }
+
+            // Handle user profile with user_id
+            // /api/v1/users/:user_id -> /functions/v1/get-user-profile?userId=:user_id
+            const userProfileMatch = path.match(/^\/api\/v1\/users\/([a-f0-9-]{36})$/i);
+            if (userProfileMatch) {
+              return `/functions/v1/get-user-profile?userId=${userProfileMatch[1]}`;
+            }
+
+            // Handle room type details with room_type_id
+            // /api/v1/rooms/:room_type_id -> /functions/v1/get-room-type?roomTypeId=:room_type_id
+            const roomTypeMatch = path.match(/^\/api\/v1\/rooms\/([a-f0-9-]{36})$/i);
+            if (roomTypeMatch) {
+              return `/functions/v1/get-room-type?roomTypeId=${roomTypeMatch[1]}`;
+            }
+
+            // Handle support ticket details with ticket_id
+            // /api/v1/support/tickets/:ticket_id -> /functions/v1/get-ticket-details?ticketId=:ticket_id
+            const ticketDetailMatch = path.match(/^\/api\/v1\/support\/tickets\/([a-f0-9-]{36})$/i);
+            if (ticketDetailMatch) {
+              return `/functions/v1/get-ticket-details?ticketId=${ticketDetailMatch[1]}`;
+            }
+
             // Check for prefix matches
             for (const [apiPath, functionPath] of Object.entries(functionMappings)) {
               if (path.startsWith(apiPath)) {
