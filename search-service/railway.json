@@ -3,15 +3,12 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "search-service/Dockerfile",
-    "watchPatterns": [
-      "search-service/**",
-      "shared/**"
-    ]
+    "watchPatterns": ["search-service/**", "shared/**"]
   },
   "deploy": {
     "numReplicas": 1,
-    "healthcheckPath": "/health",
-    "healthcheckTimeout": 100,
+    "healthcheckPath": "/health/live",
+    "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
