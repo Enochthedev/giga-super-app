@@ -1,0 +1,29 @@
+{
+  "item": [],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3f8b6bd9-9c4e-4f86-ab8f-63318c14ba61",
+    "name": "Giga Notifications Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\n## Notifications Service API\n\nMulti-channel notification service supporting Email, SMS, and Push notifications.\n\n### Features\n- **Templates**: Reusable notification templates with variable substitution\n- **Preferences**: User notification preferences and quiet hours\n- **Scheduling**: Schedule notifications for future delivery\n- **Bulk Sending**: Campaign-based bulk notifications\n- **Analytics**: Delivery tracking and engagement metrics\n\n### Channels\n- **Email**: Via SMTP/SendGrid\n- **SMS**: Via Twilio\n- **Push**: Via Firebase Cloud Messaging\n\n### Queue Architecture (BullMQ)\n- Email Queue: Email delivery\n- SMS Queue: SMS delivery\n- Push Queue: Push notifications\n- Scheduled Queue: Delayed notifications\n- Bulk Queue: Campaign processing\n      \n\nContact Support:\n Name: Giga Platform Team\n Email: api@giga.com",
+      "type": "text/plain"
+    }
+  }
+}

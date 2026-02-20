@@ -1,0 +1,177 @@
+{
+  "info": {
+    "name": "GIGA Platform API",
+    "_postman_id": "giga-platform-api-v2",
+    "description": "Complete API collection for GIGA Platform testing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "https://giga-giga-production.up.railway.app" },
+    { "key": "auth_token", "value": "" },
+    { "key": "user_id", "value": "" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{auth_token}}" }]
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if(pm.response.code===200){var j=pm.response.json();if(j.access_token)pm.collectionVariables.set('auth_token',j.access_token);if(j.user&&j.user.id)pm.collectionVariables.set('user_id',j.user.id);}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"email\":\"enoch@finaltest.com\",\"password\":\"password123\"}" },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/auth/me", "host": ["{{base_url}}"], "path": ["auth", "me"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. User Addresses",
+      "item": [
+        {
+          "name": "Add Home Address",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"label\":\"Home\",\"street\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"zip_code\":\"101233\",\"country\":\"Nigeria\",\"is_default\":true}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/user/addresses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user", "addresses"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. User Roles",
+      "item": [
+        {
+          "name": "Switch to Driver",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"role\":\"DRIVER\"}" },
+            "url": {
+              "raw": "{{base_url}}/api/v1/user/switch-role",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "user", "switch-role"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Hotels",
+      "item": [
+        {
+          "name": "Search Hotels - By City",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"city\":\"Lagos\",\"page\":1,\"limit\":20}" },
+            "url": {
+              "raw": "{{base_url}}/api/v1/hotels/search",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "hotels", "search"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Rides",
+      "item": [
+        {
+          "name": "Request Ride",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"pickup_address\":\"Lekki Phase 1\",\"pickup_lat\":6.4541,\"pickup_lng\":3.4744,\"dropoff_address\":\"Victoria Island\",\"dropoff_lat\":6.4281,\"dropoff_lng\":3.4219,\"vehicle_type\":\"comfort\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/rides/request",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "rides", "request"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Notifications",
+      "item": [
+        {
+          "name": "Get History",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/history?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "history"],
+              "query": [{ "key": "limit", "value": "20" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Ads",
+      "item": [
+        {
+          "name": "Fetch Ads",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\"placement_type\":\"home\",\"limit\":3}" },
+            "url": {
+              "raw": "{{base_url}}/api/v1/ads/fetch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "ads", "fetch"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/health", "host": ["{{base_url}}"], "path": ["health"] }
+          }
+        }
+      ]
+    }
+  ]
+}

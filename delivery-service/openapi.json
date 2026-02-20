@@ -1,0 +1,2494 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Giga Delivery Service API",
+    "version": "1.0.0",
+    "description": "\n## Delivery & Logistics Service API\n\nReal-time delivery tracking and logistics management for the Giga platform.\n\n### Features\n- **Package Management**: Create, track, and manage delivery packages\n- **Courier Management**: Assign and manage delivery couriers\n- **Real-time Tracking**: WebSocket-based live location updates\n- **Route Optimization**: Intelligent route planning using Google Maps\n- **Assignment Engine**: Automatic courier assignment based on proximity\n\n### WebSocket Events\nConnect to `/ws` for real-time updates:\n- `location_update`: Courier location changes\n- `status_update`: Package status changes\n- `assignment_update`: New assignment notifications\n\n### Tracking States\n1. **pending**: Package created, awaiting pickup\n2. **assigned**: Courier assigned\n3. **picked_up**: Package collected\n4. **in_transit**: En route to destination\n5. **delivered**: Successfully delivered\n6. **failed**: Delivery failed\n7. **returned**: Package returned to sender\n\n### Response Format\n```json\n{\n  \"success\": true,\n  \"data\": {...},\n  \"metadata\": {\n    \"timestamp\": \"ISO8601\",\n    \"request_id\": \"uuid\",\n    \"version\": \"1.0.0\"\n  }\n}\n```\n      ",
+    "contact": {
+      "name": "Giga Platform Team",
+      "email": "api@giga.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "API v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Service health checks"
+    },
+    {
+      "name": "Packages",
+      "description": "Package management"
+    },
+    {
+      "name": "Tracking",
+      "description": "Real-time package tracking"
+    },
+    {
+      "name": "Couriers",
+      "description": "Courier management"
+    },
+    {
+      "name": "Assignments",
+      "description": "Delivery assignments"
+    },
+    {
+      "name": "Scheduler",
+      "description": "Scheduled deliveries"
+    },
+    {
+      "name": "WebSocket",
+      "description": "Real-time WebSocket endpoints"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT token from Supabase Auth"
+      }
+    },
+    "schemas": {
+      "Package": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "550e8400-e29b-41d4-a716-446655440000"
+          },
+          "tracking_number": {
+            "type": "string",
+            "example": "GDL-2024-ABC123"
+          },
+          "sender_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sender_name": {
+            "type": "string",
+            "example": "John Sender"
+          },
+          "sender_phone": {
+            "type": "string",
+            "example": "+2348012345678"
+          },
+          "recipient_name": {
+            "type": "string",
+            "example": "Jane Recipient"
+          },
+          "recipient_phone": {
+            "type": "string",
+            "example": "+2348087654321"
+          },
+          "pickup_address": {
+            "type": "string",
+            "example": "123 Victoria Island, Lagos"
+          },
+          "delivery_address": {
+            "type": "string",
+            "example": "456 Ikeja, Lagos"
+          },
+          "pickup_location": {
+            "$ref": "#/components/schemas/GeoLocation"
+          },
+          "delivery_location": {
+            "$ref": "#/components/schemas/GeoLocation"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "assigned",
+              "picked_up",
+              "in_transit",
+              "delivered",
+              "failed",
+              "returned"
+            ],
+            "example": "in_transit"
+          },
+          "weight_kg": {
+            "type": "number",
+            "example": 2.5
+          },
+          "dimensions": {
+            "type": "string",
+            "example": "30x20x15 cm"
+          },
+          "package_type": {
+            "type": "string",
+            "enum": [
+              "document",
+              "parcel",
+              "fragile",
+              "food"
+            ],
+            "example": "parcel"
+          },
+          "special_instructions": {
+            "type": "string",
+            "example": "Handle with care, fragile items"
+          },
+          "estimated_delivery": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "actual_delivery": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "delivery_fee": {
+            "type": "number",
+            "example": 1500
+          },
+          "payment_status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "paid",
+              "failed"
+            ],
+            "example": "paid"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "CreatePackageRequest": {
+        "type": "object",
+        "required": [
+          "recipient_name",
+          "recipient_phone",
+          "pickup_address",
+          "delivery_address"
+        ],
+        "properties": {
+          "recipient_name": {
+            "type": "string",
+            "example": "Jane Recipient"
+          },
+          "recipient_phone": {
+            "type": "string",
+            "example": "+2348087654321"
+          },
+          "pickup_address": {
+            "type": "string",
+            "example": "123 Victoria Island, Lagos"
+          },
+          "delivery_address": {
+            "type": "string",
+            "example": "456 Ikeja, Lagos"
+          },
+          "pickup_lat": {
+            "type": "number",
+            "example": 6.4281
+          },
+          "pickup_lng": {
+            "type": "number",
+            "example": 3.4219
+          },
+          "delivery_lat": {
+            "type": "number",
+            "example": 6.6018
+          },
+          "delivery_lng": {
+            "type": "number",
+            "example": 3.3515
+          },
+          "weight_kg": {
+            "type": "number",
+            "example": 2.5
+          },
+          "dimensions": {
+            "type": "string",
+            "example": "30x20x15 cm"
+          },
+          "package_type": {
+            "type": "string",
+            "enum": [
+              "document",
+              "parcel",
+              "fragile",
+              "food"
+            ],
+            "default": "parcel"
+          },
+          "special_instructions": {
+            "type": "string"
+          },
+          "scheduled_pickup": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "express_delivery": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "PackageResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Package"
+          },
+          "estimated_fee": {
+            "type": "number",
+            "example": 1500
+          },
+          "estimated_time": {
+            "type": "string",
+            "example": "45-60 minutes"
+          }
+        }
+      },
+      "Courier": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Samuel Courier"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+2348012345678"
+          },
+          "avatar_url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "vehicle_type": {
+            "type": "string",
+            "enum": [
+              "bike",
+              "motorcycle",
+              "car",
+              "van",
+              "truck"
+            ],
+            "example": "motorcycle"
+          },
+          "vehicle_plate": {
+            "type": "string",
+            "example": "LG-123-ABC"
+          },
+          "current_location": {
+            "$ref": "#/components/schemas/GeoLocation"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "busy",
+              "offline"
+            ],
+            "example": "available"
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "example": 4.8
+          },
+          "total_deliveries": {
+            "type": "integer",
+            "example": 450
+          },
+          "is_verified": {
+            "type": "boolean",
+            "example": true
+          },
+          "max_weight_kg": {
+            "type": "number",
+            "description": "Maximum weight capacity",
+            "example": 50
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "NearbyCourer": {
+        "type": "object",
+        "properties": {
+          "courier": {
+            "$ref": "#/components/schemas/Courier"
+          },
+          "distance_km": {
+            "type": "number",
+            "example": 1.2
+          },
+          "eta_minutes": {
+            "type": "integer",
+            "example": 8
+          }
+        }
+      },
+      "Assignment": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "package_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courier_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "accepted",
+              "rejected",
+              "completed",
+              "cancelled"
+            ],
+            "example": "accepted"
+          },
+          "assigned_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accepted_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "picked_up_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "rejection_reason": {
+            "type": "string"
+          }
+        }
+      },
+      "AssignCourierRequest": {
+        "type": "object",
+        "required": [
+          "package_id",
+          "courier_id"
+        ],
+        "properties": {
+          "package_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "courier_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "priority": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "urgent"
+            ],
+            "default": "normal"
+          }
+        }
+      },
+      "GeoLocation": {
+        "type": "object",
+        "properties": {
+          "latitude": {
+            "type": "number",
+            "format": "double",
+            "example": 6.5244
+          },
+          "longitude": {
+            "type": "number",
+            "format": "double",
+            "example": 3.3792
+          }
+        }
+      },
+      "TrackingEvent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "package_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "example": "in_transit"
+          },
+          "location": {
+            "$ref": "#/components/schemas/GeoLocation"
+          },
+          "address": {
+            "type": "string",
+            "example": "Surulere, Lagos"
+          },
+          "description": {
+            "type": "string",
+            "example": "Package is en route to destination"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TrackingResponse": {
+        "type": "object",
+        "properties": {
+          "package": {
+            "$ref": "#/components/schemas/Package"
+          },
+          "courier": {
+            "$ref": "#/components/schemas/Courier"
+          },
+          "current_location": {
+            "$ref": "#/components/schemas/GeoLocation"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TrackingEvent"
+            }
+          },
+          "eta_minutes": {
+            "type": "integer",
+            "example": 25
+          }
+        }
+      },
+      "DeliveryFeeRequest": {
+        "type": "object",
+        "required": [
+          "pickup_lat",
+          "pickup_lng",
+          "delivery_lat",
+          "delivery_lng"
+        ],
+        "properties": {
+          "pickup_lat": {
+            "type": "number",
+            "example": 6.4281
+          },
+          "pickup_lng": {
+            "type": "number",
+            "example": 3.4219
+          },
+          "delivery_lat": {
+            "type": "number",
+            "example": 6.6018
+          },
+          "delivery_lng": {
+            "type": "number",
+            "example": 3.3515
+          },
+          "weight_kg": {
+            "type": "number",
+            "example": 2.5
+          },
+          "package_type": {
+            "type": "string",
+            "enum": [
+              "document",
+              "parcel",
+              "fragile",
+              "food"
+            ]
+          },
+          "express_delivery": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "DeliveryFeeResponse": {
+        "type": "object",
+        "properties": {
+          "distance_km": {
+            "type": "number",
+            "example": 12.5
+          },
+          "base_fee": {
+            "type": "number",
+            "example": 500
+          },
+          "distance_fee": {
+            "type": "number",
+            "example": 625
+          },
+          "weight_fee": {
+            "type": "number",
+            "example": 125
+          },
+          "express_fee": {
+            "type": "number",
+            "example": 0
+          },
+          "total_fee": {
+            "type": "number",
+            "example": 1250
+          },
+          "currency": {
+            "type": "string",
+            "example": "NGN"
+          },
+          "estimated_time": {
+            "type": "string",
+            "example": "30-45 minutes"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object"
+          },
+          "metadata": {
+            "type": "object",
+            "properties": {
+              "timestamp": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "request_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "version": {
+                "type": "string",
+                "example": "1.0.0"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "example": "PACKAGE_NOT_FOUND"
+              },
+              "message": {
+                "type": "string",
+                "example": "Package with this tracking number not found"
+              }
+            }
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "example": 1
+          },
+          "limit": {
+            "type": "integer",
+            "example": 20
+          },
+          "total": {
+            "type": "integer",
+            "example": 150
+          },
+          "pages": {
+            "type": "integer",
+            "example": 8
+          }
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Unauthorized - Authentication required",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "AUTHENTICATION_REQUIRED",
+                "message": "Valid JWT token required"
+              }
+            }
+          }
+        }
+      },
+      "ForbiddenError": {
+        "description": "Forbidden - Insufficient permissions",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "FORBIDDEN",
+                "message": "You can only track your own packages"
+              }
+            }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Not Found - Resource does not exist",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "PACKAGE_NOT_FOUND",
+                "message": "Package with tracking number GDL-2024-ABC123 not found"
+              }
+            }
+          }
+        }
+      },
+      "BadRequestError": {
+        "description": "Bad Request - Invalid input",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "VALIDATION_ERROR",
+                "message": "Recipient phone number is required"
+              }
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "success": false,
+              "error": {
+                "code": "INTERNAL_ERROR",
+                "message": "An unexpected error occurred"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "paths": {
+    "/assignments": {
+      "post": {
+        "tags": [
+          "Assignments"
+        ],
+        "summary": "Create delivery assignment",
+        "description": "Creates a new delivery assignment linking a package to a courier",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "order_id",
+                  "pickup_location",
+                  "delivery_location",
+                  "recipient_name",
+                  "recipient_phone"
+                ],
+                "properties": {
+                  "order_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "pickup_location": {
+                    "type": "object",
+                    "properties": {
+                      "latitude": {
+                        "type": "number"
+                      },
+                      "longitude": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "delivery_location": {
+                    "type": "object",
+                    "properties": {
+                      "latitude": {
+                        "type": "number"
+                      },
+                      "longitude": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "recipient_name": {
+                    "type": "string"
+                  },
+                  "recipient_phone": {
+                    "type": "string"
+                  },
+                  "package_weight_kg": {
+                    "type": "number"
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "specific_courier_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Assignment created successfully"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/assignments/{id}": {
+      "get": {
+        "tags": [
+          "Assignments"
+        ],
+        "summary": "Get assignment by ID",
+        "description": "Retrieves delivery assignment details including courier and order info",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Assignment details retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assignment"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/assignments/find-couriers": {
+      "post": {
+        "tags": [
+          "Assignments"
+        ],
+        "summary": "Find available couriers",
+        "description": "Finds available couriers near a location for delivery assignment",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "location"
+                ],
+                "properties": {
+                  "location": {
+                    "type": "object",
+                    "properties": {
+                      "latitude": {
+                        "type": "number"
+                      },
+                      "longitude": {
+                        "type": "number"
+                      }
+                    }
+                  },
+                  "radius_km": {
+                    "type": "number",
+                    "default": 10
+                  },
+                  "package_weight_kg": {
+                    "type": "number"
+                  },
+                  "priority": {
+                    "type": "integer"
+                  },
+                  "required_vehicle_type": {
+                    "type": "string"
+                  },
+                  "min_rating": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Available couriers found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "couriers": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/NearbyCourer"
+                      }
+                    },
+                    "total_found": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/couriers": {
+      "get": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "List all couriers",
+        "description": "Retrieves all couriers with optional filtering",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "verification_status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "verified",
+                "rejected",
+                "suspended"
+              ]
+            },
+            "description": "Filter by verification status"
+          },
+          {
+            "in": "query",
+            "name": "availability_status",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "available",
+                "busy",
+                "offline",
+                "on_break"
+              ]
+            },
+            "description": "Filter by availability status"
+          },
+          {
+            "in": "query",
+            "name": "vehicle_type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "bicycle",
+                "motorcycle",
+                "car",
+                "van",
+                "truck"
+              ]
+            },
+            "description": "Filter by vehicle type"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 100
+            },
+            "description": "Number of items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Couriers list retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Courier"
+                      }
+                    },
+                    "pagination": {
+                      "type": "object",
+                      "properties": {
+                        "page": {
+                          "type": "integer"
+                        },
+                        "limit": {
+                          "type": "integer"
+                        },
+                        "total": {
+                          "type": "integer"
+                        },
+                        "total_pages": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Create courier profile",
+        "description": "Creates a new courier profile for delivery agent onboarding",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "first_name",
+                  "last_name",
+                  "phone_number",
+                  "vehicle_type"
+                ],
+                "properties": {
+                  "first_name": {
+                    "type": "string",
+                    "description": "Courier's first name",
+                    "example": "John"
+                  },
+                  "last_name": {
+                    "type": "string",
+                    "description": "Courier's last name",
+                    "example": "Doe"
+                  },
+                  "phone_number": {
+                    "type": "string",
+                    "description": "Courier's phone number",
+                    "example": "+2341234567890"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Courier's email (optional)",
+                    "example": "john.doe@example.com"
+                  },
+                  "vehicle_type": {
+                    "type": "string",
+                    "enum": [
+                      "bicycle",
+                      "motorcycle",
+                      "car",
+                      "van",
+                      "truck"
+                    ],
+                    "description": "Type of vehicle the courier uses",
+                    "example": "motorcycle"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Courier profile created"
+          },
+          "400": {
+            "description": "Validation error - missing or invalid fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            },
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/couriers/user/{userId}": {
+      "get": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Get courier by user ID",
+        "description": "Retrieves courier profile by the associated user ID",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The user ID associated with the courier profile"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Courier details retrieved"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Courier not found for the given user ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/couriers/{courierId}": {
+      "get": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Get courier by ID",
+        "description": "Retrieves courier profile details including location",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courierId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "The unique courier ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Courier details retrieved"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "description": "Courier not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            },
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Update courier profile",
+        "description": "Updates an existing courier profile",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courierId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "phone_number": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Courier updated successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/couriers/{courierId}/location": {
+      "post": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Update courier location",
+        "description": "Updates the current GPS coordinates of a courier",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courierId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "latitude",
+                  "longitude"
+                ],
+                "properties": {
+                  "latitude": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90,
+                    "description": "Latitude coordinate",
+                    "example": 6.5244
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180,
+                    "description": "Longitude coordinate",
+                    "example": 3.3792
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Location updated successfully"
+          },
+          "400": {
+            "description": "Invalid coordinates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            },
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/couriers/{courierId}/availability": {
+      "post": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Update courier availability",
+        "description": "Updates the availability status of a courier",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courierId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "available",
+                      "busy",
+                      "offline",
+                      "on_break"
+                    ],
+                    "description": "New availability status",
+                    "example": "available"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Availability updated successfully"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/couriers/{courierId}/verification": {
+      "post": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Update courier verification status",
+        "description": "Admin/Moderator only",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courierId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "verified",
+                      "rejected",
+                      "suspended"
+                    ],
+                    "description": "New verification status",
+                    "example": "verified"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification status updated"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "description": "Forbidden - requires admin or moderator role",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForbiddenError"
+                }
+              }
+            },
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      }
+    },
+    "/couriers/{courierId}/stats": {
+      "get": {
+        "tags": [
+          "Couriers"
+        ],
+        "summary": "Get courier statistics",
+        "description": "Retrieves performance statistics for a courier including deliveries completed, ratings, etc.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "courierId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Courier statistics retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total_deliveries": {
+                          "type": "integer"
+                        },
+                        "completed_deliveries": {
+                          "type": "integer"
+                        },
+                        "average_rating": {
+                          "type": "number"
+                        },
+                        "total_earnings": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Basic health check",
+        "description": "Returns service health status and basic information",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "success": true,
+                  "data": {
+                    "status": "healthy",
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "service": "delivery-service",
+                    "version": "1.0.0",
+                    "uptime": 3600,
+                    "environment": "production"
+                  },
+                  "metadata": {
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "request_id": "health-check",
+                    "version": "1.0.0"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Readiness check",
+        "description": "Checks if the service is ready to accept traffic (database connectivity)",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "status": "ready",
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "service": "delivery-service",
+                    "version": "1.0.0",
+                    "checks": {
+                      "database": true
+                    }
+                  },
+                  "metadata": {
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "request_id": "readiness-check",
+                    "version": "1.0.0"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service is not ready",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": false,
+                  "data": {
+                    "status": "not ready",
+                    "checks": {
+                      "database": false
+                    },
+                    "errors": [
+                      "Database connection failed"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/live": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Liveness check",
+        "description": "Checks if the service process is alive with memory and CPU metrics",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Service is alive",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "status": "alive",
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "service": "delivery-service",
+                    "version": "1.0.0",
+                    "uptime": 3600,
+                    "memory": {
+                      "rss": 128,
+                      "heapTotal": 64,
+                      "heapUsed": 32,
+                      "external": 8
+                    },
+                    "cpu": {
+                      "user": 1000000,
+                      "system": 500000
+                    }
+                  },
+                  "metadata": {
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "request_id": "liveness-check",
+                    "version": "1.0.0"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "System metrics",
+        "description": "Returns detailed system metrics including memory, CPU, and Node.js information",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Metrics retrieved successfully",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "service": "delivery-service",
+                    "version": "1.0.0",
+                    "uptime": 3600,
+                    "environment": "production",
+                    "node": {
+                      "version": "v20.10.0",
+                      "platform": "linux",
+                      "arch": "x64"
+                    },
+                    "memory": {
+                      "rss": 134217728,
+                      "heapTotal": 67108864,
+                      "heapUsed": 33554432,
+                      "external": 8388608,
+                      "arrayBuffers": 1048576
+                    },
+                    "cpu": {
+                      "user": 1000000,
+                      "system": 500000
+                    }
+                  },
+                  "metadata": {
+                    "timestamp": "2026-02-18T10:00:00.000Z",
+                    "request_id": "metrics-check",
+                    "version": "1.0.0"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/packages": {
+      "post": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Create a new delivery package",
+        "description": "Creates a new package for delivery with sender and recipient details",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePackageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Package created successfully"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/packages/{packageId}": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Get package by ID",
+        "description": "Retrieves detailed information about a specific package",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Package details retrieved"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Update package information",
+        "description": "Updates package details (sender, recipient, status, etc.)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Package updated successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Delete a package",
+        "description": "Soft deletes a package from the system",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Package deleted successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/packages/sender/{senderId}": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Get packages by sender",
+        "description": "Retrieves all packages sent by a specific user with pagination",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "senderId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Packages retrieved successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/packages/status/{status}": {
+      "get": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Get packages by status",
+        "description": "Retrieves all packages with a specific delivery status",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "status",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "assigned",
+                "picked_up",
+                "in_transit",
+                "delivered",
+                "cancelled",
+                "failed"
+              ]
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Packages retrieved successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/packages/{packageId}/cancel": {
+      "post": {
+        "tags": [
+          "Packages"
+        ],
+        "summary": "Cancel a package",
+        "description": "Cancels a package delivery (only if not yet picked up)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "packageId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Package cancelled successfully"
+          },
+          "400": {
+            "description": "Package cannot be cancelled"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/scheduler/stats": {
+      "get": {
+        "tags": [
+          "Scheduler"
+        ],
+        "summary": "Get scheduler statistics",
+        "description": "Retrieves scheduler service statistics (Admin/Dispatcher only)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scheduler stats retrieved",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "active_tasks": 5,
+                    "completed_tasks": 150,
+                    "failed_tasks": 2,
+                    "uptime_seconds": 86400
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      }
+    },
+    "/scheduler/cleanup": {
+      "post": {
+        "tags": [
+          "Scheduler"
+        ],
+        "summary": "Trigger manual cleanup",
+        "description": "Triggers manual cleanup tasks (Admin/Dispatcher only)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "tracking",
+                      "websocket",
+                      "assignments",
+                      "all"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cleanup completed successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      }
+    },
+    "/track-delivery": {
+      "post": {
+        "tags": [
+          "Tracking"
+        ],
+        "summary": "Update delivery location",
+        "description": "Updates courier location with real-time tracking data",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "assignment_id",
+                  "latitude",
+                  "longitude"
+                ],
+                "properties": {
+                  "assignment_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  },
+                  "accuracy_meters": {
+                    "type": "number"
+                  },
+                  "speed_kmh": {
+                    "type": "number"
+                  },
+                  "heading_degrees": {
+                    "type": "number"
+                  },
+                  "battery_level": {
+                    "type": "integer"
+                  },
+                  "status": {
+                    "type": "string"
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Location updated successfully"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/tracking/{assignmentId}": {
+      "get": {
+        "tags": [
+          "Tracking"
+        ],
+        "summary": "Get tracking data",
+        "description": "Retrieves real-time tracking data for a delivery assignment",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "assignmentId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "in": "query",
+            "name": "since",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tracking data retrieved"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/tracking/{assignmentId}/progress": {
+      "get": {
+        "tags": [
+          "Tracking"
+        ],
+        "summary": "Get delivery progress",
+        "description": "Retrieves delivery progress and ETA information",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "assignmentId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delivery progress retrieved"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          }
+        }
+      }
+    },
+    "/tracking/{assignmentId}/cleanup": {
+      "post": {
+        "tags": [
+          "Tracking"
+        ],
+        "summary": "Cleanup tracking data",
+        "description": "Removes old tracking data for a delivery assignment",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "assignmentId",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "retention_hours": {
+                    "type": "integer",
+                    "default": 72
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tracking data cleaned up"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          }
+        }
+      }
+    },
+    "/websocket/stats": {
+      "get": {
+        "tags": [
+          "WebSocket"
+        ],
+        "summary": "Get WebSocket statistics",
+        "description": "Retrieves WebSocket server statistics (Admin/Dispatcher only)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "WebSocket stats retrieved",
+            "content": {
+              "application/json": {
+                "example": {
+                  "success": true,
+                  "data": {
+                    "active_rooms": 25,
+                    "total_participants": 50,
+                    "messages_per_minute": 120
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      }
+    },
+    "/websocket/cleanup": {
+      "post": {
+        "tags": [
+          "WebSocket"
+        ],
+        "summary": "Cleanup inactive rooms",
+        "description": "Cleans up inactive WebSocket tracking rooms (Admin/Dispatcher only)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "max_inactive_minutes": {
+                    "type": "integer",
+                    "default": 30,
+                    "minimum": 1,
+                    "maximum": 1440
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cleanup completed successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      }
+    },
+    "/websocket/broadcast": {
+      "post": {
+        "tags": [
+          "WebSocket"
+        ],
+        "summary": "Broadcast message to tracking room",
+        "description": "Broadcasts a message to a specific tracking room (Admin/Dispatcher only)",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "assignment_id",
+                  "message_type",
+                  "message"
+                ],
+                "properties": {
+                  "assignment_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "message_type": {
+                    "type": "string",
+                    "enum": [
+                      "announcement",
+                      "alert",
+                      "update"
+                    ]
+                  },
+                  "message": {
+                    "type": "string",
+                    "maxLength": 500
+                  },
+                  "data": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Message broadcasted successfully"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "403": {
+            "$ref": "#/components/responses/ForbiddenError"
+          }
+        }
+      }
+    }
+  }
+}

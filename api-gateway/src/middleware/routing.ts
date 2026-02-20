@@ -78,18 +78,73 @@ export const routingMiddleware = (
               // User management
               '/api/v1/users/search': '/functions/v1/search-users',
               '/api/v1/users/profile': '/functions/v1/get-user-profile',
+              '/api/v1/user/profile': '/functions/v1/get-user-profile',
               '/api/v1/user/addresses': '/functions/v1/add-user-address',
               '/api/v1/user/switch-role': '/functions/v1/switch-role',
-              // Hotels
+
+              // Hotels - Customer facing (public)
               '/api/v1/hotels/search': '/functions/v1/Search-hotels',
+              '/api/v1/hotels/recommended': '/functions/v1/get-recommended-hotels',
+              '/api/v1/hotels/details': '/functions/v1/Get-hotel-details',
+              '/api/v1/hotels/reviews': '/functions/v1/get-hotel-reviews',
+              '/api/v1/hotels/favorites': '/functions/v1/get-user-favorites',
+              '/api/v1/hotels/favorites/add': '/functions/v1/add-hotel-to-favorites',
+              '/api/v1/hotels/favorites/remove': '/functions/v1/remove-hotel-from-favorites',
+
+              // Hotel bookings
+              '/api/v1/bookings': '/functions/v1/Get-user-bookings',
+              '/api/v1/bookings/create': '/functions/v1/Create-booking',
+              '/api/v1/bookings/cancel': '/functions/v1/cancel-booking',
+              '/api/v1/bookings/modify': '/functions/v1/modify-booking',
+              '/api/v1/bookings/details': '/functions/v1/get-booking-details',
+              '/api/v1/bookings/price': '/functions/v1/Calculate-booking-price',
+
+              // Room availability
+              '/api/v1/rooms/availability': '/functions/v1/check-room-availability',
+              '/api/v1/rooms/types': '/functions/v1/get-room-types',
+
+              // E-commerce - Customer facing (public for browsing)
+              '/api/v1/cart': '/functions/v1/get-user-cart',
+              '/api/v1/cart/add': '/functions/v1/add-to-cart',
+              '/api/v1/cart/checkout': '/functions/v1/checkout-cart',
+
+              // Payments
+              '/api/v1/payments/initialize': '/functions/v1/Initialize-payment',
+              '/api/v1/payments/verify': '/functions/v1/Verify-payment',
+              '/api/v1/payments/intent': '/functions/v1/create-payment-intent',
+              '/api/v1/wallet/topup': '/functions/v1/Topup-wallet',
+              '/api/v1/wallet/pay': '/functions/v1/Pay-with-wallet',
+
               // Notifications
               '/api/v1/notifications/history': '/functions/v1/get-notification-history',
+              '/api/v1/notifications/preferences': '/functions/v1/get-notification-preferences',
+              '/api/v1/notifications/preferences/update':
+                '/functions/v1/update-notification-preferences',
+              '/api/v1/notifications/send': '/functions/v1/send-notification',
+
               // Ads
               '/api/v1/ads/campaigns': '/functions/v1/get-ad-campaigns',
               '/api/v1/ads/fetch': '/functions/v1/fetch-ads',
-              // Rides
+              '/api/v1/ads/my-campaigns': '/functions/v1/get-my-campaigns',
+
+              // Rides/Taxi
               '/api/v1/rides/request': '/functions/v1/request-ride',
               '/api/v1/rides/estimate': '/functions/v1/get-ride-estimate',
+              '/api/v1/rides/active': '/functions/v1/get-active-ride',
+              '/api/v1/rides/history': '/functions/v1/get-ride-history',
+              '/api/v1/rides/cancel': '/functions/v1/cancel-ride',
+              '/api/v1/drivers/nearby': '/functions/v1/get-nearby-drivers',
+
+              // Social
+              '/api/v1/social/feed': '/functions/v1/get-social-feed',
+              '/api/v1/social/posts': '/functions/v1/get-user-posts',
+              '/api/v1/social/post/create': '/functions/v1/create-social-post',
+              '/api/v1/social/stories': '/functions/v1/get-stories',
+              '/api/v1/social/friends': '/functions/v1/get-friends',
+
+              // Support
+              '/api/v1/support/tickets': '/functions/v1/get-my-tickets',
+              '/api/v1/support/tickets/create': '/functions/v1/create-support-ticket',
             };
 
             // Check for exact match first
