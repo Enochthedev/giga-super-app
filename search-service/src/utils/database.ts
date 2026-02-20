@@ -133,27 +133,28 @@ export class DatabaseService {
     // Text search
     if (query.q) {
       dbQuery = dbQuery.or(
-        `name.ilike.%${query.q}%,description.ilike.%${query.q}%,category.ilike.%${query.q}%`
+        `name.ilike.%${query.q}%,description.ilike.%${query.q}%,short_description.ilike.%${query.q}%`
       );
     }
 
-    // Price filters
+    // Price filters (using final_price which is the discounted price)
     if (query.min_price) {
-      dbQuery = dbQuery.gte('price', query.min_price);
+      dbQuery = dbQuery.gte('final_price', query.min_price);
     }
     if (query.max_price) {
-      dbQuery = dbQuery.lte('price', query.max_price);
+      dbQuery = dbQuery.lte('final_price', query.max_price);
     }
 
-    // Brand filter
-    if (query.filters?.brand) {
-      dbQuery = dbQuery.ilike('brand', `%${query.filters.brand}%`);
-    }
+    // Brand filter - check in attributes JSONB if brand exists
+    // Note: brand is not a direct column, may be in attributes
+    // if (query.filters?.brand) {
+    //   dbQuery = dbQuery.contains('attributes', { brand: query.filters.brand });
+    // }
 
-    // Condition filter
-    if (query.filters?.condition) {
-      dbQuery = dbQuery.eq('condition', query.filters.condition);
-    }
+    // Condition filter - not a direct column in the schema
+    // if (query.filters?.condition) {
+    //   dbQuery = dbQuery.eq('condition', query.filters.condition);
+    // }
 
     // In stock filter
     dbQuery = dbQuery.gt('stock_quantity', 0);
@@ -172,25 +173,29 @@ export class DatabaseService {
       throw new Error(`Product search failed: ${error.message}`);
     }
 
-    const results: SearchResult<EcommerceProduct>[] = (data || []).map(
-      (product: EcommerceProduct) => ({
-        id: product.id,
-        type: 'products' as SearchCategory,
-        title: product.name,
-        description: product.description,
-        image_url: product.image_urls?.[0],
-        price: product.price,
-        currency: product.currency,
-        location: undefined,
-        relevance_score: this.calculateRelevanceScore(
-          query.q || '',
-          `${product.name} ${product.description}`
-        ),
-        data: product,
-        created_at: product.created_at,
-        updated_at: product.updated_at,
-      })
-    );
+    const results: SearchResult<EcommerceProduct>[] = (data || []).map((product: any) => ({
+      id: product.id,
+      type: 'products' as SearchCategory,
+      title: product.name,
+      description: product.description,
+      image_url: product.images?.[0] || product.thumbnail,
+      price: product.final_price, // Use final_price (discounted price)
+      currency: 'NGN', // Default currency
+      location: undefined,
+      relevance_score: this.calculateRelevanceScore(
+        query.q || '',
+        `${product.name} ${product.description || ''}`
+      ),
+      data: {
+        ...product,
+        price: product.final_price, // Map final_price to price for compatibility
+        original_price: product.base_price, // Map base_price to original_price
+        image_urls: product.images || [],
+        category: product.category_id, // Map category_id to category
+      },
+      created_at: product.created_at,
+      updated_at: product.updated_at,
+    }));
 
     return { results, total: count || 0 };
   }
@@ -453,8 +458,8 @@ export class DatabaseService {
       },
       products: {
         relevance: 'name',
-        price: 'price',
-        rating: 'name', // Products don't have ratings, fallback to name
+        price: 'final_price', // Use final_price (discounted price)
+        rating: 'average_rating', // Use average_rating column
         created_at: 'created_at',
       },
       drivers: {
