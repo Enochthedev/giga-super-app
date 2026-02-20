@@ -54,7 +54,10 @@ export const authMiddleware = async (
       '/api/v1/hotels/recommended',
       '/api/v1/hotels/details',
       '/api/v1/hotels/reviews',
+      '/api/v1/hotels/amenities',
+      '/api/v1/hotels/locations',
       '/api/v1/rooms/availability',
+      '/api/v1/rooms/types',
 
       // Products - browsing (public for anonymous users)
       '/api/v1/products/search',
@@ -71,10 +74,18 @@ export const authMiddleware = async (
       '/api/v1/search/products/trending',
       '/api/v1/search/products/categories',
       '/api/v1/search/products/brands',
+      '/api/v1/search/drivers',
 
       // Ride estimates (public for price checking)
       '/api/v1/rides/estimate',
       '/api/v1/drivers/nearby',
+
+      // Delivery tracking (public for recipients with tracking number)
+      '/api/v1/tracking/public',
+
+      // Social - public feed for discovery
+      '/api/v1/social/feed/public',
+      '/api/v1/social/posts/public',
     ];
 
     const isPublicPath = publicPaths.some(
