@@ -1,0 +1,794 @@
+openapi: 3.0.3
+info:
+  title: Hotels Service API
+  description: |
+    Comprehensive hotel and booking management API for the Giga platform.
+    Handles hotel search, details, room availability, bookings, reviews, favorites,
+    and hotel management for hosts.
+  version: 1.0.0
+  contact:
+    name: Giga Platform Team
+
+servers:
+  - url: http://localhost:3008
+    description: Local development
+  - url: https://hotels-service.railway.app
+    description: Production (Railway)
+
+tags:
+  - name: Health
+    description: Service health checks
+  - name: Hotels
+    description: Hotel search and details
+  - name: Bookings
+    description: Booking management
+  - name: Favorites
+    description: User favorite hotels
+  - name: Reviews
+    description: Hotel reviews
+  - name: Management
+    description: Hotel management for hosts
+
+paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
+
+  /api/v1/hotels/search:
+    get:
+      tags: [Hotels]
+      summary: Search hotels
+      parameters:
+        - name: city
+          in: query
+          schema: { type: string }
+        - name: lat
+          in: query
+          schema: { type: number }
+        - name: lng
+          in: query
+          schema: { type: number }
+        - name: radius
+          in: query
+          schema: { type: number, default: 25 }
+        - name: check_in
+          in: query
+          schema: { type: string, format: date }
+        - name: check_out
+          in: query
+          schema: { type: string, format: date }
+        - name: rooms
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: min_price
+          in: query
+          schema: { type: number }
+        - name: max_price
+          in: query
+          schema: { type: number }
+        - name: sort_by
+          in: query
+          schema: { type: string, enum: [distance, price, rating] }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: Search results
+
+  /api/v1/hotels/{id}:
+    get:
+      tags: [Hotels]
+      summary: Get hotel details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Hotel details
+        '404':
+          description: Hotel not found
+
+  /api/v1/hotels/{id}/reviews:
+    get:
+      tags: [Hotels]
+      summary: Get hotel reviews
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: sort_by
+          in: query
+          schema: { type: string, enum: [recent, oldest, highest_rating, lowest_rating, most_helpful] }
+      responses:
+        '200':
+          description: Hotel reviews
+
+  /api/v1/hotels/{id}/availability:
+    get:
+      tags: [Hotels]
+      summary: Check room availability
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: check_in
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: check_out
+          in: query
+          required: true
+          schema: { type: string, format: date }
+        - name: rooms
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: adults
+          in: query
+          schema: { type: integer, default: 2 }
+        - name: children
+          in: query
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: Room availability
+
+  /api/v1/bookings:
+    get:
+      tags: [Bookings]
+      summary: Get user bookings
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string, enum: [all, upcoming, past, cancelled] }
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: User bookings
+        '401':
+          description: Authentication required
+
+  /api/v1/bookings/{id}:
+    get:
+      tags: [Bookings]
+      summary: Get booking details
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Booking details
+        '404':
+          description: Booking not found
+
+  /api/v1/bookings/create:
+    post:
+      tags: [Bookings]
+      summary: Create a new booking
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hotelId, roomTypeId, checkInDate, checkOutDate]
+              properties:
+                hotelId: { type: string, format: uuid }
+                roomTypeId: { type: string, format: uuid }
+                checkInDate: { type: string, format: date }
+                checkOutDate: { type: string, format: date }
+                numberOfRooms: { type: integer, default: 1 }
+                guestCount: { type: integer, default: 1 }
+                guestName: { type: string }
+                guestEmail: { type: string, format: email }
+                guestPhone: { type: string }
+                specialRequests: { type: string }
+      responses:
+        '200':
+          description: Booking created
+        '400':
+          description: Validation error
+
+  /api/v1/bookings/{id}/cancel:
+    post:
+      tags: [Bookings]
+      summary: Cancel a booking
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cancellationReason: { type: string }
+      responses:
+        '200':
+          description: Booking cancelled
+
+  /api/v1/bookings/price:
+    post:
+      tags: [Bookings]
+      summary: Calculate booking price
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hotelId, roomTypeId, checkInDate, checkOutDate]
+              properties:
+                hotelId: { type: string }
+                roomTypeId: { type: string }
+                checkInDate: { type: string, format: date }
+                checkOutDate: { type: string, format: date }
+                numberOfRooms: { type: integer }
+                promoCode: { type: string }
+      responses:
+        '200':
+          description: Price calculation
+
+  /api/v1/favorites:
+    get:
+      tags: [Favorites]
+      summary: Get user's favorite hotels
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Favorite hotels
+
+  /api/v1/favorites/add:
+    post:
+      tags: [Favorites]
+      summary: Add hotel to favorites
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hotelId]
+              properties:
+                hotelId: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Hotel added to favorites
+
+  /api/v1/favorites/remove:
+    post:
+      tags: [Favorites]
+      summary: Remove hotel from favorites
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hotelId]
+              properties:
+                hotelId: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Hotel removed from favorites
+
+  /api/v1/favorites/check/{hotelId}:
+    get:
+      tags: [Favorites]
+      summary: Check if hotel is in favorites
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Favorite status
+
+  /api/v1/reviews:
+    post:
+      tags: [Reviews]
+      summary: Create a hotel review
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [hotel_id, rating]
+              properties:
+                hotel_id: { type: string, format: uuid }
+                booking_id: { type: string, format: uuid }
+                rating: { type: integer, minimum: 1, maximum: 5 }
+                title: { type: string }
+                comment: { type: string }
+                cleanliness_rating: { type: integer }
+                comfort_rating: { type: integer }
+                location_rating: { type: integer }
+                service_rating: { type: integer }
+                value_rating: { type: integer }
+                images: { type: array, items: { type: string } }
+      responses:
+        '200':
+          description: Review created
+
+  /api/v1/reviews/{id}:
+    put:
+      tags: [Reviews]
+      summary: Update own review
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Review updated
+    delete:
+      tags: [Reviews]
+      summary: Delete own review
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Review deleted
+
+  /api/v1/reviews/{id}/helpful:
+    post:
+      tags: [Reviews]
+      summary: Mark review as helpful
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Marked as helpful
+
+  /api/v1/reviews/my-reviews:
+    get:
+      tags: [Reviews]
+      summary: Get user's own reviews
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User's reviews
+
+  /api/v1/management/hotels:
+    get:
+      tags: [Management]
+      summary: Get hotels owned by user
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: User's hotels
+    post:
+      tags: [Management]
+      summary: Create a new hotel
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, address, city, country]
+              properties:
+                name: { type: string }
+                description: { type: string }
+                short_description: { type: string }
+                address: { type: string }
+                city: { type: string }
+                state: { type: string }
+                country: { type: string }
+                postal_code: { type: string }
+                latitude: { type: number }
+                longitude: { type: number }
+                phone: { type: string }
+                email: { type: string }
+                website: { type: string }
+                star_rating: { type: integer }
+                amenities: { type: array, items: { type: string } }
+                check_in_time: { type: string }
+                check_out_time: { type: string }
+                cancellation_policy: { type: string }
+                house_rules: { type: string }
+                featured_image: { type: string }
+      responses:
+        '200':
+          description: Hotel created
+
+  /api/v1/management/hotels/{id}:
+    put:
+      tags: [Management]
+      summary: Update hotel details
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Hotel updated
+    delete:
+      tags: [Management]
+      summary: Delete hotel (soft delete)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Hotel deleted
+
+  /api/v1/management/hotels/{hotelId}/room-types:
+    post:
+      tags: [Management]
+      summary: Create a room type
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, base_price]
+              properties:
+                name: { type: string }
+                description: { type: string }
+                capacity: { type: integer }
+                beds_count: { type: integer }
+                bed_type: { type: string }
+                room_size_sqft: { type: integer }
+                base_price: { type: number }
+                weekend_price: { type: number }
+                amenities: { type: array, items: { type: string } }
+                images: { type: array, items: { type: string } }
+                max_adults: { type: integer }
+                max_children: { type: integer }
+                allows_pets: { type: boolean }
+                allows_smoking: { type: boolean }
+                breakfast_included: { type: boolean }
+                refundable: { type: boolean }
+                cancellation_hours: { type: integer }
+                total_rooms: { type: integer }
+      responses:
+        '200':
+          description: Room type created
+
+  /api/v1/management/room-types/{id}:
+    put:
+      tags: [Management]
+      summary: Update room type
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Room type updated
+    delete:
+      tags: [Management]
+      summary: Delete room type
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Room type deleted
+
+  /api/v1/management/room-types/{id}/availability:
+    put:
+      tags: [Management]
+      summary: Update room availability
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [dates]
+              properties:
+                dates:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      date: { type: string, format: date }
+                      available_rooms: { type: integer }
+                      price_override: { type: number }
+      responses:
+        '200':
+          description: Availability updated
+
+  /api/v1/management/hotels/{hotelId}/bulk-pricing:
+    post:
+      tags: [Management]
+      summary: Bulk update room pricing
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                updates:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      room_type_id: { type: string }
+                      base_price: { type: number }
+                      weekend_price: { type: number }
+      responses:
+        '200':
+          description: Pricing updated
+
+  /api/v1/management/hotels/{hotelId}/analytics:
+    get:
+      tags: [Management]
+      summary: Get hotel analytics
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: start_date
+          in: query
+          schema: { type: string, format: date }
+        - name: end_date
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Hotel analytics
+
+  /api/v1/management/hotels/{hotelId}/calendar:
+    get:
+      tags: [Management]
+      summary: Get booking calendar
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+        - name: start_date
+          in: query
+          schema: { type: string, format: date }
+        - name: end_date
+          in: query
+          schema: { type: string, format: date }
+      responses:
+        '200':
+          description: Booking calendar
+
+  /api/v1/management/bookings/{id}/check-in:
+    post:
+      tags: [Management]
+      summary: Check in a guest
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Guest checked in
+
+  /api/v1/management/bookings/{id}/check-out:
+    post:
+      tags: [Management]
+      summary: Check out a guest
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Guest checked out
+
+  /api/v1/management/bookings/{id}/status:
+    put:
+      tags: [Management]
+      summary: Update booking status
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [pending, confirmed, checked_in, checked_out, cancelled, no_show] }
+                notes: { type: string }
+      responses:
+        '200':
+          description: Status updated
+
+  /api/v1/management/hotels/{hotelId}/promo-codes:
+    post:
+      tags: [Management]
+      summary: Create promo code
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: hotelId
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code, discount_type, discount_value]
+              properties:
+                code: { type: string }
+                discount_type: { type: string, enum: [percentage, fixed] }
+                discount_value: { type: number }
+                min_booking_amount: { type: number }
+                max_uses: { type: integer }
+                valid_from: { type: string, format: date-time }
+                valid_until: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Promo code created
+
+  /api/v1/management/promo-codes/validate:
+    post:
+      tags: [Management]
+      summary: Validate promo code
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [code, hotel_id]
+              properties:
+                code: { type: string }
+                hotel_id: { type: string }
+                booking_amount: { type: number }
+      responses:
+        '200':
+          description: Promo code validation result
+
+  /api/v1/management/reviews/{id}/respond:
+    post:
+      tags: [Management]
+      summary: Respond to a review
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [response]
+              properties:
+                response: { type: string }
+      responses:
+        '200':
+          description: Response added
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

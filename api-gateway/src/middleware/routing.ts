@@ -356,9 +356,22 @@ export const routingMiddleware = (
             if (path.startsWith('/api/v1/notifications/')) {
               return path.replace('/api/v1/notifications', '/api/v1');
             }
-            // Taxi realtime service: /api/v1/taxi-realtime -> /api/v1 (assuming it expects /api/v1)
+            // Taxi realtime service: /api/v1/taxi-realtime -> /api (service expects /api)
             if (path.startsWith('/api/v1/taxi-realtime/')) {
-              return path.replace('/api/v1/taxi-realtime', '/api/v1');
+              return path.replace('/api/v1/taxi-realtime', '/api');
+            }
+            // Taxi/Rides routes -> Taxi realtime service
+            if (path.startsWith('/api/v1/rides/')) {
+              return path.replace('/api/v1/rides', '/api/rides');
+            }
+            if (path.startsWith('/api/v1/ride/')) {
+              return path.replace('/api/v1/ride', '/api/rides');
+            }
+            if (path.startsWith('/api/v1/drivers/')) {
+              return path.replace('/api/v1/drivers', '/api/drivers');
+            }
+            if (path.startsWith('/api/v1/driver/')) {
+              return path.replace('/api/v1/driver', '/api/drivers');
             }
             // Default: keep the path as-is
             return path;

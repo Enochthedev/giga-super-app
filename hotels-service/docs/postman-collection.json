@@ -1,0 +1,668 @@
+{
+  "info": {
+    "name": "Hotels Service API",
+    "description": "Comprehensive hotel and booking management API for the Giga platform. Includes hotel search, bookings, reviews, favorites, and hotel management for hosts.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3008", "type": "string" },
+    { "key": "authToken", "value": "", "type": "string" },
+    { "key": "hotelId", "value": "", "type": "string" },
+    { "key": "roomTypeId", "value": "", "type": "string" },
+    { "key": "bookingId", "value": "", "type": "string" },
+    { "key": "reviewId", "value": "", "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{authToken}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "Search Hotels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hotels/search?city=Lagos&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "hotels", "search"],
+              "query": [
+                { "key": "city", "value": "Lagos" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" },
+                { "key": "min_price", "value": "", "disabled": true },
+                { "key": "max_price", "value": "", "disabled": true },
+                { "key": "sort_by", "value": "rating", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Search Hotels by Location",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hotels/search?lat=6.5244&lng=3.3792&radius=25",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "hotels", "search"],
+              "query": [
+                { "key": "lat", "value": "6.5244" },
+                { "key": "lng", "value": "3.3792" },
+                { "key": "radius", "value": "25" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Hotel Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hotels/:hotelId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "hotels", ":hotelId"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Hotel Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hotels/:hotelId/reviews?page=1&limit=10&sort_by=recent",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "hotels", ":hotelId", "reviews"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" },
+                { "key": "sort_by", "value": "recent" }
+              ],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Check Room Availability",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/hotels/:hotelId/availability?check_in=2026-03-01&check_out=2026-03-03&rooms=1&adults=2",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "hotels", ":hotelId", "availability"],
+              "query": [
+                { "key": "check_in", "value": "2026-03-01" },
+                { "key": "check_out", "value": "2026-03-03" },
+                { "key": "rooms", "value": "1" },
+                { "key": "adults", "value": "2" }
+              ],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Get My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings?status=all&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "bookings"],
+              "query": [
+                { "key": "status", "value": "all" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Upcoming Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings?status=upcoming",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "bookings"],
+              "query": [{ "key": "status", "value": "upcoming" }]
+            }
+          }
+        },
+        {
+          "name": "Get Booking Details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings/:bookingId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "bookings", ":bookingId"],
+              "variable": [{ "key": "bookingId", "value": "{{bookingId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hotelId\": \"{{hotelId}}\",\n  \"roomTypeId\": \"{{roomTypeId}}\",\n  \"checkInDate\": \"2026-03-01\",\n  \"checkOutDate\": \"2026-03-03\",\n  \"numberOfRooms\": 1,\n  \"guestCount\": 2,\n  \"guestName\": \"John Doe\",\n  \"guestEmail\": \"john@example.com\",\n  \"guestPhone\": \"+2341234567890\",\n  \"specialRequests\": \"Late check-in requested\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "bookings", "create"]
+            }
+          }
+        },
+        {
+          "name": "Calculate Booking Price",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hotelId\": \"{{hotelId}}\",\n  \"roomTypeId\": \"{{roomTypeId}}\",\n  \"checkInDate\": \"2026-03-01\",\n  \"checkOutDate\": \"2026-03-03\",\n  \"numberOfRooms\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings/price",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "bookings", "price"]
+            }
+          }
+        },
+        {
+          "name": "Cancel Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cancellationReason\": \"Change of plans\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/bookings/:bookingId/cancel",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "bookings", ":bookingId", "cancel"],
+              "variable": [{ "key": "bookingId", "value": "{{bookingId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Favorites",
+      "item": [
+        {
+          "name": "Get My Favorites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites"]
+            }
+          }
+        },
+        {
+          "name": "Add to Favorites",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"hotelId\": \"{{hotelId}}\"\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites/add",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites", "add"]
+            }
+          }
+        },
+        {
+          "name": "Remove from Favorites",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"hotelId\": \"{{hotelId}}\"\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites/remove",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites", "remove"]
+            }
+          }
+        },
+        {
+          "name": "Check if Favorite",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/favorites/check/:hotelId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "favorites", "check", ":hotelId"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hotel_id\": \"{{hotelId}}\",\n  \"rating\": 5,\n  \"title\": \"Amazing stay!\",\n  \"comment\": \"The hotel was fantastic. Great service and clean rooms.\",\n  \"cleanliness_rating\": 5,\n  \"comfort_rating\": 5,\n  \"location_rating\": 4,\n  \"service_rating\": 5,\n  \"value_rating\": 4\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews"]
+            }
+          }
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Updated review comment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/:reviewId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", ":reviewId"],
+              "variable": [{ "key": "reviewId", "value": "{{reviewId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/:reviewId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", ":reviewId"],
+              "variable": [{ "key": "reviewId", "value": "{{reviewId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Mark Review Helpful",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/:reviewId/helpful",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", ":reviewId", "helpful"],
+              "variable": [{ "key": "reviewId", "value": "{{reviewId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get My Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/reviews/my-reviews",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "reviews", "my-reviews"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Management - Hotels",
+      "item": [
+        {
+          "name": "Get My Hotels",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels"]
+            }
+          }
+        },
+        {
+          "name": "Create Hotel",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My New Hotel\",\n  \"description\": \"A beautiful hotel in the heart of the city\",\n  \"short_description\": \"Luxury hotel with great amenities\",\n  \"address\": \"123 Main Street\",\n  \"city\": \"Lagos\",\n  \"state\": \"Lagos\",\n  \"country\": \"Nigeria\",\n  \"postal_code\": \"100001\",\n  \"latitude\": 6.5244,\n  \"longitude\": 3.3792,\n  \"phone\": \"+2341234567890\",\n  \"email\": \"info@myhotel.com\",\n  \"star_rating\": 4,\n  \"amenities\": [\"wifi\", \"pool\", \"gym\", \"restaurant\"],\n  \"check_in_time\": \"14:00\",\n  \"check_out_time\": \"11:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels"]
+            }
+          }
+        },
+        {
+          "name": "Update Hotel",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated hotel description\",\n  \"amenities\": [\"wifi\", \"pool\", \"gym\", \"restaurant\", \"spa\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Delete Hotel",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Hotel Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId/analytics?start_date=2026-01-01&end_date=2026-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId", "analytics"],
+              "query": [
+                { "key": "start_date", "value": "2026-01-01" },
+                { "key": "end_date", "value": "2026-12-31" }
+              ],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get Booking Calendar",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId/calendar?start_date=2026-03-01&end_date=2026-03-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId", "calendar"],
+              "query": [
+                { "key": "start_date", "value": "2026-03-01" },
+                { "key": "end_date", "value": "2026-03-31" }
+              ],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Management - Room Types",
+      "item": [
+        {
+          "name": "Create Room Type",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Deluxe Room\",\n  \"description\": \"Spacious room with city view\",\n  \"capacity\": 2,\n  \"beds_count\": 1,\n  \"bed_type\": \"king\",\n  \"room_size_sqft\": 350,\n  \"base_price\": 25000,\n  \"weekend_price\": 30000,\n  \"amenities\": [\"wifi\", \"tv\", \"minibar\", \"safe\"],\n  \"max_adults\": 2,\n  \"max_children\": 1,\n  \"breakfast_included\": true,\n  \"refundable\": true,\n  \"cancellation_hours\": 24,\n  \"total_rooms\": 10\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId/room-types",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId", "room-types"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Update Room Type",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"base_price\": 28000,\n  \"weekend_price\": 35000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/room-types/:roomTypeId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "room-types", ":roomTypeId"],
+              "variable": [{ "key": "roomTypeId", "value": "{{roomTypeId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Delete Room Type",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/room-types/:roomTypeId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "room-types", ":roomTypeId"],
+              "variable": [{ "key": "roomTypeId", "value": "{{roomTypeId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Update Room Availability",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dates\": [\n    { \"date\": \"2026-03-15\", \"available_rooms\": 5, \"price_override\": 35000 },\n    { \"date\": \"2026-03-16\", \"available_rooms\": 5, \"price_override\": 35000 },\n    { \"date\": \"2026-03-17\", \"available_rooms\": 8 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/room-types/:roomTypeId/availability",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "room-types", ":roomTypeId", "availability"],
+              "variable": [{ "key": "roomTypeId", "value": "{{roomTypeId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Bulk Update Pricing",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"updates\": [\n    { \"room_type_id\": \"{{roomTypeId}}\", \"base_price\": 30000, \"weekend_price\": 38000 }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId/bulk-pricing",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId", "bulk-pricing"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Management - Bookings",
+      "item": [
+        {
+          "name": "Check In Guest",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/bookings/:bookingId/check-in",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "bookings", ":bookingId", "check-in"],
+              "variable": [{ "key": "bookingId", "value": "{{bookingId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Check Out Guest",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/bookings/:bookingId/check-out",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "bookings", ":bookingId", "check-out"],
+              "variable": [{ "key": "bookingId", "value": "{{bookingId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Update Booking Status",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\",\n  \"notes\": \"Guest confirmed via phone\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/bookings/:bookingId/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "bookings", ":bookingId", "status"],
+              "variable": [{ "key": "bookingId", "value": "{{bookingId}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Management - Promo Codes",
+      "item": [
+        {
+          "name": "Create Promo Code",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"SUMMER20\",\n  \"discount_type\": \"percentage\",\n  \"discount_value\": 20,\n  \"min_booking_amount\": 50000,\n  \"max_uses\": 100,\n  \"valid_until\": \"2026-08-31T23:59:59Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/hotels/:hotelId/promo-codes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "hotels", ":hotelId", "promo-codes"],
+              "variable": [{ "key": "hotelId", "value": "{{hotelId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Validate Promo Code",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"SUMMER20\",\n  \"hotel_id\": \"{{hotelId}}\",\n  \"booking_amount\": 75000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/promo-codes/validate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "promo-codes", "validate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Management - Reviews",
+      "item": [
+        {
+          "name": "Respond to Review",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"response\": \"Thank you for your wonderful review! We're glad you enjoyed your stay and look forward to welcoming you back.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/management/reviews/:reviewId/respond",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "management", "reviews", ":reviewId", "respond"],
+              "variable": [{ "key": "reviewId", "value": "{{reviewId}}" }]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": { "type": "text/javascript", "exec": [""] }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('Response status is successful', function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);",
+          "});",
+          "",
+          "pm.test('Response has success field', function () {",
+          "    var jsonData = pm.response.json();",
+          "    pm.expect(jsonData).to.have.property('success');",
+          "});"
+        ]
+      }
+    }
+  ]
+}

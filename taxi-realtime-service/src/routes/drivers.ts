@@ -382,6 +382,201 @@ router.get('/nearby', async (req: Request, res: Response) => {
 
 /**
  * @swagger
+ * /api/drivers/earnings:
+ *   get:
+ *     summary: Get driver's earnings history and summary
+ *     tags: [Drivers]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: period
+ *         schema: { type: string, enum: [today, week, month, all], default: all }
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, default: 50 }
+ *       - in: query
+ *         name: offset
+ *         schema: { type: integer, default: 0 }
+ *     responses:
+ *       200:
+ *         description: Earnings history and summary
+ */
+router.get('/earnings', async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
+    }
+
+    const { period = 'all', limit = 50, offset = 0 } = req.query;
+
+    let query = supabase
+      .from('driver_earnings')
+      .select('*', { count: 'exact' })
+      .eq('driver_id', userId)
+      .order('created_at', { ascending: false })
+      .range(Number(offset), Number(offset) + Number(limit) - 1);
+
+    // Apply period filter
+    const now = new Date();
+    if (period === 'today') {
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+      query = query.gte('created_at', startOfDay);
+    } else if (period === 'week') {
+      const startOfWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      query = query.gte('created_at', startOfWeek);
+    } else if (period === 'month') {
+      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+      query = query.gte('created_at', startOfMonth);
+    }
+
+    const { data: earnings, error, count } = await query;
+
+    if (error) throw error;
+
+    // Calculate totals
+    const totalEarnings = earnings?.reduce((sum, e) => sum + Number(e.amount || 0), 0) || 0;
+    const totalNet = earnings?.reduce((sum, e) => sum + Number(e.net_earning || 0), 0) || 0;
+    const totalCommission = earnings?.reduce((sum, e) => sum + Number(e.commission || 0), 0) || 0;
+    const totalRides = earnings?.length || 0;
+
+    // Get pending payout amount
+    const { data: pendingPayouts } = await supabase
+      .from('driver_earnings')
+      .select('net_earning')
+      .eq('driver_id', userId)
+      .eq('payout_status', 'pending');
+
+    const pendingAmount =
+      pendingPayouts?.reduce((sum, e) => sum + Number(e.net_earning || 0), 0) || 0;
+
+    res.json({
+      success: true,
+      data: {
+        history: earnings,
+        summary: {
+          total_earnings: totalEarnings,
+          total_net: totalNet,
+          total_commission: totalCommission,
+          total_rides: totalRides,
+          pending_payout: pendingAmount,
+          currency: 'NGN',
+          period,
+        },
+      },
+      pagination: { total: count, limit: Number(limit), offset: Number(offset) },
+    });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ success: false, error: { code: 'INTERNAL_ERROR', message: error.message } });
+  }
+});
+
+/**
+ * @swagger
+ * /api/drivers/stats:
+ *   get:
+ *     summary: Get driver's performance statistics
+ *     tags: [Drivers]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Driver statistics
+ */
+router.get('/stats', async (req: Request, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
+      });
+    }
+
+    // Get driver profile
+    const { data: driver, error: driverError } = await supabase
+      .from('driver_profiles')
+      .select('rating, total_rides, is_verified, created_at')
+      .eq('user_id', userId)
+      .single();
+
+    if (driverError || !driver) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Driver profile not found' },
+      });
+    }
+
+    // Get ride statistics
+    const { count: completedRides } = await supabase
+      .from('rides')
+      .select('*', { count: 'exact', head: true })
+      .eq('driver_id', userId)
+      .eq('status', 'completed');
+
+    const { count: cancelledRides } = await supabase
+      .from('rides')
+      .select('*', { count: 'exact', head: true })
+      .eq('driver_id', userId)
+      .eq('status', 'cancelled');
+
+    // Get today's stats
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const { count: todayRides } = await supabase
+      .from('rides')
+      .select('*', { count: 'exact', head: true })
+      .eq('driver_id', userId)
+      .eq('status', 'completed')
+      .gte('completed_at', startOfDay.toISOString());
+
+    const { data: todayEarnings } = await supabase
+      .from('driver_earnings')
+      .select('net_earning')
+      .eq('driver_id', userId)
+      .gte('created_at', startOfDay.toISOString());
+
+    const todayTotal = todayEarnings?.reduce((sum, e) => sum + Number(e.net_earning || 0), 0) || 0;
+
+    // Calculate acceptance rate (simplified)
+    const totalOffered = (completedRides || 0) + (cancelledRides || 0);
+    const acceptanceRate = totalOffered > 0 ? ((completedRides || 0) / totalOffered) * 100 : 100;
+
+    res.json({
+      success: true,
+      data: {
+        rating: driver.rating || 0,
+        total_rides: driver.total_rides || completedRides || 0,
+        completed_rides: completedRides || 0,
+        cancelled_rides: cancelledRides || 0,
+        acceptance_rate: Math.round(acceptanceRate),
+        is_verified: driver.is_verified,
+        member_since: driver.created_at,
+        today: {
+          rides: todayRides || 0,
+          earnings: todayTotal,
+          currency: 'NGN',
+        },
+      },
+    });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ success: false, error: { code: 'INTERNAL_ERROR', message: error.message } });
+  }
+});
+
+// PARAMETERIZED ROUTES (must come after static routes)
+
+/**
+ * @swagger
  * /api/drivers/{driverId}:
  *   get:
  *     summary: Get a specific driver's public profile
