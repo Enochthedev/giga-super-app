@@ -61,6 +61,10 @@ export const config = {
       process.env.SEARCH_SERVICE_URL ??
         `http://localhost:${process.env.SEARCH_SERVICE_PORT ?? '3007'}`
     ),
+    hotels: ensureProtocol(
+      process.env.HOTELS_SERVICE_URL ??
+        `http://localhost:${process.env.HOTELS_SERVICE_PORT ?? '3008'}`
+    ),
     ads: ensureProtocol(process.env.ADS_SERVICE_URL),
     media: ensureProtocol(process.env.MEDIA_SERVICE_URL),
     communication: ensureProtocol(process.env.COMMUNICATION_SERVICE_URL),

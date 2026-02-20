@@ -39,13 +39,15 @@ class ServiceRegistry {
       },
     });
 
+    // Hotels are now handled by Railway hotels-service
+    // Keeping this as fallback for any edge functions that haven't been migrated
     this.registerService('supabase-hotels', {
       id: 'supabase-hotels',
-      name: 'Hotel Core Service',
+      name: 'Hotel Core Service (Legacy)',
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/hotels*', '/api/v1/hotel*', '/api/v1/booking*', '/api/v1/room*'],
+      patterns: ['/api/v1/hotel-legacy*', '/api/v1/room*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -78,13 +80,15 @@ class ServiceRegistry {
       },
     });
 
+    // Taxi service is now handled by Railway taxi-realtime-service
+    // Keeping this as fallback for any edge functions that haven't been migrated
     this.registerService('supabase-taxi', {
       id: 'supabase-taxi',
-      name: 'Taxi Core Service',
+      name: 'Taxi Core Service (Legacy)',
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/ride*', '/api/v1/driver*', '/api/v1/rides*'],
+      patterns: ['/api/v1/taxi-legacy*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -186,6 +190,23 @@ class ServiceRegistry {
       });
     }
 
+    if (config.services.hotels) {
+      this.registerService('railway-hotels', {
+        id: 'railway-hotels',
+        name: 'Hotels Service',
+        baseUrl: config.services.hotels,
+        healthEndpoint: '/health',
+        platform: 'railway',
+        patterns: [
+          '/api/v1/bookings*',
+          '/api/v1/favorites*',
+          '/api/v1/reviews*',
+          '/api/v1/management*',
+          '/api/v1/hotels*',
+        ],
+      });
+    }
+
     if (config.services.payment) {
       this.registerService('railway-payment', {
         id: 'railway-payment',
@@ -266,7 +287,16 @@ class ServiceRegistry {
         baseUrl: config.services.taxiRealtime,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/taxi-realtime*', '/api/v1/driver-location*'],
+        patterns: [
+          // All taxi/ride routes now go to Railway taxi-realtime-service
+          '/api/v1/rides*',
+          '/api/v1/ride*',
+          '/api/v1/drivers*',
+          '/api/v1/driver*',
+          '/api/v1/taxi*',
+          '/api/v1/taxi-realtime*',
+          '/api/v1/driver-location*',
+        ],
       });
     }
 
@@ -423,6 +453,7 @@ class ServiceRegistry {
       delivery: 'railway-delivery',
       notifications: 'railway-notifications',
       taxiRealtime: 'railway-taxi-realtime',
+      hotels: 'railway-hotels',
     };
 
     const serviceId = serviceIdMap[serviceName] || serviceName;
