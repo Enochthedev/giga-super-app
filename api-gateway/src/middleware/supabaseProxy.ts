@@ -28,22 +28,88 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/hotels/:id/reviews': 'get-hotel-reviews',
   '/api/v1/hotels/:id/availability': 'check-room-availability',
   '/api/v1/hotels/:id/price': 'Calculate-booking-price',
+  '/api/v1/hotels/recommended': 'get-recommended-hotels',
+  '/api/v1/hotels/favorites': 'get-user-favorites',
+  '/api/v1/hotels/favorites/add': 'add-hotel-to-favorites',
+  '/api/v1/hotels/favorites/remove': 'remove-hotel-from-favorites',
+  '/api/v1/hotels/create': 'create-hotel',
+  '/api/v1/hotels/update': 'update-hotel',
+  '/api/v1/hotels/delete': 'delete-hotel',
+  '/api/v1/hotels/analytics': 'get-hotel-analytics',
+  '/api/v1/hotels/promo-codes/create': 'create-hotel-promo-code',
+  '/api/v1/hotels/promo-codes/validate': 'validate-hotel-promo-code',
+  '/api/v1/hotels/reviews/respond': 'respond-to-review',
+  '/api/v1/hotels/reviews/create': 'create-hotel-review',
+  '/api/v1/hotels/reviews/helpful': 'mark-review-helpful',
+
+  // Bookings
+  '/api/v1/bookings': 'Get-user-bookings',
+  '/api/v1/bookings/create': 'Create-booking',
+  '/api/v1/bookings/details': 'get-booking-details',
+  '/api/v1/bookings/:id': 'get-booking-details',
+  '/api/v1/bookings/cancel': 'cancel-booking',
+  '/api/v1/bookings/:id/cancel': 'cancel-booking',
+  '/api/v1/bookings/modify': 'modify-booking',
+  '/api/v1/bookings/calendar': 'get-booking-calendar',
+  '/api/v1/bookings/check-in': 'check-in-guest',
+  '/api/v1/bookings/check-out': 'Checkout-guest',
+  '/api/v1/bookings/status': 'update-booking-status',
+  '/api/v1/bookings/price': 'Calculate-booking-price',
+
+  // Rooms
+  '/api/v1/rooms/availability': 'check-room-availability',
+  '/api/v1/rooms/types': 'get-room-types',
+  '/api/v1/rooms/create': 'create-room-type',
+  '/api/v1/rooms/update': 'update-room-type',
+  '/api/v1/rooms/delete': 'delete-room-type',
+  '/api/v1/rooms/availability/update': 'update-room-availability',
+  '/api/v1/rooms/pricing/bulk': 'bulk-update-pricing',
 
   // User Profile
   '/api/v1/users/profile': 'get-user-profile',
   '/api/v1/users/profile/update': 'update-user-profile',
   '/api/v1/users/profile/picture': 'upload-profile-picture',
   '/api/v1/users/address': 'add-user-address',
+  '/api/v1/users/search': 'search-users',
+  '/api/v1/user/profile': 'get-user-profile',
+  '/api/v1/user/addresses': 'add-user-address',
+  '/api/v1/user/switch-role': 'switch-role',
 
-  // Rides/Taxi
+  // Rides/Taxi - Passenger
   '/api/v1/rides/request': 'request-ride',
-  '/api/v1/rides/accept': 'accept-ride',
-  '/api/v1/rides/start': 'start-ride',
-  '/api/v1/rides/complete': 'complete-ride',
-  '/api/v1/rides/cancel': 'cancel-ride',
   '/api/v1/rides/estimate': 'get-ride-estimate',
-  '/api/v1/rides/nearby-drivers': 'get-nearby-drivers',
+  '/api/v1/rides/active': 'get-active-ride',
   '/api/v1/rides/history': 'get-ride-history',
+  '/api/v1/rides/cancel': 'cancel-ride',
+  '/api/v1/rides/rate': 'rate-driver',
+  '/api/v1/rides/:id': 'get-ride-details',
+  '/api/v1/rides/:id/accept': 'accept-ride',
+  '/api/v1/rides/:id/start': 'start-ride',
+  '/api/v1/rides/:id/complete': 'complete-ride',
+  '/api/v1/rides/:id/cancel': 'cancel-ride',
+  '/api/v1/drivers/nearby': 'get-nearby-drivers',
+
+  // Rides/Taxi - Driver
+  '/api/v1/driver/rides/requests': 'get-ride-requests',
+  '/api/v1/driver/rides/accept': 'accept-ride',
+  '/api/v1/driver/rides/reject': 'reject-ride',
+  '/api/v1/driver/rides/start': 'start-ride',
+  '/api/v1/driver/rides/complete': 'complete-ride',
+  '/api/v1/driver/location': 'update-location',
+  '/api/v1/driver/availability': 'toggle-availability',
+  '/api/v1/driver/earnings': 'get-earnings',
+  '/api/v1/driver/analytics': 'get-ride-analytics',
+
+  // Payments
+  '/api/v1/payments/initialize': 'Initialize-payment',
+  '/api/v1/payments/verify': 'Verify-payment',
+  '/api/v1/payments/:id/verify': 'Verify-payment',
+  '/api/v1/payments/intent': 'create-payment-intent',
+
+  // Wallet
+  '/api/v1/wallet/topup': 'Topup-wallet',
+  '/api/v1/wallet/pay': 'Pay-with-wallet',
+  '/api/v1/wallet/balance': 'Get-vendor-balance',
 
   // Cart/E-commerce
   '/api/v1/cart': 'get-user-cart',
@@ -51,11 +117,23 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/cart/item': 'add-to-cart',
   '/api/v1/cart/checkout': 'checkout-cart',
 
+  // Notifications
+  '/api/v1/notifications/history': 'get-notification-history',
+  '/api/v1/notifications/preferences': 'get-notification-preferences',
+  '/api/v1/notifications/preferences/update': 'update-notification-preferences',
+  '/api/v1/notifications/send': 'send-notification',
+
+  // Ads
+  '/api/v1/ads/campaigns': 'get-ad-campaigns',
+  '/api/v1/ads/fetch': 'fetch-ads',
+  '/api/v1/ads/my-campaigns': 'get-my-campaigns',
+
   // Calls
   '/api/v1/calls/initiate': 'initiate-call',
   '/api/v1/calls/answer': 'answer-call',
   '/api/v1/calls/decline': 'decline-call',
   '/api/v1/calls/end': 'end-call',
+  '/api/v1/calls/leave': 'leave-call',
 
   // Roles
   '/api/v1/roles/switch': 'switch-role',
@@ -68,9 +146,24 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
 
   // Support
   '/api/v1/support/tickets': 'get-my-tickets',
+  '/api/v1/support/tickets/create': 'create-support-ticket',
+  '/api/v1/support/tickets/:id': 'get-ticket-details',
 
   // Admin
   '/api/v1/admin/create-user': 'admin-create-user',
+  '/api/v1/admin/dashboard-stats': 'admin-dashboard-stats',
+  '/api/v1/admin/manage-users': 'admin-manage-users',
+
+  // Social
+  '/api/v1/social/feed': 'get-social-feed',
+  '/api/v1/social/posts': 'get-user-posts',
+  '/api/v1/social/post/create': 'create-social-post',
+  '/api/v1/social/stories': 'get-stories',
+  '/api/v1/social/friends': 'get-friends',
+
+  // Vendors
+  '/api/v1/vendors/apply': 'apply-vendor',
+  '/api/v1/vendors/balance': 'Get-vendor-balance',
 };
 
 // Deprecated endpoints with migration info
@@ -237,6 +330,7 @@ export function extractPathParams(path: string): Record<string, string> {
   const params: Record<string, string> = {};
 
   // Extract hotel ID from /api/v1/hotels/:id patterns
+  // Matches: /api/v1/hotels/uuid, /api/v1/hotels/uuid/reviews, /api/v1/hotels/uuid/availability, etc.
   const hotelIdMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})(\/.*)?$/i);
   if (hotelIdMatch && hotelIdMatch[1]) {
     params.hotelId = hotelIdMatch[1];
@@ -246,12 +340,86 @@ export function extractPathParams(path: string): Record<string, string> {
   const rideIdMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})(\/.*)?$/i);
   if (rideIdMatch && rideIdMatch[1]) {
     params.rideId = rideIdMatch[1];
+    params.ride_id = rideIdMatch[1]; // Some functions use ride_id
   }
 
   // Extract user ID from /api/v1/users/:id patterns
   const userIdMatch = path.match(/^\/api\/v1\/users\/([a-f0-9-]{36})(\/.*)?$/i);
   if (userIdMatch && userIdMatch[1]) {
     params.userId = userIdMatch[1];
+  }
+
+  // Extract booking ID from /api/v1/bookings/:id patterns
+  const bookingIdMatch = path.match(/^\/api\/v1\/bookings\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (bookingIdMatch && bookingIdMatch[1]) {
+    params.bookingId = bookingIdMatch[1];
+  }
+
+  // Extract order ID from /api/v1/orders/:id patterns
+  const orderIdMatch = path.match(/^\/api\/v1\/orders\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (orderIdMatch && orderIdMatch[1]) {
+    params.orderId = orderIdMatch[1];
+  }
+
+  // Extract product ID from /api/v1/products/:id patterns
+  const productIdMatch = path.match(/^\/api\/v1\/products\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (productIdMatch && productIdMatch[1]) {
+    params.productId = productIdMatch[1];
+  }
+
+  // Extract payment ID from /api/v1/payments/:id patterns
+  const paymentIdMatch = path.match(/^\/api\/v1\/payments\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (paymentIdMatch && paymentIdMatch[1]) {
+    params.paymentId = paymentIdMatch[1];
+  }
+
+  // Extract transaction ID from /api/v1/transactions/:id patterns
+  const transactionIdMatch = path.match(/^\/api\/v1\/transactions\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (transactionIdMatch && transactionIdMatch[1]) {
+    params.transactionId = transactionIdMatch[1];
+  }
+
+  // Extract room type ID from /api/v1/rooms/:id patterns
+  const roomIdMatch = path.match(/^\/api\/v1\/rooms\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (roomIdMatch && roomIdMatch[1]) {
+    params.roomTypeId = roomIdMatch[1];
+    params.room_type_id = roomIdMatch[1];
+  }
+
+  // Extract call ID from /api/v1/calls/:id patterns
+  const callIdMatch = path.match(/^\/api\/v1\/calls\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (callIdMatch && callIdMatch[1]) {
+    params.callId = callIdMatch[1];
+  }
+
+  // Extract ticket ID from /api/v1/support/tickets/:id patterns
+  const ticketIdMatch = path.match(/^\/api\/v1\/support\/tickets\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (ticketIdMatch && ticketIdMatch[1]) {
+    params.ticketId = ticketIdMatch[1];
+  }
+
+  // Extract post ID from /api/v1/social/posts/:id patterns
+  const postIdMatch = path.match(/^\/api\/v1\/social\/posts\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (postIdMatch && postIdMatch[1]) {
+    params.postId = postIdMatch[1];
+  }
+
+  // Extract driver ID from /api/v1/drivers/:id patterns
+  const driverIdMatch = path.match(/^\/api\/v1\/drivers\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (driverIdMatch && driverIdMatch[1]) {
+    params.driverId = driverIdMatch[1];
+  }
+
+  // Extract vendor ID from /api/v1/vendors/:id patterns
+  const vendorIdMatch = path.match(/^\/api\/v1\/vendors\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (vendorIdMatch && vendorIdMatch[1]) {
+    params.vendorId = vendorIdMatch[1];
+  }
+
+  // Extract campaign ID from /api/v1/ads/campaigns/:id patterns
+  const campaignIdMatch = path.match(/^\/api\/v1\/ads\/campaigns\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (campaignIdMatch && campaignIdMatch[1]) {
+    params.campaignId = campaignIdMatch[1];
   }
 
   return params;
