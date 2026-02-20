@@ -45,7 +45,7 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/hotel*', '/api/v1/booking*', '/api/v1/room*', '/api/v1/hotels/search*'],
+      patterns: ['/api/v1/hotels*', '/api/v1/hotel*', '/api/v1/booking*', '/api/v1/room*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
