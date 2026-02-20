@@ -46,7 +46,7 @@ serve(async req => {
     const isHost = roomType.hotels.host_id === user.id;
     if (!isHost) {
       const { data: profile } = await supabaseClient
-        .from('profiles')
+        .from('user_profiles')
         .select('role')
         .eq('id', user.id)
         .single();

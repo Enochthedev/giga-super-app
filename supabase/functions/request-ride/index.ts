@@ -72,7 +72,7 @@ serve(async req => {
     const { data: activeRide } = await supabaseClient
       .from('rides')
       .select('id')
-      .eq('rider_id', user.id)
+      .eq('passenger_id', user.id)
       .in('status', ['pending', 'accepted', 'in_progress'])
       .single();
 

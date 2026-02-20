@@ -43,7 +43,7 @@ serve(async req => {
     if (!hotel) throw new Error('Hotel not found');
     if (hotel.host_id !== user.id) {
       const { data: profile } = await supabaseClient
-        .from('profiles')
+        .from('user_profiles')
         .select('role')
         .eq('id', user.id)
         .single();

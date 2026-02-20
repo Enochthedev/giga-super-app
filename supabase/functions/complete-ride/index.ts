@@ -116,7 +116,7 @@ serve(async req => {
 
     // Notify Rider
     await supabaseClient.from('notifications').insert({
-      user_id: ride.rider_id,
+      user_id: ride.passenger_id,
       type: 'ride_completed',
       title: 'Ride Completed',
       message: `Your ride is complete. Total fare: ₦${finalFare}`,

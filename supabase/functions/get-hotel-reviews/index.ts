@@ -22,15 +22,39 @@ serve(async req => {
       }
     );
 
-    const {
-      hotelId,
-      hotelSlug,
-      page = 1,
-      limit = 10,
-      sortBy = 'recent',
-      minRating,
-      verified,
-    } = await req.json();
+    // Support both GET (query params) and POST (JSON body)
+    let hotelId: string | null = null;
+    let hotelSlug: string | null = null;
+    let page = 1;
+    let limit = 10;
+    let sortBy = 'recent';
+    let minRating: number | null = null;
+    let verified: boolean | null = null;
+
+    if (req.method === 'GET') {
+      // Parse from URL query parameters
+      const url = new URL(req.url);
+      hotelId = url.searchParams.get('hotelId') || url.searchParams.get('hotel_id');
+      hotelSlug = url.searchParams.get('hotelSlug') || url.searchParams.get('slug');
+      page = parseInt(url.searchParams.get('page') || '1', 10);
+      limit = Math.min(parseInt(url.searchParams.get('limit') || '10', 10), 100);
+      sortBy =
+        url.searchParams.get('sortBy') || url.searchParams.get('sort_by') || 'recent';
+      const minRatingParam =
+        url.searchParams.get('minRating') || url.searchParams.get('rating');
+      minRating = minRatingParam ? parseInt(minRatingParam, 10) : null;
+      verified = url.searchParams.get('verified') === 'true';
+    } else {
+      // Parse from JSON body (POST)
+      const body = await req.json();
+      hotelId = body.hotelId || body.hotel_id;
+      hotelSlug = body.hotelSlug || body.slug;
+      page = body.page || 1;
+      limit = Math.min(body.limit || 10, 100);
+      sortBy = body.sortBy || body.sort_by || 'recent';
+      minRating = body.minRating || body.min_rating || null;
+      verified = body.verified ?? null;
+    }
 
     if (!hotelId && !hotelSlug) {
       throw new Error('Either hotelId or hotelSlug is required');
@@ -44,7 +68,7 @@ serve(async req => {
       .select(
         `
         *,
-        user:profiles!hotel_reviews_user_id_fkey(
+        user:user_profiles!hotel_reviews_user_id_fkey(
           id,
           first_name,
           last_name,

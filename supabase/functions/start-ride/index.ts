@@ -80,7 +80,7 @@ serve(async req => {
 
     // Notify rider
     await supabaseClient.from('notifications').insert({
-      user_id: ride.rider_id,
+      user_id: ride.passenger_id,
       type: 'ride_started',
       title: 'Ride Started',
       message: 'Your ride has started. Enjoy your trip!',

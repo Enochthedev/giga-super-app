@@ -78,21 +78,18 @@ serve(async req => {
     // Get the ride and check if it's still available
     const { data: ride, error: rideError } = await supabaseClient
       .from('rides')
-      .select(
-        `
-        *,
-        rider:user_profiles!rides_rider_id_fkey(
-          first_name,
-          last_name,
-          phone,
-          avatar_url
-        )
-      `
-      )
+      .select('*')
       .eq('id', ride_id)
       .single();
 
     if (rideError) throw new Error('Ride not found');
+
+    // Get rider profile separately (passenger_id references auth.users, not user_profiles directly)
+    const { data: riderProfile } = await supabaseClient
+      .from('user_profiles')
+      .select('first_name, last_name, phone, avatar_url')
+      .eq('id', ride.passenger_id)
+      .single();
 
     if (ride.status !== 'pending' && ride.status !== 'scheduled') {
       throw new Error('This ride is no longer available');
@@ -150,7 +147,7 @@ serve(async req => {
 
     // Send notification to rider
     await supabaseClient.from('notifications').insert({
-      user_id: ride.rider_id,
+      user_id: ride.passenger_id,
       type: 'ride_accepted',
       title: 'Driver Found!',
       message: `${driverProfile.first_name} is on the way. ETA: ${eta_minutes} minutes.`,
@@ -179,7 +176,7 @@ serve(async req => {
             estimated_fare: updatedRide.estimated_fare,
             eta_minutes,
           },
-          rider: ride.rider,
+          rider: riderProfile,
           message: 'Ride accepted successfully! Head to the pickup location.',
         },
       }),

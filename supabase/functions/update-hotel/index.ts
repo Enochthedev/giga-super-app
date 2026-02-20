@@ -44,7 +44,7 @@ serve(async req => {
 
     // Check if user owns the hotel or is admin
     const { data: profile } = await supabaseClient
-      .from('profiles')
+      .from('user_profiles')
       .select('role')
       .eq('id', user.id)
       .single();

@@ -60,7 +60,7 @@ serve(async req => {
     if (rideError || !ride) throw new Error('Ride not found');
 
     // Determine if user is rider or driver
-    const isRider = ride.rider_id === user.id;
+    const isRider = ride.passenger_id === user.id;
     const isDriver = ride.driver_id === user.id;
 
     if (!isRider && !isDriver) {
@@ -116,7 +116,7 @@ serve(async req => {
     if (updateError) throw updateError;
 
     // Notify the other party
-    const otherUserId = isRider ? ride.driver_id : ride.rider_id;
+    const otherUserId = isRider ? ride.driver_id : ride.passenger_id;
 
     if (otherUserId) {
       await supabaseClient.from('notifications').insert({
