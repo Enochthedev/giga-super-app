@@ -74,7 +74,7 @@ router.post(
     const requestId = req.headers['x-request-id'] as string;
 
     // Set a response timeout to prevent hanging
-    res.setTimeout(25000, () => {
+    res.setTimeout(45000, () => {
       if (!res.headersSent) {
         console.error('Request timeout - response not sent in time', requestId);
         res.status(504).json({
@@ -128,9 +128,11 @@ router.post(
       };
 
       // Check cache first
+      console.log(`[POST ${requestId}] Checking cache...`);
       const cachedResults = await getCache().getSearchResults(searchQuery);
       if (cachedResults) {
         const executionTime = Date.now() - startTime;
+        console.log(`[POST ${requestId}] Cache hit, returning cached results`);
         req.logger?.logSearchResults(cachedResults.data.total_results, true, executionTime);
 
         res.json(cachedResults);
@@ -138,7 +140,9 @@ router.post(
       }
 
       // Perform product search
+      console.log(`[POST ${requestId}] Cache miss, querying database...`);
       const { results, total } = await getDatabase().searchProducts(searchQuery);
+      console.log(`[POST ${requestId}] Database query complete, got ${total} results`);
 
       const executionTime = Date.now() - startTime;
 
@@ -321,7 +325,7 @@ router.get(
     const requestId = req.headers['x-request-id'] as string;
 
     // Set a response timeout to prevent hanging
-    res.setTimeout(25000, () => {
+    res.setTimeout(45000, () => {
       if (!res.headersSent) {
         console.error('Request timeout - response not sent in time', requestId);
         res.status(504).json({
@@ -372,9 +376,11 @@ router.get(
       };
 
       // Check cache first
+      console.log(`[GET ${requestId}] Checking cache...`);
       const cachedResults = await getCache().getSearchResults(searchQuery);
       if (cachedResults) {
         const executionTime = Date.now() - startTime;
+        console.log(`[GET ${requestId}] Cache hit, returning cached results`);
         req.logger?.logSearchResults(cachedResults.data.total_results, true, executionTime);
 
         res.json(cachedResults);
@@ -382,7 +388,9 @@ router.get(
       }
 
       // Perform product search
+      console.log(`[GET ${requestId}] Cache miss, querying database...`);
       const { results, total } = await getDatabase().searchProducts(searchQuery);
+      console.log(`[GET ${requestId}] Database query complete, got ${total} results`);
 
       const executionTime = Date.now() - startTime;
 
@@ -504,17 +512,45 @@ router.get(
         return;
       }
 
-      // This would typically query the database for distinct categories
-      const categories = [
-        { name: 'Electronics', count: 0, slug: 'electronics' },
-        { name: 'Fashion', count: 0, slug: 'fashion' },
-        { name: 'Home & Garden', count: 0, slug: 'home-garden' },
-        { name: 'Sports & Outdoors', count: 0, slug: 'sports-outdoors' },
-        { name: 'Books', count: 0, slug: 'books' },
-        { name: 'Health & Beauty', count: 0, slug: 'health-beauty' },
-        { name: 'Automotive', count: 0, slug: 'automotive' },
-        { name: 'Toys & Games', count: 0, slug: 'toys-games' },
-      ];
+      // Query database for categories with product counts
+      const db = getDatabase();
+      const { data: categoryData, error } = await db.supabase
+        .from('ecommerce_categories')
+        .select('id, name, slug, description, parent_id, image_url')
+        .eq('is_active', true)
+        .is('deleted_at', null)
+        .order('name', { ascending: true });
+
+      if (error) {
+        console.error('[Categories] Database error:', error);
+        throw new Error(`Failed to fetch categories: ${error.message}`);
+      }
+
+      // Get product counts per category
+      const { data: countData } = await db.supabase
+        .from('ecommerce_products')
+        .select('category_id')
+        .eq('is_active', true)
+        .is('deleted_at', null)
+        .gt('stock_quantity', 0);
+
+      // Count products per category
+      const categoryCounts: Record<string, number> = {};
+      (countData || []).forEach((product: { category_id: string }) => {
+        if (product.category_id) {
+          categoryCounts[product.category_id] = (categoryCounts[product.category_id] || 0) + 1;
+        }
+      });
+
+      const categories = (categoryData || []).map((cat: any) => ({
+        id: cat.id,
+        name: cat.name,
+        slug: cat.slug,
+        description: cat.description,
+        parent_id: cat.parent_id,
+        image_url: cat.image_url,
+        count: categoryCounts[cat.id] || 0,
+      }));
 
       const executionTime = Date.now() - startTime;
 
@@ -697,16 +733,51 @@ router.get(
         return;
       }
 
-      // This would typically query the database for distinct brands
-      const brands = [
-        { name: 'Apple', count: 0, category: 'Electronics' },
-        { name: 'Samsung', count: 0, category: 'Electronics' },
-        { name: 'Nike', count: 0, category: 'Fashion' },
-        { name: 'Adidas', count: 0, category: 'Fashion' },
-        { name: 'Sony', count: 0, category: 'Electronics' },
-      ]
-        .filter(brand => !category || brand.category.toLowerCase() === category.toLowerCase())
-        .slice(0, Number(limit));
+      // Query database for brands from ecommerce_brands table
+      const db = getDatabase();
+      const query = db.supabase
+        .from('ecommerce_brands')
+        .select('id, name, slug, logo_url, description')
+        .eq('is_active', true)
+        .is('deleted_at', null)
+        .order('name', { ascending: true })
+        .limit(Number(limit));
+
+      const { data: brandData, error } = await query;
+
+      if (error) {
+        console.error('[Brands] Database error:', error);
+        // Fallback to empty array if table doesn't exist
+        const brands: any[] = [];
+        const executionTime = Date.now() - startTime;
+
+        const response = {
+          success: true,
+          data: {
+            brands,
+            total_count: brands.length,
+            category: category || 'all',
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            request_id: requestId,
+            execution_time_ms: executionTime,
+            cached: false,
+          },
+        };
+
+        res.json(response);
+        return;
+      }
+
+      const brands = (brandData || []).map((brand: any) => ({
+        id: brand.id,
+        name: brand.name,
+        slug: brand.slug,
+        logo_url: brand.logo_url,
+        description: brand.description,
+        count: 0, // Would need a separate query to count products per brand
+      }));
 
       const executionTime = Date.now() - startTime;
 
