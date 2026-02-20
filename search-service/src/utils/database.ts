@@ -16,7 +16,7 @@ import {
 } from '../types/index.js';
 
 export class DatabaseService {
-  private supabase: SupabaseClient;
+  public supabase: SupabaseClient;
 
   constructor(supabaseUrl: string, supabaseKey: string) {
     this.supabase = createClient(supabaseUrl, supabaseKey, {

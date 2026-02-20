@@ -192,6 +192,10 @@ export const routingMiddleware = (
             if (path.startsWith('/api/v1/search/')) {
               return path; // Keep as-is
             }
+            // Products routes -> Search service: /api/v1/products/* -> /api/v1/search/products/*
+            if (path.startsWith('/api/v1/products/')) {
+              return path.replace('/api/v1/products', '/api/v1/search/products');
+            }
             // Payment queue service: /api/v1/payment-queue -> /api/v1 (assuming it expects /api/v1)
             if (path.startsWith('/api/v1/payment-queue/')) {
               return path.replace('/api/v1/payment-queue', '/api/v1');

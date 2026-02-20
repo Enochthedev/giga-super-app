@@ -4,6 +4,7 @@
 
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
+
 import { optionalAuth, rateLimitByUser } from '../middleware/auth.js';
 import { CacheService } from '../utils/cache.js';
 import { DatabaseService } from '../utils/database.js';
@@ -21,8 +22,11 @@ let cacheService: CacheService | null = null;
 
 const getDatabase = () => {
   if (!databaseService) {
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      throw new Error('SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are required');
+    if (!SUPABASE_URL) {
+      throw new Error('SUPABASE_URL environment variable is not set');
+    }
+    if (!SUPABASE_SERVICE_ROLE_KEY) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY environment variable is not set');
     }
     databaseService = new DatabaseService(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
   }
@@ -708,8 +712,116 @@ router.get(
   }
 );
 
+/**
+ * @swagger
+ * /search/products/{id}:
+ *   get:
+ *     summary: Get product details
+ *     description: Get detailed information about a specific product
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Product ID
+ *     responses:
+ *       200:
+ *         description: Product details
+ *       404:
+ *         description: Product not found
+ */
+router.get(
+  '/:id',
+  optionalAuth,
+  rateLimitByUser(100, 15 * 60 * 1000),
+  async (req: Request, res: Response): Promise<void> => {
+    const startTime = Date.now();
+    const requestId = req.headers['x-request-id'] as string;
+    const { id } = req.params;
+
+    try {
+      const db = getDatabase();
+
+      // Query the product by ID
+      const { data: product, error } = await db.supabase
+        .from('ecommerce_products')
+        .select('*')
+        .eq('id', id)
+        .eq('is_active', true)
+        .is('deleted_at', null)
+        .single();
+
+      if (error || !product) {
+        res.status(404).json({
+          success: false,
+          error: {
+            code: 'PRODUCT_NOT_FOUND',
+            message: 'Product not found',
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            request_id: requestId,
+            version: '1.0.0',
+          },
+        });
+        return;
+      }
+
+      const executionTime = Date.now() - startTime;
+
+      const response = {
+        success: true,
+        data: {
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          currency: product.currency || 'NGN',
+          category: product.category,
+          brand: product.brand,
+          condition: product.condition || 'new',
+          stock_quantity: product.stock_quantity,
+          in_stock: product.stock_quantity > 0,
+          images: product.image_urls || [],
+          specifications: product.specifications || {},
+          vendor_id: product.vendor_id,
+          created_at: product.created_at,
+          updated_at: product.updated_at,
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          request_id: requestId,
+          execution_time_ms: executionTime,
+        },
+      };
+
+      res.json(response);
+    } catch (error) {
+      const executionTime = Date.now() - startTime;
+      req.logger?.error('Product details fetch failed', error as Error, { executionTime });
+
+      res.status(500).json({
+        success: false,
+        error: {
+          code: 'PRODUCT_DETAILS_ERROR',
+          message: 'Failed to fetch product details',
+        },
+        metadata: {
+          timestamp: new Date().toISOString(),
+          request_id: requestId,
+          version: '1.0.0',
+          execution_time_ms: executionTime,
+        },
+      });
+    }
+  }
+);
+
 // Helper functions for facets
-async function getCategoryFacets(query: any) {
+async function getCategoryFacets(_query: unknown) {
   return [
     { value: 'Electronics', count: 0, selected: false },
     { value: 'Fashion', count: 0, selected: false },
@@ -718,7 +830,7 @@ async function getCategoryFacets(query: any) {
   ];
 }
 
-async function getBrandFacets(query: any) {
+async function getBrandFacets(_query: unknown) {
   return [
     { value: 'Apple', count: 0, selected: false },
     { value: 'Samsung', count: 0, selected: false },
@@ -727,7 +839,7 @@ async function getBrandFacets(query: any) {
   ];
 }
 
-async function getPriceRangeFacets(query: any) {
+async function getPriceRangeFacets(_query: unknown) {
   return [
     { value: '0-50', count: 0, selected: false },
     { value: '50-100', count: 0, selected: false },
@@ -736,7 +848,7 @@ async function getPriceRangeFacets(query: any) {
   ];
 }
 
-async function getConditionFacets(query: any) {
+async function getConditionFacets(_query: unknown) {
   return [
     { value: 'new', count: 0, selected: false },
     { value: 'used', count: 0, selected: false },

@@ -175,7 +175,14 @@ class ServiceRegistry {
         baseUrl: config.services.search,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/search*'],
+        patterns: [
+          '/api/v1/search*',
+          // Product routes - handled by search service
+          '/api/v1/products/search*',
+          '/api/v1/products/categories*',
+          '/api/v1/products/trending*',
+          '/api/v1/products/brands*',
+        ],
       });
     }
 
