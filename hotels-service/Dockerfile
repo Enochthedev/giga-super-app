@@ -1,15 +1,17 @@
+# Multi-stage build for Hotels Service
 FROM node:20-alpine AS builder
 
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (skip prepare scripts like husky)
+RUN npm ci --ignore-scripts
 
 # Copy source code
-COPY . .
+COPY src ./src
 
 # Build TypeScript
 RUN npm run build
@@ -21,7 +23,7 @@ WORKDIR /app
 
 # Copy package files and install production dependencies
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci --only=production --ignore-scripts
 
 # Copy built files
 COPY --from=builder /app/dist ./dist
