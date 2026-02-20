@@ -1,5 +1,5 @@
-import type { NextFunction, Response } from 'express';
-import rateLimit from 'express-rate-limit';
+import type { NextFunction, Request, Response } from 'express';
+import rateLimit, { type RateLimitRequestHandler } from 'express-rate-limit';
 
 import type { AuthenticatedRequest } from '../types/index.js';
 import { logger } from '../utils/logger.js';
@@ -13,38 +13,90 @@ import { logger } from '../utils/logger.js';
  * - Premium/Admin: 2000 requests per minute
  */
 
-const RATE_LIMIT_TIERS = {
-  anonymous: {
-    windowMs: 60 * 1000, // 1 minute
-    max: 500,
-  },
-  authenticated: {
-    windowMs: 60 * 1000, // 1 minute
-    max: 1000,
-  },
-  premium: {
-    windowMs: 60 * 1000, // 1 minute
-    max: 2000,
-  },
-  admin: {
-    windowMs: 60 * 1000, // 1 minute
-    max: 5000,
-  },
-} as const;
+type RateLimitTier = 'anonymous' | 'authenticated' | 'premium' | 'admin';
 
-// Override from environment if set
-const getEnvOverrides = () => ({
+// Get environment overrides (evaluated once at module load)
+const ENV_OVERRIDES = {
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? '60000', 10),
   anonymousMax: parseInt(process.env.RATE_LIMIT_ANONYMOUS_MAX ?? '500', 10),
   authenticatedMax: parseInt(process.env.RATE_LIMIT_AUTHENTICATED_MAX ?? '1000', 10),
   premiumMax: parseInt(process.env.RATE_LIMIT_PREMIUM_MAX ?? '2000', 10),
   adminMax: parseInt(process.env.RATE_LIMIT_ADMIN_MAX ?? '5000', 10),
+};
+
+/**
+ * Create rate limit error response
+ */
+const createRateLimitResponse = (requestId: string | undefined, tier: string, limit: number) => ({
+  success: false,
+  error: {
+    code: 'RATE_LIMIT_EXCEEDED',
+    message: 'Too many requests. Please try again later.',
+    details: {
+      tier,
+      limit,
+      windowMs: ENV_OVERRIDES.windowMs,
+      retryAfter: Math.ceil(ENV_OVERRIDES.windowMs / 1000),
+    },
+  },
+  metadata: {
+    timestamp: new Date().toISOString(),
+    request_id: requestId,
+    version: '1.0.0',
+  },
 });
+
+/**
+ * Create a rate limiter for a specific tier
+ * These are created at module initialization time, not during request handling
+ */
+const createTierLimiter = (tier: RateLimitTier, max: number): RateLimitRequestHandler => {
+  return rateLimit({
+    windowMs: ENV_OVERRIDES.windowMs,
+    max,
+    message: createRateLimitResponse(undefined, tier, max),
+    standardHeaders: true,
+    legacyHeaders: false,
+    keyGenerator: (request: Request) => {
+      // Use user ID for authenticated users, IP for anonymous
+      const authReq = request as AuthenticatedRequest;
+      if (authReq.user?.id) {
+        return `user_${authReq.user.id}`;
+      }
+      return request.ip ?? 'unknown';
+    },
+    handler: (request: Request, response: Response) => {
+      const authReq = request as AuthenticatedRequest;
+      logger.warn('Rate limit exceeded', {
+        requestId: authReq.id,
+        userId: authReq.user?.id,
+        tier,
+        limit: max,
+        ip: request.ip,
+        path: request.path,
+      });
+
+      response.status(429).json(createRateLimitResponse(authReq.id, tier, max));
+    },
+    skip: (req: Request) => {
+      // Skip for health checks
+      return req.path.startsWith('/health') || req.path.endsWith('/health');
+    },
+  });
+};
+
+// Pre-create all tier limiters at initialization time
+const tierLimiters: Record<RateLimitTier, RateLimitRequestHandler> = {
+  anonymous: createTierLimiter('anonymous', ENV_OVERRIDES.anonymousMax),
+  authenticated: createTierLimiter('authenticated', ENV_OVERRIDES.authenticatedMax),
+  premium: createTierLimiter('premium', ENV_OVERRIDES.premiumMax),
+  admin: createTierLimiter('admin', ENV_OVERRIDES.adminMax),
+};
 
 /**
  * Determine rate limit tier based on user context
  */
-const getRateLimitTier = (req: AuthenticatedRequest): keyof typeof RATE_LIMIT_TIERS => {
+const getRateLimitTier = (req: AuthenticatedRequest): RateLimitTier => {
   if (!req.user) {
     return 'anonymous';
   }
@@ -72,49 +124,25 @@ const getRateLimitTier = (req: AuthenticatedRequest): keyof typeof RATE_LIMIT_TI
 /**
  * Get rate limit for a specific tier
  */
-const getTierLimit = (tier: keyof typeof RATE_LIMIT_TIERS): number => {
-  const envOverrides = getEnvOverrides();
-
+const getTierLimit = (tier: RateLimitTier): number => {
   switch (tier) {
     case 'admin':
-      return envOverrides.adminMax;
+      return ENV_OVERRIDES.adminMax;
     case 'premium':
-      return envOverrides.premiumMax;
+      return ENV_OVERRIDES.premiumMax;
     case 'authenticated':
-      return envOverrides.authenticatedMax;
+      return ENV_OVERRIDES.authenticatedMax;
     default:
-      return envOverrides.anonymousMax;
+      return ENV_OVERRIDES.anonymousMax;
   }
 };
-
-/**
- * Create rate limit error response
- */
-const createRateLimitResponse = (requestId: string | undefined, tier: string, limit: number) => ({
-  success: false,
-  error: {
-    code: 'RATE_LIMIT_EXCEEDED',
-    message: 'Too many requests. Please try again later.',
-    details: {
-      tier,
-      limit,
-      windowMs: getEnvOverrides().windowMs,
-      retryAfter: Math.ceil(getEnvOverrides().windowMs / 1000),
-    },
-  },
-  metadata: {
-    timestamp: new Date().toISOString(),
-    request_id: requestId,
-    version: '1.0.0',
-  },
-});
 
 /**
  * Base rate limiter for anonymous requests (applied globally first)
  */
 export const baseRateLimiter = rateLimit({
-  windowMs: getEnvOverrides().windowMs,
-  max: getEnvOverrides().anonymousMax,
+  windowMs: ENV_OVERRIDES.windowMs,
+  max: ENV_OVERRIDES.anonymousMax,
   message: {
     success: false,
     error: {
@@ -133,7 +161,7 @@ export const baseRateLimiter = rateLimit({
 
 /**
  * Tiered rate limiter middleware - applies after authentication
- * This adjusts the rate limit based on user's authentication status and role
+ * This selects the appropriate pre-created rate limiter based on user's tier
  */
 export const tieredRateLimiter = (
   req: AuthenticatedRequest,
@@ -147,41 +175,10 @@ export const tieredRateLimiter = (
   }
 
   const tier = getRateLimitTier(req);
-  const limit = getTierLimit(tier);
-  const envOverrides = getEnvOverrides();
 
-  // Create a dynamic rate limiter for this tier
-  const tierLimiter = rateLimit({
-    windowMs: envOverrides.windowMs,
-    max: limit,
-    message: createRateLimitResponse(req.id, tier, limit),
-    standardHeaders: true,
-    legacyHeaders: false,
-    keyGenerator: request => {
-      // Use user ID for authenticated users, IP for anonymous
-      const authReq = request as AuthenticatedRequest;
-      if (authReq.user?.id) {
-        return `user_${authReq.user.id}`;
-      }
-      return request.ip ?? 'unknown';
-    },
-    handler: (request, response) => {
-      const authReq = request as AuthenticatedRequest;
-      logger.warn('Rate limit exceeded', {
-        requestId: authReq.id,
-        userId: authReq.user?.id,
-        tier,
-        limit,
-        ip: request.ip,
-        path: request.path,
-      });
-
-      response.status(429).json(createRateLimitResponse(authReq.id, tier, limit));
-    },
-  });
-
-  // Apply the tier-specific limiter
-  tierLimiter(req, res, next);
+  // Use the pre-created limiter for this tier
+  const limiter = tierLimiters[tier];
+  limiter(req, res, next);
 };
 
 /**
@@ -208,12 +205,11 @@ export const strictRateLimiter = rateLimit({
 export const getRateLimitInfo = (req: AuthenticatedRequest) => {
   const tier = getRateLimitTier(req);
   const limit = getTierLimit(tier);
-  const envOverrides = getEnvOverrides();
 
   return {
     tier,
     limit,
-    windowMs: envOverrides.windowMs,
-    windowSeconds: Math.ceil(envOverrides.windowMs / 1000),
+    windowMs: ENV_OVERRIDES.windowMs,
+    windowSeconds: Math.ceil(ENV_OVERRIDES.windowMs / 1000),
   };
 };
