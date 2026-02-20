@@ -71,7 +71,7 @@ export const config = {
 
   // Health Check
   healthCheckTimeoutMs: parseInt(process.env.HEALTH_CHECK_TIMEOUT_MS ?? '5000', 10),
-  serviceTimeoutMs: parseInt(process.env.SERVICE_TIMEOUT_MS ?? '5000', 10),
+  serviceTimeoutMs: parseInt(process.env.SERVICE_TIMEOUT_MS ?? '60000', 10), // 60 seconds (1 minute)
 
   // Logging
   logLevel: process.env.LOG_LEVEL ?? 'info',
