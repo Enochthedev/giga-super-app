@@ -105,7 +105,8 @@ export const routingMiddleware = (
 
               // E-commerce - Customer facing (public for browsing)
               '/api/v1/cart': '/functions/v1/get-user-cart',
-              '/api/v1/cart/add': '/functions/v1/add-to-cart',
+              '/api/v1/cart/add': '/functions/v1/add-to-cart/add',
+              '/api/v1/cart/item': '/functions/v1/add-to-cart/item',
               '/api/v1/cart/checkout': '/functions/v1/checkout-cart',
 
               // Payments

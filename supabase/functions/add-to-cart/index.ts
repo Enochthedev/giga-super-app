@@ -9,7 +9,7 @@ const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
 Deno.serve(async req => {
   const url = new URL(req.url);
   const pathname = url.pathname.replace(/\/+$/g, '');
-  const {method} = req;
+  const { method } = req;
   const authHeader = req.headers.get('authorization') || '';
   const bearer = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
   async function getUserId() {
@@ -64,7 +64,8 @@ Deno.serve(async req => {
   }
   const route = pathname.split('/').pop();
   try {
-    if (route === 'add' && method === 'POST') {
+    // Support both '/add' route and direct '/add-to-cart' function call
+    if ((route === 'add' || route === 'add-to-cart') && method === 'POST') {
       const body = await req.json();
       // Support either single item fields or items array
       let itemsInput = [];
