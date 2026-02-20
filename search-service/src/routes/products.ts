@@ -73,6 +73,25 @@ router.post(
     const startTime = Date.now();
     const requestId = req.headers['x-request-id'] as string;
 
+    // Set a response timeout to prevent hanging
+    res.setTimeout(25000, () => {
+      if (!res.headersSent) {
+        console.error('Request timeout - response not sent in time', requestId);
+        res.status(504).json({
+          success: false,
+          error: {
+            code: 'GATEWAY_TIMEOUT',
+            message: 'Request timed out',
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            request_id: requestId,
+            version: '1.0.0',
+          },
+        });
+      }
+    });
+
     try {
       // Validate request body
       const queryParams = validateProductSearch(req.body);
@@ -300,6 +319,25 @@ router.get(
   async (req: Request, res: Response): Promise<void> => {
     const startTime = Date.now();
     const requestId = req.headers['x-request-id'] as string;
+
+    // Set a response timeout to prevent hanging
+    res.setTimeout(25000, () => {
+      if (!res.headersSent) {
+        console.error('Request timeout - response not sent in time', requestId);
+        res.status(504).json({
+          success: false,
+          error: {
+            code: 'GATEWAY_TIMEOUT',
+            message: 'Request timed out',
+          },
+          metadata: {
+            timestamp: new Date().toISOString(),
+            request_id: requestId,
+            version: '1.0.0',
+          },
+        });
+      }
+    });
 
     try {
       // Validate query parameters
