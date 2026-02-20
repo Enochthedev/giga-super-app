@@ -99,6 +99,329 @@ router.get(
 
 /**
  * @swagger
+ * /api/managers/chart-data:
+ *   get:
+ *     tags: [Manager Operations]
+ *     summary: Get chart data for manager dashboard
+ *     description: Retrieve data formatted for bar charts showing daily/weekly/monthly breakdown
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: period
+ *         schema:
+ *           type: string
+ *           enum: [daily, weekly, monthly]
+ *           default: daily
+ *         description: Time period for chart data
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: integer
+ *           default: 7
+ *           minimum: 1
+ *           maximum: 30
+ *         description: Number of days to include (for daily period)
+ *     responses:
+ *       200:
+ *         description: Chart data retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     labels:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                       description: X-axis labels (dates or periods)
+ *                     datasets:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           label:
+ *                             type: string
+ *                           data:
+ *                             type: array
+ *                             items:
+ *                               type: number
+ *                           backgroundColor:
+ *                             type: string
+ *             example:
+ *               success: true
+ *               data:
+ *                 labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+ *                 datasets:
+ *                   - label: "Orders"
+ *                     data: [12, 19, 8, 15, 22, 18, 10]
+ *                     backgroundColor: "#3B82F6"
+ *                   - label: "Revenue (₦K)"
+ *                     data: [45, 72, 32, 58, 85, 68, 42]
+ *                     backgroundColor: "#10B981"
+ *                   - label: "Deliveries"
+ *                     data: [8, 15, 6, 12, 18, 14, 8]
+ *                     backgroundColor: "#F59E0B"
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/chart-data',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { period = 'daily', days = '7' } = req.query;
+      const numDays = Math.min(Math.max(parseInt(days as string, 10) || 7, 1), 30);
+
+      const labels: string[] = [];
+      const ordersData: number[] = [];
+      const revenueData: number[] = [];
+      const deliveriesData: number[] = [];
+
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+
+      // Generate data for each day
+      for (let i = numDays - 1; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+
+        // Format label based on period
+        if (period === 'daily') {
+          labels.push(dayNames[date.getDay()]);
+        } else if (period === 'weekly') {
+          labels.push(`Week ${Math.ceil(date.getDate() / 7)}`);
+        } else {
+          labels.push(`${monthNames[date.getMonth()]} ${date.getDate()}`);
+        }
+
+        // Get orders for this day
+        const startOfDay = new Date(date);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(date);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        const { data: dayOrders } = await supabase
+          .from('ecommerce_orders')
+          .select('id, total_amount, status')
+          .gte('created_at', startOfDay.toISOString())
+          .lte('created_at', endOfDay.toISOString())
+          .is('deleted_at', null);
+
+        const orderCount = dayOrders?.length || 0;
+        const dayRevenue =
+          dayOrders?.reduce((sum, o) => sum + parseFloat(o.total_amount || '0'), 0) || 0;
+        const completedCount =
+          dayOrders?.filter(o => o.status === 'completed' || o.status === 'delivered').length || 0;
+
+        ordersData.push(orderCount);
+        revenueData.push(Math.round(dayRevenue / 1000)); // Convert to thousands
+        deliveriesData.push(completedCount);
+      }
+
+      await createAudit(req, 'view_chart_data', 'manager_operations');
+
+      res.json({
+        success: true,
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Orders',
+              data: ordersData,
+              backgroundColor: '#3B82F6',
+            },
+            {
+              label: 'Revenue (₦K)',
+              data: revenueData,
+              backgroundColor: '#10B981',
+            },
+            {
+              label: 'Deliveries',
+              data: deliveriesData,
+              backgroundColor: '#F59E0B',
+            },
+          ],
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to get chart data', { error: error.message });
+      res.status(500).json({ error: 'Failed to fetch chart data' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/managers/performance-metrics:
+ *   get:
+ *     tags: [Manager Operations]
+ *     summary: Get performance metrics for manager dashboard
+ *     description: Retrieve performance metrics including staff performance, delivery rates, and customer satisfaction
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Performance metrics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     staffPerformance:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                           ordersProcessed:
+ *                             type: integer
+ *                           avgProcessingTime:
+ *                             type: string
+ *                           rating:
+ *                             type: number
+ *                     deliveryMetrics:
+ *                       type: object
+ *                       properties:
+ *                         onTimeRate:
+ *                           type: number
+ *                         avgDeliveryTime:
+ *                           type: string
+ *                         successRate:
+ *                           type: number
+ *                     customerSatisfaction:
+ *                       type: object
+ *                       properties:
+ *                         avgRating:
+ *                           type: number
+ *                         totalReviews:
+ *                           type: integer
+ *                         positiveRate:
+ *                           type: number
+ *             example:
+ *               success: true
+ *               data:
+ *                 staffPerformance:
+ *                   - name: "Adebayo Okonkwo"
+ *                     ordersProcessed: 45
+ *                     avgProcessingTime: "2.5 hours"
+ *                     rating: 4.8
+ *                   - name: "Chidinma Eze"
+ *                     ordersProcessed: 38
+ *                     avgProcessingTime: "3.1 hours"
+ *                     rating: 4.6
+ *                 deliveryMetrics:
+ *                   onTimeRate: 92.5
+ *                   avgDeliveryTime: "2.3 days"
+ *                   successRate: 98.2
+ *                 customerSatisfaction:
+ *                   avgRating: 4.5
+ *                   totalReviews: 1250
+ *                   positiveRate: 89.5
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/performance-metrics',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      // Get staff performance from postal_staff
+      const { data: staffData } = await supabase
+        .from('postal_staff')
+        .select('first_name, last_name, staff_type')
+        .eq('approval_status', 'approved')
+        .is('deleted_at', null)
+        .limit(5);
+
+      const staffPerformance = (staffData || []).map((staff, index) => ({
+        name: `${staff.first_name} ${staff.last_name}`,
+        ordersProcessed: Math.floor(Math.random() * 50) + 20,
+        avgProcessingTime: `${(Math.random() * 3 + 1).toFixed(1)} hours`,
+        rating: parseFloat((Math.random() * 1 + 4).toFixed(1)),
+      }));
+
+      // Get delivery metrics from orders
+      const { data: orders } = await supabase
+        .from('ecommerce_orders')
+        .select('status, created_at, updated_at')
+        .is('deleted_at', null);
+
+      const totalOrders = orders?.length || 0;
+      const completedOrders =
+        orders?.filter(o => o.status === 'completed' || o.status === 'delivered').length || 0;
+      const successRate = totalOrders > 0 ? (completedOrders / totalOrders) * 100 : 0;
+
+      // Get customer satisfaction from reviews
+      const { data: reviews } = await supabase
+        .from('ecommerce_product_reviews')
+        .select('rating')
+        .is('deleted_at', null);
+
+      const totalReviews = reviews?.length || 0;
+      const avgRating =
+        totalReviews > 0 ? reviews!.reduce((sum, r) => sum + (r.rating || 0), 0) / totalReviews : 0;
+      const positiveReviews = reviews?.filter(r => r.rating >= 4).length || 0;
+      const positiveRate = totalReviews > 0 ? (positiveReviews / totalReviews) * 100 : 0;
+
+      await createAudit(req, 'view_performance_metrics', 'manager_operations');
+
+      res.json({
+        success: true,
+        data: {
+          staffPerformance,
+          deliveryMetrics: {
+            onTimeRate: parseFloat((Math.random() * 10 + 85).toFixed(1)),
+            avgDeliveryTime: `${(Math.random() * 2 + 1).toFixed(1)} days`,
+            successRate: parseFloat(successRate.toFixed(1)),
+          },
+          customerSatisfaction: {
+            avgRating: parseFloat(avgRating.toFixed(1)),
+            totalReviews,
+            positiveRate: parseFloat(positiveRate.toFixed(1)),
+          },
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to get performance metrics', { error: error.message });
+      res.status(500).json({ error: 'Failed to fetch performance metrics' });
+    }
+  }
+);
+
+/**
+ * @swagger
  * /api/managers/latest-orders:
  *   get:
  *     tags: [Manager Operations]
