@@ -140,9 +140,13 @@ export class DatabaseService {
     console.log('[DB] Starting product search query...');
 
     try {
+      // Select only needed columns for faster queries (avoid SELECT *)
       let dbQuery = this.supabase
         .from('ecommerce_products')
-        .select('*', { count: 'exact' })
+        .select(
+          'id, name, description, short_description, slug, sku, base_price, final_price, discount_percentage, stock_quantity, images, thumbnail, category_id, vendor_id, average_rating, review_count, is_featured, created_at, updated_at',
+          { count: 'exact' }
+        )
         .eq('is_active', true)
         .is('deleted_at', null);
 

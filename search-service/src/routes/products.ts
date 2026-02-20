@@ -732,21 +732,29 @@ router.get(
         return;
       }
 
-      // Query database for brands from ecommerce_brands table
+      // Query database for brands - extract unique vendors from products
+      // Note: ecommerce_brands table doesn't exist, so we extract from ecommerce_vendors
       const db = getDatabase();
-      const query = db.supabase
-        .from('ecommerce_brands')
-        .select('*')
-        .eq('is_active', true)
-        .order('name', { ascending: true })
-        .limit(Number(limit));
 
-      const { data: brandData, error } = await query;
+      const { data: vendorData, error } = await db.supabase
+        .from('ecommerce_vendors')
+        .select('id, business_name, is_verified, average_rating')
+        .eq('is_active', true)
+        .is('deleted_at', null)
+        .order('business_name', { ascending: true })
+        .limit(Number(limit));
 
       if (error) {
         console.error('[Brands] Database error:', error);
-        // Fallback to empty array if table doesn't exist
-        const brands: any[] = [];
+        // Fallback to empty array
+        const brands: {
+          id: string;
+          name: string;
+          slug: string;
+          logo_url: null;
+          description: null;
+          count: number;
+        }[] = [];
         const executionTime = Date.now() - startTime;
 
         const response = {
@@ -768,13 +776,22 @@ router.get(
         return;
       }
 
-      const brands = (brandData || []).map((brand: any) => ({
-        id: brand.id,
-        name: brand.name,
-        slug: brand.slug || brand.name?.toLowerCase().replace(/\s+/g, '-'),
-        logo_url: brand.logo_url || brand.image_url || null,
-        description: brand.description || null,
-        count: 0, // Would need a separate query to count products per brand
+      // Map vendors to brand format
+      interface VendorRow {
+        id: string;
+        business_name: string;
+        is_verified: boolean;
+        average_rating: number;
+      }
+      const brands = (vendorData || []).map((vendor: VendorRow) => ({
+        id: vendor.id,
+        name: vendor.business_name,
+        slug: vendor.business_name?.toLowerCase().replace(/\s+/g, '-') || vendor.id,
+        logo_url: null,
+        description: null,
+        count: 0,
+        is_verified: vendor.is_verified,
+        rating: vendor.average_rating,
       }));
 
       const executionTime = Date.now() - startTime;
