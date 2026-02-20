@@ -516,9 +516,8 @@ router.get(
       const db = getDatabase();
       const { data: categoryData, error } = await db.supabase
         .from('ecommerce_categories')
-        .select('id, name, slug, description, parent_id, image_url')
+        .select('*')
         .eq('is_active', true)
-        .is('deleted_at', null)
         .order('name', { ascending: true });
 
       if (error) {
@@ -545,10 +544,10 @@ router.get(
       const categories = (categoryData || []).map((cat: any) => ({
         id: cat.id,
         name: cat.name,
-        slug: cat.slug,
-        description: cat.description,
-        parent_id: cat.parent_id,
-        image_url: cat.image_url,
+        slug: cat.slug || cat.name?.toLowerCase().replace(/\s+/g, '-'),
+        description: cat.description || null,
+        parent_id: cat.parent_id || null,
+        image_url: cat.image_url || cat.icon_url || null,
         count: categoryCounts[cat.id] || 0,
       }));
 
@@ -737,9 +736,8 @@ router.get(
       const db = getDatabase();
       const query = db.supabase
         .from('ecommerce_brands')
-        .select('id, name, slug, logo_url, description')
+        .select('*')
         .eq('is_active', true)
-        .is('deleted_at', null)
         .order('name', { ascending: true })
         .limit(Number(limit));
 
@@ -773,9 +771,9 @@ router.get(
       const brands = (brandData || []).map((brand: any) => ({
         id: brand.id,
         name: brand.name,
-        slug: brand.slug,
-        logo_url: brand.logo_url,
-        description: brand.description,
+        slug: brand.slug || brand.name?.toLowerCase().replace(/\s+/g, '-'),
+        logo_url: brand.logo_url || brand.image_url || null,
+        description: brand.description || null,
         count: 0, // Would need a separate query to count products per brand
       }));
 
