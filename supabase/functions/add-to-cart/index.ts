@@ -205,14 +205,22 @@ Deno.serve(async req => {
           const variant = variantMap.get(it.variant_id);
           price_per_unit = (price_per_unit ?? 0) + (variant.price_adjustment ?? 0);
         }
-        // upsert behavior: try update first
-        const { data: existing } = await sb
+        // upsert behavior: check for existing item first
+        // Use .is() for null variant_id, .eq() for non-null
+        let existingQuery = sb
           .from('ecommerce_cart_items')
           .select('*')
           .eq('cart_id', cart.id)
-          .eq('product_id', it.product_id)
-          .eq('variant_id', it.variant_id ?? null)
-          .limit(1);
+          .eq('product_id', it.product_id);
+
+        if (it.variant_id) {
+          existingQuery = existingQuery.eq('variant_id', it.variant_id);
+        } else {
+          existingQuery = existingQuery.is('variant_id', null);
+        }
+
+        const { data: existing } = await existingQuery.limit(1);
+
         if (existing?.length) {
           const newQty = (existing[0].quantity ?? 0) + quantity;
           const { error: upErr } = await sb
@@ -239,10 +247,18 @@ Deno.serve(async req => {
         .from('ecommerce_cart_items')
         .select('*')
         .eq('cart_id', cart.id);
+
+      // Transform null variant_id to empty string for frontend
+      const transformedItems =
+        items?.map(item => ({
+          ...item,
+          variant_id: item.variant_id ?? '',
+        })) || [];
+
       return new Response(
         JSON.stringify({
           cart_id: cart.id,
-          items,
+          items: transformedItems,
         }),
         {
           status: 200,
@@ -291,7 +307,10 @@ Deno.serve(async req => {
       if (error) throw error;
       return new Response(
         JSON.stringify({
-          item: data,
+          item: {
+            ...data,
+            variant_id: data.variant_id ?? '',
+          },
         }),
         {
           status: 200,
@@ -365,10 +384,18 @@ Deno.serve(async req => {
         .from('ecommerce_cart_items')
         .select('*')
         .eq('cart_id', cart.id);
+
+      // Transform null variant_id to empty string for frontend
+      const transformedItems =
+        items?.map(item => ({
+          ...item,
+          variant_id: item.variant_id ?? '',
+        })) || [];
+
       return new Response(
         JSON.stringify({
           cart,
-          items,
+          items: transformedItems,
         }),
         {
           status: 200,

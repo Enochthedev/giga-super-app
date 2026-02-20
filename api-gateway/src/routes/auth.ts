@@ -14,7 +14,8 @@
  * - POST /auth/reset-password - Reset password with token
  */
 
-import { Response, Router } from 'express';
+import { createClient } from '@supabase/supabase-js';
+import { Request, Response, Router } from 'express';
 import { Options, createProxyMiddleware } from 'http-proxy-middleware';
 
 import { config } from '../config/index.js';
@@ -207,8 +208,8 @@ logger.info('Auth proxy configured', { authApiUrl, projectRef });
  * @openapi
  * /auth/me:
  *   get:
- *     summary: Get current authenticated user
- *     description: Returns the currently authenticated user's information
+ *     summary: Get current authenticated user with profile and addresses
+ *     description: Returns the currently authenticated user's information including profile, roles, and addresses
  *     tags:
  *       - Authentication
  *     security:
@@ -221,33 +222,50 @@ logger.info('Auth proxy configured', { authApiUrl, projectRef });
  *             schema:
  *               type: object
  *               properties:
- *                 id:
- *                   type: string
- *                   format: uuid
- *                 email:
- *                   type: string
- *                 phone:
- *                   type: string
- *                 created_at:
- *                   type: string
- *                   format: date-time
- *                 updated_at:
- *                   type: string
- *                   format: date-time
- *                 app_metadata:
+ *                 success:
+ *                   type: boolean
+ *                 data:
  *                   type: object
  *                   properties:
- *                     provider:
+ *                     id:
  *                       type: string
- *                     role:
+ *                       format: uuid
+ *                     email:
  *                       type: string
- *                 user_metadata:
- *                   type: object
- *                   properties:
- *                     first_name:
+ *                     profile:
+ *                       type: object
+ *                       properties:
+ *                         first_name:
+ *                           type: string
+ *                         last_name:
+ *                           type: string
+ *                         phone:
+ *                           type: string
+ *                         avatar_url:
+ *                           type: string
+ *                     roles:
+ *                       type: array
+ *                       items:
+ *                         type: string
+ *                     active_role:
  *                       type: string
- *                     last_name:
- *                       type: string
+ *                     addresses:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           id:
+ *                             type: string
+ *                           label:
+ *                             type: string
+ *                           address_line_1:
+ *                             type: string
+ *                           city:
+ *                             type: string
+ *                           state:
+ *                             type: string
+ *                           is_default:
+ *                             type: boolean
  *       401:
  *         description: Not authenticated
  *         content:
@@ -379,6 +397,101 @@ logger.info('Auth proxy configured', { authApiUrl, projectRef });
  *           type: string
  *           example: Invalid login credentials
  */
+
+// =====================================================
+// CUSTOM HANDLERS (before proxy middleware)
+// =====================================================
+
+// GET /me - Custom handler to include profile, roles, and addresses
+router.get('/me', async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Missing or invalid authorization header' },
+      });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+
+    // Create Supabase client with user's token
+    const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    // Get authenticated user
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      logger.error('Auth error in /me:', authError);
+      return res.status(401).json({
+        success: false,
+        error: { code: 'UNAUTHORIZED', message: 'Invalid or expired token' },
+      });
+    }
+
+    // Fetch profile
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    // Fetch roles
+    const { data: rolesData } = await supabase
+      .from('user_roles')
+      .select('role_name')
+      .eq('user_id', user.id);
+
+    // Fetch active role
+    const { data: activeRoleData } = await supabase
+      .from('user_active_roles')
+      .select('active_role')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    // Fetch addresses
+    const { data: addresses } = await supabase
+      .from('user_addresses')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('is_default', { ascending: false });
+
+    // Fetch wallet balance
+    const { data: wallet } = await supabase
+      .from('user_wallets')
+      .select('id, balance, currency')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    const response = {
+      success: true,
+      data: {
+        id: user.id,
+        email: user.email,
+        phone: user.phone || '',
+        email_confirmed_at: user.email_confirmed_at,
+        created_at: user.created_at,
+        profile: profile || null,
+        roles: rolesData?.map((r: { role_name: string }) => r.role_name) || [],
+        active_role: activeRoleData?.active_role || null,
+        addresses: addresses || [],
+        wallet: wallet || null,
+      },
+    };
+
+    return res.json(response);
+  } catch (error: any) {
+    logger.error('Error in /auth/me:', error);
+    return res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: error.message || 'Internal server error' },
+    });
+  }
+});
 
 // =====================================================
 // PROXY MIDDLEWARE
