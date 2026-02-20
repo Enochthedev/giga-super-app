@@ -1470,6 +1470,86 @@
  *         description: Cart is empty or invalid address
  */
 
+/**
+ * @openapi
+ * /api/v1/cart/item:
+ *   patch:
+ *     summary: Update cart item quantity
+ *     description: Update the quantity of an item in the cart
+ *     tags:
+ *       - E-commerce
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - item_id
+ *               - quantity
+ *             properties:
+ *               item_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Cart item ID
+ *               quantity:
+ *                 type: integer
+ *                 minimum: 1
+ *                 description: New quantity
+ *           example:
+ *             item_id: "123e4567-e89b-12d3-a456-426614174000"
+ *             quantity: 3
+ *     responses:
+ *       200:
+ *         description: Item quantity updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 item:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       format: uuid
+ *                     quantity:
+ *                       type: integer
+ *                     price_per_unit:
+ *                       type: number
+ *       400:
+ *         description: Invalid item_id or quantity
+ *   delete:
+ *     summary: Remove item from cart
+ *     description: Remove an item from the shopping cart
+ *     tags:
+ *       - E-commerce
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: item_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Cart item ID to remove
+ *     responses:
+ *       200:
+ *         description: Item removed from cart
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *       400:
+ *         description: Invalid item_id
+
 // =====================================================
 // CALLING SYSTEM
 // =====================================================

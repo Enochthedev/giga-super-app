@@ -48,6 +48,7 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   // Cart/E-commerce
   '/api/v1/cart': 'get-user-cart',
   '/api/v1/cart/add': 'add-to-cart',
+  '/api/v1/cart/item': 'add-to-cart',
   '/api/v1/cart/checkout': 'checkout-cart',
 
   // Calls

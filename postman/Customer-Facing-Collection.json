@@ -8,7 +8,10 @@
   "variable": [
     { "key": "base_url", "value": "{{gateway_url}}/api/v1" },
     { "key": "gateway_url", "value": "http://localhost:3000" },
-    { "key": "auth_token", "value": "" }
+    { "key": "auth_token", "value": "" },
+    { "key": "product_id", "value": "" },
+    { "key": "product_id_2", "value": "" },
+    { "key": "cart_item_id", "value": "" }
   ],
   "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{auth_token}}" }] },
   "item": [
@@ -157,12 +160,40 @@
           "request": { "method": "GET", "url": "{{base_url}}/cart" }
         },
         {
-          "name": "Add to Cart",
+          "name": "Add Single Item to Cart",
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
             "url": "{{base_url}}/cart/add",
             "body": { "mode": "raw", "raw": "{\"product_id\":\"{{product_id}}\",\"quantity\":1}" }
+          }
+        },
+        {
+          "name": "Add Multiple Items to Cart",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/cart/add",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"items\":[{\"product_id\":\"{{product_id}}\",\"quantity\":2},{\"product_id\":\"{{product_id_2}}\",\"quantity\":1}]}"
+            }
+          }
+        },
+        {
+          "name": "Update Cart Item Quantity",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{base_url}}/cart/item",
+            "body": { "mode": "raw", "raw": "{\"item_id\":\"{{cart_item_id}}\",\"quantity\":3}" }
+          }
+        },
+        {
+          "name": "Remove Item from Cart",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/cart/item?item_id={{cart_item_id}}"
           }
         },
         {
