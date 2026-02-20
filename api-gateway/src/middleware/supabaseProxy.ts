@@ -132,6 +132,12 @@ export const supabaseProxy = async (req: Request, res: Response, next: NextFunct
     // Build Supabase function URL
     const supabaseFunctionUrl = `${SUPABASE_URL}/functions/v1/${functionName}`;
 
+    // Extract path parameters (e.g., hotelId from /api/v1/hotels/:id/reviews)
+    const pathParams = extractPathParams(req.path);
+
+    // Merge path params with query params (path params take precedence)
+    const mergedParams = { ...req.query, ...pathParams };
+
     // Forward request to Supabase
     const response = await axios({
       method: req.method,
@@ -143,7 +149,7 @@ export const supabaseProxy = async (req: Request, res: Response, next: NextFunct
         'X-Request-ID': (req as any).id || '',
       },
       data: req.body,
-      params: req.query,
+      params: mergedParams,
       timeout: 30000, // 30 second timeout
       validateStatus: () => true, // Don't throw on any status code
     });
@@ -222,6 +228,33 @@ function getFunctionNameFromRoute(path: string, _method: string): string | null 
   }
 
   return null;
+}
+
+/**
+ * Extract path parameters from a route pattern
+ */
+export function extractPathParams(path: string): Record<string, string> {
+  const params: Record<string, string> = {};
+
+  // Extract hotel ID from /api/v1/hotels/:id patterns
+  const hotelIdMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (hotelIdMatch && hotelIdMatch[1]) {
+    params.hotelId = hotelIdMatch[1];
+  }
+
+  // Extract ride ID from /api/v1/rides/:id patterns
+  const rideIdMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (rideIdMatch && rideIdMatch[1]) {
+    params.rideId = rideIdMatch[1];
+  }
+
+  // Extract user ID from /api/v1/users/:id patterns
+  const userIdMatch = path.match(/^\/api\/v1\/users\/([a-f0-9-]{36})(\/.*)?$/i);
+  if (userIdMatch && userIdMatch[1]) {
+    params.userId = userIdMatch[1];
+  }
+
+  return params;
 }
 
 /**
