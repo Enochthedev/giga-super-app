@@ -9,14 +9,30 @@ import { AutocompleteResponse, SearchQuery, SearchResponse } from '../types/inde
 
 /**
  * Check if Redis should be used
+ * Disable for free tiers to avoid eviction policy issues
  */
 const shouldUseRedis = (): boolean => {
   const redisUrl = process.env.REDIS_URL;
   const forceDisable = process.env.DISABLE_REDIS === 'true';
-  const isDev = process.env.NODE_ENV === 'development';
+  const forceEnable = process.env.FORCE_REDIS === 'true';
+
+  // Force enable overrides everything
+  if (forceEnable && redisUrl) {
+    return true;
+  }
 
   // Disable if explicitly disabled, no URL, or local dev URL
   if (forceDisable || !redisUrl || redisUrl === 'redis://localhost:6379') {
+    return false;
+  }
+
+  // Auto-disable for known free tier Redis providers
+  const freeRedisPatterns = ['redis-cloud.com', 'redis.cloud', 'upstash.io', 'redislabs.com'];
+
+  const isFreeTier = freeRedisPatterns.some(pattern => redisUrl.includes(pattern));
+
+  if (isFreeTier && !forceEnable) {
+    console.log('Free Redis tier detected - using NodeCache instead');
     return false;
   }
 
