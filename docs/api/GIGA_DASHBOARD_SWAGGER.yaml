@@ -437,6 +437,84 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   # Postal Monitoring Endpoints
+  /api/postal-monitoring/dashboard:
+    get:
+      tags: [Postal Monitoring]
+      summary: Get postal managers dashboard data
+      description: Retrieve dashboard statistics and revenue chart data for postal managers
+      parameters:
+        - in: query
+          name: days
+          schema:
+            type: integer
+            default: 30
+            minimum: 7
+            maximum: 90
+          description: Number of days for revenue chart
+      responses:
+        200:
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          stats:
+                            type: object
+                            properties:
+                              total_packages:
+                                type: integer
+                                example: 1250
+                              pending_packages:
+                                type: integer
+                                example: 45
+                              delivered_packages:
+                                type: integer
+                                example: 1180
+                              total_revenue:
+                                type: number
+                                example: 2500000
+                              total_staff:
+                                type: integer
+                                example: 150
+                          revenue_chart:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                date:
+                                  type: string
+                                  format: date
+                                  example: '2026-01-20'
+                                revenue:
+                                  type: number
+                                  example: 3500
+              example:
+                success: true
+                data:
+                  stats:
+                    total_packages: 1250
+                    pending_packages: 45
+                    delivered_packages: 1180
+                    total_revenue: 2500000
+                    total_staff: 150
+                  revenue_chart:
+                    - date: '2026-01-20'
+                      revenue: 3500
+                    - date: '2026-01-21'
+                      revenue: 4200
+                    - date: '2026-01-22'
+                      revenue: 5000
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
   /api/postal-monitoring/staff:
     get:
       tags: [Postal Monitoring]
@@ -770,6 +848,101 @@ paths:
                         properties:
                           ad:
                             $ref: '#/components/schemas/Advertisement'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/ads/{id}/approve:
+    post:
+      tags: [Advertisement Management]
+      summary: Approve an advertisement
+      description: Approve a pending advertisement campaign
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Advertisement ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                review_notes:
+                  type: string
+                  example: 'Campaign meets all guidelines'
+      responses:
+        200:
+          description: Advertisement approved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Advertisement'
+                      message:
+                        type: string
+                        example: 'Advertisement approved successfully'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/ads/{id}/reject:
+    post:
+      tags: [Advertisement Management]
+      summary: Reject an advertisement
+      description: Reject a pending advertisement campaign with reason
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Advertisement ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rejection_reason]
+              properties:
+                rejection_reason:
+                  type: string
+                  example: 'Content violates advertising guidelines'
+                review_notes:
+                  type: string
+                  example: 'Please review section 3.2 of our ad policy'
+      responses:
+        200:
+          description: Advertisement rejected successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Advertisement'
+                      message:
+                        type: string
+                        example: 'Advertisement rejected'
         400:
           $ref: '#/components/responses/BadRequest'
         401:

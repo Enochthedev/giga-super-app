@@ -313,6 +313,171 @@ router.put(
 
 /**
  * @swagger
+ * /api/ads/{adId}/approve:
+ *   post:
+ *     tags: [Advertisement Management]
+ *     summary: Approve an advertisement
+ *     description: Approve a pending advertisement campaign
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: adId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Advertisement ID
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               review_notes:
+ *                 type: string
+ *           example:
+ *             review_notes: "Campaign meets all guidelines"
+ *     responses:
+ *       200:
+ *         description: Advertisement approved successfully
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Advertisement not found
+ */
+router.post(
+  '/:adId/approve',
+  authenticate,
+  requirePermission('ads:approve'),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { adId } = req.params;
+      const { review_notes } = req.body || {};
+
+      const { data: ad, error } = await supabase
+        .from('ad_campaigns')
+        .update({
+          status: 'active',
+          review_notes: review_notes || 'Approved',
+          approved_by: req.user!.id,
+          approved_at: new Date().toISOString(),
+          reviewed_by: req.user!.id,
+          reviewed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', adId)
+        .eq('status', 'pending_approval')
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (!ad) {
+        return res.status(404).json({ error: 'Advertisement not found or not pending approval' });
+      }
+
+      await createAudit(req, 'approve_ad', 'ad_campaigns', adId, { review_notes });
+
+      res.json({ success: true, data: ad, message: 'Advertisement approved successfully' });
+    } catch (error: any) {
+      logger.error('Failed to approve ad', { error: error.message });
+      await createFailedAudit(req, 'approve_ad', 'ad_campaigns', error.message, req.params.adId);
+      res.status(500).json({ error: 'Failed to approve advertisement' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/ads/{adId}/reject:
+ *   post:
+ *     tags: [Advertisement Management]
+ *     summary: Reject an advertisement
+ *     description: Reject a pending advertisement campaign with reason
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: adId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         description: Advertisement ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - rejection_reason
+ *             properties:
+ *               rejection_reason:
+ *                 type: string
+ *               review_notes:
+ *                 type: string
+ *           example:
+ *             rejection_reason: "Content violates advertising guidelines"
+ *             review_notes: "Please review section 3.2 of our ad policy"
+ *     responses:
+ *       200:
+ *         description: Advertisement rejected successfully
+ *       400:
+ *         description: Rejection reason required
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Advertisement not found
+ */
+router.post(
+  '/:adId/reject',
+  authenticate,
+  requirePermission('ads:approve'),
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { adId } = req.params;
+      const { rejection_reason, review_notes } = req.body || {};
+
+      if (!rejection_reason) {
+        return res.status(400).json({ error: 'Rejection reason is required' });
+      }
+
+      const { data: ad, error } = await supabase
+        .from('ad_campaigns')
+        .update({
+          status: 'rejected',
+          rejection_reason,
+          review_notes: review_notes || rejection_reason,
+          reviewed_by: req.user!.id,
+          reviewed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', adId)
+        .eq('status', 'pending_approval')
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (!ad) {
+        return res.status(404).json({ error: 'Advertisement not found or not pending approval' });
+      }
+
+      await createAudit(req, 'reject_ad', 'ad_campaigns', adId, { rejection_reason, review_notes });
+
+      res.json({ success: true, data: ad, message: 'Advertisement rejected' });
+    } catch (error: any) {
+      logger.error('Failed to reject ad', { error: error.message });
+      await createFailedAudit(req, 'reject_ad', 'ad_campaigns', error.message, req.params.adId);
+      res.status(500).json({ error: 'Failed to reject advertisement' });
+    }
+  }
+);
+
+/**
+ * @swagger
  * /api/ads/fetch:
  *   post:
  *     tags: [Advertisement Management]
