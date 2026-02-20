@@ -21,19 +21,44 @@ Deno.serve(async (req: Request) => {
     const url = new URL(req.url);
     const status = url.searchParams.get('status') || 'accepted';
 
-    const { data: connections, error } = await supabase
+    // Build query for connections (without user join - FK points to auth.users, not user_profiles)
+    const { data: connectionsData, error } = await supabase
       .from('user_connections')
-      .select(
-        `
-        *,
-        user_profiles!user_connections_connected_user_id_fkey(id, first_name, last_name, avatar_url, email)
-      `
-      )
+      .select('*')
       .eq('user_id', user.id)
       .eq('status', status)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
+
+    // Fetch user profiles separately (connected_user_id references auth.users, not user_profiles)
+    const userIds = [
+      ...new Set(connectionsData?.map(c => c.connected_user_id).filter(Boolean) || []),
+    ];
+    let userProfiles: Record<string, any> = {};
+
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url, email')
+        .in('id', userIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce(
+          (acc, profile) => {
+            acc[profile.id] = profile;
+            return acc;
+          },
+          {} as Record<string, any>
+        );
+      }
+    }
+
+    // Attach user profiles to connections
+    const connections = (connectionsData || []).map(conn => ({
+      ...conn,
+      user_profiles: userProfiles[conn.connected_user_id] || null,
+    }));
 
     return new Response(JSON.stringify({ connections }), {
       headers: { 'Content-Type': 'application/json' },

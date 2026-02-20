@@ -62,28 +62,9 @@ serve(async req => {
 
     const offset = (page - 1) * limit;
 
-    // Build query
-    let query = supabaseClient
-      .from('hotel_reviews')
-      .select(
-        `
-        *,
-        user:user_profiles!hotel_reviews_user_id_fkey(
-          id,
-          first_name,
-          last_name,
-          avatar_url
-        )
-      `,
-        { count: 'exact' }
-      )
-      .eq('is_approved', true);
-
-    // Filter by hotel
-    if (hotelId) {
-      query = query.eq('hotel_id', hotelId);
-    } else if (hotelSlug) {
-      // Get hotel ID from slug first
+    // If hotelSlug provided, get hotel ID first
+    let resolvedHotelId = hotelId;
+    if (!hotelId && hotelSlug) {
       const { data: hotel } = await supabaseClient
         .from('hotels')
         .select('id')
@@ -91,8 +72,15 @@ serve(async req => {
         .single();
 
       if (!hotel) throw new Error('Hotel not found');
-      query = query.eq('hotel_id', hotel.id);
+      resolvedHotelId = hotel.id;
     }
+
+    // Build query for reviews (without user join - FK points to auth.users, not user_profiles)
+    let query = supabaseClient
+      .from('hotel_reviews')
+      .select('*', { count: 'exact' })
+      .eq('is_approved', true)
+      .eq('hotel_id', resolvedHotelId);
 
     // Filter by minimum rating
     if (minRating) {
@@ -138,36 +126,61 @@ serve(async req => {
 
     if (error) throw error;
 
-    // Format reviews
-    const formattedReviews = reviews.map(review => ({
-      id: review.id,
-      rating: review.rating,
-      ratings: {
-        overall: review.rating,
-        cleanliness: review.cleanliness_rating,
-        comfort: review.comfort_rating,
-        location: review.location_rating,
-        service: review.service_rating,
-        value: review.value_rating,
-      },
-      title: review.title,
-      comment: review.comment,
-      images: review.images || [],
-      isVerified: review.is_verified,
-      isFeatured: review.is_featured,
-      helpfulCount: review.helpful_count || 0,
-      unhelpfulCount: review.unhelpful_count || 0,
-      responseFromHost: review.response_from_host,
-      createdAt: review.created_at,
-      user: {
-        id: review.user?.id,
-        name: review.user
-          ? `${review.user.first_name} ${review.user.last_name}`.trim()
-          : 'Anonymous',
-        firstName: review.user?.first_name,
-        avatar: review.user?.avatar_url,
-      },
-    }));
+    // Fetch user profiles separately (user_id in hotel_reviews references auth.users, not user_profiles)
+    // user_profiles.id matches auth.users.id, so we can query by those IDs
+    const userIds = [...new Set(reviews?.map(r => r.user_id).filter(Boolean) || [])];
+    let userProfiles: Record<string, any> = {};
+
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabaseClient
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .in('id', userIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce(
+          (acc, profile) => {
+            acc[profile.id] = profile;
+            return acc;
+          },
+          {} as Record<string, any>
+        );
+      }
+    }
+
+    // Format reviews with user data
+    const formattedReviews = (reviews || []).map(review => {
+      const user = userProfiles[review.user_id];
+      return {
+        id: review.id,
+        rating: review.rating,
+        ratings: {
+          overall: review.rating,
+          cleanliness: review.cleanliness_rating,
+          comfort: review.comfort_rating,
+          location: review.location_rating,
+          service: review.service_rating,
+          value: review.value_rating,
+        },
+        title: review.title,
+        comment: review.comment,
+        images: review.images || [],
+        isVerified: review.is_verified,
+        isFeatured: review.is_featured,
+        helpfulCount: review.helpful_count || 0,
+        unhelpfulCount: review.unhelpful_count || 0,
+        responseFromHost: review.response_from_host,
+        createdAt: review.created_at,
+        user: {
+          id: user?.id || review.user_id,
+          name: user
+            ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || 'Anonymous'
+            : 'Anonymous',
+          firstName: user?.first_name,
+          avatar: user?.avatar_url,
+        },
+      };
+    });
 
     return new Response(
       JSON.stringify({

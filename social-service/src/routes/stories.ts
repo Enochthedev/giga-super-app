@@ -84,8 +84,7 @@ router.get('/', async (req: Request, res: Response) => {
         caption,
         view_count,
         expires_at,
-        created_at,
-        user_profiles!stories_user_id_fkey(id, first_name, last_name, avatar_url)
+        created_at
       `
       )
       .in('user_id', userIds)
@@ -94,17 +93,36 @@ router.get('/', async (req: Request, res: Response) => {
 
     if (error) throw error;
 
+    // Fetch user profiles separately (FK points to auth.users, not user_profiles)
+    const storyUserIds = [...new Set(stories?.map(s => s.user_id).filter(Boolean) || [])];
+    let userProfiles: Record<string, any> = {};
+
+    if (storyUserIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .in('id', storyUserIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce((acc: Record<string, any>, profile: any) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+      }
+    }
+
     // Group stories by user
     const groupedStories = (stories ?? []).reduce(
       (acc: Record<string, any>, story: any) => {
         const userId = story.user_id;
+        const profile = userProfiles[userId];
         if (!acc[userId]) {
           acc[userId] = {
             user: {
-              id: story.user_profiles.id,
-              first_name: story.user_profiles.first_name,
-              last_name: story.user_profiles.last_name,
-              avatar_url: story.user_profiles.avatar_url,
+              id: profile?.id || userId,
+              first_name: profile?.first_name,
+              last_name: profile?.last_name,
+              avatar_url: profile?.avatar_url,
             },
             stories: [],
           };
@@ -416,7 +434,7 @@ router.get('/:storyId/viewers', async (req: Request, res: Response) => {
       .select(
         `
         viewed_at,
-        user_profiles!story_views_user_id_fkey(id, first_name, last_name, avatar_url)
+        viewer_id
       `
       )
       .eq('story_id', storyId)
@@ -424,13 +442,34 @@ router.get('/:storyId/viewers', async (req: Request, res: Response) => {
 
     if (error) throw error;
 
-    const viewers = views?.map((v: any) => ({
-      id: v.user_profiles.id,
-      first_name: v.user_profiles.first_name,
-      last_name: v.user_profiles.last_name,
-      avatar_url: v.user_profiles.avatar_url,
-      viewed_at: v.viewed_at,
-    }));
+    // Fetch user profiles separately (FK points to auth.users, not user_profiles)
+    const viewerIds = [...new Set(views?.map(v => v.viewer_id).filter(Boolean) || [])];
+    let userProfiles: Record<string, any> = {};
+
+    if (viewerIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, avatar_url')
+        .in('id', viewerIds);
+
+      if (profiles) {
+        userProfiles = profiles.reduce((acc: Record<string, any>, profile: any) => {
+          acc[profile.id] = profile;
+          return acc;
+        }, {});
+      }
+    }
+
+    const viewers = views?.map((v: any) => {
+      const profile = userProfiles[v.viewer_id];
+      return {
+        id: profile?.id || v.viewer_id,
+        first_name: profile?.first_name,
+        last_name: profile?.last_name,
+        avatar_url: profile?.avatar_url,
+        viewed_at: v.viewed_at,
+      };
+    });
 
     sendSuccess(res, { data: viewers ?? [], requestId: req.requestId });
   } catch (error) {

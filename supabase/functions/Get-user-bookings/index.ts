@@ -11,13 +11,33 @@ serve(async req => {
     });
   }
   try {
+    // Get Authorization header (handle case-insensitivity)
+    const authHeader =
+      req.headers.get('Authorization') || req.headers.get('authorization');
+
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Authentication required',
+        }),
+        {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+          },
+          status: 401,
+        }
+      );
+    }
+
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       {
         global: {
           headers: {
-            Authorization: req.headers.get('Authorization'),
+            Authorization: authHeader,
           },
         },
       }
