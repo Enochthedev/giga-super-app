@@ -25,9 +25,17 @@ export const authMiddleware = async (
   try {
     // First, check for user context from API Gateway headers
     // The gateway validates the token and forwards user info
-    const userId = req.headers['x-user-id'] as string;
-    const userEmail = req.headers['x-user-email'] as string;
-    const userRole = req.headers['x-user-role'] as string;
+    // Note: Express lowercases all header names
+    const userId = (req.headers['x-user-id'] || req.headers['X-User-ID']) as string;
+    const userEmail = (req.headers['x-user-email'] || req.headers['X-User-Email']) as string;
+    const userRole = (req.headers['x-user-role'] || req.headers['X-User-Role']) as string;
+
+    // Debug logging to see what headers are received
+    console.log('[Auth] Headers received:', {
+      'x-user-id': req.headers['x-user-id'],
+      authorization: req.headers.authorization ? 'present' : 'missing',
+      allHeaders: Object.keys(req.headers),
+    });
 
     if (userId) {
       // Trust the gateway's authentication
