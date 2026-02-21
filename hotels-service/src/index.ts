@@ -22,9 +22,28 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Request logging
-app.use((req, _res, next) => {
+// Request logging and user context extraction from gateway headers
+app.use((req: any, _res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+
+  // Extract user context from API Gateway headers
+  // The gateway validates the JWT and forwards user info
+  const userId = req.headers['x-user-id'] as string;
+  if (userId) {
+    req.user = {
+      id: userId,
+      email: (req.headers['x-user-email'] as string) || '',
+      role: (req.headers['x-user-role'] as string) || 'user',
+    };
+    console.log(`[Auth] User context from gateway: ${userId}`);
+  }
+
+  // Store auth token if present
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    req.authToken = authHeader.substring(7);
+  }
+
   next();
 });
 
