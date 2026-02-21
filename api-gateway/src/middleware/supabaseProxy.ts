@@ -21,50 +21,9 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 }
 
 // Map API Gateway routes to Supabase function names
+// NOTE: Hotels, Bookings, Rooms, Favorites, Reviews, and Management routes
+// are now handled by Railway hotels-service and should NOT be in this map
 const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
-  // Hotel Management
-  '/api/v1/hotels/search': 'Search-hotels',
-  '/api/v1/hotels/:id': 'Get-hotel-details',
-  '/api/v1/hotels/:id/reviews': 'get-hotel-reviews',
-  '/api/v1/hotels/:id/availability': 'check-room-availability',
-  '/api/v1/hotels/:id/price': 'Calculate-booking-price',
-  '/api/v1/hotels/recommended': 'get-recommended-hotels',
-  '/api/v1/hotels/favorites': 'get-user-favorites',
-  '/api/v1/hotels/favorites/add': 'add-hotel-to-favorites',
-  '/api/v1/hotels/favorites/remove': 'remove-hotel-from-favorites',
-  '/api/v1/hotels/create': 'create-hotel',
-  '/api/v1/hotels/update': 'update-hotel',
-  '/api/v1/hotels/delete': 'delete-hotel',
-  '/api/v1/hotels/analytics': 'get-hotel-analytics',
-  '/api/v1/hotels/promo-codes/create': 'create-hotel-promo-code',
-  '/api/v1/hotels/promo-codes/validate': 'validate-hotel-promo-code',
-  '/api/v1/hotels/reviews/respond': 'respond-to-review',
-  '/api/v1/hotels/reviews/create': 'create-hotel-review',
-  '/api/v1/hotels/reviews/helpful': 'mark-review-helpful',
-
-  // Bookings
-  '/api/v1/bookings': 'Get-user-bookings',
-  '/api/v1/bookings/create': 'Create-booking',
-  '/api/v1/bookings/details': 'get-booking-details',
-  '/api/v1/bookings/:id': 'get-booking-details',
-  '/api/v1/bookings/cancel': 'cancel-booking',
-  '/api/v1/bookings/:id/cancel': 'cancel-booking',
-  '/api/v1/bookings/modify': 'modify-booking',
-  '/api/v1/bookings/calendar': 'get-booking-calendar',
-  '/api/v1/bookings/check-in': 'check-in-guest',
-  '/api/v1/bookings/check-out': 'Checkout-guest',
-  '/api/v1/bookings/status': 'update-booking-status',
-  '/api/v1/bookings/price': 'Calculate-booking-price',
-
-  // Rooms
-  '/api/v1/rooms/availability': 'check-room-availability',
-  '/api/v1/rooms/types': 'get-room-types',
-  '/api/v1/rooms/create': 'create-room-type',
-  '/api/v1/rooms/update': 'update-room-type',
-  '/api/v1/rooms/delete': 'delete-room-type',
-  '/api/v1/rooms/availability/update': 'update-room-availability',
-  '/api/v1/rooms/pricing/bulk': 'bulk-update-pricing',
-
   // User Profile
   '/api/v1/users/profile': 'get-user-profile',
   '/api/v1/users/profile/update': 'update-user-profile',
@@ -167,11 +126,9 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
 };
 
 // Deprecated endpoints with migration info
+// NOTE: Hotels endpoints are now handled by Railway hotels-service
 const DEPRECATED_ENDPOINTS: Record<string, { newEndpoint: string; deprecationDate: string }> = {
-  '/api/v1/hotels/search': {
-    newEndpoint: '/api/v1/search/hotels',
-    deprecationDate: '2026-02-01',
-  },
+  // Hotels search is now handled by hotels-service, not deprecated
 };
 
 /**
@@ -325,16 +282,10 @@ function getFunctionNameFromRoute(path: string, _method: string): string | null 
 
 /**
  * Extract path parameters from a route pattern
+ * NOTE: Hotel and booking path params removed - now handled by hotels-service
  */
 export function extractPathParams(path: string): Record<string, string> {
   const params: Record<string, string> = {};
-
-  // Extract hotel ID from /api/v1/hotels/:id patterns
-  // Matches: /api/v1/hotels/uuid, /api/v1/hotels/uuid/reviews, /api/v1/hotels/uuid/availability, etc.
-  const hotelIdMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})(\/.*)?$/i);
-  if (hotelIdMatch && hotelIdMatch[1]) {
-    params.hotelId = hotelIdMatch[1];
-  }
 
   // Extract ride ID from /api/v1/rides/:id patterns
   const rideIdMatch = path.match(/^\/api\/v1\/rides\/([a-f0-9-]{36})(\/.*)?$/i);
@@ -347,12 +298,6 @@ export function extractPathParams(path: string): Record<string, string> {
   const userIdMatch = path.match(/^\/api\/v1\/users\/([a-f0-9-]{36})(\/.*)?$/i);
   if (userIdMatch && userIdMatch[1]) {
     params.userId = userIdMatch[1];
-  }
-
-  // Extract booking ID from /api/v1/bookings/:id patterns
-  const bookingIdMatch = path.match(/^\/api\/v1\/bookings\/([a-f0-9-]{36})(\/.*)?$/i);
-  if (bookingIdMatch && bookingIdMatch[1]) {
-    params.bookingId = bookingIdMatch[1];
   }
 
   // Extract order ID from /api/v1/orders/:id patterns
@@ -377,13 +322,6 @@ export function extractPathParams(path: string): Record<string, string> {
   const transactionIdMatch = path.match(/^\/api\/v1\/transactions\/([a-f0-9-]{36})(\/.*)?$/i);
   if (transactionIdMatch && transactionIdMatch[1]) {
     params.transactionId = transactionIdMatch[1];
-  }
-
-  // Extract room type ID from /api/v1/rooms/:id patterns
-  const roomIdMatch = path.match(/^\/api\/v1\/rooms\/([a-f0-9-]{36})(\/.*)?$/i);
-  if (roomIdMatch && roomIdMatch[1]) {
-    params.roomTypeId = roomIdMatch[1];
-    params.room_type_id = roomIdMatch[1];
   }
 
   // Extract call ID from /api/v1/calls/:id patterns
@@ -427,10 +365,11 @@ export function extractPathParams(path: string): Record<string, string> {
 
 /**
  * Check if a route should be proxied to Supabase
+ * NOTE: Hotels, bookings, rooms, favorites, reviews, and management routes
+ * are now handled by Railway hotels-service
  */
 export function shouldProxyToSupabase(path: string): boolean {
   const supabaseRoutes = [
-    '/api/v1/hotels',
     '/api/v1/rides',
     '/api/v1/users',
     '/api/v1/cart',
