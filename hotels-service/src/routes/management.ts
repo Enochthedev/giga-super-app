@@ -14,12 +14,58 @@ const router = Router();
 router.use(authMiddleware);
 
 /**
+ * Helper function to check if user has a host profile
+ */
+async function checkHostProfile(userId: string): Promise<{ exists: boolean; profile?: any }> {
+  const { data: hostProfile, error } = await databaseService.supabase
+    .from('host_profiles')
+    .select('id, is_verified, business_name')
+    .eq('id', userId)
+    .single();
+
+  if (error || !hostProfile) {
+    return { exists: false };
+  }
+  return { exists: true, profile: hostProfile };
+}
+
+/**
+ * Helper function to return host profile required error
+ */
+function hostProfileRequiredError(res: any) {
+  return res.status(403).json({
+    success: false,
+    error: 'You must be a registered host to access this feature',
+    code: 'HOST_PROFILE_REQUIRED',
+    details: {
+      message: 'Please apply for the HOST role first using POST /api/v1/roles/apply',
+      apply_endpoint: '/api/v1/roles/apply',
+      required_data: {
+        role_name: 'HOST',
+        application_data: {
+          business_name: 'Your business name',
+          business_type: 'hotel',
+          description: 'Description of your business',
+        },
+      },
+    },
+  });
+}
+
+/**
  * POST /api/v1/management/hotels
  * Create a new hotel
  */
 router.post('/hotels', async (req: AuthenticatedRequest, res) => {
   try {
     const userId = req.user!.id;
+
+    // Check if user has a host profile
+    const hostCheck = await checkHostProfile(userId);
+    if (!hostCheck.exists) {
+      return hostProfileRequiredError(res);
+    }
+
     const {
       name,
       description,
@@ -178,6 +224,12 @@ router.delete('/hotels/:id', async (req: AuthenticatedRequest, res) => {
 router.get('/hotels', async (req: AuthenticatedRequest, res) => {
   try {
     const userId = req.user!.id;
+
+    // Check if user has a host profile
+    const hostCheck = await checkHostProfile(userId);
+    if (!hostCheck.exists) {
+      return hostProfileRequiredError(res);
+    }
 
     const { data: hotels, error } = await databaseService.supabase
       .from('hotels')
