@@ -1,12 +1,15 @@
 /**
  * Authentication middleware for Hotels Service
- * Trusts user context from API Gateway headers (X-User-ID, X-User-Email, X-User-Role)
- * Falls back to direct Supabase token validation if headers not present
+ * Direct Supabase token validation (consistent with other services)
  */
 
+import { createClient } from '@supabase/supabase-js';
 import { NextFunction, Request, Response } from 'express';
 
-import { databaseService } from '../utils/database.js';
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -23,41 +26,7 @@ export const authMiddleware = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // First, check for user context from API Gateway headers
-    // The gateway validates the token and forwards user info
-    // Note: Express lowercases all header names
-    const userId = (req.headers['x-user-id'] || req.headers['X-User-ID']) as string;
-    const userEmail = (req.headers['x-user-email'] || req.headers['X-User-Email']) as string;
-    const userRole = (req.headers['x-user-role'] || req.headers['X-User-Role']) as string;
-
-    // Debug logging to see what headers are received
-    console.log('[Auth] Headers received:', {
-      'x-user-id': req.headers['x-user-id'],
-      authorization: req.headers.authorization ? 'present' : 'missing',
-      allHeaders: Object.keys(req.headers),
-    });
-
-    if (userId) {
-      // Trust the gateway's authentication
-      req.user = {
-        id: userId,
-        email: userEmail || '',
-        role: userRole || 'user',
-      };
-
-      // Store the auth token if present
-      const authHeader = req.headers.authorization;
-      if (authHeader?.startsWith('Bearer ')) {
-        req.authToken = authHeader.substring(7);
-      }
-
-      console.log(`[Auth] User authenticated via gateway: ${userId}`);
-      next();
-      return;
-    }
-
-    // Fallback: Direct token validation (for local development or direct access)
-    const authHeader = req.headers.authorization || req.headers['authorization'];
+    const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
@@ -71,11 +40,10 @@ export const authMiddleware = async (
     req.authToken = token;
 
     // Validate token with Supabase
-    const userClient = databaseService.createUserClient(token);
     const {
       data: { user },
       error,
-    } = await userClient.auth.getUser();
+    } = await supabase.auth.getUser(token);
 
     if (error || !user) {
       console.error('[Auth] Token validation failed:', error?.message);
@@ -92,7 +60,7 @@ export const authMiddleware = async (
       role: user.app_metadata?.role || 'user',
     };
 
-    console.log(`[Auth] User authenticated via token: ${user.id}`);
+    console.log(`[Auth] User authenticated: ${user.id}`);
     next();
   } catch (error) {
     console.error('Auth middleware error:', error);
