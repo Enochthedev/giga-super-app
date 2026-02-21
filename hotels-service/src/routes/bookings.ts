@@ -31,8 +31,7 @@ router.get('/', async (req: AuthenticatedRequest, res) => {
         `
         *,
         hotel:hotels!inner(id, name, slug, city, state, country, address, featured_image, star_rating, phone, email),
-        room_type:room_types!inner(id, name, images, amenities, breakfast_included),
-        payment:hotel_booking_payments(id, amount, payment_status, payment_method, paid_at)
+        room_type:room_types!inner(id, name, images, amenities, breakfast_included)
       `,
         { count: 'exact' }
       )
@@ -78,14 +77,9 @@ router.get('/', async (req: AuthenticatedRequest, res) => {
         can_cancel: booking.booking_status === 'confirmed' && checkIn > now,
         can_review: booking.booking_status === 'checked_out' && !booking.has_review,
         payment_summary: {
-          total_paid:
-            booking.payment?.reduce(
-              (sum: number, p: any) =>
-                p.payment_status === 'completed' ? sum + parseFloat(p.amount) : sum,
-              0
-            ) || 0,
+          total_paid: booking.total_amount || 0,
           payment_complete: booking.payment_status === 'paid',
-          payment_method: booking.payment?.[0]?.payment_method || null,
+          payment_method: null,
         },
       };
 
@@ -136,8 +130,7 @@ router.get('/:id', async (req: AuthenticatedRequest, res) => {
         `
         *,
         hotel:hotels!inner(id, name, slug, city, state, country, address, featured_image, star_rating, phone, email, description),
-        room_type:room_types!inner(id, name, description, images, amenities, breakfast_included, base_price),
-        payment:hotel_booking_payments(id, amount, payment_status, payment_method, paid_at, transaction_reference)
+        room_type:room_types!inner(id, name, description, images, amenities, breakfast_included, base_price)
       `
       )
       .eq('id', bookingId)
@@ -275,12 +268,10 @@ router.post('/create', async (req: AuthenticatedRequest, res) => {
     if (availability && availability.length > 0) {
       const minAvailable = Math.min(...availability.map(a => a.available_rooms));
       if (minAvailable < roomsVal) {
-        res
-          .status(400)
-          .json({
-            success: false,
-            error: `Only ${minAvailable} room(s) available for selected dates`,
-          });
+        res.status(400).json({
+          success: false,
+          error: `Only ${minAvailable} room(s) available for selected dates`,
+        });
         return;
       }
     }
@@ -380,12 +371,10 @@ router.post('/:id/cancel', async (req: AuthenticatedRequest, res) => {
     }
 
     if (['cancelled', 'completed', 'checked_out'].includes(booking.booking_status)) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          error: `Cannot cancel booking with status: ${booking.booking_status}`,
-        });
+      res.status(400).json({
+        success: false,
+        error: `Cannot cancel booking with status: ${booking.booking_status}`,
+      });
       return;
     }
 
@@ -467,12 +456,10 @@ router.post('/price', async (req: AuthenticatedRequest, res) => {
     const promoCodeVal = promoCode || promo_code;
 
     if (!hotelIdVal || !roomTypeIdVal || !checkInVal || !checkOutVal) {
-      res
-        .status(400)
-        .json({
-          success: false,
-          error: 'hotelId, roomTypeId, checkInDate, and checkOutDate are required',
-        });
+      res.status(400).json({
+        success: false,
+        error: 'hotelId, roomTypeId, checkInDate, and checkOutDate are required',
+      });
       return;
     }
 
