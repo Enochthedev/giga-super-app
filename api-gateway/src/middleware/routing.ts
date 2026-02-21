@@ -74,6 +74,8 @@ export const routingMiddleware = (
       service.platform === 'supabase'
         ? path => {
             // Map API paths to Supabase function names
+            // NOTE: Hotels, bookings, rooms, favorites, reviews, and management routes
+            // are now handled by Railway hotels-service
             const functionMappings: Record<string, string> = {
               // User management
               '/api/v1/users/search': '/functions/v1/search-users',
@@ -81,27 +83,6 @@ export const routingMiddleware = (
               '/api/v1/user/profile': '/functions/v1/get-user-profile',
               '/api/v1/user/addresses': '/functions/v1/add-user-address',
               '/api/v1/user/switch-role': '/functions/v1/switch-role',
-
-              // Hotels - Customer facing (public)
-              '/api/v1/hotels/search': '/functions/v1/Search-hotels',
-              '/api/v1/hotels/recommended': '/functions/v1/get-recommended-hotels',
-              '/api/v1/hotels/details': '/functions/v1/Get-hotel-details',
-              '/api/v1/hotels/reviews': '/functions/v1/get-hotel-reviews',
-              '/api/v1/hotels/favorites': '/functions/v1/get-user-favorites',
-              '/api/v1/hotels/favorites/add': '/functions/v1/add-hotel-to-favorites',
-              '/api/v1/hotels/favorites/remove': '/functions/v1/remove-hotel-from-favorites',
-
-              // Hotel bookings
-              '/api/v1/bookings': '/functions/v1/Get-user-bookings',
-              '/api/v1/bookings/create': '/functions/v1/Create-booking',
-              '/api/v1/bookings/cancel': '/functions/v1/cancel-booking',
-              '/api/v1/bookings/modify': '/functions/v1/modify-booking',
-              '/api/v1/bookings/details': '/functions/v1/get-booking-details',
-              '/api/v1/bookings/price': '/functions/v1/Calculate-booking-price',
-
-              // Room availability
-              '/api/v1/rooms/availability': '/functions/v1/check-room-availability',
-              '/api/v1/rooms/types': '/functions/v1/get-room-types',
 
               // E-commerce - Customer facing (public for browsing)
               '/api/v1/cart': '/functions/v1/get-user-cart',
@@ -148,30 +129,6 @@ export const routingMiddleware = (
               '/api/v1/driver/earnings': '/functions/v1/get-earnings',
               '/api/v1/driver/analytics': '/functions/v1/get-ride-analytics',
 
-              // Hotel Management (Host/Admin)
-              '/api/v1/hotels/create': '/functions/v1/create-hotel',
-              '/api/v1/hotels/update': '/functions/v1/update-hotel',
-              '/api/v1/hotels/delete': '/functions/v1/delete-hotel',
-              '/api/v1/hotels/analytics': '/functions/v1/get-hotel-analytics',
-              '/api/v1/hotels/promo-codes/create': '/functions/v1/create-hotel-promo-code',
-              '/api/v1/hotels/promo-codes/validate': '/functions/v1/validate-hotel-promo-code',
-              '/api/v1/hotels/reviews/respond': '/functions/v1/respond-to-review',
-              '/api/v1/hotels/reviews/create': '/functions/v1/create-hotel-review',
-              '/api/v1/hotels/reviews/helpful': '/functions/v1/mark-review-helpful',
-
-              // Room Management (Host/Admin)
-              '/api/v1/rooms/create': '/functions/v1/create-room-type',
-              '/api/v1/rooms/update': '/functions/v1/update-room-type',
-              '/api/v1/rooms/delete': '/functions/v1/delete-room-type',
-              '/api/v1/rooms/availability/update': '/functions/v1/update-room-availability',
-              '/api/v1/rooms/pricing/bulk': '/functions/v1/bulk-update-pricing',
-
-              // Booking Management (Host/Admin)
-              '/api/v1/bookings/calendar': '/functions/v1/get-booking-calendar',
-              '/api/v1/bookings/check-in': '/functions/v1/check-in-guest',
-              '/api/v1/bookings/check-out': '/functions/v1/Checkout-guest',
-              '/api/v1/bookings/status': '/functions/v1/update-booking-status',
-
               // Social
               '/api/v1/social/feed': '/functions/v1/get-social-feed',
               '/api/v1/social/posts': '/functions/v1/get-user-posts',
@@ -187,52 +144,6 @@ export const routingMiddleware = (
             // Check for exact match first
             if (functionMappings[path]) {
               return functionMappings[path];
-            }
-
-            // Handle dynamic path parameters for hotels
-            // /api/v1/hotels/:hotel_id -> /functions/v1/Get-hotel-details?hotelId=:hotel_id
-            const hotelDetailMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})$/i);
-            if (hotelDetailMatch) {
-              return `/functions/v1/Get-hotel-details?hotelId=${hotelDetailMatch[1]}`;
-            }
-
-            // Handle hotel reviews with hotel_id
-            // /api/v1/hotels/:hotel_id/reviews -> /functions/v1/get-hotel-reviews?hotelId=:hotel_id
-            const hotelReviewsMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})\/reviews$/i);
-            if (hotelReviewsMatch) {
-              return `/functions/v1/get-hotel-reviews?hotelId=${hotelReviewsMatch[1]}`;
-            }
-
-            // Handle hotel availability with hotel_id
-            // /api/v1/hotels/:hotel_id/availability -> /functions/v1/check-room-availability?hotelId=:hotel_id
-            const hotelAvailabilityMatch = path.match(
-              /^\/api\/v1\/hotels\/([a-f0-9-]{36})\/availability$/i
-            );
-            if (hotelAvailabilityMatch) {
-              return `/functions/v1/check-room-availability?hotelId=${hotelAvailabilityMatch[1]}`;
-            }
-
-            // Handle hotel price calculation
-            // /api/v1/hotels/:hotel_id/price -> /functions/v1/Calculate-booking-price?hotelId=:hotel_id
-            const hotelPriceMatch = path.match(/^\/api\/v1\/hotels\/([a-f0-9-]{36})\/price$/i);
-            if (hotelPriceMatch) {
-              return `/functions/v1/Calculate-booking-price?hotelId=${hotelPriceMatch[1]}`;
-            }
-
-            // Handle booking details with booking_id
-            // /api/v1/bookings/:booking_id -> /functions/v1/get-booking-details?bookingId=:booking_id
-            const bookingDetailMatch = path.match(/^\/api\/v1\/bookings\/([a-f0-9-]{36})$/i);
-            if (bookingDetailMatch) {
-              return `/functions/v1/get-booking-details?bookingId=${bookingDetailMatch[1]}`;
-            }
-
-            // Handle booking cancellation with booking_id
-            // /api/v1/bookings/:booking_id/cancel -> /functions/v1/cancel-booking?bookingId=:booking_id
-            const bookingCancelMatch = path.match(
-              /^\/api\/v1\/bookings\/([a-f0-9-]{36})\/cancel$/i
-            );
-            if (bookingCancelMatch) {
-              return `/functions/v1/cancel-booking?bookingId=${bookingCancelMatch[1]}`;
             }
 
             // Handle ride details with ride_id
@@ -284,13 +195,6 @@ export const routingMiddleware = (
             const userProfileMatch = path.match(/^\/api\/v1\/users\/([a-f0-9-]{36})$/i);
             if (userProfileMatch) {
               return `/functions/v1/get-user-profile?userId=${userProfileMatch[1]}`;
-            }
-
-            // Handle room type details with room_type_id
-            // /api/v1/rooms/:room_type_id -> /functions/v1/get-room-type?roomTypeId=:room_type_id
-            const roomTypeMatch = path.match(/^\/api\/v1\/rooms\/([a-f0-9-]{36})$/i);
-            if (roomTypeMatch) {
-              return `/functions/v1/get-room-type?roomTypeId=${roomTypeMatch[1]}`;
             }
 
             // Handle support ticket details with ticket_id
