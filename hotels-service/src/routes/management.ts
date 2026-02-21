@@ -756,12 +756,18 @@ router.post('/hotels/:hotelId/promo-codes', async (req: AuthenticatedRequest, re
     const { hotelId } = req.params;
     const {
       code,
+      description,
       discount_type,
       discount_value,
-      min_booking_amount,
-      max_uses,
+      min_order_amount,
+      max_discount_amount,
+      usage_limit,
+      per_user_limit,
+      min_nights,
       valid_from,
       valid_until,
+      first_booking_only,
+      applies_to_weekends_only,
     } = req.body;
 
     const { data: hotel } = await databaseService.supabase
@@ -785,16 +791,23 @@ router.post('/hotels/:hotelId/promo-codes', async (req: AuthenticatedRequest, re
     const { data: promo, error } = await databaseService.supabase
       .from('hotel_promo_codes')
       .insert({
-        hotel_id: hotelId,
         code: code.toUpperCase(),
+        description,
         discount_type, // 'percentage' or 'fixed'
         discount_value,
-        min_booking_amount: min_booking_amount || 0,
-        max_uses: max_uses || null,
-        current_uses: 0,
+        min_order_amount: min_order_amount || 0,
+        max_discount_amount,
+        usage_limit: usage_limit || null,
+        usage_count: 0,
+        per_user_limit: per_user_limit || null,
+        min_nights: min_nights || null,
+        applicable_hotels: [hotelId], // Apply to this specific hotel
         valid_from: valid_from || new Date().toISOString(),
         valid_until,
+        first_booking_only: first_booking_only || false,
+        applies_to_weekends_only: applies_to_weekends_only || false,
         is_active: true,
+        created_by: userId,
       })
       .select()
       .single();
@@ -820,16 +833,30 @@ router.post('/promo-codes/validate', async (req: AuthenticatedRequest, res) => {
       return;
     }
 
+    // Find promo code that applies to this hotel
     const { data: promo, error } = await databaseService.supabase
       .from('hotel_promo_codes')
       .select('*')
       .eq('code', code.toUpperCase())
-      .eq('hotel_id', hotel_id)
       .eq('is_active', true)
       .single();
 
     if (error || !promo) {
       res.status(400).json({ success: false, error: 'Invalid promo code' });
+      return;
+    }
+
+    // Check if promo applies to this hotel
+    if (promo.applicable_hotels && promo.applicable_hotels.length > 0) {
+      if (!promo.applicable_hotels.includes(hotel_id)) {
+        res.status(400).json({ success: false, error: 'Promo code not valid for this hotel' });
+        return;
+      }
+    }
+
+    // Check if hotel is excluded
+    if (promo.excluded_hotels && promo.excluded_hotels.includes(hotel_id)) {
+      res.status(400).json({ success: false, error: 'Promo code not valid for this hotel' });
       return;
     }
 
@@ -842,14 +869,14 @@ router.post('/promo-codes/validate', async (req: AuthenticatedRequest, res) => {
       res.status(400).json({ success: false, error: 'Promo code has expired' });
       return;
     }
-    if (promo.max_uses && promo.current_uses >= promo.max_uses) {
+    if (promo.usage_limit && promo.usage_count >= promo.usage_limit) {
       res.status(400).json({ success: false, error: 'Promo code usage limit reached' });
       return;
     }
-    if (booking_amount && promo.min_booking_amount > booking_amount) {
+    if (booking_amount && promo.min_order_amount > booking_amount) {
       res
         .status(400)
-        .json({ success: false, error: `Minimum booking amount is ${promo.min_booking_amount}` });
+        .json({ success: false, error: `Minimum booking amount is ${promo.min_order_amount}` });
       return;
     }
 
@@ -858,6 +885,10 @@ router.post('/promo-codes/validate', async (req: AuthenticatedRequest, res) => {
       discount = booking_amount
         ? (booking_amount * promo.discount_value) / 100
         : promo.discount_value;
+      // Apply max discount cap if set
+      if (promo.max_discount_amount && discount > promo.max_discount_amount) {
+        discount = promo.max_discount_amount;
+      }
     } else {
       discount = promo.discount_value;
     }
@@ -867,9 +898,12 @@ router.post('/promo-codes/validate', async (req: AuthenticatedRequest, res) => {
       data: {
         valid: true,
         code: promo.code,
+        description: promo.description,
         discount_type: promo.discount_type,
         discount_value: promo.discount_value,
         calculated_discount: discount,
+        max_discount_amount: promo.max_discount_amount,
+        min_order_amount: promo.min_order_amount,
       },
     });
   } catch (error) {
