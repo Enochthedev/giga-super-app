@@ -70,6 +70,8 @@ tags:
     description: Ad review and approval workflow
   - name: Admin Panel
     description: Administrative categories and settings
+  - name: Pending Entries
+    description: Pending business module entries awaiting approval (products, hotels, drivers, media)
 
 security:
   - BearerAuth: []
@@ -1855,6 +1857,202 @@ paths:
         401:
           $ref: '#/components/responses/Unauthorized'
 
+  # ============================================================================
+  # PENDING ENTRIES - Global Approval Workflow
+  # ============================================================================
+
+  /api/pending-entries:
+    get:
+      tags: [Pending Entries]
+      summary: Get all pending entries across business modules
+      description: |
+        Retrieve pending entries for products, hotels, drivers, and media content awaiting approval.
+        This is a global endpoint that aggregates pending items from all business modules.
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: module
+          schema:
+            type: string
+            enum: [ecommerce, hotels, taxi, media]
+          description: Filter by specific module (optional - returns all if not specified)
+      responses:
+        200:
+          description: List of pending entries retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      products:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PendingProduct'
+                      hotels:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PendingHotel'
+                      drivers:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PendingDriver'
+                      media:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PendingMedia'
+                  metadata:
+                    type: object
+                    properties:
+                      timestamp:
+                        type: string
+                        format: date-time
+                      counts:
+                        type: object
+                        properties:
+                          products:
+                            type: integer
+                            example: 5
+                          hotels:
+                            type: integer
+                            example: 3
+                          drivers:
+                            type: integer
+                            example: 8
+                          media:
+                            type: integer
+                            example: 2
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/pending-entries/{module}/{id}/approve:
+    post:
+      tags: [Pending Entries]
+      summary: Approve a pending entry
+      description: Approve a pending product, hotel, driver, or media content
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: module
+          required: true
+          schema:
+            type: string
+            enum: [products, hotels, drivers, media]
+          description: The module type of the entry
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the entry to approve
+      responses:
+        200:
+          description: Entry approved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "products entry approved successfully"
+                  data:
+                    type: object
+                    description: The approved entry with updated status
+        400:
+          description: Invalid module type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid module. Valid modules: products, hotels, drivers, media"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/pending-entries/{module}/{id}/reject:
+    post:
+      tags: [Pending Entries]
+      summary: Reject a pending entry
+      description: Reject a pending product, hotel, driver, or media content with a reason
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: module
+          required: true
+          schema:
+            type: string
+            enum: [products, hotels, drivers, media]
+          description: The module type of the entry
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the entry to reject
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  description: Reason for rejection
+                  example: "Product images do not meet quality standards"
+      responses:
+        200:
+          description: Entry rejected successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "products entry rejected successfully"
+                  data:
+                    type: object
+                    description: The rejected entry with updated status
+        400:
+          description: Invalid module type
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        403:
+          $ref: '#/components/responses/Forbidden'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -2580,3 +2778,142 @@ components:
             phone:
               type: string
               example: '+2348012345678'
+
+    # Pending Entries Schemas
+    PendingProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Samsung Galaxy S24 Ultra"
+        description:
+          type: string
+          example: "Latest flagship smartphone with AI features"
+        final_price:
+          type: number
+          example: 850000
+        vendor_id:
+          type: string
+          format: uuid
+        category_id:
+          type: string
+          format: uuid
+        approval_status:
+          type: string
+          enum: [pending, approved, rejected]
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
+
+    PendingHotel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Grand Lekki Resort"
+        description:
+          type: string
+          example: "5-star luxury resort with ocean view"
+        city:
+          type: string
+          example: "Lagos"
+        state:
+          type: string
+          example: "Lagos"
+        star_rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        approval_status:
+          type: string
+          enum: [pending, approved, rejected]
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
+
+    PendingDriver:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        first_name:
+          type: string
+          example: "Chukwuemeka"
+        last_name:
+          type: string
+          example: "Okonkwo"
+        email:
+          type: string
+          format: email
+          example: "chukwuemeka@email.com"
+        phone:
+          type: string
+          example: "+2348012345678"
+        city:
+          type: string
+          example: "Lagos"
+        license_number:
+          type: string
+          example: "LIC-2024-12345"
+        vehicle_make:
+          type: string
+          example: "Toyota"
+        vehicle_model:
+          type: string
+          example: "Camry"
+        plate_number:
+          type: string
+          example: "ABC-123-XY"
+        approval_status:
+          type: string
+          enum: [pending, approved, rejected]
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
+
+    PendingMedia:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          example: "Hotel Promotional Video"
+        description:
+          type: string
+          example: "Marketing video for Grand Lekki Resort"
+        content_type:
+          type: string
+          example: "video/mp4"
+        file_name:
+          type: string
+          example: "grand-lekki-promo.mp4"
+        category:
+          type: string
+          example: "promotional"
+        publisher_name:
+          type: string
+          example: "Marketing Team"
+        publisher_email:
+          type: string
+          format: email
+          example: "marketing@grandlekki.com"
+        approval_status:
+          type: string
+          enum: [pending, approved, rejected]
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
