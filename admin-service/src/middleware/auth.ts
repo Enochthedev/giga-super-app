@@ -152,7 +152,11 @@ export const requireRole = (roles: string[]) => {
       });
     }
 
-    if (!roles.includes(req.user.role)) {
+    // Case-insensitive role comparison
+    const userRoleLower = req.user.role.toLowerCase();
+    const hasRole = roles.some(r => r.toLowerCase() === userRoleLower);
+
+    if (!hasRole) {
       logger.warn('Role access denied', {
         userId: req.user.id,
         required: roles,
