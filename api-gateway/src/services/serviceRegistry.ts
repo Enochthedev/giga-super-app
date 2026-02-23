@@ -168,6 +168,7 @@ class ServiceRegistry {
           '/api/operations*',
           '/api/managers*',
           '/api/ads*',
+          '/api/pending-entries*',
         ],
       });
     }
