@@ -325,12 +325,13 @@ router.get('/nearby', async (req: Request, res: Response) => {
     }
 
     // Get online drivers with recent location updates (within last 5 minutes)
-    let query = supabase
+    // Note: vehicle_type is stored in vehicle_info JSON, not as a separate column
+    const query = supabase
       .from('driver_profiles')
       .select(
         `
         id, user_id, license_number, vehicle_info, is_online, current_location,
-        rating, total_rides, is_verified, vehicle_type, heading, speed,
+        rating, total_rides, is_verified, heading, speed,
         last_location_updated_at,
         user:user_profiles(first_name, last_name, avatar_url)
       `
@@ -340,21 +341,23 @@ router.get('/nearby', async (req: Request, res: Response) => {
       .is('deleted_at', null)
       .gte('last_location_updated_at', new Date(Date.now() - 5 * 60 * 1000).toISOString());
 
-    if (vehicle_type) {
-      query = query.eq('vehicle_type', vehicle_type);
-    }
-
     const { data: drivers, error } = await query;
 
     if (error) throw error;
 
     // Calculate distance and filter by radius
+    // Also filter by vehicle_type from vehicle_info JSON if specified
     const nearbyDrivers = (drivers || [])
       .map(driver => {
         const driverLat = driver.current_location?.latitude;
         const driverLng = driver.current_location?.longitude;
 
         if (!driverLat || !driverLng) return null;
+
+        // Filter by vehicle_type from vehicle_info JSON if specified
+        if (vehicle_type && driver.vehicle_info?.type !== vehicle_type) {
+          return null;
+        }
 
         const distance = calculateDistance(lat, lng, driverLat, driverLng);
         if (distance > searchRadius) return null;
@@ -602,7 +605,7 @@ router.get('/:driverId', async (req: Request, res: Response) => {
       .from('driver_profiles')
       .select(
         `
-        id, user_id, vehicle_info, is_online, rating, total_rides, is_verified, vehicle_type,
+        id, user_id, vehicle_info, is_online, rating, total_rides, is_verified,
         user:user_profiles(first_name, last_name, avatar_url)
       `
       )

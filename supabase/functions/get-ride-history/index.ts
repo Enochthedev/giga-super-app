@@ -64,7 +64,7 @@ serve(async req => {
         if (role === 'rider' && ride.driver_id) {
           const { data: driver } = await supabaseClient
             .from('driver_profiles')
-            .select('user_id, vehicle_type, rating, vehicle_info')
+            .select('user_id, rating, vehicle_info')
             .eq('user_id', ride.driver_id)
             .single();
 

@@ -46,10 +46,10 @@ async function getRevenueForPeriod(startDate: Date, endDate: Date): Promise<Cate
       .eq('status', 'completed'),
     supabase
       .from('hotel_bookings')
-      .select('total_price')
+      .select('total_amount')
       .gte('created_at', startStr)
       .lt('created_at', endStr)
-      .in('status', ['confirmed', 'completed']),
+      .in('booking_status', ['confirmed', 'completed']),
     supabase
       .from('rides')
       .select('final_amount')
@@ -68,7 +68,7 @@ async function getRevenueForPeriod(startDate: Date, endDate: Date): Promise<Cate
     (sum, o) => sum + (Number(o.total_amount) || 0),
     0
   );
-  const hotelTotal = (hotel.data || []).reduce((sum, b) => sum + (Number(b.total_price) || 0), 0);
+  const hotelTotal = (hotel.data || []).reduce((sum, b) => sum + (Number(b.total_amount) || 0), 0);
   const taxiTotal = (taxi.data || []).reduce((sum, r) => sum + (Number(r.final_amount) || 0), 0);
   const mediaTotal = (media.data || []).reduce((sum, a) => sum + (Number(a.budget) || 0), 0);
 
