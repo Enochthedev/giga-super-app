@@ -1,0 +1,557 @@
+{
+  "info": {
+    "name": "Search Service - Admin API",
+    "description": "Admin search endpoints for the Giga platform Search Service.\n\nThese endpoints require authentication and specific roles:\n- **Moderator**: users, vendors, bookings, orders\n- **Admin**: drivers, transactions, rides\n\nBase URL: `{{baseUrl}}/api/v1/search/admin`",
+    "version": "2.2.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{authToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3004",
+      "type": "string"
+    },
+    {
+      "key": "authToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Search Users",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"\",\n  \"email\": \"\",\n  \"phone\": \"\",\n  \"is_active\": true,\n  \"is_phone_verified\": null,\n  \"state\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "users"]
+            },
+            "description": "Search user profiles with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `q`: Search query (name, email, phone)\n- `email`: Filter by email\n- `phone`: Filter by phone\n- `is_active`: Filter by active status\n- `is_phone_verified`: Filter by verification\n- `state`: Filter by state/region"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Users - By Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@example.com\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "users"]
+            },
+            "description": "Search users by email address"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Users - Inactive",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_active\": false,\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "users"]
+            },
+            "description": "Find all inactive users"
+          },
+          "response": []
+        }
+      ],
+      "description": "User profile search endpoints (Moderator access)"
+    },
+    {
+      "name": "Vendors",
+      "item": [
+        {
+          "name": "Search Vendors",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"\",\n  \"business_name\": \"\",\n  \"is_verified\": null,\n  \"is_active\": true,\n  \"min_rating\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "vendors"]
+            },
+            "description": "Search ecommerce vendors with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `q`: Search query (business name)\n- `business_name`: Filter by business name\n- `is_verified`: Filter by verification status\n- `is_active`: Filter by active status\n- `min_rating`: Minimum rating (0-5)"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Vendors - Unverified",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_verified\": false,\n  \"is_active\": true,\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "vendors"]
+            },
+            "description": "Find vendors pending verification"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Vendors - Top Rated",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"min_rating\": 4.5,\n  \"is_verified\": true,\n  \"sort\": \"average_rating\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "vendors"]
+            },
+            "description": "Find top-rated verified vendors"
+          },
+          "response": []
+        }
+      ],
+      "description": "Vendor search endpoints (Moderator access)"
+    },
+    {
+      "name": "Drivers",
+      "item": [
+        {
+          "name": "Search Drivers",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"\",\n  \"license_number\": \"\",\n  \"vehicle_type\": \"\",\n  \"is_online\": null,\n  \"is_verified\": null,\n  \"min_rating\": null,\n  \"subscription_tier\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "drivers"]
+            },
+            "description": "Search driver profiles with filters.\n\n**Required Role**: Admin only\n\n**Filters**:\n- `q`: Search query (license, vehicle)\n- `license_number`: Filter by license\n- `vehicle_type`: sedan, suv, motorcycle, etc.\n- `is_online`: Filter by online status\n- `is_verified`: Filter by verification\n- `min_rating`: Minimum rating (0-5)\n- `subscription_tier`: Filter by tier"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Drivers - Online",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_online\": true,\n  \"is_verified\": true,\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "drivers"]
+            },
+            "description": "Find all online verified drivers"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Drivers - By Vehicle Type",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vehicle_type\": \"sedan\",\n  \"is_verified\": true,\n  \"min_rating\": 4.0,\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "drivers"]
+            },
+            "description": "Find drivers by vehicle type"
+          },
+          "response": []
+        }
+      ],
+      "description": "Driver search endpoints (Admin access only)"
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Search Bookings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"\",\n  \"booking_number\": \"\",\n  \"user_id\": \"\",\n  \"hotel_id\": \"\",\n  \"status\": \"\",\n  \"payment_status\": \"\",\n  \"check_in_from\": \"\",\n  \"check_in_to\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "bookings"]
+            },
+            "description": "Search hotel bookings with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `booking_number`: Filter by booking number\n- `user_id`: Filter by user UUID\n- `hotel_id`: Filter by hotel UUID\n- `status`: pending, confirmed, checked_in, checked_out, cancelled\n- `payment_status`: pending, paid, refunded, failed\n- `check_in_from/to`: Date range filter"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Bookings - Pending Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\",\n  \"payment_status\": \"pending\",\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "bookings"]
+            },
+            "description": "Find confirmed bookings with pending payment"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Bookings - Date Range",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"check_in_from\": \"2024-03-01\",\n  \"check_in_to\": \"2024-03-31\",\n  \"status\": \"confirmed\",\n  \"page\": 1,\n  \"limit\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "bookings"]
+            },
+            "description": "Find bookings within a date range"
+          },
+          "response": []
+        }
+      ],
+      "description": "Hotel booking search endpoints (Moderator access)"
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Search Orders",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"\",\n  \"order_number\": \"\",\n  \"user_id\": \"\",\n  \"status\": \"\",\n  \"payment_status\": \"\",\n  \"min_amount\": null,\n  \"max_amount\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "orders"]
+            },
+            "description": "Search ecommerce orders with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `order_number`: Filter by order number\n- `user_id`: Filter by user UUID\n- `status`: pending, processing, shipped, delivered, cancelled, refunded\n- `payment_status`: pending, paid, refunded, failed\n- `min_amount/max_amount`: Amount range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Orders - High Value",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"min_amount\": 100000,\n  \"payment_status\": \"paid\",\n  \"sort\": \"total_amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "orders"]
+            },
+            "description": "Find high-value orders"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Orders - Pending Delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"shipped\",\n  \"payment_status\": \"paid\",\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "orders"]
+            },
+            "description": "Find orders in transit"
+          },
+          "response": []
+        }
+      ],
+      "description": "Ecommerce order search endpoints (Moderator access)"
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Search Transactions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"\",\n  \"reference\": \"\",\n  \"user_id\": \"\",\n  \"payment_method\": \"\",\n  \"payment_status\": \"\",\n  \"module_name\": \"\",\n  \"min_amount\": null,\n  \"max_amount\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "transactions"]
+            },
+            "description": "Search payment transactions with filters.\n\n**Required Role**: Admin only (sensitive financial data)\n\n**Note**: All access is logged for audit purposes.\n\n**Filters**:\n- `reference`: Filter by payment reference\n- `user_id`: Filter by user UUID\n- `payment_method`: card, bank, ussd, etc.\n- `payment_status`: pending, success, failed, refunded\n- `module_name`: hotel_booking, ecommerce, taxi, etc.\n- `min_amount/max_amount`: Amount range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Transactions - Failed",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_status\": \"failed\",\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "transactions"]
+            },
+            "description": "Find failed transactions for investigation"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Transactions - By Module",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"module_name\": \"hotel_booking\",\n  \"payment_status\": \"success\",\n  \"min_amount\": 50000,\n  \"sort\": \"amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "transactions"]
+            },
+            "description": "Find transactions by business module"
+          },
+          "response": []
+        }
+      ],
+      "description": "Payment transaction search endpoints (Admin access only)"
+    },
+    {
+      "name": "Rides",
+      "item": [
+        {
+          "name": "Search Rides",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"\",\n  \"driver_id\": \"\",\n  \"status\": \"\",\n  \"vehicle_type\": \"\",\n  \"min_fare\": null,\n  \"max_fare\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "rides"]
+            },
+            "description": "Search taxi rides with filters.\n\n**Required Role**: Admin only\n\n**Filters**:\n- `user_id`: Filter by rider UUID\n- `driver_id`: Filter by driver UUID\n- `status`: pending, accepted, in_progress, completed, cancelled\n- `vehicle_type`: sedan, suv, motorcycle, etc.\n- `min_fare/max_fare`: Fare range"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Rides - Cancelled",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"cancelled\",\n  \"page\": 1,\n  \"limit\": 50\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "rides"]
+            },
+            "description": "Find cancelled rides for analysis"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Rides - By Driver",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"driver_id\": \"{{driverId}}\",\n  \"status\": \"completed\",\n  \"sort\": \"fare\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "rides"]
+            },
+            "description": "Find all rides for a specific driver"
+          },
+          "response": []
+        }
+      ],
+      "description": "Taxi ride search endpoints (Admin access only)"
+    }
+  ]
+}

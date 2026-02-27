@@ -58,6 +58,10 @@ Cache TTL varies by query type (5-15 minutes).
       { name: 'Hotels', description: 'Hotel search endpoints' },
       { name: 'Products', description: 'Product search endpoints' },
       { name: 'Drivers', description: 'Driver search endpoints' },
+      {
+        name: 'Admin Search',
+        description: 'Protected admin search endpoints - requires moderator or admin role',
+      },
     ],
     components: {
       securitySchemes: {
@@ -341,6 +345,407 @@ Cache TTL varies by query type (5-15 minutes).
                 message: { type: 'string', example: 'Search query cannot be empty' },
               },
             },
+          },
+        },
+        // Admin Search Schemas
+        AdminPaginationParams: {
+          type: 'object',
+          properties: {
+            page: { type: 'integer', minimum: 1, default: 1, example: 1 },
+            limit: { type: 'integer', minimum: 1, maximum: 100, default: 20, example: 20 },
+            sort: { type: 'string', description: 'Field to sort by', example: 'created_at' },
+            order: { type: 'string', enum: ['asc', 'desc'], default: 'desc', example: 'desc' },
+          },
+        },
+        AdminUserSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                q: {
+                  type: 'string',
+                  description: 'Search query for name, email, phone',
+                  example: 'john',
+                },
+                email: {
+                  type: 'string',
+                  description: 'Filter by email',
+                  example: 'john@example.com',
+                },
+                phone: { type: 'string', description: 'Filter by phone', example: '+234' },
+                is_active: { type: 'boolean', description: 'Filter by active status' },
+                is_phone_verified: { type: 'boolean', description: 'Filter by phone verification' },
+                state: { type: 'string', description: 'Filter by state/region', example: 'Lagos' },
+              },
+            },
+          ],
+        },
+        AdminUserSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      email: { type: 'string' },
+                      phone: { type: 'string' },
+                      first_name: { type: 'string' },
+                      last_name: { type: 'string' },
+                      avatar_url: { type: 'string' },
+                      is_active: { type: 'boolean' },
+                      is_phone_verified: { type: 'boolean' },
+                      state: { type: 'string' },
+                      last_login_at: { type: 'string', format: 'date-time' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminVendorSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                q: { type: 'string', description: 'Search query for business name' },
+                business_name: { type: 'string', description: 'Filter by business name' },
+                is_verified: { type: 'boolean', description: 'Filter by verification status' },
+                is_active: { type: 'boolean', description: 'Filter by active status' },
+                min_rating: {
+                  type: 'number',
+                  minimum: 0,
+                  maximum: 5,
+                  description: 'Minimum rating',
+                },
+              },
+            },
+          ],
+        },
+        AdminVendorSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      user_id: { type: 'string', format: 'uuid' },
+                      business_name: { type: 'string' },
+                      business_registration: { type: 'string' },
+                      is_verified: { type: 'boolean' },
+                      is_active: { type: 'boolean' },
+                      average_rating: { type: 'number' },
+                      total_sales: { type: 'number' },
+                      commission_rate: { type: 'number' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminDriverSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                q: { type: 'string', description: 'Search query for license or vehicle' },
+                license_number: { type: 'string', description: 'Filter by license number' },
+                vehicle_type: { type: 'string', description: 'Filter by vehicle type' },
+                is_online: { type: 'boolean', description: 'Filter by online status' },
+                is_verified: { type: 'boolean', description: 'Filter by verification status' },
+                min_rating: { type: 'number', minimum: 0, maximum: 5 },
+                subscription_tier: { type: 'string', description: 'Filter by subscription tier' },
+              },
+            },
+          ],
+        },
+        AdminDriverSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      user_id: { type: 'string', format: 'uuid' },
+                      license_number: { type: 'string' },
+                      vehicle_info: { type: 'object' },
+                      vehicle_type: { type: 'string' },
+                      is_online: { type: 'boolean' },
+                      rating: { type: 'number' },
+                      total_rides: { type: 'integer' },
+                      is_verified: { type: 'boolean' },
+                      subscription_tier: { type: 'string' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminBookingSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                q: { type: 'string', description: 'Search by booking number' },
+                booking_number: { type: 'string' },
+                user_id: { type: 'string', format: 'uuid' },
+                hotel_id: { type: 'string', format: 'uuid' },
+                status: {
+                  type: 'string',
+                  enum: ['pending', 'confirmed', 'checked_in', 'checked_out', 'cancelled'],
+                },
+                payment_status: { type: 'string', enum: ['pending', 'paid', 'refunded', 'failed'] },
+                check_in_from: { type: 'string', format: 'date' },
+                check_in_to: { type: 'string', format: 'date' },
+              },
+            },
+          ],
+        },
+        AdminBookingSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      booking_number: { type: 'string' },
+                      user_id: { type: 'string', format: 'uuid' },
+                      hotel_id: { type: 'string', format: 'uuid' },
+                      status: { type: 'string' },
+                      check_in_date: { type: 'string', format: 'date' },
+                      check_out_date: { type: 'string', format: 'date' },
+                      guests: { type: 'integer' },
+                      total_amount: { type: 'number' },
+                      payment_status: { type: 'string' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminOrderSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                q: { type: 'string', description: 'Search by order number' },
+                order_number: { type: 'string' },
+                user_id: { type: 'string', format: 'uuid' },
+                status: {
+                  type: 'string',
+                  enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'],
+                },
+                payment_status: { type: 'string', enum: ['pending', 'paid', 'refunded', 'failed'] },
+                min_amount: { type: 'number' },
+                max_amount: { type: 'number' },
+              },
+            },
+          ],
+        },
+        AdminOrderSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      order_number: { type: 'string' },
+                      user_id: { type: 'string', format: 'uuid' },
+                      status: { type: 'string' },
+                      payment_status: { type: 'string' },
+                      total_amount: { type: 'number' },
+                      shipping_address: { type: 'object' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminTransactionSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                q: { type: 'string', description: 'Search by reference' },
+                reference: { type: 'string' },
+                user_id: { type: 'string', format: 'uuid' },
+                payment_method: { type: 'string' },
+                payment_status: {
+                  type: 'string',
+                  enum: ['pending', 'success', 'failed', 'refunded'],
+                },
+                module_name: {
+                  type: 'string',
+                  description: 'Filter by module (hotel_booking, ecommerce, taxi, etc.)',
+                },
+                min_amount: { type: 'number' },
+                max_amount: { type: 'number' },
+              },
+            },
+          ],
+        },
+        AdminTransactionSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      reference: { type: 'string' },
+                      provider_reference: { type: 'string' },
+                      user_id: { type: 'string', format: 'uuid' },
+                      amount: { type: 'number' },
+                      currency: { type: 'string' },
+                      payment_method: { type: 'string' },
+                      payment_status: { type: 'string' },
+                      module_name: { type: 'string' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminRideSearchRequest: {
+          allOf: [
+            { $ref: '#/components/schemas/AdminPaginationParams' },
+            {
+              type: 'object',
+              properties: {
+                user_id: { type: 'string', format: 'uuid' },
+                driver_id: { type: 'string', format: 'uuid' },
+                status: {
+                  type: 'string',
+                  enum: ['pending', 'accepted', 'in_progress', 'completed', 'cancelled'],
+                },
+                vehicle_type: { type: 'string' },
+                min_fare: { type: 'number' },
+                max_fare: { type: 'number' },
+              },
+            },
+          ],
+        },
+        AdminRideSearchResponse: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            data: {
+              type: 'object',
+              properties: {
+                results: {
+                  type: 'array',
+                  items: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string', format: 'uuid' },
+                      user_id: { type: 'string', format: 'uuid' },
+                      driver_id: { type: 'string', format: 'uuid' },
+                      status: { type: 'string' },
+                      vehicle_type: { type: 'string' },
+                      pickup_location: { type: 'object' },
+                      dropoff_location: { type: 'object' },
+                      fare: { type: 'number' },
+                      distance: { type: 'number' },
+                      duration: { type: 'integer' },
+                      rating: { type: 'number' },
+                      created_at: { type: 'string', format: 'date-time' },
+                    },
+                  },
+                },
+                total: { type: 'integer' },
+              },
+            },
+            pagination: { $ref: '#/components/schemas/AdminPaginationResponse' },
+            metadata: { $ref: '#/components/schemas/AdminMetadata' },
+          },
+        },
+        AdminPaginationResponse: {
+          type: 'object',
+          properties: {
+            page: { type: 'integer', example: 1 },
+            limit: { type: 'integer', example: 20 },
+            total: { type: 'integer', example: 150 },
+            total_pages: { type: 'integer', example: 8 },
+          },
+        },
+        AdminMetadata: {
+          type: 'object',
+          properties: {
+            timestamp: { type: 'string', format: 'date-time' },
+            request_id: { type: 'string' },
+            execution_time_ms: { type: 'integer' },
+            cached: { type: 'boolean' },
+            version: { type: 'string', example: '1.0.0' },
           },
         },
       },

@@ -10,8 +10,6 @@ import swaggerUi from 'swagger-ui-express';
 
 import { SERVICE_PORTS } from './config/ports.js';
 import { swaggerSpec } from './config/swagger.js';
-
-// Import middleware
 import {
   corsHeaders,
   errorHandler,
@@ -24,8 +22,7 @@ import {
   securityHeaders,
   validateContentType,
 } from './middleware/index.js';
-
-// Import routes
+import adminRoutes from './routes/admin.js';
 import driverRoutes from './routes/drivers.js';
 import healthRoutes from './routes/health.js';
 import hotelRoutes from './routes/hotels.js';
@@ -103,6 +100,7 @@ app.use('/api/v1/search', searchRoutes);
 app.use('/api/v1/search/hotels', hotelRoutes);
 app.use('/api/v1/search/products', productRoutes);
 app.use('/api/v1/search/drivers', driverRoutes);
+app.use('/api/v1/search/admin', adminRoutes);
 app.use('/api/v1/health', healthRoutes);
 
 // Legacy route support (redirect to v1)
@@ -156,10 +154,10 @@ const server = app.listen(PORT, () => {
   logger.info('Search Service started successfully', {
     port: PORT,
     environment: NODE_ENV,
-    version: '2.1.0',
+    version: '2.2.0',
     timestamp: new Date().toISOString(),
-    features: ['hotels', 'products', 'drivers', 'comprehensive-search'],
-    deployment: 'railway-redeployment-v2.1.0',
+    features: ['hotels', 'products', 'drivers', 'comprehensive-search', 'admin-search'],
+    deployment: 'railway-redeployment-v2.2.0',
   });
 });
 
