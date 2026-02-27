@@ -95,13 +95,18 @@ const tierLimiters: Record<RateLimitTier, RateLimitRequestHandler> = {
 
 /**
  * Determine rate limit tier based on user context
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 const getRateLimitTier = (req: AuthenticatedRequest): RateLimitTier => {
   if (!req.user) {
     return 'anonymous';
   }
 
-  const userRoles = [req.user.role, ...(req.user.roles || [])];
+  // Normalize all roles to lowercase for case-insensitive comparison
+  const userRoles = [req.user.role, ...(req.user.roles || [])]
+    .filter(Boolean)
+    .map(r => (r || '').toLowerCase());
 
   // Admin tier
   if (userRoles.includes('admin') || userRoles.includes('super_admin')) {

@@ -358,7 +358,10 @@ router.put('/:postId', async (req: Request, res: Response) => {
       return;
     }
 
-    if (existingPost.user_id !== req.user.id && req.user.role !== 'admin') {
+    // Check ownership - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRole = (req.user.role || '').toLowerCase();
+    if (existingPost.user_id !== req.user.id && !['admin', 'super_admin'].includes(userRole)) {
       sendForbidden(res, 'You can only update your own posts', req.requestId);
       return;
     }
@@ -460,7 +463,13 @@ router.delete('/:postId', async (req: Request, res: Response) => {
       return;
     }
 
-    if (existingPost.user_id !== req.user.id && req.user.role !== 'admin') {
+    // Check ownership - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRoleDelete = (req.user.role || '').toLowerCase();
+    if (
+      existingPost.user_id !== req.user.id &&
+      !['admin', 'super_admin'].includes(userRoleDelete)
+    ) {
       sendForbidden(res, 'You can only delete your own posts', req.requestId);
       return;
     }

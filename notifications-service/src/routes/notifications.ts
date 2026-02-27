@@ -70,8 +70,13 @@ const requireAuth = (req: AuthenticatedRequest, res: Response, next: Function) =
 };
 
 // Middleware to check admin permissions
+// Performs case-insensitive role comparison
+// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
-  if (!req.user || req.user.role !== 'admin') {
+  const userRole = (req.user?.role || '').toLowerCase();
+  const allowedRoles = ['admin', 'super_admin'];
+
+  if (!req.user || !allowedRoles.includes(userRole)) {
     return res.status(403).json({
       success: false,
       error: 'Admin privileges required',
@@ -614,13 +619,19 @@ router.get('/status/:id', requireAuth, async (req: AuthenticatedRequest, res: Re
     }
 
     // Check if user owns this notification (or is admin)
+    // Case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
     const { data: notification } = await supabase
       .from('notification_logs')
       .select('user_id')
       .eq('id', id)
       .single();
 
-    if (!notification || (notification.user_id !== userId && req.user!.role !== 'admin')) {
+    const userRoleCheck = (req.user!.role || '').toLowerCase();
+    if (
+      !notification ||
+      (notification.user_id !== userId && !['admin', 'super_admin'].includes(userRoleCheck))
+    ) {
       return res.status(403).json({
         success: false,
         error: 'Access denied',

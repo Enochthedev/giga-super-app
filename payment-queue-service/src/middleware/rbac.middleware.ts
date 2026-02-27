@@ -17,6 +17,8 @@ type AdminLevel = 'branch' | 'state' | 'national';
 
 /**
  * Check if user has required role
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 export const requireRole = (allowedRoles: string[]) => {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -25,12 +27,13 @@ export const requireRole = (allowedRoles: string[]) => {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const userRole = req.user.role || '';
+      const userRole = (req.user.role || '').toLowerCase();
+      const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
 
-      if (!allowedRoles.includes(userRole)) {
+      if (!normalizedAllowedRoles.includes(userRole)) {
         logger.warn('Insufficient role', {
           userId: req.user.id,
-          userRole,
+          userRole: req.user.role,
           requiredRoles: allowedRoles,
         });
         throw new ForbiddenError('Insufficient permissions');
@@ -76,6 +79,8 @@ export const requirePermission = (permission: string) => {
  * Branch admin can only see their branch
  * State admin can see all branches in their state
  * National admin can see everything
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 export const requireAdminLevel = (level: AdminLevel) => {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -84,9 +89,9 @@ export const requireAdminLevel = (level: AdminLevel) => {
         throw new UnauthorizedError('Authentication required');
       }
 
-      const userRole = req.user.role || '';
+      const userRole = (req.user.role || '').toLowerCase();
 
-      // Define hierarchy
+      // Define hierarchy (all lowercase for comparison)
       const hierarchy: Record<string, number> = {
         branch_admin: 1,
         state_admin: 2,
@@ -106,7 +111,7 @@ export const requireAdminLevel = (level: AdminLevel) => {
       if (userLevel < requiredLevel) {
         logger.warn('Insufficient admin level', {
           userId: req.user.id,
-          userRole,
+          userRole: req.user.role,
           requiredLevel: level,
         });
         throw new ForbiddenError(`Admin level ${level} required`);
@@ -128,6 +133,7 @@ export const requireAdminLevel = (level: AdminLevel) => {
 
 /**
  * Check if user can access specific branch data
+ * Performs case-insensitive role comparison
  */
 export const canAccessBranch = (branchIdParam: string = 'branchId') => {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -142,7 +148,7 @@ export const canAccessBranch = (branchIdParam: string = 'branchId') => {
         throw new ForbiddenError('Branch ID required');
       }
 
-      const userRole = req.user.role || '';
+      const userRole = (req.user.role || '').toLowerCase();
       const userBranchId = req.user.branchId;
       const userStateId = req.user.stateId;
 
@@ -166,7 +172,7 @@ export const canAccessBranch = (branchIdParam: string = 'branchId') => {
 
       logger.warn('Unauthorized branch access attempt', {
         userId: req.user.id,
-        userRole,
+        userRole: req.user.role,
         userBranchId,
         requestedBranchId,
       });
@@ -180,6 +186,7 @@ export const canAccessBranch = (branchIdParam: string = 'branchId') => {
 
 /**
  * Check if user can access specific state data
+ * Performs case-insensitive role comparison
  */
 export const canAccessState = (stateIdParam: string = 'stateId') => {
   return async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -194,7 +201,7 @@ export const canAccessState = (stateIdParam: string = 'stateId') => {
         throw new ForbiddenError('State ID required');
       }
 
-      const userRole = req.user.role || '';
+      const userRole = (req.user.role || '').toLowerCase();
       const userStateId = req.user.stateId;
 
       // Super admin and national admin can access all states
@@ -209,7 +216,7 @@ export const canAccessState = (stateIdParam: string = 'stateId') => {
 
       logger.warn('Unauthorized state access attempt', {
         userId: req.user.id,
-        userRole,
+        userRole: req.user.role,
         userStateId,
         requestedStateId,
       });

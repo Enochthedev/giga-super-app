@@ -237,6 +237,8 @@ export const authMiddleware = async (
 
 /**
  * Role-based authorization middleware
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 export const requireRole = (requiredRoles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
@@ -247,14 +249,15 @@ export const requireRole = (requiredRoles: string[]) => {
       return;
     }
 
-    const userRoles = [req.user.role, ...req.user.roles];
-    const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role));
+    const userRoles = [req.user.role, ...req.user.roles].map(r => r.toLowerCase());
+    const normalizedRequiredRoles = requiredRoles.map(r => r.toLowerCase());
+    const hasRequiredRole = normalizedRequiredRoles.some(role => userRoles.includes(role));
 
     if (!hasRequiredRole) {
       logger.warn('Authorization failed', {
         requestId: req.id,
         userId: req.user.id,
-        userRoles,
+        userRoles: [req.user.role, ...req.user.roles],
         requiredRoles,
       });
 

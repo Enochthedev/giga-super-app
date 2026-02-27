@@ -25,6 +25,8 @@ interface AuthenticatedRequest extends Request {
 }
 
 // Middleware to check admin permissions
+// Performs case-insensitive role comparison
+// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({
@@ -34,7 +36,10 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
     });
   }
 
-  if (req.user.role !== 'admin') {
+  const userRole = (req.user.role || '').toLowerCase();
+  const allowedRoles = ['admin', 'super_admin'];
+
+  if (!allowedRoles.includes(userRole)) {
     return res.status(403).json({
       success: false,
       error: 'Admin privileges required',

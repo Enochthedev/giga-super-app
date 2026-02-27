@@ -877,8 +877,10 @@ router.delete('/cache', optionalAuth, async (req: Request, res: Response): Promi
   const requestId = req.headers['x-request-id'] as string;
 
   try {
-    // Check if user is admin
-    if (!req.user || req.user.role !== 'admin') {
+    // Check if user is admin - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRole = (req.user?.role || '').toLowerCase();
+    if (!req.user || !['admin', 'super_admin'].includes(userRole)) {
       res.status(403).json({
         success: false,
         error: {
@@ -954,8 +956,10 @@ router.get('/stats', optionalAuth, async (req: Request, res: Response): Promise<
   const requestId = req.headers['x-request-id'] as string;
 
   try {
-    // Check if user is admin
-    if (!req.user || req.user.role !== 'admin') {
+    // Check if user is admin - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRole = (req.user?.role || '').toLowerCase();
+    if (!req.user || !['admin', 'super_admin'].includes(userRole)) {
       res.status(403).json({
         success: false,
         error: {

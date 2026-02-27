@@ -357,7 +357,10 @@ router.delete('/:storyId', async (req: Request, res: Response) => {
       return;
     }
 
-    if (story.user_id !== req.user.id && req.user.role !== 'admin') {
+    // Check ownership - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRole = (req.user.role || '').toLowerCase();
+    if (story.user_id !== req.user.id && !['admin', 'super_admin'].includes(userRole)) {
       sendForbidden(res, 'You can only delete your own stories', req.requestId);
       return;
     }
