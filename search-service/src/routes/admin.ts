@@ -47,7 +47,6 @@ const UserSearchSchema = PaginationSchema.extend({
   phone: z.string().optional(),
   is_active: z.coerce.boolean().optional(),
   is_phone_verified: z.coerce.boolean().optional(),
-  state: z.string().optional(),
 });
 
 const VendorSearchSchema = PaginationSchema.extend({
@@ -61,7 +60,6 @@ const VendorSearchSchema = PaginationSchema.extend({
 const DriverSearchSchema = PaginationSchema.extend({
   q: z.string().optional(),
   license_number: z.string().optional(),
-  vehicle_type: z.string().optional(),
   is_online: z.coerce.boolean().optional(),
   is_verified: z.coerce.boolean().optional(),
   min_rating: z.coerce.number().min(0).max(5).optional(),
@@ -73,7 +71,7 @@ const BookingSearchSchema = PaginationSchema.extend({
   booking_number: z.string().optional(),
   user_id: z.string().uuid().optional(),
   hotel_id: z.string().uuid().optional(),
-  status: z.string().optional(),
+  booking_status: z.string().optional(),
   payment_status: z.string().optional(),
   check_in_from: z.string().optional(),
   check_in_to: z.string().optional(),
@@ -91,21 +89,20 @@ const OrderSearchSchema = PaginationSchema.extend({
 
 const TransactionSearchSchema = PaginationSchema.extend({
   q: z.string().optional(),
-  reference: z.string().optional(),
+  reference_id: z.string().optional(),
   user_id: z.string().uuid().optional(),
   payment_method: z.string().optional(),
   payment_status: z.string().optional(),
-  module_name: z.string().optional(),
+  payment_type: z.string().optional(),
   min_amount: z.coerce.number().optional(),
   max_amount: z.coerce.number().optional(),
 });
 
 const RideSearchSchema = PaginationSchema.extend({
   q: z.string().optional(),
-  user_id: z.string().uuid().optional(),
+  passenger_id: z.string().uuid().optional(),
   driver_id: z.string().uuid().optional(),
   status: z.string().optional(),
-  vehicle_type: z.string().optional(),
   min_fare: z.coerce.number().optional(),
   max_fare: z.coerce.number().optional(),
 });
@@ -182,7 +179,7 @@ router.post(
       let query = db.supabase
         .from('user_profiles')
         .select(
-          'id, email, phone, first_name, last_name, avatar_url, is_active, is_phone_verified, state, last_login_at, created_at, updated_at',
+          'id, email, phone, first_name, last_name, avatar_url, is_active, is_phone_verified, last_login_at, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
@@ -197,7 +194,6 @@ router.post(
       if (params.is_active !== undefined) query = query.eq('is_active', params.is_active);
       if (params.is_phone_verified !== undefined)
         query = query.eq('is_phone_verified', params.is_phone_verified);
-      if (params.state) query = query.ilike('state', `%${params.state}%`);
 
       query = query.order(params.sort || 'created_at', { ascending: params.order === 'asc' });
       query = query.range(offset, offset + limit - 1);
@@ -297,7 +293,7 @@ router.post(
       let query = db.supabase
         .from('ecommerce_vendors')
         .select(
-          'id, user_id, business_name, business_registration, tax_id, is_verified, is_active, average_rating, total_sales, commission_rate, created_at, updated_at',
+          'id, business_name, business_registration, tax_id, is_verified, is_active, average_rating, total_sales, commission_rate, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
@@ -357,7 +353,8 @@ router.post(
  *   post:
  *     summary: Search drivers (Admin)
  *     description: |
- *       Search driver profiles with advanced filters including license, vehicle info, and status.
+ *       Search driver profiles with advanced filters including license and status.
+ *       Vehicle type is stored in vehicle_info JSON field.
  *       Requires admin role (sensitive data).
  *     tags: [Admin Search]
  *     security:
@@ -370,7 +367,6 @@ router.post(
  *             $ref: '#/components/schemas/AdminDriverSearchRequest'
  *           example:
  *             license_number: "ABC123"
- *             vehicle_type: "sedan"
  *             is_online: true
  *             is_verified: true
  *             min_rating: 4.0
@@ -411,16 +407,14 @@ router.post(
       let query = db.supabase
         .from('driver_profiles')
         .select(
-          'id, user_id, license_number, vehicle_info, vehicle_type, is_online, current_location, rating, total_rides, is_verified, subscription_tier, created_at, updated_at',
+          'id, user_id, license_number, vehicle_info, is_online, current_location, rating, total_rides, is_verified, subscription_tier, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
 
-      if (params.q)
-        query = query.or(`license_number.ilike.%${params.q}%,vehicle_type.ilike.%${params.q}%`);
+      if (params.q) query = query.ilike('license_number', `%${params.q}%`);
       if (params.license_number)
         query = query.ilike('license_number', `%${params.license_number}%`);
-      if (params.vehicle_type) query = query.ilike('vehicle_type', `%${params.vehicle_type}%`);
       if (params.is_online !== undefined) query = query.eq('is_online', params.is_online);
       if (params.is_verified !== undefined) query = query.eq('is_verified', params.is_verified);
       if (params.min_rating !== undefined) query = query.gte('rating', params.min_rating);
@@ -472,7 +466,7 @@ router.post(
  *   post:
  *     summary: Search bookings (Admin)
  *     description: |
- *       Search hotel bookings with advanced filters including status, dates, and payment status.
+ *       Search hotel bookings with advanced filters including booking_status, dates, and payment status.
  *       Requires moderator or admin role.
  *     tags: [Admin Search]
  *     security:
@@ -485,7 +479,7 @@ router.post(
  *             $ref: '#/components/schemas/AdminBookingSearchRequest'
  *           example:
  *             booking_number: "BK-2024"
- *             status: "confirmed"
+ *             booking_status: "confirmed"
  *             payment_status: "paid"
  *             check_in_from: "2024-03-01"
  *             check_in_to: "2024-03-31"
@@ -526,7 +520,7 @@ router.post(
       let query = db.supabase
         .from('hotel_bookings')
         .select(
-          'id, booking_number, user_id, hotel_id, room_type_id, status, check_in_date, check_out_date, guests, total_amount, payment_status, special_requests, created_at, updated_at',
+          'id, booking_number, user_id, hotel_id, room_type_id, booking_status, check_in_date, check_out_date, guest_count, total_amount, payment_status, special_requests, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
@@ -536,7 +530,7 @@ router.post(
         query = query.ilike('booking_number', `%${params.booking_number}%`);
       if (params.user_id) query = query.eq('user_id', params.user_id);
       if (params.hotel_id) query = query.eq('hotel_id', params.hotel_id);
-      if (params.status) query = query.eq('status', params.status);
+      if (params.booking_status) query = query.eq('booking_status', params.booking_status);
       if (params.payment_status) query = query.eq('payment_status', params.payment_status);
       if (params.check_in_from) query = query.gte('check_in_date', params.check_in_from);
       if (params.check_in_to) query = query.lte('check_in_date', params.check_in_to);
@@ -713,10 +707,10 @@ router.post(
  *           schema:
  *             $ref: '#/components/schemas/AdminTransactionSearchRequest'
  *           example:
- *             reference: "PAY-2024"
+ *             reference_id: "PAY-2024"
  *             payment_method: "card"
  *             payment_status: "success"
- *             module_name: "hotel_booking"
+ *             payment_type: "hotel_booking"
  *             min_amount: 5000
  *             max_amount: 1000000
  *             page: 1
@@ -756,18 +750,18 @@ router.post(
       let query = db.supabase
         .from('payments')
         .select(
-          'id, reference, provider_reference, user_id, amount, currency, payment_method, payment_status, module_name, module_id, metadata, created_at, updated_at',
+          'id, reference_id, provider_reference, user_id, amount, currency, payment_method, payment_status, payment_type, metadata, created_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
 
       if (params.q)
-        query = query.or(`reference.ilike.%${params.q}%,provider_reference.ilike.%${params.q}%`);
-      if (params.reference) query = query.ilike('reference', `%${params.reference}%`);
+        query = query.or(`reference_id.ilike.%${params.q}%,provider_reference.ilike.%${params.q}%`);
+      if (params.reference_id) query = query.ilike('reference_id', `%${params.reference_id}%`);
       if (params.user_id) query = query.eq('user_id', params.user_id);
       if (params.payment_method) query = query.eq('payment_method', params.payment_method);
       if (params.payment_status) query = query.eq('payment_status', params.payment_status);
-      if (params.module_name) query = query.eq('module_name', params.module_name);
+      if (params.payment_type) query = query.eq('payment_type', params.payment_type);
       if (params.min_amount !== undefined) query = query.gte('amount', params.min_amount);
       if (params.max_amount !== undefined) query = query.lte('amount', params.max_amount);
 
@@ -823,7 +817,7 @@ router.post(
  *   post:
  *     summary: Search rides (Admin)
  *     description: |
- *       Search taxi rides with advanced filters including user, driver, status, and fare range.
+ *       Search taxi rides with advanced filters including passenger, driver, status, and fare range.
  *       Requires admin role (sensitive data).
  *     tags: [Admin Search]
  *     security:
@@ -836,7 +830,6 @@ router.post(
  *             $ref: '#/components/schemas/AdminRideSearchRequest'
  *           example:
  *             status: "completed"
- *             vehicle_type: "sedan"
  *             min_fare: 1000
  *             max_fare: 50000
  *             page: 1
@@ -876,17 +869,16 @@ router.post(
       let query = db.supabase
         .from('rides')
         .select(
-          'id, user_id, driver_id, status, vehicle_type, pickup_location, dropoff_location, fare, distance, duration, rating, created_at, updated_at',
+          'id, ride_number, passenger_id, driver_id, status, pickup_location, dropoff_location, final_amount, total_fare, distance_km, estimated_duration_minutes, rating, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
 
-      if (params.user_id) query = query.eq('user_id', params.user_id);
+      if (params.passenger_id) query = query.eq('passenger_id', params.passenger_id);
       if (params.driver_id) query = query.eq('driver_id', params.driver_id);
       if (params.status) query = query.eq('status', params.status);
-      if (params.vehicle_type) query = query.ilike('vehicle_type', `%${params.vehicle_type}%`);
-      if (params.min_fare !== undefined) query = query.gte('fare', params.min_fare);
-      if (params.max_fare !== undefined) query = query.lte('fare', params.max_fare);
+      if (params.min_fare !== undefined) query = query.gte('final_amount', params.min_fare);
+      if (params.max_fare !== undefined) query = query.lte('final_amount', params.max_fare);
 
       query = query.order(params.sort || 'created_at', { ascending: params.order === 'asc' });
       query = query.range(offset, offset + limit - 1);

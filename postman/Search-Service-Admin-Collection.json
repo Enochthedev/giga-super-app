@@ -1,8 +1,8 @@
 {
   "info": {
     "name": "Search Service - Admin API",
-    "description": "Admin search endpoints for the Giga platform Search Service.\n\nThese endpoints require authentication and specific roles:\n- **Moderator**: users, vendors, bookings, orders\n- **Admin**: drivers, transactions, rides\n\nBase URL: `{{baseUrl}}/api/v1/search/admin`",
-    "version": "2.2.0",
+    "description": "Admin search endpoints for the Giga platform Search Service.\n\nThese endpoints require authentication and specific roles:\n- **Moderator**: users, vendors, bookings, orders\n- **Admin**: drivers, transactions, rides\n\nBase URL: `{{baseUrl}}/api/v1/search/admin`\n\n**Note**: Field names match the actual Supabase database schema.",
+    "version": "2.3.0",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -43,14 +43,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"email\": \"\",\n  \"phone\": \"\",\n  \"is_active\": true,\n  \"is_phone_verified\": null,\n  \"state\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+              "raw": "{\n  \"q\": \"\",\n  \"email\": \"\",\n  \"phone\": \"\",\n  \"is_active\": true,\n  \"is_phone_verified\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/users",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "users"]
             },
-            "description": "Search user profiles with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `q`: Search query (name, email, phone)\n- `email`: Filter by email\n- `phone`: Filter by phone\n- `is_active`: Filter by active status\n- `is_phone_verified`: Filter by verification\n- `state`: Filter by state/region"
+            "description": "Search user profiles with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `q`: Search query (name, email, phone)\n- `email`: Filter by email\n- `phone`: Filter by phone\n- `is_active`: Filter by active status\n- `is_phone_verified`: Filter by verification"
           },
           "response": []
         },
@@ -125,7 +125,7 @@
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "vendors"]
             },
-            "description": "Search ecommerce vendors with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `q`: Search query (business name)\n- `business_name`: Filter by business name\n- `is_verified`: Filter by verification status\n- `is_active`: Filter by active status\n- `min_rating`: Minimum rating (0-5)"
+            "description": "Search ecommerce vendors with filters.\n\n**Required Role**: Moderator or Admin\n\n**Note**: Vendor `id` is the same as `user_id` (FK to user_profiles)\n\n**Filters**:\n- `q`: Search query (business name)\n- `business_name`: Filter by business name\n- `is_verified`: Filter by verification status\n- `is_active`: Filter by active status\n- `min_rating`: Minimum rating (0-5)"
           },
           "response": []
         },
@@ -193,14 +193,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"license_number\": \"\",\n  \"vehicle_type\": \"\",\n  \"is_online\": null,\n  \"is_verified\": null,\n  \"min_rating\": null,\n  \"subscription_tier\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+              "raw": "{\n  \"q\": \"\",\n  \"license_number\": \"\",\n  \"is_online\": null,\n  \"is_verified\": null,\n  \"min_rating\": null,\n  \"subscription_tier\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "drivers"]
             },
-            "description": "Search driver profiles with filters.\n\n**Required Role**: Admin only\n\n**Filters**:\n- `q`: Search query (license, vehicle)\n- `license_number`: Filter by license\n- `vehicle_type`: sedan, suv, motorcycle, etc.\n- `is_online`: Filter by online status\n- `is_verified`: Filter by verification\n- `min_rating`: Minimum rating (0-5)\n- `subscription_tier`: Filter by tier"
+            "description": "Search driver profiles with filters.\n\n**Required Role**: Admin only\n\n**Note**: Vehicle type is stored in `vehicle_info` JSON field, not as a separate column.\n\n**Filters**:\n- `q`: Search query (license number)\n- `license_number`: Filter by license\n- `is_online`: Filter by online status\n- `is_verified`: Filter by verification\n- `min_rating`: Minimum rating (0-5)\n- `subscription_tier`: Filter by tier"
           },
           "response": []
         },
@@ -228,7 +228,7 @@
           "response": []
         },
         {
-          "name": "Search Drivers - By Vehicle Type",
+          "name": "Search Drivers - By Rating",
           "request": {
             "method": "POST",
             "header": [
@@ -239,14 +239,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"vehicle_type\": \"sedan\",\n  \"is_verified\": true,\n  \"min_rating\": 4.0,\n  \"page\": 1,\n  \"limit\": 20\n}"
+              "raw": "{\n  \"is_verified\": true,\n  \"min_rating\": 4.0,\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "drivers"]
             },
-            "description": "Find drivers by vehicle type"
+            "description": "Find drivers by minimum rating"
           },
           "response": []
         }
@@ -268,14 +268,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"booking_number\": \"\",\n  \"user_id\": \"\",\n  \"hotel_id\": \"\",\n  \"status\": \"\",\n  \"payment_status\": \"\",\n  \"check_in_from\": \"\",\n  \"check_in_to\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+              "raw": "{\n  \"q\": \"\",\n  \"booking_number\": \"\",\n  \"user_id\": \"\",\n  \"hotel_id\": \"\",\n  \"booking_status\": \"\",\n  \"payment_status\": \"\",\n  \"check_in_from\": \"\",\n  \"check_in_to\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "bookings"]
             },
-            "description": "Search hotel bookings with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `booking_number`: Filter by booking number\n- `user_id`: Filter by user UUID\n- `hotel_id`: Filter by hotel UUID\n- `status`: pending, confirmed, checked_in, checked_out, cancelled\n- `payment_status`: pending, paid, refunded, failed\n- `check_in_from/to`: Date range filter"
+            "description": "Search hotel bookings with filters.\n\n**Required Role**: Moderator or Admin\n\n**Note**: Uses `booking_status` (not `status`) and `guest_count` is a JSON object.\n\n**Filters**:\n- `booking_number`: Filter by booking number\n- `user_id`: Filter by user UUID\n- `hotel_id`: Filter by hotel UUID\n- `booking_status`: pending, confirmed, checked_in, checked_out, cancelled\n- `payment_status`: pending, paid, refunded, failed\n- `check_in_from/to`: Date range filter"
           },
           "response": []
         },
@@ -291,7 +291,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"confirmed\",\n  \"payment_status\": \"pending\",\n  \"page\": 1,\n  \"limit\": 50\n}"
+              "raw": "{\n  \"booking_status\": \"confirmed\",\n  \"payment_status\": \"pending\",\n  \"page\": 1,\n  \"limit\": 50\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
@@ -314,7 +314,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"check_in_from\": \"2024-03-01\",\n  \"check_in_to\": \"2024-03-31\",\n  \"status\": \"confirmed\",\n  \"page\": 1,\n  \"limit\": 100\n}"
+              "raw": "{\n  \"check_in_from\": \"2024-03-01\",\n  \"check_in_to\": \"2024-03-31\",\n  \"booking_status\": \"confirmed\",\n  \"page\": 1,\n  \"limit\": 100\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
@@ -418,14 +418,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"reference\": \"\",\n  \"user_id\": \"\",\n  \"payment_method\": \"\",\n  \"payment_status\": \"\",\n  \"module_name\": \"\",\n  \"min_amount\": null,\n  \"max_amount\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+              "raw": "{\n  \"q\": \"\",\n  \"reference_id\": \"\",\n  \"user_id\": \"\",\n  \"payment_method\": \"\",\n  \"payment_status\": \"\",\n  \"payment_type\": \"\",\n  \"min_amount\": null,\n  \"max_amount\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "transactions"]
             },
-            "description": "Search payment transactions with filters.\n\n**Required Role**: Admin only (sensitive financial data)\n\n**Note**: All access is logged for audit purposes.\n\n**Filters**:\n- `reference`: Filter by payment reference\n- `user_id`: Filter by user UUID\n- `payment_method`: card, bank, ussd, etc.\n- `payment_status`: pending, success, failed, refunded\n- `module_name`: hotel_booking, ecommerce, taxi, etc.\n- `min_amount/max_amount`: Amount range"
+            "description": "Search payment transactions with filters.\n\n**Required Role**: Admin only (sensitive financial data)\n\n**Note**: All access is logged for audit purposes. Uses `reference_id` and `payment_type` (not `reference` or `module_name`).\n\n**Filters**:\n- `reference_id`: Filter by payment reference\n- `user_id`: Filter by user UUID\n- `payment_method`: card, bank, ussd, etc.\n- `payment_status`: pending, success, failed, refunded\n- `payment_type`: hotel_booking, ecommerce, taxi, etc.\n- `min_amount/max_amount`: Amount range"
           },
           "response": []
         },
@@ -453,7 +453,7 @@
           "response": []
         },
         {
-          "name": "Search Transactions - By Module",
+          "name": "Search Transactions - By Payment Type",
           "request": {
             "method": "POST",
             "header": [
@@ -464,14 +464,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"module_name\": \"hotel_booking\",\n  \"payment_status\": \"success\",\n  \"min_amount\": 50000,\n  \"sort\": \"amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+              "raw": "{\n  \"payment_type\": \"hotel_booking\",\n  \"payment_status\": \"success\",\n  \"min_amount\": 50000,\n  \"sort\": \"amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "transactions"]
             },
-            "description": "Find transactions by business module"
+            "description": "Find transactions by payment type"
           },
           "response": []
         }
@@ -493,14 +493,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"user_id\": \"\",\n  \"driver_id\": \"\",\n  \"status\": \"\",\n  \"vehicle_type\": \"\",\n  \"min_fare\": null,\n  \"max_fare\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
+              "raw": "{\n  \"passenger_id\": \"\",\n  \"driver_id\": \"\",\n  \"status\": \"\",\n  \"min_fare\": null,\n  \"max_fare\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/rides",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "rides"]
             },
-            "description": "Search taxi rides with filters.\n\n**Required Role**: Admin only\n\n**Filters**:\n- `user_id`: Filter by rider UUID\n- `driver_id`: Filter by driver UUID\n- `status`: pending, accepted, in_progress, completed, cancelled\n- `vehicle_type`: sedan, suv, motorcycle, etc.\n- `min_fare/max_fare`: Fare range"
+            "description": "Search taxi rides with filters.\n\n**Required Role**: Admin only\n\n**Note**: Uses `passenger_id` (not `user_id`), `final_amount`/`total_fare` (not `fare`), `distance_km` (not `distance`), `estimated_duration_minutes` (not `duration`). No `vehicle_type` column.\n\n**Filters**:\n- `passenger_id`: Filter by rider UUID\n- `driver_id`: Filter by driver UUID\n- `status`: pending, accepted, in_progress, completed, cancelled\n- `min_fare/max_fare`: Fare range (uses final_amount)"
           },
           "response": []
         },
@@ -539,7 +539,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"driver_id\": \"{{driverId}}\",\n  \"status\": \"completed\",\n  \"sort\": \"fare\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 100\n}"
+              "raw": "{\n  \"driver_id\": \"{{driverId}}\",\n  \"status\": \"completed\",\n  \"sort\": \"final_amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 100\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/rides",
