@@ -4,6 +4,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { NextFunction, Request, Response } from 'express';
+
 import { SearchLogger } from '../utils/logger.js';
 
 const SUPABASE_URL = process.env.SUPABASE_URL || '';
@@ -72,7 +73,7 @@ export const authenticateUser = async (
 
     if (error || !user) {
       req.logger?.logSecurityEvent('Invalid token attempt', 'medium', {
-        token: token.substring(0, 10) + '...',
+        token: `${token.substring(0, 10)}...`,
         error: error?.message,
       });
 
@@ -182,6 +183,8 @@ export const optionalAuth = async (
 
 /**
  * Role-based authorization middleware
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 export const requireRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
@@ -201,12 +204,13 @@ export const requireRole = (allowedRoles: string[]) => {
       return;
     }
 
-    const userRole = req.user.role || 'user';
+    const userRole = (req.user.role || 'user').toLowerCase();
+    const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
 
-    if (!allowedRoles.includes(userRole)) {
+    if (!normalizedAllowedRoles.includes(userRole)) {
       req.logger?.logSecurityEvent('Unauthorized role access attempt', 'high', {
         userId: req.user.id,
-        userRole,
+        userRole: req.user.role,
         requiredRoles: allowedRoles,
         endpoint: req.path,
       });
@@ -228,7 +232,7 @@ export const requireRole = (allowedRoles: string[]) => {
 
     req.logger?.info('Role authorization successful', {
       userId: req.user.id,
-      userRole,
+      userRole: req.user.role,
       endpoint: req.path,
     });
 
@@ -255,7 +259,7 @@ export const authenticateApiKey = (req: Request, res: Response, next: NextFuncti
 
   if (!apiKey || !validApiKey || apiKey !== validApiKey) {
     req.logger?.logSecurityEvent('Invalid API key attempt', 'high', {
-      providedKey: apiKey ? apiKey.substring(0, 8) + '...' : 'none',
+      providedKey: apiKey ? `${apiKey.substring(0, 8)}...` : 'none',
       endpoint: req.path,
       ip: req.ip,
     });

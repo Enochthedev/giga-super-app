@@ -3,7 +3,7 @@
  * Validates JWT tokens and extracts user context
  */
 
-import { Response, NextFunction } from 'express';
+import { NextFunction, Response } from 'express';
 import { AuthenticatedRequest } from '../types';
 import { AuthenticationError, AuthorizationError } from '../utils/errors';
 import logger from '../utils/logger';
@@ -25,9 +25,7 @@ export const authMiddleware = async (
 
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new AuthenticationError(
-        'Authorization header with Bearer token is required'
-      );
+      throw new AuthenticationError('Authorization header with Bearer token is required');
     }
 
     const token = authHeader.substring(7); // Remove 'Bearer ' prefix
@@ -165,7 +163,8 @@ export const optionalAuth = async (
 
 /**
  * Role-based authorization middleware
- * @param allowedRoles - Array of roles that can access the endpoint
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 export const requireRoles = (allowedRoles: string[] = []) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
@@ -173,23 +172,20 @@ export const requireRoles = (allowedRoles: string[] = []) => {
       return next(new AuthenticationError('Authentication required'));
     }
 
-    const userRoles = req.user.roles || [];
-    const hasRequiredRole = allowedRoles.some((role) =>
-      userRoles.includes(role)
-    );
+    const userRoles = (req.user.roles || []).map(r => r.toLowerCase());
+    const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
+    const hasRequiredRole = normalizedAllowedRoles.some(role => userRoles.includes(role));
 
     if (allowedRoles.length > 0 && !hasRequiredRole) {
       logger.warn('Insufficient permissions', {
         requestId: req.requestId,
         userId: req.user.id,
-        userRoles,
+        userRoles: req.user.roles,
         requiredRoles: allowedRoles,
       });
 
       return next(
-        new AuthorizationError(
-          `Access denied. Required roles: ${allowedRoles.join(', ')}`
-        )
+        new AuthorizationError(`Access denied. Required roles: ${allowedRoles.join(', ')}`)
       );
     }
 
@@ -205,8 +201,4 @@ export const requireAdmin = requireRoles(['admin', 'super_admin']);
 /**
  * Moderator or admin middleware
  */
-export const requireModerator = requireRoles([
-  'admin',
-  'super_admin',
-  'moderator',
-]);
+export const requireModerator = requireRoles(['admin', 'super_admin', 'moderator']);

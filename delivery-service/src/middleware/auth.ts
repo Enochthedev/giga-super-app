@@ -101,6 +101,8 @@ export const requireAuth = async (
 
 /**
  * Role-based authorization middleware
+ * Performs case-insensitive role comparison
+ * TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
  */
 export const requireRole = (allowedRoles: string[]) => {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
@@ -120,13 +122,14 @@ export const requireRole = (allowedRoles: string[]) => {
       return;
     }
 
-    const userRoles = req.user.roles || [req.user.role];
-    const hasRole = allowedRoles.some(role => userRoles.includes(role));
+    const userRoles = (req.user.roles || [req.user.role]).map(r => (r || '').toLowerCase());
+    const normalizedAllowedRoles = allowedRoles.map(r => r.toLowerCase());
+    const hasRole = normalizedAllowedRoles.some(role => userRoles.includes(role));
 
     if (!hasRole) {
       logger.warn('Insufficient permissions', {
         user_id: req.user.id,
-        user_roles: userRoles,
+        user_roles: req.user.roles || [req.user.role],
         required_roles: allowedRoles,
         request_id: req.requestId,
       });

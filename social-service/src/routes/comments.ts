@@ -257,7 +257,10 @@ router.put('/:commentId', async (req: Request, res: Response) => {
       return;
     }
 
-    if (existing.user_id !== req.user.id && req.user.role !== 'admin') {
+    // Check ownership - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRoleUpdate = (req.user.role || '').toLowerCase();
+    if (existing.user_id !== req.user.id && !['admin', 'super_admin'].includes(userRoleUpdate)) {
       sendForbidden(res, 'You can only update your own comments', req.requestId);
       return;
     }
@@ -338,7 +341,10 @@ router.delete('/:commentId', async (req: Request, res: Response) => {
       return;
     }
 
-    if (existing.user_id !== req.user.id && req.user.role !== 'admin') {
+    // Check ownership - case-insensitive role comparison
+    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    const userRoleDelete = (req.user.role || '').toLowerCase();
+    if (existing.user_id !== req.user.id && !['admin', 'super_admin'].includes(userRoleDelete)) {
       sendForbidden(res, 'You can only delete your own comments', req.requestId);
       return;
     }

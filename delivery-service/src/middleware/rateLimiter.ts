@@ -50,11 +50,14 @@ const rateLimitHandler = (req: Request, res: Response): void => {
 };
 
 // Skip rate limiting for certain conditions
+// Performs case-insensitive role comparison
+// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
 const skipRateLimit = (req: Request): boolean => {
   const authReq = req as AuthenticatedRequest;
 
-  // Skip rate limiting for admin users
-  if (authReq.user?.role === 'ADMIN') {
+  // Skip rate limiting for admin users (case-insensitive)
+  const userRole = (authReq.user?.role || '').toLowerCase();
+  if (['admin', 'super_admin'].includes(userRole)) {
     return true;
   }
 
