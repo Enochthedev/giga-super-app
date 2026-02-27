@@ -1,557 +1,432 @@
 {
   "info": {
     "name": "Search Service - Admin API",
-    "description": "Admin search endpoints for the Giga platform Search Service.\n\nThese endpoints require authentication and specific roles:\n- **Moderator**: users, vendors, bookings, orders\n- **Admin**: drivers, transactions, rides\n\nBase URL: `{{baseUrl}}/api/v1/search/admin`\n\n**Note**: Field names match the actual Supabase database schema.",
-    "version": "2.3.0",
+    "description": "Admin search endpoints for the Giga platform Search Service.\n\nSupports both GET and POST methods.\n\n**Authentication**: All endpoints require Bearer token.\n\n**Roles**:\n- Moderator: users, vendors, bookings, orders\n- Admin: drivers, transactions, rides\n\nBase URL: `{{baseUrl}}/api/v1/search/admin`",
+    "version": "2.4.0",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
     "type": "bearer",
-    "bearer": [
-      {
-        "key": "token",
-        "value": "{{authToken}}",
-        "type": "string"
-      }
-    ]
+    "bearer": [{ "key": "token", "value": "{{authToken}}", "type": "string" }]
   },
   "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:3004",
-      "type": "string"
-    },
-    {
-      "key": "authToken",
-      "value": "",
-      "type": "string"
-    }
+    { "key": "baseUrl", "value": "http://localhost:3004", "type": "string" },
+    { "key": "authToken", "value": "", "type": "string" }
   ],
   "item": [
     {
       "name": "Users",
       "item": [
         {
-          "name": "Search Users",
+          "name": "Search Users (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"email\": \"\",\n  \"phone\": \"\",\n  \"is_active\": true,\n  \"is_phone_verified\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/users",
+              "raw": "{{baseUrl}}/api/v1/search/admin/users?query=john&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "users"]
+              "path": ["api", "v1", "search", "admin", "users"],
+              "query": [
+                { "key": "query", "value": "john" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search user profiles with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `q`: Search query (name, email, phone)\n- `email`: Filter by email\n- `phone`: Filter by phone\n- `is_active`: Filter by active status\n- `is_phone_verified`: Filter by verification"
-          },
-          "response": []
+            "description": "Search users with GET request (dashboard compatible)"
+          }
         },
         {
-          "name": "Search Users - By Email",
+          "name": "Search Users - All (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"email\": \"john@example.com\",\n  \"page\": 1,\n  \"limit\": 20\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/users",
+              "raw": "{{baseUrl}}/api/v1/search/admin/users?page=1&limit=50",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "users"]
+              "path": ["api", "v1", "search", "admin", "users"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
             },
-            "description": "Search users by email address"
-          },
-          "response": []
+            "description": "Get all users without filter"
+          }
         },
         {
-          "name": "Search Users - Inactive",
+          "name": "Search Users (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"is_active\": false,\n  \"page\": 1,\n  \"limit\": 50\n}"
+              "raw": "{\n  \"q\": \"john\",\n  \"is_active\": true,\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/users",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "users"]
             },
-            "description": "Find all inactive users"
-          },
-          "response": []
+            "description": "Search users with POST request"
+          }
         }
-      ],
-      "description": "User profile search endpoints (Moderator access)"
+      ]
     },
     {
       "name": "Vendors",
       "item": [
         {
-          "name": "Search Vendors",
+          "name": "Search Vendors (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"business_name\": \"\",\n  \"is_verified\": null,\n  \"is_active\": true,\n  \"min_rating\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+              "raw": "{{baseUrl}}/api/v1/search/admin/vendors?query=tech&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "vendors"]
+              "path": ["api", "v1", "search", "admin", "vendors"],
+              "query": [
+                { "key": "query", "value": "tech" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search ecommerce vendors with filters.\n\n**Required Role**: Moderator or Admin\n\n**Note**: Vendor `id` is the same as `user_id` (FK to user_profiles)\n\n**Filters**:\n- `q`: Search query (business name)\n- `business_name`: Filter by business name\n- `is_verified`: Filter by verification status\n- `is_active`: Filter by active status\n- `min_rating`: Minimum rating (0-5)"
-          },
-          "response": []
+            "description": "Search vendors with GET request"
+          }
         },
         {
-          "name": "Search Vendors - Unverified",
+          "name": "Search Vendors - All (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"is_verified\": false,\n  \"is_active\": true,\n  \"page\": 1,\n  \"limit\": 50\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+              "raw": "{{baseUrl}}/api/v1/search/admin/vendors?page=1&limit=50",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "vendors"]
+              "path": ["api", "v1", "search", "admin", "vendors"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
             },
-            "description": "Find vendors pending verification"
-          },
-          "response": []
+            "description": "Get all vendors"
+          }
         },
         {
-          "name": "Search Vendors - Top Rated",
+          "name": "Search Vendors (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"min_rating\": 4.5,\n  \"is_verified\": true,\n  \"sort\": \"average_rating\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+              "raw": "{\n  \"q\": \"electronics\",\n  \"is_verified\": true,\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "vendors"]
-            },
-            "description": "Find top-rated verified vendors"
-          },
-          "response": []
+            }
+          }
         }
-      ],
-      "description": "Vendor search endpoints (Moderator access)"
+      ]
     },
     {
       "name": "Drivers",
       "item": [
         {
-          "name": "Search Drivers",
+          "name": "Search Drivers (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"license_number\": \"\",\n  \"is_online\": null,\n  \"is_verified\": null,\n  \"min_rating\": null,\n  \"subscription_tier\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+              "raw": "{{baseUrl}}/api/v1/search/admin/drivers?query=ABC&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "drivers"]
+              "path": ["api", "v1", "search", "admin", "drivers"],
+              "query": [
+                { "key": "query", "value": "ABC" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search driver profiles with filters.\n\n**Required Role**: Admin only\n\n**Note**: Vehicle type is stored in `vehicle_info` JSON field, not as a separate column.\n\n**Filters**:\n- `q`: Search query (license number)\n- `license_number`: Filter by license\n- `is_online`: Filter by online status\n- `is_verified`: Filter by verification\n- `min_rating`: Minimum rating (0-5)\n- `subscription_tier`: Filter by tier"
-          },
-          "response": []
+            "description": "Search drivers by license number (GET)"
+          }
         },
         {
-          "name": "Search Drivers - Online",
+          "name": "Search Drivers - All (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"is_online\": true,\n  \"is_verified\": true,\n  \"page\": 1,\n  \"limit\": 50\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+              "raw": "{{baseUrl}}/api/v1/search/admin/drivers?page=1&limit=50",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "drivers"]
+              "path": ["api", "v1", "search", "admin", "drivers"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
             },
-            "description": "Find all online verified drivers"
-          },
-          "response": []
+            "description": "Get all drivers"
+          }
         },
         {
-          "name": "Search Drivers - By Rating",
+          "name": "Search Drivers - Online (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/drivers?is_online=true&is_verified=true&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "drivers"],
+              "query": [
+                { "key": "is_online", "value": "true" },
+                { "key": "is_verified", "value": "true" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Get online verified drivers"
+          }
+        },
+        {
+          "name": "Search Drivers (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"is_verified\": true,\n  \"min_rating\": 4.0,\n  \"page\": 1,\n  \"limit\": 20\n}"
+              "raw": "{\n  \"is_online\": true,\n  \"is_verified\": true,\n  \"min_rating\": 4.0,\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "drivers"]
-            },
-            "description": "Find drivers by minimum rating"
-          },
-          "response": []
+            }
+          }
         }
-      ],
-      "description": "Driver search endpoints (Admin access only)"
+      ]
     },
     {
       "name": "Bookings",
       "item": [
         {
-          "name": "Search Bookings",
+          "name": "Search Bookings (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"booking_number\": \"\",\n  \"user_id\": \"\",\n  \"hotel_id\": \"\",\n  \"booking_status\": \"\",\n  \"payment_status\": \"\",\n  \"check_in_from\": \"\",\n  \"check_in_to\": \"\",\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+              "raw": "{{baseUrl}}/api/v1/search/admin/bookings?query=BK&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "bookings"]
+              "path": ["api", "v1", "search", "admin", "bookings"],
+              "query": [
+                { "key": "query", "value": "BK" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search hotel bookings with filters.\n\n**Required Role**: Moderator or Admin\n\n**Note**: Uses `booking_status` (not `status`) and `guest_count` is a JSON object.\n\n**Filters**:\n- `booking_number`: Filter by booking number\n- `user_id`: Filter by user UUID\n- `hotel_id`: Filter by hotel UUID\n- `booking_status`: pending, confirmed, checked_in, checked_out, cancelled\n- `payment_status`: pending, paid, refunded, failed\n- `check_in_from/to`: Date range filter"
-          },
-          "response": []
+            "description": "Search bookings by booking number"
+          }
         },
         {
-          "name": "Search Bookings - Pending Payment",
+          "name": "Search Bookings - All (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"booking_status\": \"confirmed\",\n  \"payment_status\": \"pending\",\n  \"page\": 1,\n  \"limit\": 50\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+              "raw": "{{baseUrl}}/api/v1/search/admin/bookings?page=1&limit=50",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "bookings"]
+              "path": ["api", "v1", "search", "admin", "bookings"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
             },
-            "description": "Find confirmed bookings with pending payment"
-          },
-          "response": []
+            "description": "Get all bookings"
+          }
         },
         {
-          "name": "Search Bookings - Date Range",
+          "name": "Search Bookings - Confirmed (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/search/admin/bookings?booking_status=confirmed&page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "search", "admin", "bookings"],
+              "query": [
+                { "key": "booking_status", "value": "confirmed" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Get confirmed bookings"
+          }
+        },
+        {
+          "name": "Search Bookings (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"check_in_from\": \"2024-03-01\",\n  \"check_in_to\": \"2024-03-31\",\n  \"booking_status\": \"confirmed\",\n  \"page\": 1,\n  \"limit\": 100\n}"
+              "raw": "{\n  \"booking_status\": \"confirmed\",\n  \"payment_status\": \"paid\",\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "bookings"]
-            },
-            "description": "Find bookings within a date range"
-          },
-          "response": []
+            }
+          }
         }
-      ],
-      "description": "Hotel booking search endpoints (Moderator access)"
+      ]
     },
     {
       "name": "Orders",
       "item": [
         {
-          "name": "Search Orders",
+          "name": "Search Orders (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"order_number\": \"\",\n  \"user_id\": \"\",\n  \"status\": \"\",\n  \"payment_status\": \"\",\n  \"min_amount\": null,\n  \"max_amount\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+              "raw": "{{baseUrl}}/api/v1/search/admin/orders?query=ORD&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "orders"]
+              "path": ["api", "v1", "search", "admin", "orders"],
+              "query": [
+                { "key": "query", "value": "ORD" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search ecommerce orders with filters.\n\n**Required Role**: Moderator or Admin\n\n**Filters**:\n- `order_number`: Filter by order number\n- `user_id`: Filter by user UUID\n- `status`: pending, processing, shipped, delivered, cancelled, refunded\n- `payment_status`: pending, paid, refunded, failed\n- `min_amount/max_amount`: Amount range"
-          },
-          "response": []
+            "description": "Search orders by order number"
+          }
         },
         {
-          "name": "Search Orders - High Value",
+          "name": "Search Orders - All (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"min_amount\": 100000,\n  \"payment_status\": \"paid\",\n  \"sort\": \"total_amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+              "raw": "{{baseUrl}}/api/v1/search/admin/orders?page=1&limit=50",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "orders"]
+              "path": ["api", "v1", "search", "admin", "orders"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
             },
-            "description": "Find high-value orders"
-          },
-          "response": []
+            "description": "Get all orders"
+          }
         },
         {
-          "name": "Search Orders - Pending Delivery",
+          "name": "Search Orders (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"status\": \"shipped\",\n  \"payment_status\": \"paid\",\n  \"page\": 1,\n  \"limit\": 50\n}"
+              "raw": "{\n  \"status\": \"delivered\",\n  \"payment_status\": \"paid\",\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/orders",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "orders"]
-            },
-            "description": "Find orders in transit"
-          },
-          "response": []
+            }
+          }
         }
-      ],
-      "description": "Ecommerce order search endpoints (Moderator access)"
+      ]
     },
     {
       "name": "Transactions",
       "item": [
         {
-          "name": "Search Transactions",
+          "name": "Search Transactions (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"q\": \"\",\n  \"reference_id\": \"\",\n  \"user_id\": \"\",\n  \"payment_method\": \"\",\n  \"payment_status\": \"\",\n  \"payment_type\": \"\",\n  \"min_amount\": null,\n  \"max_amount\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+              "raw": "{{baseUrl}}/api/v1/search/admin/transactions?query=PAY&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "transactions"]
+              "path": ["api", "v1", "search", "admin", "transactions"],
+              "query": [
+                { "key": "query", "value": "PAY" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search payment transactions with filters.\n\n**Required Role**: Admin only (sensitive financial data)\n\n**Note**: All access is logged for audit purposes. Uses `reference_id` and `payment_type` (not `reference` or `module_name`).\n\n**Filters**:\n- `reference_id`: Filter by payment reference\n- `user_id`: Filter by user UUID\n- `payment_method`: card, bank, ussd, etc.\n- `payment_status`: pending, success, failed, refunded\n- `payment_type`: hotel_booking, ecommerce, taxi, etc.\n- `min_amount/max_amount`: Amount range"
-          },
-          "response": []
+            "description": "Search transactions by reference"
+          }
         },
         {
-          "name": "Search Transactions - Failed",
+          "name": "Search Transactions - All (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"payment_status\": \"failed\",\n  \"page\": 1,\n  \"limit\": 50\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+              "raw": "{{baseUrl}}/api/v1/search/admin/transactions?page=1&limit=50",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "transactions"]
+              "path": ["api", "v1", "search", "admin", "transactions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
             },
-            "description": "Find failed transactions for investigation"
-          },
-          "response": []
+            "description": "Get all transactions"
+          }
         },
         {
-          "name": "Search Transactions - By Payment Type",
+          "name": "Search Transactions (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"payment_type\": \"hotel_booking\",\n  \"payment_status\": \"success\",\n  \"min_amount\": 50000,\n  \"sort\": \"amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 20\n}"
+              "raw": "{\n  \"payment_status\": \"success\",\n  \"min_amount\": 1000,\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "transactions"]
-            },
-            "description": "Find transactions by payment type"
-          },
-          "response": []
+            }
+          }
         }
-      ],
-      "description": "Payment transaction search endpoints (Admin access only)"
+      ]
     },
     {
       "name": "Rides",
       "item": [
         {
-          "name": "Search Rides",
+          "name": "Search Rides (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"passenger_id\": \"\",\n  \"driver_id\": \"\",\n  \"status\": \"\",\n  \"min_fare\": null,\n  \"max_fare\": null,\n  \"page\": 1,\n  \"limit\": 20,\n  \"sort\": \"created_at\",\n  \"order\": \"desc\"\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+              "raw": "{{baseUrl}}/api/v1/search/admin/rides?page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "rides"]
+              "path": ["api", "v1", "search", "admin", "rides"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Search taxi rides with filters.\n\n**Required Role**: Admin only\n\n**Note**: Uses `passenger_id` (not `user_id`), `final_amount`/`total_fare` (not `fare`), `distance_km` (not `distance`), `estimated_duration_minutes` (not `duration`). No `vehicle_type` column.\n\n**Filters**:\n- `passenger_id`: Filter by rider UUID\n- `driver_id`: Filter by driver UUID\n- `status`: pending, accepted, in_progress, completed, cancelled\n- `min_fare/max_fare`: Fare range (uses final_amount)"
-          },
-          "response": []
+            "description": "Get all rides"
+          }
         },
         {
-          "name": "Search Rides - Cancelled",
+          "name": "Search Rides - Completed (GET)",
           "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"status\": \"cancelled\",\n  \"page\": 1,\n  \"limit\": 50\n}"
-            },
+            "method": "GET",
             "url": {
-              "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+              "raw": "{{baseUrl}}/api/v1/search/admin/rides?status=completed&page=1&limit=20",
               "host": ["{{baseUrl}}"],
-              "path": ["api", "v1", "search", "admin", "rides"]
+              "path": ["api", "v1", "search", "admin", "rides"],
+              "query": [
+                { "key": "status", "value": "completed" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
             },
-            "description": "Find cancelled rides for analysis"
-          },
-          "response": []
+            "description": "Get completed rides"
+          }
         },
         {
-          "name": "Search Rides - By Driver",
+          "name": "Search Rides (POST)",
           "request": {
             "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"driver_id\": \"{{driverId}}\",\n  \"status\": \"completed\",\n  \"sort\": \"final_amount\",\n  \"order\": \"desc\",\n  \"page\": 1,\n  \"limit\": 100\n}"
+              "raw": "{\n  \"status\": \"completed\",\n  \"min_fare\": 500,\n  \"page\": 1,\n  \"limit\": 20\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/api/v1/search/admin/rides",
               "host": ["{{baseUrl}}"],
               "path": ["api", "v1", "search", "admin", "rides"]
-            },
-            "description": "Find all rides for a specific driver"
-          },
-          "response": []
+            }
+          }
         }
-      ],
-      "description": "Taxi ride search endpoints (Admin access only)"
+      ]
     }
   ]
 }
