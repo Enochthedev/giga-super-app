@@ -581,7 +581,7 @@ router.get(
       // Get bookings stats
       const { data: bookings } = await supabase
         .from('hotel_bookings')
-        .select('id, total_price, booking_status, created_at')
+        .select('id, total_amount, booking_status, created_at')
         .gte('created_at', startDate.toISOString())
         .lte('created_at', endDate.toISOString())
         .is('deleted_at', null);
@@ -601,7 +601,7 @@ router.get(
         bookings
           ?.filter((b: Record<string, unknown>) => b.booking_status !== 'cancelled')
           .reduce(
-            (sum: number, b: Record<string, unknown>) => sum + (Number(b.total_price) || 0),
+            (sum: number, b: Record<string, unknown>) => sum + (Number(b.total_amount) || 0),
             0
           ) || 0;
       const avgBookingValue = confirmedBookings > 0 ? totalRevenue / confirmedBookings : 0;
