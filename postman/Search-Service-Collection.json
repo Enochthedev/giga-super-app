@@ -1,12 +1,12 @@
 {
   "info": {
     "name": "GIGA Search Service API",
-    "description": "Search Service API for browsing hotels, products, and drivers. Most endpoints are PUBLIC.",
-    "version": "1.0.0",
+    "description": "Search Service API for browsing hotels, products, and drivers.\n\nMost endpoints are PUBLIC (no auth required).\n\n**Demo Data Available**:\n- Hotels: Lekki, Ikeja, Sunrise, Mountain View, etc.\n- Products: iPhone, Kaftan, Sofa, Fitness Watch, etc.\n- Drivers: 8 verified drivers\n\nBase URL: `{{base_url}}`",
+    "version": "2.0.0",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "base_url", "value": "{{gateway_url}}/api/v1/search" },
+    { "key": "base_url", "value": "http://localhost:3004/api/v1/search" },
     { "key": "gateway_url", "value": "http://localhost:3000" }
   ],
   "item": [
@@ -14,31 +14,101 @@
       "name": "Hotels - PUBLIC",
       "item": [
         {
+          "name": "Search Hotels - Lagos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/hotels?q=Lagos&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"],
+              "query": [
+                { "key": "q", "value": "Lagos" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Search hotels in Lagos (returns 5+ results)"
+          }
+        },
+        {
+          "name": "Search Hotels - Lekki",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/hotels?q=Lekki&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"],
+              "query": [
+                { "key": "q", "value": "Lekki" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Search for Lekki Luxury Suites"
+          }
+        },
+        {
+          "name": "Search Hotels - All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/hotels?page=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
+            },
+            "description": "Get all hotels (8 total)"
+          }
+        },
+        {
           "name": "Search Hotels (POST)",
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{base_url}}/hotels",
+            "url": {
+              "raw": "{{base_url}}/hotels",
+              "host": ["{{base_url}}"],
+              "path": ["hotels"]
+            },
             "body": {
               "mode": "raw",
-              "raw": "{\"q\":\"luxury\",\"location\":\"Lagos\",\"min_price\":100,\"max_price\":500}"
-            }
-          }
-        },
-        {
-          "name": "Search Hotels (GET)",
-          "request": {
-            "method": "GET",
-            "url": "{{base_url}}/hotels?q=beach&location=Lagos&page=1&limit=20"
+              "raw": "{\n  \"q\": \"Lagos\",\n  \"star_rating\": 4,\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "description": "Search 4+ star hotels in Lagos"
           }
         },
         {
           "name": "Get Popular Hotels",
-          "request": { "method": "GET", "url": "{{base_url}}/hotels/popular?location=Lagos&limit=10" }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/hotels/popular?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "popular"],
+              "query": [{ "key": "limit", "value": "10" }]
+            },
+            "description": "Get popular hotels sorted by rating"
+          }
         },
         {
-          "name": "Get Nearby Hotels",
-          "request": { "method": "GET", "url": "{{base_url}}/hotels/nearby?latitude=6.5244&longitude=3.3792&radius=10" }
+          "name": "Get Nearby Hotels - Lagos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/hotels/nearby?latitude=6.5244&longitude=3.3792&radius=50",
+              "host": ["{{base_url}}"],
+              "path": ["hotels", "nearby"],
+              "query": [
+                { "key": "latitude", "value": "6.5244" },
+                { "key": "longitude", "value": "3.3792" },
+                { "key": "radius", "value": "50" }
+              ]
+            },
+            "description": "Find hotels near Lagos coordinates"
+          }
         }
       ]
     },
@@ -46,29 +116,233 @@
       "name": "Products - PUBLIC",
       "item": [
         {
+          "name": "Search Products - iPhone",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?q=iPhone&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "q", "value": "iPhone" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Search for iPhone products"
+          }
+        },
+        {
+          "name": "Search Products - Kaftan",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?q=Kaftan&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "q", "value": "Kaftan" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Search for Kaftan clothing"
+          }
+        },
+        {
+          "name": "Search Products - All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products?page=1&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "50" }
+              ]
+            },
+            "description": "Get all products (9 total)"
+          }
+        },
+        {
           "name": "Search Products (POST)",
           "request": {
             "method": "POST",
             "header": [{ "key": "Content-Type", "value": "application/json" }],
-            "url": "{{base_url}}/products",
-            "body": { "mode": "raw", "raw": "{\"q\":\"iPhone\",\"category\":\"Electronics\",\"in_stock\":true}" }
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": ["{{base_url}}"],
+              "path": ["products"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"q\": \"watch\",\n  \"min_price\": 10000,\n  \"max_price\": 500000,\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "description": "Search products with price filter"
           }
         },
         {
-          "name": "Search Products (GET)",
-          "request": { "method": "GET", "url": "{{base_url}}/products?q=laptop&category=Electronics&page=1&limit=20" }
-        },
-        {
-          "name": "Get Categories",
-          "request": { "method": "GET", "url": "{{base_url}}/products/categories" }
+          "name": "Get Product Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products/categories",
+              "host": ["{{base_url}}"],
+              "path": ["products", "categories"]
+            },
+            "description": "Get all product categories"
+          }
         },
         {
           "name": "Get Trending Products",
-          "request": { "method": "GET", "url": "{{base_url}}/products/trending?limit=10" }
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products/trending?limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["products", "trending"],
+              "query": [{ "key": "limit", "value": "10" }]
+            },
+            "description": "Get trending products"
+          }
         },
         {
-          "name": "Get Brands",
-          "request": { "method": "GET", "url": "{{base_url}}/products/brands?category=Electronics" }
+          "name": "Get Product Brands",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/products/brands?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["products", "brands"],
+              "query": [{ "key": "limit", "value": "20" }]
+            },
+            "description": "Get product brands/vendors"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Drivers - PUBLIC",
+      "item": [
+        {
+          "name": "Search Drivers - All",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/drivers?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["drivers"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Get all available drivers (8 total)"
+          }
+        },
+        {
+          "name": "Search Drivers - Nearby Lagos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/drivers?latitude=6.5244&longitude=3.3792&radius=20&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["drivers"],
+              "query": [
+                { "key": "latitude", "value": "6.5244" },
+                { "key": "longitude", "value": "3.3792" },
+                { "key": "radius", "value": "20" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Find drivers near Lagos"
+          }
+        },
+        {
+          "name": "Search Drivers (POST)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{base_url}}/drivers",
+              "host": ["{{base_url}}"],
+              "path": ["drivers"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"latitude\": 6.5244,\n  \"longitude\": 3.3792,\n  \"radius\": 20,\n  \"page\": 1,\n  \"limit\": 20\n}"
+            },
+            "description": "Search drivers with location filter"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Universal Search",
+      "item": [
+        {
+          "name": "Search All - Lagos",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}?q=Lagos&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": [],
+              "query": [
+                { "key": "q", "value": "Lagos" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            },
+            "description": "Search across all categories"
+          }
+        },
+        {
+          "name": "Get Suggestions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/suggestions?q=Lag&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["suggestions"],
+              "query": [
+                { "key": "q", "value": "Lag" },
+                { "key": "limit", "value": "10" }
+              ]
+            },
+            "description": "Get autocomplete suggestions"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/../health",
+              "host": ["{{base_url}}"],
+              "path": ["..", "health"]
+            },
+            "description": "Check service health"
+          }
+        },
+        {
+          "name": "Ready Check",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/../health/ready",
+              "host": ["{{base_url}}"],
+              "path": ["..", "health", "ready"]
+            },
+            "description": "Check if service is ready"
+          }
         }
       ]
     }
