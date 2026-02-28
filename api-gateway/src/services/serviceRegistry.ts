@@ -154,7 +154,7 @@ class ServiceRegistry {
           '/api/v1/admin*',
           '/api/v1/dashboard*',
           '/api/v1/nipost*',
-          '/api/v1/ads*',
+          // Note: /api/v1/ads* goes to Supabase for user-facing operations
           '/api/v1/campaign*',
           '/api/v1/advertiser*',
           // GIGA Dashboard API patterns
@@ -169,7 +169,7 @@ class ServiceRegistry {
           '/api/delivery*',
           '/api/operations*',
           '/api/managers*',
-          '/api/ads*',
+          '/api/ads*', // Admin ads management (approve/reject/incoming)
           '/api/pending-entries*',
         ],
       });

@@ -91,8 +91,9 @@ app.use('/api', businessModulesRoutes);
 app.use('/api/postal-monitoring', postalMonitoringRoutes);
 app.use('/api/operations', postalMonitoringRoutes); // Alias for postal-monitoring
 app.use('/api/managers', managersRoutes);
-app.use('/api/ads', advertisementsRoutes);
-app.use('/api/v1/ads', advertisementsRoutes); // Support v1 API path
+app.use('/api/ads', advertisementsRoutes); // Admin ads management (approve/reject/incoming)
+// Note: /api/v1/ads/* routes go to Supabase edge functions for user-facing operations
+// (create-ad-campaign, get-ad-campaigns, fetch-ads, etc.)
 app.use('/api/managers', modulesRoutes); // Consolidated modules: /api/managers/{module}/*
 
 // Setup observability error handler (Sentry) - MUST BE BEFORE other error handlers
