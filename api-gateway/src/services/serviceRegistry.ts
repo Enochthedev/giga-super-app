@@ -165,6 +165,8 @@ class ServiceRegistry {
           '/api/hotel*',
           '/api/media*',
           '/api/postal-monitoring*',
+          '/api/postal*',
+          '/api/delivery*',
           '/api/operations*',
           '/api/managers*',
           '/api/ads*',

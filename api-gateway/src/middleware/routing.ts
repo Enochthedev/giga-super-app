@@ -229,6 +229,8 @@ export const routingMiddleware = (
             if (
               path.startsWith('/api/dashboard/') ||
               path.startsWith('/api/postal-monitoring/') ||
+              path.startsWith('/api/postal/') ||
+              path.startsWith('/api/delivery/') ||
               path.startsWith('/api/ads/') ||
               path.startsWith('/api/admin/') ||
               path.startsWith('/api/ecommerce/') ||
