@@ -2461,4 +2461,1023 @@ router.get(
   }
 );
 
+// ============================================================================
+// DELIVERY & INCOMING ORDERS ENDPOINTS
+// ============================================================================
+
+/**
+ * @swagger
+ * /api/delivery/incoming-orders:
+ *   get:
+ *     tags: [Delivery]
+ *     summary: Get incoming orders for delivery dashboard
+ *     description: Retrieve paginated list of incoming orders with toggleable delivery status
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, processing, shipped, delivered, cancelled]
+ *         description: Filter by order status
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: Search by order number or product name
+ *     responses:
+ *       200:
+ *         description: Incoming orders retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       order_number:
+ *                         type: string
+ *                       product_name:
+ *                         type: string
+ *                       quantity:
+ *                         type: integer
+ *                       date:
+ *                         type: string
+ *                         format: date
+ *                       revenue:
+ *                         type: number
+ *                       net_profit:
+ *                         type: number
+ *                       status:
+ *                         type: string
+ *                       is_delivered:
+ *                         type: boolean
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: "o1234567-89ab-cdef-0123-456789abcdef"
+ *                   order_number: "ORD-2026-001234"
+ *                   product_name: "Analog Table Clock"
+ *                   quantity: 2
+ *                   date: "2020-02-05"
+ *                   revenue: 253.82
+ *                   net_profit: 60.76
+ *                   status: "pending"
+ *                   is_delivered: false
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/delivery/incoming-orders',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { page = '1', limit = '20', status, search } = req.query;
+      const { from, to } = getPaginationRange(page as string, limit as string);
+
+      let query = supabase
+        .from('ecommerce_orders')
+        .select(
+          `
+          id,
+          order_number,
+          total_amount,
+          status,
+          created_at,
+          updated_at,
+          ecommerce_order_items(
+            quantity,
+            unit_price,
+            ecommerce_products(name)
+          )
+        `,
+          { count: 'exact' }
+        )
+        .is('deleted_at', null)
+        .range(from, to)
+        .order('created_at', { ascending: false });
+
+      if (status) {
+        query = query.eq('status', status as string);
+      }
+
+      if (search) {
+        query = query.or(`order_number.ilike.%${search}%`);
+      }
+
+      const { data: orders, count, error } = await query;
+
+      if (error) throw error;
+
+      // Transform data for frontend
+      const transformedOrders = (orders || []).map((order: any) => {
+        const items = order.ecommerce_order_items || [];
+        const firstItem = items[0];
+        const totalQuantity = items.reduce(
+          (sum: number, item: any) => sum + (item.quantity || 0),
+          0
+        );
+        const revenue = parseFloat(order.total_amount || '0');
+        const netProfit = revenue * 0.24; // Approximate 24% profit margin
+
+        return {
+          id: order.id,
+          order_number: order.order_number,
+          product_name: firstItem?.ecommerce_products?.name || 'Multiple Items',
+          quantity: totalQuantity,
+          date: order.created_at?.split('T')[0],
+          revenue: Math.round(revenue * 100) / 100,
+          net_profit: Math.round(netProfit * 100) / 100,
+          status: order.status,
+          is_delivered: order.status === 'delivered' || order.status === 'completed',
+        };
+      });
+
+      await createAudit(req, 'view_incoming_orders', 'delivery_dashboard');
+
+      res.json({
+        success: true,
+        data: transformedOrders,
+        pagination: calculatePagination(page as string, limit as string, count || 0),
+      });
+    } catch (error: any) {
+      logger.error('Failed to get incoming orders', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch incoming orders' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/delivery/orders/{orderId}/toggle-status:
+ *   put:
+ *     tags: [Delivery]
+ *     summary: Toggle order delivery status
+ *     description: Toggle an order between delivered and pending status
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: orderId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - is_delivered
+ *             properties:
+ *               is_delivered:
+ *                 type: boolean
+ *           example:
+ *             is_delivered: true
+ *     responses:
+ *       200:
+ *         description: Order status toggled successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: "o1234567-89ab-cdef-0123-456789abcdef"
+ *                 status: "delivered"
+ *                 is_delivered: true
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Order not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put(
+  '/delivery/orders/:orderId/toggle-status',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { orderId } = req.params;
+      const { is_delivered } = req.body;
+
+      const newStatus = is_delivered ? 'delivered' : 'pending';
+
+      const { data: order, error } = await supabase
+        .from('ecommerce_orders')
+        .update({
+          status: newStatus,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', orderId)
+        .is('deleted_at', null)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      if (!order) {
+        return res.status(404).json({
+          success: false,
+          error: 'Order not found',
+          code: 'ORDER_NOT_FOUND',
+        });
+      }
+
+      await createAudit(req, 'toggle_order_status', 'ecommerce_orders', orderId, {
+        new_status: newStatus,
+        is_delivered,
+      });
+
+      res.json({
+        success: true,
+        data: {
+          id: order.id,
+          status: order.status,
+          is_delivered: order.status === 'delivered' || order.status === 'completed',
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to toggle order status', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to toggle order status' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/delivery/packages/track/{trackingId}:
+ *   get:
+ *     tags: [Delivery]
+ *     summary: Track package by tracking ID
+ *     description: Get package details and status history by tracking ID (e.g., #127777489-DL-NY)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: trackingId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Package tracking ID
+ *         example: "127777489-DL-NY"
+ *     responses:
+ *       200:
+ *         description: Package tracking info retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     tracking_id:
+ *                       type: string
+ *                     status:
+ *                       type: string
+ *                     package_type:
+ *                       type: string
+ *                     status_history:
+ *                       type: array
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           status:
+ *                             type: string
+ *                           location:
+ *                             type: string
+ *                           timestamp:
+ *                             type: string
+ *                           is_current:
+ *                             type: boolean
+ *             example:
+ *               success: true
+ *               data:
+ *                 tracking_id: "#127777489-DL-NY"
+ *                 status: "out_for_delivery"
+ *                 package_type: "Parcel"
+ *                 status_history:
+ *                   - status: "Package has left Courier Facility"
+ *                     location: "SAN FRANCISCO, CALIFORNIA"
+ *                     timestamp: "2026-02-10T08:30:00Z"
+ *                     is_current: false
+ *                   - status: "Package arrived at Local Facility"
+ *                     location: "NEW YORK CITY, NEW YORK"
+ *                     timestamp: "2026-02-11T14:20:00Z"
+ *                     is_current: false
+ *                   - status: "Out for Delivery"
+ *                     location: "NEW YORK CITY, NEW YORK"
+ *                     timestamp: "2026-02-12T09:00:00Z"
+ *                     is_current: true
+ *       404:
+ *         description: Package not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/delivery/packages/track/:trackingId',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { trackingId } = req.params;
+
+      // Clean tracking ID (remove # if present)
+      const cleanTrackingId = trackingId.replace(/^#/, '');
+
+      // Search for package by tracking number
+      const { data: pkg, error } = await supabase
+        .from('delivery_packages')
+        .select('*')
+        .or(`tracking_number.eq.${cleanTrackingId},tracking_number.eq.#${cleanTrackingId}`)
+        .is('deleted_at', null)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+
+      if (!pkg) {
+        return res.status(404).json({
+          success: false,
+          error: 'Package not found',
+          code: 'PACKAGE_NOT_FOUND',
+        });
+      }
+
+      // Get status history
+      const { data: statusHistory } = await supabase
+        .from('delivery_status_history')
+        .select('*')
+        .eq('package_id', pkg.id)
+        .order('created_at', { ascending: true });
+
+      // Build status timeline
+      const statusLabels: Record<string, string> = {
+        pending: 'Package Created',
+        assigned: 'Driver Assigned',
+        picked_up: 'Package Picked Up',
+        left_facility: 'Package has left Courier Facility',
+        in_transit: 'Package in Transit',
+        arrived_facility: 'Package arrived at Local Facility',
+        out_for_delivery: 'Out for Delivery',
+        delivered: 'Delivered',
+        failed: 'Delivery Failed',
+        cancelled: 'Cancelled',
+        returned: 'Returned to Sender',
+      };
+
+      const timeline = (statusHistory || []).map((entry: any, index: number, arr: any[]) => ({
+        status: statusLabels[entry.status] || entry.status,
+        location: entry.location || 'Unknown Location',
+        timestamp: entry.created_at,
+        is_current: index === arr.length - 1,
+      }));
+
+      // If no history, create basic timeline from package status
+      if (timeline.length === 0) {
+        timeline.push({
+          status: statusLabels[pkg.status] || pkg.status,
+          location: pkg.current_location || 'Processing Center',
+          timestamp: pkg.updated_at || pkg.created_at,
+          is_current: true,
+        });
+      }
+
+      await createAudit(req, 'track_package', 'delivery_packages', pkg.id);
+
+      res.json({
+        success: true,
+        data: {
+          tracking_id: `#${cleanTrackingId}`,
+          status: pkg.status,
+          package_type: pkg.package_type || 'Parcel',
+          sender: {
+            name: pkg.sender_name,
+            address: pkg.sender_address,
+          },
+          recipient: {
+            name: pkg.recipient_name,
+            address: pkg.recipient_address,
+          },
+          delivery_address: pkg.recipient_address,
+          estimated_delivery: pkg.estimated_delivery_date,
+          status_history: timeline,
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to track package', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to track package' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/delivery/packages/recent:
+ *   get:
+ *     tags: [Delivery]
+ *     summary: Get recent packages for delivery dashboard
+ *     description: Retrieve recent packages with their current status for the delivery dashboard sidebar
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 5
+ *         description: Number of recent packages to return
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [in_transit, out_for_delivery, delivered, pending]
+ *         description: Filter by status
+ *     responses:
+ *       200:
+ *         description: Recent packages retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 - tracking_id: "#127777489-DL-NY"
+ *                   status: "in_transit"
+ *                   status_label: "In Transit"
+ *                   package_type: "Documents"
+ *                   current_location: "DETROIT, DENMARK"
+ *                   last_update: "Package has left Courier Facility"
+ *                 - tracking_id: "#127777490-DL-NY"
+ *                   status: "in_customs"
+ *                   status_label: "In Customs"
+ *                   package_type: "Parcel"
+ *                   current_location: "NEW YORK CITY, NEW YORK"
+ *                   last_update: "Customs"
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/delivery/packages/recent',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { limit = '5', status } = req.query;
+      const limitNum = Math.min(parseInt(limit as string, 10) || 5, 20);
+
+      let query = supabase
+        .from('delivery_packages')
+        .select('*')
+        .is('deleted_at', null)
+        .order('updated_at', { ascending: false })
+        .limit(limitNum);
+
+      if (status) {
+        query = query.eq('status', status as string);
+      }
+
+      const { data: packages, error } = await query;
+
+      if (error) throw error;
+
+      const statusLabels: Record<string, string> = {
+        pending: 'Pending',
+        assigned: 'Assigned',
+        picked_up: 'Picked Up',
+        left_facility: 'Left Facility',
+        in_transit: 'In Transit',
+        in_customs: 'In Customs',
+        arrived_facility: 'Arrived at Facility',
+        out_for_delivery: 'Out for Delivery',
+        delivered: 'Delivered',
+        failed: 'Failed',
+        cancelled: 'Cancelled',
+        returned: 'Returned',
+      };
+
+      const recentPackages = (packages || []).map((pkg: any) => ({
+        tracking_id: pkg.tracking_number
+          ? `#${pkg.tracking_number}`
+          : `#PKG-${pkg.id.slice(0, 8).toUpperCase()}`,
+        status: pkg.status,
+        status_label: statusLabels[pkg.status] || pkg.status,
+        package_type: pkg.package_type || 'Parcel',
+        current_location: pkg.current_location || 'Processing',
+        last_update: pkg.last_status_update || statusLabels[pkg.status],
+        updated_at: pkg.updated_at,
+      }));
+
+      await createAudit(req, 'view_recent_packages', 'delivery_dashboard');
+
+      res.json({
+        success: true,
+        data: recentPackages,
+      });
+    } catch (error: any) {
+      logger.error('Failed to get recent packages', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch recent packages' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/delivery/packages/search:
+ *   get:
+ *     tags: [Delivery]
+ *     summary: Search packages
+ *     description: Search packages by tracking number, sender/recipient name, address, or status
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Search query (tracking number, name, address)
+ *         example: "127777489"
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, assigned, picked_up, in_transit, out_for_delivery, delivered, failed, cancelled, returned]
+ *         description: Filter by status
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *     responses:
+ *       200:
+ *         description: Search results retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 - tracking_id: "#127777489-DL-NY"
+ *                   status: "in_transit"
+ *                   sender_name: "John Smith"
+ *                   recipient_name: "Jane Doe"
+ *                   package_type: "Parcel"
+ *                   current_location: "NEW YORK CITY, NEW YORK"
+ *               pagination:
+ *                 page: 1
+ *                 limit: 20
+ *                 total: 1
+ *       400:
+ *         description: Search query required
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/delivery/packages/search',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { q, status, page = '1', limit = '20' } = req.query;
+
+      if (!q || (q as string).trim().length === 0) {
+        return res.status(400).json({
+          success: false,
+          error: 'Search query is required',
+          code: 'VALIDATION_ERROR',
+        });
+      }
+
+      const searchTerm = (q as string).trim().replace(/^#/, '');
+      const { from, to } = getPaginationRange(page as string, limit as string);
+
+      // Build search query
+      let query = supabase
+        .from('delivery_packages')
+        .select('*', { count: 'exact' })
+        .is('deleted_at', null)
+        .or(
+          `tracking_number.ilike.%${searchTerm}%,` +
+            `sender_name.ilike.%${searchTerm}%,` +
+            `recipient_name.ilike.%${searchTerm}%,` +
+            `sender_address.ilike.%${searchTerm}%,` +
+            `recipient_address.ilike.%${searchTerm}%`
+        )
+        .range(from, to)
+        .order('updated_at', { ascending: false });
+
+      if (status) {
+        query = query.eq('status', status as string);
+      }
+
+      const { data: packages, count, error } = await query;
+
+      if (error) throw error;
+
+      const statusLabels: Record<string, string> = {
+        pending: 'Pending',
+        assigned: 'Assigned',
+        picked_up: 'Picked Up',
+        left_facility: 'Left Facility',
+        in_transit: 'In Transit',
+        arrived_facility: 'Arrived at Facility',
+        out_for_delivery: 'Out for Delivery',
+        delivered: 'Delivered',
+        failed: 'Failed',
+        cancelled: 'Cancelled',
+        returned: 'Returned',
+      };
+
+      const results = (packages || []).map((pkg: any) => ({
+        id: pkg.id,
+        tracking_id: pkg.tracking_number
+          ? `#${pkg.tracking_number}`
+          : `#PKG-${pkg.id.slice(0, 8).toUpperCase()}`,
+        status: pkg.status,
+        status_label: statusLabels[pkg.status] || pkg.status,
+        sender_name: pkg.sender_name,
+        recipient_name: pkg.recipient_name,
+        sender_address: pkg.sender_address,
+        recipient_address: pkg.recipient_address,
+        package_type: pkg.package_type || 'Parcel',
+        current_location: pkg.current_location || 'Processing',
+        estimated_delivery: pkg.estimated_delivery_date,
+        created_at: pkg.created_at,
+        updated_at: pkg.updated_at,
+      }));
+
+      await createAudit(req, 'search_packages', 'delivery_packages', undefined, {
+        search_term: searchTerm,
+      });
+
+      res.json({
+        success: true,
+        data: results,
+        pagination: calculatePagination(page as string, limit as string, count || 0),
+      });
+    } catch (error: any) {
+      logger.error('Failed to search packages', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to search packages' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/delivery/packages/{packageId}/update-status:
+ *   put:
+ *     tags: [Delivery]
+ *     summary: Update package delivery status
+ *     description: Update package status and add to status history (triggers notification)
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: packageId
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *               - location
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, picked_up, left_facility, in_transit, arrived_facility, out_for_delivery, delivered, failed, cancelled]
+ *               location:
+ *                 type: string
+ *               notes:
+ *                 type: string
+ *               notify_recipient:
+ *                 type: boolean
+ *                 default: true
+ *           example:
+ *             status: "out_for_delivery"
+ *             location: "NEW YORK CITY, NEW YORK"
+ *             notes: "Package is out for delivery"
+ *             notify_recipient: true
+ *     responses:
+ *       200:
+ *         description: Package status updated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: "p1234567-89ab-cdef-0123-456789abcdef"
+ *                 status: "out_for_delivery"
+ *                 notification_sent: true
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Package not found
+ *       500:
+ *         description: Internal server error
+ */
+router.put(
+  '/delivery/packages/:packageId/update-status',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { packageId } = req.params;
+      const { status, location, notes, notify_recipient = true } = req.body;
+
+      // Validate status
+      const validStatuses = [
+        'pending',
+        'assigned',
+        'picked_up',
+        'left_facility',
+        'in_transit',
+        'arrived_facility',
+        'out_for_delivery',
+        'delivered',
+        'failed',
+        'cancelled',
+        'returned',
+      ];
+
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          error: `Invalid status. Must be one of: ${validStatuses.join(', ')}`,
+          code: 'VALIDATION_ERROR',
+        });
+      }
+
+      // Update package status
+      const { data: pkg, error: updateError } = await supabase
+        .from('delivery_packages')
+        .update({
+          status,
+          current_location: location,
+          last_status_update: notes || `Status changed to ${status}`,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', packageId)
+        .is('deleted_at', null)
+        .select()
+        .single();
+
+      if (updateError) throw updateError;
+
+      if (!pkg) {
+        return res.status(404).json({
+          success: false,
+          error: 'Package not found',
+          code: 'PACKAGE_NOT_FOUND',
+        });
+      }
+
+      // Add to status history
+      await supabase.from('delivery_status_history').insert({
+        package_id: packageId,
+        status,
+        location,
+        notes,
+        created_by: req.user!.id,
+      });
+
+      // Create notification if requested
+      let notificationSent = false;
+      if (notify_recipient && pkg.recipient_id) {
+        try {
+          const statusMessages: Record<string, string> = {
+            picked_up: 'Your package has been picked up',
+            left_facility: 'Your package has left the courier facility',
+            in_transit: 'Your package is in transit',
+            arrived_facility: 'Your package has arrived at a local facility',
+            out_for_delivery: 'Your package is out for delivery',
+            delivered: 'Your package has been delivered',
+            failed: 'Delivery attempt failed',
+          };
+
+          if (statusMessages[status]) {
+            await supabase.from('notifications').insert({
+              user_id: pkg.recipient_id,
+              type: 'delivery_update',
+              title: 'Delivery Update',
+              message: `${statusMessages[status]} - Tracking: ${pkg.tracking_number || packageId}`,
+              data: {
+                package_id: packageId,
+                tracking_number: pkg.tracking_number,
+                status,
+                location,
+              },
+            });
+            notificationSent = true;
+          }
+        } catch (notifError: any) {
+          logger.warn('Failed to send delivery notification', { error: notifError.message });
+        }
+      }
+
+      await createAudit(req, 'update_package_status', 'delivery_packages', packageId, {
+        new_status: status,
+        location,
+        notification_sent: notificationSent,
+      });
+
+      res.json({
+        success: true,
+        data: {
+          id: pkg.id,
+          tracking_number: pkg.tracking_number,
+          status: pkg.status,
+          current_location: pkg.current_location,
+          notification_sent: notificationSent,
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to update package status', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to update package status' });
+    }
+  }
+);
+
+/**
+ * @swagger
+ * /api/delivery/dashboard:
+ *   get:
+ *     tags: [Delivery]
+ *     summary: Get delivery dashboard data
+ *     description: Get comprehensive delivery dashboard data including stats, recent packages, and map data
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard data retrieved successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 stats:
+ *                   total_packages: 1250
+ *                   in_transit: 45
+ *                   delivered_today: 28
+ *                   pending_pickup: 12
+ *                 featured_package:
+ *                   tracking_id: "#127777489-DL-NY"
+ *                   status: "out_for_delivery"
+ *                   package_type: "Parcel"
+ *                 recent_packages:
+ *                   - tracking_id: "#127777489-DL-NY"
+ *                     status: "in_transit"
+ *                     package_type: "Documents"
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+router.get(
+  '/delivery/dashboard',
+  authenticate,
+  requireAnyAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      // Get package statistics
+      const [totalPackages, inTransit, deliveredToday, pendingPickup] = await Promise.all([
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .is('deleted_at', null),
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .in('status', ['in_transit', 'out_for_delivery'])
+          .is('deleted_at', null),
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'delivered')
+          .gte('updated_at', today.toISOString())
+          .is('deleted_at', null),
+        supabase
+          .from('delivery_packages')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'pending')
+          .is('deleted_at', null),
+      ]);
+
+      // Get featured package (most recent active)
+      const { data: featuredPkg } = await supabase
+        .from('delivery_packages')
+        .select('*')
+        .in('status', ['in_transit', 'out_for_delivery'])
+        .is('deleted_at', null)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      // Get recent packages
+      const { data: recentPackages } = await supabase
+        .from('delivery_packages')
+        .select('*')
+        .is('deleted_at', null)
+        .order('updated_at', { ascending: false })
+        .limit(5);
+
+      const statusLabels: Record<string, string> = {
+        pending: 'Pending',
+        assigned: 'Assigned',
+        picked_up: 'Picked Up',
+        left_facility: 'Left Facility',
+        in_transit: 'In Transit',
+        in_customs: 'In Customs',
+        arrived_facility: 'Arrived at Facility',
+        out_for_delivery: 'Out for Delivery',
+        delivered: 'Delivered',
+        failed: 'Failed',
+        cancelled: 'Cancelled',
+        returned: 'Returned',
+      };
+
+      await createAudit(req, 'view_delivery_dashboard', 'delivery_dashboard');
+
+      res.json({
+        success: true,
+        data: {
+          stats: {
+            total_packages: totalPackages.count || 0,
+            in_transit: inTransit.count || 0,
+            delivered_today: deliveredToday.count || 0,
+            pending_pickup: pendingPickup.count || 0,
+          },
+          featured_package: featuredPkg
+            ? {
+                tracking_id: featuredPkg.tracking_number
+                  ? `#${featuredPkg.tracking_number}`
+                  : `#PKG-${featuredPkg.id.slice(0, 8).toUpperCase()}`,
+                status: featuredPkg.status,
+                status_label: statusLabels[featuredPkg.status] || featuredPkg.status,
+                package_type: featuredPkg.package_type || 'Parcel',
+                current_location: featuredPkg.current_location,
+              }
+            : null,
+          recent_packages: (recentPackages || []).map((pkg: any) => ({
+            tracking_id: pkg.tracking_number
+              ? `#${pkg.tracking_number}`
+              : `#PKG-${pkg.id.slice(0, 8).toUpperCase()}`,
+            status: pkg.status,
+            status_label: statusLabels[pkg.status] || pkg.status,
+            package_type: pkg.package_type || 'Parcel',
+            current_location: pkg.current_location,
+          })),
+        },
+      });
+    } catch (error: any) {
+      logger.error('Failed to get delivery dashboard', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to fetch delivery dashboard' });
+    }
+  }
+);
+
 export default router;

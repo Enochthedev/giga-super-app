@@ -52,6 +52,8 @@ tags:
     description: User authentication endpoints via Supabase Auth
   - name: Dashboard
     description: GIGA Dashboard statistics and analytics
+  - name: Delivery
+    description: Delivery dashboard, package tracking, and incoming orders management
   - name: Manager - E-commerce
     description: E-commerce products, orders, vendors management for managers
   - name: Manager - Taxi
@@ -2053,6 +2055,380 @@ paths:
         500:
           $ref: '#/components/responses/InternalServerError'
 
+  # Delivery & Package Tracking Endpoints
+  /api/delivery/incoming-orders:
+    get:
+      tags: [Delivery]
+      summary: Get incoming orders for delivery dashboard
+      description: Retrieve paginated list of incoming orders with toggleable delivery status
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, processing, shipped, delivered, cancelled]
+          description: Filter by order status
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search by order number or product name
+      responses:
+        200:
+          description: Incoming orders retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/IncomingOrder'
+              example:
+                success: true
+                data:
+                  - id: "o1234567-89ab-cdef-0123-456789abcdef"
+                    order_number: "ORD-2026-001234"
+                    product_name: "Analog Table Clock"
+                    quantity: 2
+                    date: "2026-02-05"
+                    revenue: 253.82
+                    net_profit: 60.76
+                    status: "pending"
+                    is_delivered: false
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 150
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/delivery/orders/{orderId}/toggle-status:
+    put:
+      tags: [Delivery]
+      summary: Toggle order delivery status
+      description: Toggle an order between delivered and pending status
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Order ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - is_delivered
+              properties:
+                is_delivered:
+                  type: boolean
+                  description: Set to true to mark as delivered, false for pending
+            example:
+              is_delivered: true
+      responses:
+        200:
+          description: Order status toggled successfully
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  id: "o1234567-89ab-cdef-0123-456789abcdef"
+                  status: "delivered"
+                  is_delivered: true
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/delivery/packages/search:
+    get:
+      tags: [Delivery]
+      summary: Search packages
+      description: Search packages by tracking number, sender/recipient name, address, or status
+      parameters:
+        - in: query
+          name: q
+          required: true
+          schema:
+            type: string
+          description: Search query (tracking number, name, address)
+          example: "127777489"
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, assigned, picked_up, in_transit, out_for_delivery, delivered, failed, cancelled, returned]
+          description: Filter by status
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        200:
+          description: Search results retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/PaginatedResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PackageSearchResult'
+              example:
+                success: true
+                data:
+                  - id: "p1234567-89ab-cdef-0123-456789abcdef"
+                    tracking_id: "#127777489-DL-NY"
+                    status: "in_transit"
+                    status_label: "In Transit"
+                    sender_name: "John Smith"
+                    recipient_name: "Jane Doe"
+                    package_type: "Parcel"
+                    current_location: "NEW YORK CITY, NEW YORK"
+                pagination:
+                  page: 1
+                  limit: 20
+                  total: 1
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/delivery/packages/track/{trackingId}:
+    get:
+      tags: [Delivery]
+      summary: Track package by tracking ID
+      description: Get package details and status history timeline by tracking ID (e.g., 127777489-DL-NY)
+      parameters:
+        - in: path
+          name: trackingId
+          required: true
+          schema:
+            type: string
+          description: Package tracking ID (with or without # prefix)
+          example: "127777489-DL-NY"
+      responses:
+        200:
+          description: Package tracking info retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PackageTrackingInfo'
+              example:
+                success: true
+                data:
+                  tracking_id: "#127777489-DL-NY"
+                  status: "out_for_delivery"
+                  package_type: "Parcel"
+                  sender:
+                    name: "John Smith"
+                    address: "123 Main St, San Francisco, CA"
+                  recipient:
+                    name: "Jane Doe"
+                    address: "456 Park Ave, New York, NY"
+                  delivery_address: "456 Park Ave, New York, NY"
+                  estimated_delivery: "2026-03-01T00:00:00Z"
+                  status_history:
+                    - status: "Package Created"
+                      location: "Processing Center"
+                      timestamp: "2026-02-28T08:00:00Z"
+                      is_current: false
+                    - status: "Package Picked Up"
+                      location: "SAN FRANCISCO, CALIFORNIA"
+                      timestamp: "2026-02-28T10:00:00Z"
+                      is_current: false
+                    - status: "Package has left Courier Facility"
+                      location: "SAN FRANCISCO, CALIFORNIA"
+                      timestamp: "2026-02-28T14:00:00Z"
+                      is_current: false
+                    - status: "Package arrived at Local Facility"
+                      location: "NEW YORK CITY, NEW YORK"
+                      timestamp: "2026-03-01T08:00:00Z"
+                      is_current: false
+                    - status: "Out for Delivery"
+                      location: "NEW YORK CITY, NEW YORK"
+                      timestamp: "2026-03-01T09:00:00Z"
+                      is_current: true
+        404:
+          $ref: '#/components/responses/NotFound'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/delivery/packages/recent:
+    get:
+      tags: [Delivery]
+      summary: Get recent packages for delivery dashboard
+      description: Retrieve recent packages with their current status for the delivery dashboard sidebar
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 5
+            maximum: 20
+          description: Number of recent packages to return
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [in_transit, out_for_delivery, delivered, pending]
+          description: Filter by status
+      responses:
+        200:
+          description: Recent packages retrieved successfully
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  - tracking_id: "#127777489-DL-NY"
+                    status: "in_transit"
+                    status_label: "In Transit"
+                    package_type: "Documents"
+                    current_location: "DETROIT, MICHIGAN"
+                    last_update: "Package has left Courier Facility"
+                  - tracking_id: "#127777490-DL-CH"
+                    status: "out_for_delivery"
+                    status_label: "Out for Delivery"
+                    package_type: "Parcel"
+                    current_location: "NEW YORK CITY, NEW YORK"
+                    last_update: "Out for Delivery"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/delivery/packages/{packageId}/update-status:
+    put:
+      tags: [Delivery]
+      summary: Update package delivery status
+      description: Update package status and add to status history (triggers notification to recipient)
+      parameters:
+        - in: path
+          name: packageId
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Package ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+                - location
+              properties:
+                status:
+                  type: string
+                  enum: [pending, assigned, picked_up, left_facility, in_transit, arrived_facility, out_for_delivery, delivered, failed, cancelled, returned]
+                  description: New package status
+                location:
+                  type: string
+                  description: Current location of the package
+                notes:
+                  type: string
+                  description: Additional notes about the status update
+                notify_recipient:
+                  type: boolean
+                  default: true
+                  description: Whether to send notification to recipient
+            example:
+              status: "out_for_delivery"
+              location: "NEW YORK CITY, NEW YORK"
+              notes: "Package is out for delivery"
+              notify_recipient: true
+      responses:
+        200:
+          description: Package status updated successfully
+          content:
+            application/json:
+              example:
+                success: true
+                data:
+                  id: "p1234567-89ab-cdef-0123-456789abcdef"
+                  tracking_number: "127777489-DL-NY"
+                  status: "out_for_delivery"
+                  current_location: "NEW YORK CITY, NEW YORK"
+                  notification_sent: true
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
+  /api/delivery/dashboard:
+    get:
+      tags: [Delivery]
+      summary: Get delivery dashboard data
+      description: Get comprehensive delivery dashboard data including stats, featured package, and recent packages
+      responses:
+        200:
+          description: Dashboard data retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/DeliveryDashboard'
+              example:
+                success: true
+                data:
+                  stats:
+                    total_packages: 1250
+                    in_transit: 45
+                    delivered_today: 28
+                    pending_pickup: 12
+                  featured_package:
+                    tracking_id: "#127777489-DL-NY"
+                    status: "out_for_delivery"
+                    status_label: "Out for Delivery"
+                    package_type: "Parcel"
+                    current_location: "NEW YORK CITY, NEW YORK"
+                  recent_packages:
+                    - tracking_id: "#127777489-DL-NY"
+                      status: "in_transit"
+                      status_label: "In Transit"
+                      package_type: "Documents"
+                      current_location: "DETROIT, MICHIGAN"
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+
 components:
   securitySchemes:
     BearerAuth:
@@ -2917,3 +3293,204 @@ components:
         created_at:
           type: string
           format: date-time
+
+    # Delivery Schemas
+    IncomingOrder:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        order_number:
+          type: string
+          example: "ORD-2026-001234"
+        product_name:
+          type: string
+          example: "Analog Table Clock"
+        quantity:
+          type: integer
+          example: 2
+        date:
+          type: string
+          format: date
+          example: "2026-02-05"
+        revenue:
+          type: number
+          example: 253.82
+        net_profit:
+          type: number
+          example: 60.76
+        status:
+          type: string
+          enum: [pending, processing, shipped, delivered, cancelled]
+          example: "pending"
+        is_delivered:
+          type: boolean
+          example: false
+
+    PackageSearchResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        tracking_id:
+          type: string
+          example: "#127777489-DL-NY"
+        status:
+          type: string
+          example: "in_transit"
+        status_label:
+          type: string
+          example: "In Transit"
+        sender_name:
+          type: string
+          example: "John Smith"
+        recipient_name:
+          type: string
+          example: "Jane Doe"
+        sender_address:
+          type: string
+          example: "123 Main St, San Francisco, CA"
+        recipient_address:
+          type: string
+          example: "456 Park Ave, New York, NY"
+        package_type:
+          type: string
+          example: "Parcel"
+        current_location:
+          type: string
+          example: "NEW YORK CITY, NEW YORK"
+        estimated_delivery:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    PackageTrackingInfo:
+      type: object
+      properties:
+        tracking_id:
+          type: string
+          example: "#127777489-DL-NY"
+        status:
+          type: string
+          example: "out_for_delivery"
+        package_type:
+          type: string
+          example: "Parcel"
+        sender:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "John Smith"
+            address:
+              type: string
+              example: "123 Main St, San Francisco, CA"
+        recipient:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Jane Doe"
+            address:
+              type: string
+              example: "456 Park Ave, New York, NY"
+        delivery_address:
+          type: string
+          example: "456 Park Ave, New York, NY"
+        estimated_delivery:
+          type: string
+          format: date-time
+        status_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusHistoryEntry'
+
+    StatusHistoryEntry:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "Package has left Courier Facility"
+        location:
+          type: string
+          example: "SAN FRANCISCO, CALIFORNIA"
+        timestamp:
+          type: string
+          format: date-time
+        is_current:
+          type: boolean
+          example: false
+
+    RecentPackage:
+      type: object
+      properties:
+        tracking_id:
+          type: string
+          example: "#127777489-DL-NY"
+        status:
+          type: string
+          example: "in_transit"
+        status_label:
+          type: string
+          example: "In Transit"
+        package_type:
+          type: string
+          example: "Documents"
+        current_location:
+          type: string
+          example: "DETROIT, MICHIGAN"
+        last_update:
+          type: string
+          example: "Package has left Courier Facility"
+        updated_at:
+          type: string
+          format: date-time
+
+    DeliveryDashboard:
+      type: object
+      properties:
+        stats:
+          type: object
+          properties:
+            total_packages:
+              type: integer
+              example: 1250
+            in_transit:
+              type: integer
+              example: 45
+            delivered_today:
+              type: integer
+              example: 28
+            pending_pickup:
+              type: integer
+              example: 12
+        featured_package:
+          type: object
+          nullable: true
+          properties:
+            tracking_id:
+              type: string
+              example: "#127777489-DL-NY"
+            status:
+              type: string
+              example: "out_for_delivery"
+            status_label:
+              type: string
+              example: "Out for Delivery"
+            package_type:
+              type: string
+              example: "Parcel"
+            current_location:
+              type: string
+              example: "NEW YORK CITY, NEW YORK"
+        recent_packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentPackage'
