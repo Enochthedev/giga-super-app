@@ -104,10 +104,15 @@ export const routingMiddleware = (
                 '/functions/v1/update-notification-preferences',
               '/api/v1/notifications/send': '/functions/v1/send-notification',
 
-              // Ads
+              // Ads - User-facing operations (Supabase edge functions)
               '/api/v1/ads/campaigns': '/functions/v1/get-ad-campaigns',
+              '/api/v1/ads/campaigns/create': '/functions/v1/create-ad-campaign',
               '/api/v1/ads/fetch': '/functions/v1/fetch-ads',
               '/api/v1/ads/my-campaigns': '/functions/v1/get-my-campaigns',
+              '/api/v1/ads/analytics': '/functions/v1/get-ad-analytics',
+              '/api/v1/ads/track': '/functions/v1/track-ad-event',
+              '/api/v1/advertiser/profile': '/functions/v1/get-advertiser-profile',
+              '/api/v1/advertiser/profile/create': '/functions/v1/create-advertiser-profile',
 
               // Rides/Taxi - Passenger
               '/api/v1/rides/request': '/functions/v1/request-ride',
