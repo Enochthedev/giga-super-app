@@ -238,7 +238,8 @@ export const routingMiddleware = (
               path.startsWith('/api/hotel/') ||
               path.startsWith('/api/media/') ||
               path.startsWith('/api/operations/') ||
-              path.startsWith('/api/managers/')
+              path.startsWith('/api/managers/') ||
+              path.startsWith('/api/pending-entries/')
             ) {
               return path; // Keep as-is - admin service expects these paths
             }
