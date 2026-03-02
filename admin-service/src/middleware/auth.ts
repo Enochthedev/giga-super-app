@@ -22,8 +22,11 @@ export interface AuthUser {
   accessLevel: 'national' | 'state' | 'branch';
   branchId?: string;
   stateId?: string;
+  stateName?: string;
   role: string;
   permissions: string[]; // Array of permission strings
+  isNipostAdmin: boolean; // Flag to identify NIPOST admin users
+  modulePermissions?: Record<string, any>; // Module-specific permissions for MODULE_ADMIN
 }
 
 export interface AuthRequest extends Request {
@@ -62,37 +65,53 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
 
     const userId = user.id;
 
-    // Get user permissions from nipost_user_permissions table
-    const { data: permissions, error } = await supabase
+    // Check if user has NIPOST admin permissions
+    const { data: nipostPermissions, error: nipostError } = await supabase
       .from('nipost_user_permissions')
       .select('*')
       .eq('user_id', userId)
       .eq('is_active', true)
       .single();
 
-    if (error || !permissions) {
-      logger.error('No permissions found', { userId, error: error?.message });
-      return res.status(403).json({
-        success: false,
-        error: 'No permissions found for this user',
-        code: 'NO_PERMISSIONS',
+    // If user has NIPOST admin permissions, use those
+    if (nipostPermissions && !nipostError) {
+      const userPermissions = nipostPermissions.permissions || [];
+      const modulePermissions = nipostPermissions.module_permissions || {};
+
+      req.user = {
+        id: userId,
+        email: user.email || '',
+        accessLevel: nipostPermissions.access_level,
+        branchId: nipostPermissions.branch_id,
+        stateId: nipostPermissions.state_id,
+        stateName: nipostPermissions.state_name,
+        role: nipostPermissions.role,
+        permissions: userPermissions,
+        isNipostAdmin: true,
+        modulePermissions,
+      };
+
+      logger.info('NIPOST admin authenticated', {
+        userId,
+        role: nipostPermissions.role,
+        accessLevel: nipostPermissions.access_level,
+        state: nipostPermissions.state_name,
       });
+
+      return next();
     }
 
-    // Extract permissions array from the permissions object
-    const userPermissions = permissions.permissions || [];
-
-    req.user = {
-      id: userId,
-      email: user.email || '',
-      accessLevel: permissions.access_level,
-      branchId: permissions.branch_id,
-      stateId: permissions.state_id,
-      role: permissions.role,
-      permissions: userPermissions,
-    };
-
-    next();
+    // If no NIPOST permissions, check for regular admin permissions
+    // This allows backward compatibility with existing admin users
+    logger.warn('No NIPOST permissions found for user', { userId });
+    return res.status(403).json({
+      success: false,
+      error: 'No admin permissions found for this user',
+      code: 'NO_PERMISSIONS',
+      details: {
+        message: 'This user does not have NIPOST admin dashboard access',
+      },
+    });
   } catch (error: any) {
     logger.error('Authentication failed', { error: error.message });
     res.status(401).json({
@@ -260,3 +279,95 @@ export const requireAnyAccess = requireAccessLevel(['national', 'state', 'branch
 export const requireAdmin = requireRole(['admin', 'super_admin']);
 export const requireManager = requireRole(['admin', 'super_admin', 'manager']);
 export const requireStaff = requireRole(['admin', 'super_admin', 'manager', 'staff']);
+
+// NIPOST-specific role middleware
+export const requireDOP = requireRole(['DOP']);
+export const requirePMG = requireRole(['PMG']);
+export const requireRegionalManager = requireRole(['REGIONAL_MANAGER']);
+export const requireModuleAdmin = requireRole(['MODULE_ADMIN']);
+export const requireCourier = requireRole(['COURIER']);
+
+// NIPOST hierarchical access (DOP can access everything, PMG can access state-level, etc.)
+export const requireDOPOrHigher = requireRole(['DOP']);
+export const requirePMGOrHigher = requireRole(['DOP', 'PMG']);
+export const requireRegionalManagerOrHigher = requireRole(['DOP', 'PMG', 'REGIONAL_MANAGER']);
+
+/**
+ * Require NIPOST admin (any NIPOST role)
+ */
+export const requireNipostAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      error: 'Authentication required',
+      code: 'AUTHENTICATION_REQUIRED',
+    });
+  }
+
+  if (!req.user.isNipostAdmin) {
+    logger.warn('NIPOST admin access denied', {
+      userId: req.user.id,
+      role: req.user.role,
+      path: req.path,
+    });
+
+    return res.status(403).json({
+      success: false,
+      error: 'NIPOST admin access required',
+      code: 'NIPOST_ADMIN_REQUIRED',
+      details: {
+        message: 'This endpoint requires NIPOST admin dashboard access',
+      },
+    });
+  }
+
+  next();
+};
+
+/**
+ * Require state-scoped access (validates that user can only access their assigned state)
+ */
+export const requireStateScope = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      error: 'Authentication required',
+      code: 'AUTHENTICATION_REQUIRED',
+    });
+  }
+
+  // DOP has national access, can access any state
+  if (req.user.role === 'DOP') {
+    return next();
+  }
+
+  // For state-level roles, validate state access
+  if (req.user.accessLevel === 'state') {
+    const requestedState = req.query.state || req.body.state || req.params.state;
+
+    if (
+      requestedState &&
+      requestedState !== req.user.stateId &&
+      requestedState !== req.user.stateName
+    ) {
+      logger.warn('State access denied', {
+        userId: req.user.id,
+        userState: req.user.stateName,
+        requestedState,
+        path: req.path,
+      });
+
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied to this state',
+        code: 'STATE_ACCESS_DENIED',
+        details: {
+          userState: req.user.stateName,
+          requestedState,
+        },
+      });
+    }
+  }
+
+  next();
+};
