@@ -21,6 +21,7 @@ import healthRoutes from './routes/health';
 import managersRoutes from './routes/managers';
 import modulesRoutes from './routes/modules/index';
 import nipostRoutes from './routes/nipost';
+import nipostAdminRoutes from './routes/nipost-admin'; // NIPOST admin hierarchy routes
 import postalMonitoringRoutes from './routes/postal-monitoring';
 import usersRoutes from './routes/users';
 
@@ -86,6 +87,7 @@ app.use('/api', healthRoutes);
 app.use('/api/admin', nipostRoutes);
 app.use('/api/admin', adminPanelRoutes);
 app.use('/api/admin/users', usersRoutes);
+app.use('/api/nipost-admin', nipostAdminRoutes); // NIPOST admin hierarchy routes
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api', businessModulesRoutes);
 app.use('/api/postal-monitoring', postalMonitoringRoutes);
