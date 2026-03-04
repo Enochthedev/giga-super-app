@@ -217,7 +217,7 @@ class ServiceRegistry {
         baseUrl: config.services.payment,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/payment-queue*'],
+        patterns: ['/api/v1/payments*', '/api/v1/wallet*', '/api/v1/payment-queue*'],
       });
     }
 
