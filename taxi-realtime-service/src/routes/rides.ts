@@ -258,7 +258,15 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       { lat: dropoff_lat, lng: dropoff_lng }
     );
 
-    const base_fare = 500 + Math.round(distance_km * 100) + Math.round(duration_minutes * 20);
+    // Calculate fare components
+    const BASE_FARE = 500;
+    const COST_PER_KM = 100;
+    const COST_PER_MINUTE = 20;
+
+    const distance_fare = Math.round(distance_km * COST_PER_KM);
+    const time_fare = Math.round(duration_minutes * COST_PER_MINUTE);
+    const total_fare = BASE_FARE + distance_fare + time_fare;
+
     const ride_number = `RIDE-${Date.now().toString(36).toUpperCase()}`;
 
     const rideData: any = {
@@ -270,9 +278,12 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       dropoff_address,
       distance_km,
       estimated_duration_minutes: duration_minutes,
-      base_fare,
-      total_fare: base_fare,
-      final_amount: base_fare,
+      base_fare: BASE_FARE,
+      distance_fare,
+      time_fare,
+      total_fare,
+      final_amount: total_fare,
+      final_fare: total_fare,
       status: 'requested',
       passenger_notes,
     };
