@@ -23,6 +23,7 @@ import modulesRoutes from './routes/modules/index';
 import nipostRoutes from './routes/nipost';
 import nipostAdminRoutes from './routes/nipost-admin'; // NIPOST admin hierarchy routes
 import postalMonitoringRoutes from './routes/postal-monitoring';
+import publicApplicationRoutes from './routes/public-applications';
 import usersRoutes from './routes/users';
 
 dotenv.config();
