@@ -2,6 +2,13 @@ import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 
 import { authMiddleware } from '../middleware/auth';
+import { getDistanceAndDuration } from '../services/googleMaps';
+import { NotificationService } from '../services/notificationService';
+
+// Extend Request type to include notificationService
+interface RequestWithNotification extends Request {
+  notificationService?: NotificationService;
+}
 
 const router = Router();
 
@@ -64,8 +71,13 @@ router.post('/estimate', async (req: Request, res: Response) => {
         error: { code: 'VALIDATION_ERROR', message: 'All coordinates are required' },
       });
     }
-    const distance_km = calculateDistance(pickup_lat, pickup_lng, dropoff_lat, dropoff_lng);
-    const duration_minutes = Math.ceil((distance_km / 25) * 60);
+
+    // Use Google Maps API for accurate distance and duration
+    const { distance_km, duration_minutes, using_fallback } = await getDistanceAndDuration(
+      { lat: pickup_lat, lng: pickup_lng },
+      { lat: dropoff_lat, lng: dropoff_lng }
+    );
+
     const pricing: Record<string, { base: number; perKm: number; perMin: number }> = {
       standard: { base: 500, perKm: 100, perMin: 20 },
       premium: { base: 800, perKm: 150, perMin: 30 },
@@ -86,6 +98,7 @@ router.post('/estimate', async (req: Request, res: Response) => {
           Math.round(duration_minutes * rates.perMin),
         currency: 'NGN',
         vehicle_type,
+        using_google_maps: !using_fallback,
       },
     });
   } catch (error: any) {
@@ -109,7 +122,7 @@ router.get('/active', authMiddleware, async (req: Request, res: Response) => {
       .maybeSingle();
 
     if (error) throw error;
-    if (!ride) return res.json({ success: true, data: null, message: 'No active ride found' });
+    if (!ride) return res.json({ success: true, data: {}, message: 'No active ride found' });
 
     let driverProfile = null;
     if (ride.driver_id) {
@@ -216,6 +229,7 @@ router.get('/history', authMiddleware, async (req: Request, res: Response) => {
 router.post('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
+    const reqWithNotification = req as RequestWithNotification;
 
     const {
       pickup_lat,
@@ -238,8 +252,12 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
       });
     }
 
-    const distance_km = calculateDistance(pickup_lat, pickup_lng, dropoff_lat, dropoff_lng);
-    const duration_minutes = Math.ceil((distance_km / 25) * 60);
+    // Use Google Maps API for accurate distance and duration
+    const { distance_km, duration_minutes } = await getDistanceAndDuration(
+      { lat: pickup_lat, lng: pickup_lng },
+      { lat: dropoff_lat, lng: dropoff_lng }
+    );
+
     const base_fare = 500 + Math.round(distance_km * 100) + Math.round(duration_minutes * 20);
     const ride_number = `RIDE-${Date.now().toString(36).toUpperCase()}`;
 
@@ -265,6 +283,19 @@ router.post('/', authMiddleware, async (req: Request, res: Response) => {
     if (error) throw error;
 
     await logAudit('INSERT', 'rides', ride.id, userId, { action: 'ride_requested', ride_number });
+
+    // Get passenger info for notification
+    const { data: passengerProfile } = await supabase
+      .from('user_profiles')
+      .select('first_name, last_name, avatar_url, rating')
+      .eq('id', userId)
+      .single();
+
+    // Notify drivers of new ride via Socket.IO
+    if (reqWithNotification.notificationService) {
+      reqWithNotification.notificationService.notifyDriversOfNewRide(ride, passengerProfile);
+    }
+
     res.status(201).json({ success: true, data: ride });
   } catch (error: any) {
     res
@@ -387,6 +418,7 @@ router.put('/:rideId/status', authMiddleware, async (req: Request, res: Response
 router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
+    const reqWithNotification = req as RequestWithNotification;
 
     const { rideId } = req.params;
     const { driver_eta_minutes } = req.body;
@@ -432,6 +464,27 @@ router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Respons
       action: 'ride_accepted',
       driver_id: userId,
     });
+
+    // Get driver info for notification
+    const { data: driverProfile } = await supabase
+      .from('driver_profiles')
+      .select(
+        'user_id, vehicle_info, rating, total_rides, user:user_profiles(first_name, last_name, avatar_url, phone)'
+      )
+      .eq('user_id', userId)
+      .single();
+
+    // Notify passenger that driver accepted
+    if (reqWithNotification.notificationService && driverProfile) {
+      reqWithNotification.notificationService.notifyPassengerRideAccepted(
+        ride.passenger_id,
+        ride,
+        driverProfile
+      );
+      // Notify other drivers that ride is no longer available
+      reqWithNotification.notificationService.notifyRideUnavailable(rideId, userId);
+    }
+
     res.json({ success: true, data: ride, message: 'Ride accepted successfully' });
   } catch (error: any) {
     res
@@ -619,6 +672,7 @@ router.post('/:rideId/complete', authMiddleware, async (req: Request, res: Respo
 router.post('/:rideId/cancel', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
+    const reqWithNotification = req as RequestWithNotification;
 
     const { rideId } = req.params;
     const { reason } = req.body;
@@ -707,6 +761,19 @@ router.post('/:rideId/cancel', authMiddleware, async (req: Request, res: Respons
         message: messageToOther,
         data: { ride_id: rideId, reason, fee_charged: fee > 0 },
       });
+
+      // Send real-time notification via Socket.IO
+      if (reqWithNotification.notificationService) {
+        const recipientType = isPassenger ? 'driver' : 'passenger';
+        const cancelledBy = isPassenger ? 'passenger' : 'driver';
+        reqWithNotification.notificationService.notifyRideCancelled(
+          updatedRide,
+          otherUserId,
+          recipientType,
+          cancelledBy,
+          reason
+        );
+      }
     }
 
     res.json({

@@ -88,6 +88,7 @@ app.use('/api/admin', nipostRoutes);
 app.use('/api/admin', adminPanelRoutes);
 app.use('/api/admin/users', usersRoutes);
 app.use('/api/nipost-admin', nipostAdminRoutes); // NIPOST admin hierarchy routes
+app.use('/api/public', publicApplicationRoutes); // Public role application endpoints (no admin auth required)
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api', businessModulesRoutes);
 app.use('/api/postal-monitoring', postalMonitoringRoutes);
