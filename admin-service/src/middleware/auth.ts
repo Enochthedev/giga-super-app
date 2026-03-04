@@ -276,9 +276,33 @@ export const requireStateOrHigher = requireAccessLevel(['national', 'state']);
 export const requireAnyAccess = requireAccessLevel(['national', 'state', 'branch']);
 
 // Convenience middleware for common roles
-export const requireAdmin = requireRole(['admin', 'super_admin']);
-export const requireManager = requireRole(['admin', 'super_admin', 'manager']);
-export const requireStaff = requireRole(['admin', 'super_admin', 'manager', 'staff']);
+// Updated to include NIPOST admin roles (DOP, PMG, etc.)
+export const requireAdmin = requireRole([
+  'admin',
+  'super_admin',
+  'DOP',
+  'PMG',
+  'REGIONAL_MANAGER',
+  'MODULE_ADMIN',
+]);
+export const requireManager = requireRole([
+  'admin',
+  'super_admin',
+  'manager',
+  'DOP',
+  'PMG',
+  'REGIONAL_MANAGER',
+]);
+export const requireStaff = requireRole([
+  'admin',
+  'super_admin',
+  'manager',
+  'staff',
+  'DOP',
+  'PMG',
+  'REGIONAL_MANAGER',
+  'MODULE_ADMIN',
+]);
 
 // NIPOST-specific role middleware
 export const requireDOP = requireRole(['DOP']);
