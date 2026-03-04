@@ -240,7 +240,11 @@ export const routingMiddleware = (
             if (path.startsWith('/api/v1/products/')) {
               return path.replace('/api/v1/products', '/api/v1/search/products');
             }
-            // Payment queue service: /api/v1/payment-queue -> /api/v1 (assuming it expects /api/v1)
+            // Payment queue service: /api/v1/payments, /api/v1/wallet -> keep as-is
+            if (path.startsWith('/api/v1/payments/') || path.startsWith('/api/v1/wallet/')) {
+              return path; // Service expects these paths
+            }
+            // Legacy payment-queue prefix: /api/v1/payment-queue -> /api/v1
             if (path.startsWith('/api/v1/payment-queue/')) {
               return path.replace('/api/v1/payment-queue', '/api/v1');
             }
