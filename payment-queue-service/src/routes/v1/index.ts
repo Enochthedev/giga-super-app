@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import paymentsRouter from './payments';
-import webhooksRouter from './webhooks';
 import adminRouter from './admin';
+import paymentsRouter from './payments';
+import walletRouter from './wallet';
+import webhooksRouter from './webhooks';
 
 const router = Router();
 
@@ -9,5 +10,6 @@ const router = Router();
 router.use('/payments', paymentsRouter);
 router.use('/webhooks', webhooksRouter);
 router.use('/admin/payments', adminRouter);
+router.use('/wallet', walletRouter);
 
 export default router;
