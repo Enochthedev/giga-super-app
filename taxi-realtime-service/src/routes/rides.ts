@@ -1,6 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 
+import { authMiddleware } from '../middleware/auth';
+
 const router = Router();
 
 const supabase = createClient(
@@ -93,14 +95,9 @@ router.post('/estimate', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/active', async (req: Request, res: Response) => {
+router.get('/active', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const { data: ride, error } = await supabase
       .from('rides')
@@ -144,14 +141,9 @@ router.get('/active', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/requests', async (req: Request, res: Response) => {
+router.get('/requests', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const { data: driver } = await supabase
       .from('driver_profiles')
@@ -193,14 +185,9 @@ router.get('/requests', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/history', async (req: Request, res: Response) => {
+router.get('/history', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const { role, status, limit = 20, offset = 0 } = req.query;
     let query = supabase
@@ -226,14 +213,9 @@ router.get('/history', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const {
       pickup_lat,
@@ -293,7 +275,7 @@ router.post('/', async (req: Request, res: Response) => {
 
 // PARAMETERIZED ROUTES (must come after static routes)
 
-router.get('/:rideId', async (req: Request, res: Response) => {
+router.get('/:rideId', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
     const { rideId } = req.params;
@@ -333,14 +315,9 @@ router.get('/:rideId', async (req: Request, res: Response) => {
   }
 });
 
-router.put('/:rideId/status', async (req: Request, res: Response) => {
+router.put('/:rideId/status', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const { rideId } = req.params;
     const { status, cancellation_reason } = req.body;
@@ -407,14 +384,9 @@ router.put('/:rideId/status', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/:rideId/accept', async (req: Request, res: Response) => {
+router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const { rideId } = req.params;
     const { driver_eta_minutes } = req.body;
@@ -468,14 +440,9 @@ router.post('/:rideId/accept', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/:rideId/start', async (req: Request, res: Response) => {
+router.post('/:rideId/start', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res.status(401).json({
-        success: false,
-        error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-      });
 
     const { rideId } = req.params;
     const { data: ride, error: fetchError } = await supabase
@@ -532,16 +499,9 @@ router.post('/:rideId/start', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/:rideId/complete', async (req: Request, res: Response) => {
+router.post('/:rideId/complete', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
 
     const { rideId } = req.params;
     const { dropoff_lat, dropoff_lng, actual_distance_km } = req.body;
@@ -572,19 +532,15 @@ router.post('/:rideId/complete', async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, error: { code: 'NOT_FOUND', message: 'Ride not found' } });
     if (ride.driver_id !== userId)
-      return res
-        .status(403)
-        .json({
-          success: false,
-          error: { code: 'FORBIDDEN', message: 'Only the assigned driver can complete this ride' },
-        });
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Only the assigned driver can complete this ride' },
+      });
     if (ride.status !== 'in_progress')
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'INVALID_STATE', message: 'Ride is not in progress' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_STATE', message: 'Ride is not in progress' },
+      });
 
     const endTime = new Date();
     const startTime = new Date(ride.started_at);
@@ -619,30 +575,26 @@ router.post('/:rideId/complete', async (req: Request, res: Response) => {
       .single();
     if (error) throw error;
 
-    await supabase
-      .from('driver_earnings')
-      .insert({
-        driver_id: userId,
-        ride_id: rideId,
-        amount: finalFare,
-        commission: platformFee,
-        net_earning: driverEarning,
-        payout_status: 'pending',
-      });
+    await supabase.from('driver_earnings').insert({
+      driver_id: userId,
+      ride_id: rideId,
+      amount: finalFare,
+      commission: platformFee,
+      net_earning: driverEarning,
+      payout_status: 'pending',
+    });
     await logAudit('UPDATE', 'rides', rideId, userId, {
       action: 'ride_completed',
       final_fare: finalFare,
       duration_minutes: durationMinutes,
     });
-    await supabase
-      .from('notifications')
-      .insert({
-        user_id: ride.passenger_id,
-        type: 'ride_completed',
-        title: 'Ride Completed',
-        message: `Your ride is complete. Total fare: ₦${finalFare}`,
-        data: { ride_id: rideId, fare: finalFare, distance: distanceKm, duration: durationMinutes },
-      });
+    await supabase.from('notifications').insert({
+      user_id: ride.passenger_id,
+      type: 'ride_completed',
+      title: 'Ride Completed',
+      message: `Your ride is complete. Total fare: ₦${finalFare}`,
+      data: { ride_id: rideId, fare: finalFare, distance: distanceKm, duration: durationMinutes },
+    });
 
     res.json({
       success: true,
@@ -664,16 +616,9 @@ router.post('/:rideId/complete', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/:rideId/cancel', async (req: Request, res: Response) => {
+router.post('/:rideId/cancel', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
 
     const { rideId } = req.params;
     const { reason } = req.body;
@@ -704,19 +649,15 @@ router.post('/:rideId/cancel', async (req: Request, res: Response) => {
     const isPassenger = ride.passenger_id === userId;
     const isDriver = ride.driver_id === userId;
     if (!isPassenger && !isDriver)
-      return res
-        .status(403)
-        .json({
-          success: false,
-          error: { code: 'FORBIDDEN', message: 'You are not authorized to cancel this ride' },
-        });
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'You are not authorized to cancel this ride' },
+      });
     if (['completed', 'cancelled'].includes(ride.status))
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'INVALID_STATE', message: `Ride is already ${ride.status}` },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_STATE', message: `Ride is already ${ride.status}` },
+      });
 
     let fee = 0;
     let notificationType = '';
@@ -759,15 +700,13 @@ router.post('/:rideId/cancel', async (req: Request, res: Response) => {
 
     const otherUserId = isPassenger ? ride.driver_id : ride.passenger_id;
     if (otherUserId) {
-      await supabase
-        .from('notifications')
-        .insert({
-          user_id: otherUserId,
-          type: notificationType,
-          title: 'Ride Cancelled',
-          message: messageToOther,
-          data: { ride_id: rideId, reason, fee_charged: fee > 0 },
-        });
+      await supabase.from('notifications').insert({
+        user_id: otherUserId,
+        type: notificationType,
+        title: 'Ride Cancelled',
+        message: messageToOther,
+        data: { ride_id: rideId, reason, fee_charged: fee > 0 },
+      });
     }
 
     res.json({
@@ -783,16 +722,9 @@ router.post('/:rideId/cancel', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/:rideId/reject', async (req: Request, res: Response) => {
+router.post('/:rideId/reject', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
 
     const { rideId } = req.params;
     const { reason } = req.body;
@@ -803,12 +735,10 @@ router.post('/:rideId/reject', async (req: Request, res: Response) => {
       .eq('user_id', userId)
       .single();
     if (!driver)
-      return res
-        .status(403)
-        .json({
-          success: false,
-          error: { code: 'FORBIDDEN', message: 'Only drivers can reject rides' },
-        });
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Only drivers can reject rides' },
+      });
 
     await logAudit('UPDATE', 'rides', rideId, userId, { action: 'ride_rejected', reason });
     res.json({ success: true, message: 'Ride rejected' });
@@ -819,27 +749,18 @@ router.post('/:rideId/reject', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/:rideId/rate', async (req: Request, res: Response) => {
+router.post('/:rideId/rate', authMiddleware, async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
-    if (!userId)
-      return res
-        .status(401)
-        .json({
-          success: false,
-          error: { code: 'UNAUTHORIZED', message: 'Authentication required' },
-        });
 
     const { rideId } = req.params;
     const { rating, review_comment } = req.body;
 
     if (!rating || rating < 1 || rating > 5)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'VALIDATION_ERROR', message: 'Rating must be 1-5' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_ERROR', message: 'Rating must be 1-5' },
+      });
 
     const { data: ride, error: fetchError } = await supabase
       .from('rides')
@@ -851,19 +772,15 @@ router.post('/:rideId/rate', async (req: Request, res: Response) => {
         .status(404)
         .json({ success: false, error: { code: 'NOT_FOUND', message: 'Ride not found' } });
     if (ride.status !== 'completed')
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: { code: 'INVALID_STATE', message: 'Can only rate completed rides' },
-        });
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_STATE', message: 'Can only rate completed rides' },
+      });
     if (ride.passenger_id !== userId)
-      return res
-        .status(403)
-        .json({
-          success: false,
-          error: { code: 'FORBIDDEN', message: 'Only passengers can rate rides' },
-        });
+      return res.status(403).json({
+        success: false,
+        error: { code: 'FORBIDDEN', message: 'Only passengers can rate rides' },
+      });
 
     const { data: updatedRide, error } = await supabase
       .from('rides')
