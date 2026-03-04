@@ -292,10 +292,15 @@ class ServiceRegistry {
         platform: 'railway',
         patterns: [
           // All taxi/ride routes now go to Railway taxi-realtime-service
+          // Support both /api/v1/rides and /api/rides paths
           '/api/v1/rides*',
           '/api/v1/ride*',
+          '/api/rides*',
+          '/api/ride*',
           '/api/v1/drivers*',
           '/api/v1/driver*',
+          '/api/drivers*',
+          '/api/driver*',
           '/api/v1/taxi*',
           '/api/v1/taxi-realtime*',
           '/api/v1/driver-location*',

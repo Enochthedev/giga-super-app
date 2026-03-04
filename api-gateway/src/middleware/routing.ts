@@ -257,6 +257,7 @@ export const routingMiddleware = (
               return path.replace('/api/v1/taxi-realtime', '/api');
             }
             // Taxi/Rides routes -> Taxi realtime service
+            // Support both /api/v1/rides and /api/rides paths
             if (path.startsWith('/api/v1/rides/')) {
               return path.replace('/api/v1/rides', '/api/rides');
             }
@@ -268,6 +269,10 @@ export const routingMiddleware = (
             }
             if (path.startsWith('/api/v1/driver/')) {
               return path.replace('/api/v1/driver', '/api/drivers');
+            }
+            // Direct /api/rides and /api/drivers paths (no v1) - keep as-is
+            if (path.startsWith('/api/rides/') || path.startsWith('/api/drivers/')) {
+              return path; // Already in correct format for taxi-realtime-service
             }
             // Default: keep the path as-is
             return path;
