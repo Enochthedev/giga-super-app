@@ -195,8 +195,16 @@ export const requireRoles = (allowedRoles: string[] = []) => {
 
 /**
  * Admin-only middleware
+ * Updated to include NIPOST admin roles
  */
-export const requireAdmin = requireRoles(['admin', 'super_admin']);
+export const requireAdmin = requireRoles([
+  'admin',
+  'super_admin',
+  'DOP',
+  'PMG',
+  'REGIONAL_MANAGER',
+  'MODULE_ADMIN',
+]);
 
 /**
  * Moderator or admin middleware
