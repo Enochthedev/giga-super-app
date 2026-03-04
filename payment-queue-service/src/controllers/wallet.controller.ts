@@ -69,11 +69,17 @@ export const initializeTopUp = async (req: Request, res: Response) => {
   }
 
   try {
+    // Extract IP address and user agent for audit logging
+    const ipAddress = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || req.ip;
+    const userAgent = req.headers['user-agent'];
+
     const result = await walletService.initializeTopUp({
       userId,
       amount: parseFloat(amount),
       email,
       callbackUrl,
+      ipAddress,
+      userAgent,
     });
 
     res.json({
@@ -117,7 +123,11 @@ export const verifyTopUp = async (req: Request, res: Response) => {
   }
 
   try {
-    const result = await walletService.verifyTopUp(reference);
+    // Extract IP address and user agent for audit logging
+    const ipAddress = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || req.ip;
+    const userAgent = req.headers['user-agent'];
+
+    const result = await walletService.verifyTopUp(reference, ipAddress, userAgent);
 
     res.json({
       success: true,
