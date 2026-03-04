@@ -16,6 +16,7 @@ import { swaggerSpec } from './config/swagger';
 import { authMiddleware } from './middleware/auth';
 import driversRouter from './routes/drivers';
 import ridesRouter from './routes/rides';
+import { NotificationService } from './services/notificationService';
 
 dotenv.config();
 
@@ -234,6 +235,16 @@ const startServer = async () => {
     logger.warn('Running without Redis adapter - Socket.IO will work in single-instance mode only');
   }
 
+  // Initialize notification service
+  const notificationService = new NotificationService(io, logger);
+  notificationService.setActiveConnections(activeDrivers, activeRiders);
+
+  // Middleware to inject notification service into requests
+  app.use((req: any, res, next) => {
+    req.notificationService = notificationService;
+    next();
+  });
+
   // Start HTTP server
   httpServer.listen(PORT, () => {
     logger.info(`Taxi Real-Time Service started`, {
@@ -242,7 +253,7 @@ const startServer = async () => {
       redisConnected: redisInitialized,
       version: '2.1.0',
       deployment: 'railway-redeployment-v2.1.0',
-      features: ['websockets', 'real-time-tracking', 'trip-management'],
+      features: ['websockets', 'real-time-tracking', 'trip-management', 'real-time-notifications'],
     });
   });
 };

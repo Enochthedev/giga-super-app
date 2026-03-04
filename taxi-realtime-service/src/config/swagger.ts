@@ -187,6 +187,12 @@ const socket = io('wss://taxi-realtime.giga.railway.app', {
             estimated_total: { type: 'number', example: 2350 },
             currency: { type: 'string', example: 'NGN' },
             vehicle_type: { type: 'string', example: 'standard' },
+            using_google_maps: {
+              type: 'boolean',
+              description:
+                'Indicates if Google Maps API was used (true) or fallback Haversine formula (false)',
+              example: true,
+            },
           },
         },
         Error: {
@@ -466,7 +472,8 @@ const socket = io('wss://taxi-realtime.giga.railway.app', {
         post: {
           tags: ['Rides'],
           summary: 'Get fare estimate',
-          description: 'Calculate fare estimate for a ride. No authentication required.',
+          description:
+            'Calculate fare estimate for a ride using Google Maps API (with fallback to Haversine formula). No authentication required.',
           security: [],
           requestBody: {
             required: true,
@@ -492,20 +499,178 @@ const socket = io('wss://taxi-realtime.giga.railway.app', {
           },
           responses: {
             200: {
-              description: 'Fare estimate',
+              description: 'Fare estimate with Google Maps integration status',
               content: {
                 'application/json': {
                   schema: {
                     type: 'object',
                     properties: {
                       success: { type: 'boolean' },
-                      data: { $ref: '#/components/schemas/FareEstimate' },
+                      data: {
+                        allOf: [
+                          { $ref: '#/components/schemas/FareEstimate' },
+                          {
+                            type: 'object',
+                            properties: {
+                              using_google_maps: {
+                                type: 'boolean',
+                                description:
+                                  'True if Google Maps API was used, false if fallback calculation',
+                                example: true,
+                              },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                  example: {
+                    success: true,
+                    data: {
+                      distance_km: 8.5,
+                      duration_minutes: 22,
+                      base_fare: 500,
+                      distance_fare: 850,
+                      time_fare: 440,
+                      estimated_total: 1790,
+                      currency: 'NGN',
+                      vehicle_type: 'standard',
+                      using_google_maps: true,
                     },
                   },
                 },
               },
             },
             400: { $ref: '#/components/responses/ValidationError' },
+          },
+        },
+      },
+      '/api/rides/active': {
+        get: {
+          tags: ['Rides'],
+          summary: 'Get active ride',
+          description:
+            'Get the current active ride for the authenticated user (as passenger or driver). Returns empty object if no active ride.',
+          responses: {
+            200: {
+              description: 'Active ride details or empty object',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: {
+                        oneOf: [
+                          {
+                            type: 'object',
+                            properties: {
+                              ride: { $ref: '#/components/schemas/Ride' },
+                              driver: { $ref: '#/components/schemas/Driver' },
+                              passenger: { $ref: '#/components/schemas/UserProfile' },
+                            },
+                          },
+                          { type: 'object', example: {} },
+                        ],
+                      },
+                      message: { type: 'string', example: 'No active ride found' },
+                    },
+                  },
+                  examples: {
+                    'with-ride': {
+                      summary: 'Active ride found',
+                      value: {
+                        success: true,
+                        data: {
+                          ride: {
+                            id: '123e4567-e89b-12d3-a456-426614174000',
+                            status: 'in_progress',
+                            pickup_address: 'Victoria Island, Lagos',
+                            dropoff_address: 'Ikeja, Lagos',
+                          },
+                          driver: {
+                            user_id: 'driver-uuid',
+                            vehicle_info: { make: 'Toyota', model: 'Camry' },
+                            rating: 4.8,
+                          },
+                        },
+                      },
+                    },
+                    'no-ride': {
+                      summary: 'No active ride',
+                      value: {
+                        success: true,
+                        data: {},
+                        message: 'No active ride found',
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+          },
+        },
+      },
+      '/api/rides/requests': {
+        get: {
+          tags: ['Rides'],
+          summary: 'Get available ride requests (Driver)',
+          description:
+            'Get list of available ride requests for drivers. Only verified drivers can access this endpoint.',
+          parameters: [
+            {
+              name: 'limit',
+              in: 'query',
+              schema: { type: 'integer', default: 20, maximum: 100 },
+              description: 'Maximum number of requests to return',
+            },
+          ],
+          responses: {
+            200: {
+              description: 'List of available ride requests',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: {
+                        type: 'array',
+                        items: {
+                          allOf: [
+                            { $ref: '#/components/schemas/Ride' },
+                            {
+                              type: 'object',
+                              properties: {
+                                passenger: { $ref: '#/components/schemas/UserProfile' },
+                              },
+                            },
+                          ],
+                        },
+                      },
+                      count: { type: 'integer', description: 'Number of available requests' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: {
+              description: 'Not a verified driver',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: {
+                      code: 'FORBIDDEN',
+                      message: 'Only verified drivers can view ride requests',
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -769,6 +934,294 @@ const socket = io('wss://taxi-realtime.giga.railway.app', {
             },
             401: { $ref: '#/components/responses/UnauthorizedError' },
             403: { $ref: '#/components/responses/ForbiddenError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/start': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Start a ride (Driver)',
+          description:
+            'Driver starts the ride after picking up the passenger. Updates status to in_progress.',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          responses: {
+            200: {
+              description: 'Ride started',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                      message: { type: 'string', example: 'Ride started successfully' },
+                    },
+                  },
+                },
+              },
+            },
+            400: {
+              description: 'Invalid state',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: {
+                      code: 'INVALID_STATE',
+                      message: 'Cannot start ride with status: completed',
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: {
+              description: 'Not the assigned driver',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: {
+                      code: 'FORBIDDEN',
+                      message: 'Only the assigned driver can start this ride',
+                    },
+                  },
+                },
+              },
+            },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/complete': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Complete a ride (Driver)',
+          description:
+            'Driver completes the ride after dropping off passenger. Calculates final fare and creates driver earnings record.',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    dropoff_lat: {
+                      type: 'number',
+                      description: 'Actual dropoff latitude',
+                      example: 6.6018,
+                    },
+                    dropoff_lng: {
+                      type: 'number',
+                      description: 'Actual dropoff longitude',
+                      example: 3.3515,
+                    },
+                    actual_distance_km: {
+                      type: 'number',
+                      description: 'Actual distance traveled',
+                      example: 12.8,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Ride completed with fare breakdown',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                      fare_details: {
+                        type: 'object',
+                        properties: {
+                          total: { type: 'number', example: 2350 },
+                          distance_km: { type: 'number', example: 12.5 },
+                          duration_minutes: { type: 'integer', example: 30 },
+                          base_fare: { type: 'number', example: 500 },
+                          driver_earning: {
+                            type: 'number',
+                            description: 'Driver commission (80%)',
+                            example: 1880,
+                          },
+                          platform_fee: {
+                            type: 'number',
+                            description: 'Platform commission (20%)',
+                            example: 470,
+                          },
+                        },
+                      },
+                      message: { type: 'string', example: 'Ride completed successfully' },
+                    },
+                  },
+                },
+              },
+            },
+            400: {
+              description: 'Invalid state',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: { code: 'INVALID_STATE', message: 'Ride is not in progress' },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: { $ref: '#/components/responses/ForbiddenError' },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/cancel': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Cancel a ride',
+          description:
+            'Cancel a ride. Passengers may be charged a cancellation fee if cancelled after grace period. Sends real-time notification to the other party.',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    reason: {
+                      type: 'string',
+                      description: 'Reason for cancellation',
+                      example: 'Change of plans',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Ride cancelled',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      data: { $ref: '#/components/schemas/Ride' },
+                      fee_charged: {
+                        type: 'number',
+                        description: 'Cancellation fee charged (if applicable)',
+                        example: 200,
+                      },
+                      message: { type: 'string', example: 'Ride cancelled successfully' },
+                    },
+                  },
+                },
+              },
+            },
+            400: {
+              description: 'Invalid state',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: { code: 'INVALID_STATE', message: 'Ride is already completed' },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: { $ref: '#/components/responses/ForbiddenError' },
+            404: { $ref: '#/components/responses/NotFoundError' },
+          },
+        },
+      },
+      '/api/rides/{rideId}/reject': {
+        post: {
+          tags: ['Rides'],
+          summary: 'Reject a ride request (Driver)',
+          description:
+            'Driver rejects a ride request. This is logged for analytics but does not affect the ride status.',
+          parameters: [
+            {
+              name: 'rideId',
+              in: 'path',
+              required: true,
+              schema: { type: 'string', format: 'uuid' },
+            },
+          ],
+          requestBody: {
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    reason: {
+                      type: 'string',
+                      description: 'Reason for rejection',
+                      example: 'Too far from pickup location',
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: 'Ride rejected',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'object',
+                    properties: {
+                      success: { type: 'boolean' },
+                      message: { type: 'string', example: 'Ride rejected' },
+                    },
+                  },
+                },
+              },
+            },
+            401: { $ref: '#/components/responses/UnauthorizedError' },
+            403: {
+              description: 'Not a driver',
+              content: {
+                'application/json': {
+                  schema: { $ref: '#/components/schemas/Error' },
+                  example: {
+                    success: false,
+                    error: { code: 'FORBIDDEN', message: 'Only drivers can reject rides' },
+                  },
+                },
+              },
+            },
           },
         },
       },
