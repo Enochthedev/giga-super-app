@@ -37,6 +37,39 @@ interface WalletTransaction {
 
 export class WalletService {
   /**
+   * Log audit entry for wallet operations
+   */
+  private async logAudit(params: {
+    userId: string;
+    action: string;
+    resourceType: string;
+    resourceId?: string;
+    oldValues?: any;
+    newValues?: any;
+    ipAddress?: string;
+    userAgent?: string;
+  }): Promise<void> {
+    try {
+      await supabase.from('audit_logs').insert({
+        user_id: params.userId,
+        action: params.action,
+        resource_type: params.resourceType,
+        resource_id: params.resourceId,
+        old_values: params.oldValues,
+        new_values: params.newValues,
+        ip_address: params.ipAddress,
+        user_agent: params.userAgent,
+      });
+    } catch (error: any) {
+      // Log audit failure but don't throw - audit logging shouldn't break operations
+      logger.error('Failed to log audit entry', {
+        error: error.message,
+        params,
+      });
+    }
+  }
+
+  /**
    * Get user wallet balance
    */
   async getBalance(userId: string): Promise<WalletBalance> {
@@ -99,12 +132,14 @@ export class WalletService {
     amount: number;
     email: string;
     callbackUrl?: string;
+    ipAddress?: string;
+    userAgent?: string;
   }): Promise<{
     authorization_url: string;
     reference: string;
     isDemoMode: boolean;
   }> {
-    const { userId, amount, email, callbackUrl } = params;
+    const { userId, amount, email, callbackUrl, ipAddress, userAgent } = params;
 
     // Validate amount
     if (amount < 100) {
@@ -117,6 +152,9 @@ export class WalletService {
 
     try {
       const reference = `WALLET-TOPUP-${Date.now()}-${uuidv4().substring(0, 8)}`;
+
+      // Get current balance for audit
+      const currentBalance = await this.getBalance(userId);
 
       // Initialize Paystack transaction
       const paystackResponse = await paystackService.initializeTransaction({
@@ -146,6 +184,23 @@ export class WalletService {
         },
       });
 
+      // Audit log
+      await this.logAudit({
+        userId,
+        action: 'wallet_topup_initialized',
+        resourceType: 'wallet',
+        resourceId: reference,
+        oldValues: { balance: currentBalance.balance },
+        newValues: {
+          amount,
+          reference,
+          status: 'pending',
+          isDemoMode: paystackService.isDemo(),
+        },
+        ipAddress,
+        userAgent,
+      });
+
       logger.info('Wallet top-up initialized', {
         userId,
         amount,
@@ -172,7 +227,11 @@ export class WalletService {
    * Verify and complete wallet top-up
    * Called after user completes payment on Paystack
    */
-  async verifyTopUp(reference: string): Promise<{
+  async verifyTopUp(
+    reference: string,
+    ipAddress?: string,
+    userAgent?: string
+  ): Promise<{
     success: boolean;
     amount: number;
     newBalance: number;
@@ -212,6 +271,9 @@ export class WalletService {
         };
       }
 
+      // Get old balance for audit
+      const oldBalance = await this.getBalance(transaction.user_id);
+
       // Credit wallet
       const { data: wallet, error: walletError } = await supabase.rpc('credit_wallet', {
         p_user_id: transaction.user_id,
@@ -235,13 +297,30 @@ export class WalletService {
         })
         .eq('reference', reference);
 
+      const updatedBalance = await this.getBalance(transaction.user_id);
+
+      // Audit log
+      await this.logAudit({
+        userId: transaction.user_id,
+        action: 'wallet_topup_completed',
+        resourceType: 'wallet',
+        resourceId: reference,
+        oldValues: { balance: oldBalance.balance },
+        newValues: {
+          balance: updatedBalance.balance,
+          amount: verification.amount,
+          reference,
+          status: 'completed',
+        },
+        ipAddress,
+        userAgent,
+      });
+
       logger.info('Wallet top-up completed', {
         userId: transaction.user_id,
         amount: verification.amount,
         reference,
       });
-
-      const updatedBalance = await this.getBalance(transaction.user_id);
 
       return {
         success: true,
@@ -267,17 +346,19 @@ export class WalletService {
     description: string;
     reference: string;
     metadata?: any;
+    ipAddress?: string;
+    userAgent?: string;
   }): Promise<{
     success: boolean;
     newBalance: number;
   }> {
-    const { userId, amount, description, reference, metadata } = params;
+    const { userId, amount, description, reference, metadata, ipAddress, userAgent } = params;
 
     try {
       // Check balance
-      const balance = await this.getBalance(userId);
+      const oldBalance = await this.getBalance(userId);
 
-      if (balance.balance < amount) {
+      if (oldBalance.balance < amount) {
         throw new BadRequestError('Insufficient wallet balance');
       }
 
@@ -304,6 +385,24 @@ export class WalletService {
       });
 
       const updatedBalance = await this.getBalance(userId);
+
+      // Audit log
+      await this.logAudit({
+        userId,
+        action: 'wallet_deduction',
+        resourceType: 'wallet',
+        resourceId: reference,
+        oldValues: { balance: oldBalance.balance },
+        newValues: {
+          balance: updatedBalance.balance,
+          amount,
+          description,
+          reference,
+          status: 'completed',
+        },
+        ipAddress,
+        userAgent,
+      });
 
       logger.info('Wallet deduction completed', {
         userId,
