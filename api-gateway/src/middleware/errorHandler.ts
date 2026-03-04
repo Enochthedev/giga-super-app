@@ -19,6 +19,22 @@ export const errorHandler: ErrorMiddleware = (
   res: Response,
   _next: NextFunction
 ): void => {
+  // Handle JSON parsing errors from body-parser
+  const parseError = error as Error & { status?: number; body?: string };
+  if (error instanceof SyntaxError && parseError.status === 400 && parseError.body !== undefined) {
+    logger.error('Invalid JSON payload', {
+      requestId: req.id,
+      error: error.message,
+      path: req.path,
+      method: req.method,
+    });
+
+    res
+      .status(400)
+      .json(createErrorResponse('INVALID_JSON', 'Invalid JSON payload received', req.id));
+    return;
+  }
+
   logger.error('Unhandled error', {
     requestId: req.id,
     error: error.message,
