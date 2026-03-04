@@ -114,25 +114,9 @@ export const routingMiddleware = (
               '/api/v1/advertiser/profile': '/functions/v1/get-advertiser-profile',
               '/api/v1/advertiser/profile/create': '/functions/v1/create-advertiser-profile',
 
-              // Rides/Taxi - Passenger
-              '/api/v1/rides/request': '/functions/v1/request-ride',
-              '/api/v1/rides/estimate': '/functions/v1/get-ride-estimate',
-              '/api/v1/rides/active': '/functions/v1/get-active-ride',
-              '/api/v1/rides/history': '/functions/v1/get-ride-history',
-              '/api/v1/rides/cancel': '/functions/v1/cancel-ride',
-              '/api/v1/rides/rate': '/functions/v1/rate-driver',
-              '/api/v1/drivers/nearby': '/functions/v1/get-nearby-drivers',
-
-              // Rides/Taxi - Driver
-              '/api/v1/driver/rides/requests': '/functions/v1/get-ride-requests',
-              '/api/v1/driver/rides/accept': '/functions/v1/accept-ride',
-              '/api/v1/driver/rides/reject': '/functions/v1/reject-ride',
-              '/api/v1/driver/rides/start': '/functions/v1/start-ride',
-              '/api/v1/driver/rides/complete': '/functions/v1/complete-ride',
-              '/api/v1/driver/location': '/functions/v1/update-location',
-              '/api/v1/driver/availability': '/functions/v1/toggle-availability',
-              '/api/v1/driver/earnings': '/functions/v1/get-earnings',
-              '/api/v1/driver/analytics': '/functions/v1/get-ride-analytics',
+              // Rides/Taxi - ALL endpoints now handled by Railway taxi-realtime-service
+              // The service implements all ride and driver endpoints
+              // Removed all hardcoded Supabase mappings to allow service registry routing
 
               // Social
               '/api/v1/social/feed': '/functions/v1/get-social-feed',
