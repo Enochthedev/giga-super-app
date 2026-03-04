@@ -14,7 +14,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
     }),
-  },
+  ],
 });
 
 // Haversine formula for fallback distance calculation
@@ -80,8 +80,7 @@ export async function getDistanceAndDuration(
         origins: [`${origin.lat},${origin.lng}`],
         destinations: [`${destination.lat},${destination.lng}`],
         mode: TravelMode.driving,
-        departure_time: 'now',
-        traffic_model: 'best_guess',
+        departure_time: new Date(),
         key: apiKey,
       },
       timeout: 5000, // 5 second timeout
@@ -141,7 +140,7 @@ export async function getDirections(
         destination: `${destination.lat},${destination.lng}`,
         mode: TravelMode.driving,
         alternatives,
-        departure_time: 'now',
+        departure_time: new Date(),
         key: apiKey,
       },
       timeout: 5000,

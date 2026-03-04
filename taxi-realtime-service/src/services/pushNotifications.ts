@@ -12,7 +12,7 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
     }),
-  ),
+  ],
 });
 
 let firebaseInitialized = false;
@@ -97,7 +97,9 @@ export async function sendPushNotification(
     };
 
     await admin.messaging().send(message);
-    logger.info('Push notification sent successfully', { deviceToken: deviceToken.substring(0, 10) + '...' });
+    logger.info('Push notification sent successfully', {
+      deviceToken: deviceToken.substring(0, 10) + '...',
+    });
     return true;
   } catch (error) {
     logger.error('Failed to send push notification', {
@@ -154,7 +156,7 @@ export async function sendMulticastPushNotification(
     };
 
     const response = await admin.messaging().sendEachForMulticast(message);
-    
+
     logger.info('Multicast push notifications sent', {
       successCount: response.successCount,
       failureCount: response.failureCount,
@@ -241,7 +243,7 @@ export async function subscribeToTopic(
 
   try {
     const response = await admin.messaging().subscribeToTopic(deviceTokens, topic);
-    
+
     logger.info('Devices subscribed to topic', {
       topic,
       successCount: response.successCount,
@@ -275,7 +277,7 @@ export async function unsubscribeFromTopic(
 
   try {
     const response = await admin.messaging().unsubscribeFromTopic(deviceTokens, topic);
-    
+
     logger.info('Devices unsubscribed from topic', {
       topic,
       successCount: response.successCount,
