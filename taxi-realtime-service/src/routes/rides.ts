@@ -169,14 +169,28 @@ router.get('/requests', authMiddleware, async (req: Request, res: Response) => {
         error: { code: 'FORBIDDEN', message: 'Only verified drivers can view ride requests' },
       });
 
+    // Get ride IDs this driver has already rejected
+    const { data: rejections } = await supabase
+      .from('ride_rejections')
+      .select('ride_id')
+      .eq('driver_id', userId);
+    const rejectedRideIds = (rejections || []).map(r => r.ride_id);
+
     const limit = parseInt(req.query.limit as string) || 20;
-    const { data: rides, error } = await supabase
+    let query = supabase
       .from('rides')
       .select('*')
       .in('status', ['requested', 'pending'])
       .is('driver_id', null)
       .order('created_at', { ascending: false })
       .limit(limit);
+
+    // Filter out rejected rides if any exist
+    if (rejectedRideIds.length > 0) {
+      query = query.not('id', 'in', `(${rejectedRideIds.join(',')})`);
+    }
+
+    const { data: rides, error } = await query;
     if (error) throw error;
 
     const enrichedRides = await Promise.all(
@@ -432,11 +446,10 @@ router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Respons
     const reqWithNotification = req as RequestWithNotification;
 
     const { rideId } = req.params;
-    const { driver_eta_minutes } = req.body;
 
     const { data: driver } = await supabase
       .from('driver_profiles')
-      .select('id, is_verified')
+      .select('id, is_verified, current_location')
       .eq('user_id', userId)
       .single();
     if (!driver || !driver.is_verified)
@@ -447,7 +460,7 @@ router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Respons
 
     const { data: currentRide } = await supabase
       .from('rides')
-      .select('status')
+      .select('status, pickup_location')
       .eq('id', rideId)
       .single();
     if (!currentRide || currentRide.status !== 'requested')
@@ -455,6 +468,32 @@ router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Respons
         success: false,
         error: { code: 'RIDE_UNAVAILABLE', message: 'Ride is no longer available' },
       });
+
+    // Calculate ETA server-side from driver's current location to pickup
+    let driver_eta_minutes: number | null = null;
+    const driverLat = driver.current_location?.latitude;
+    const driverLng = driver.current_location?.longitude;
+    const pickupLat = currentRide.pickup_location?.latitude;
+    const pickupLng = currentRide.pickup_location?.longitude;
+
+    if (driverLat && driverLng && pickupLat && pickupLng) {
+      try {
+        const { duration_minutes } = await getDistanceAndDuration(
+          { lat: driverLat, lng: driverLng },
+          { lat: pickupLat, lng: pickupLng }
+        );
+        driver_eta_minutes = duration_minutes;
+      } catch {
+        // Fallback: use Haversine distance with 30 km/h average
+        const distance = calculateDistance(driverLat, driverLng, pickupLat, pickupLng);
+        driver_eta_minutes = Math.ceil((distance / 30) * 60);
+      }
+    }
+
+    // Allow client override if provided (optional)
+    if (req.body.driver_eta_minutes && typeof req.body.driver_eta_minutes === 'number') {
+      driver_eta_minutes = req.body.driver_eta_minutes;
+    }
 
     const { data: ride, error } = await supabase
       .from('rides')
@@ -474,6 +513,7 @@ router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Respons
     await logAudit('UPDATE', 'rides', rideId, userId, {
       action: 'ride_accepted',
       driver_id: userId,
+      driver_eta_minutes,
     });
 
     // Get driver info for notification
@@ -817,6 +857,15 @@ router.post('/:rideId/reject', authMiddleware, async (req: Request, res: Respons
         success: false,
         error: { code: 'FORBIDDEN', message: 'Only drivers can reject rides' },
       });
+
+    // Persist the rejection so this ride won't appear in the driver's poll again
+    const { error: rejectionError } = await supabase
+      .from('ride_rejections')
+      .upsert({ ride_id: rideId, driver_id: userId, reason }, { onConflict: 'ride_id,driver_id' });
+
+    if (rejectionError) {
+      console.error('Failed to save ride rejection:', rejectionError);
+    }
 
     await logAudit('UPDATE', 'rides', rideId, userId, { action: 'ride_rejected', reason });
     res.json({ success: true, message: 'Ride rejected' });
