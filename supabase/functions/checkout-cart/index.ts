@@ -6,7 +6,7 @@ const sb = createClient(SUPABASE_URL, SERVICE_KEY);
 
 interface CheckoutRequest {
   address_id?: string;
-  payment_method: 'card' | 'wallet' | 'bank_transfer';
+  payment_method: 'card' | 'wallet' | 'bank_transfer' | 'cash';
   use_wallet_balance?: boolean;
   coupon_code?: string;
   delivery_notes?: string;
@@ -45,12 +45,61 @@ Deno.serve(async req => {
     // Parse request body
     const body: CheckoutRequest = await req.json();
     const {
-      address_id,
+      address_id: requestedAddressId,
       payment_method = 'card',
       use_wallet_balance = false,
       coupon_code,
       delivery_notes,
     } = body;
+
+    // ─── RESOLVE SHIPPING ADDRESS ─────────────────────────────────────────────
+    // Priority: 1) address_id sent by client  2) user's default address  3) null
+    let resolvedAddressId: string | null = null;
+
+    if (requestedAddressId) {
+      // Validate the provided address belongs to this user
+      const { data: address } = await sb
+        .from('user_addresses')
+        .select('id')
+        .eq('id', requestedAddressId)
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (!address) {
+        return new Response(JSON.stringify({ error: 'Invalid shipping address' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        });
+      }
+      resolvedAddressId = address.id;
+    } else {
+      // No address provided — try to find the default address
+      const { data: defaultAddress } = await sb
+        .from('user_addresses')
+        .select('id, label, street, city, state')
+        .eq('user_id', userId)
+        .eq('is_default', true)
+        .maybeSingle();
+
+      if (defaultAddress) {
+        resolvedAddressId = defaultAddress.id;
+      } else {
+        // No default — fall back to the most recently added address
+        const { data: latestAddress } = await sb
+          .from('user_addresses')
+          .select('id, label, street, city, state')
+          .eq('user_id', userId)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (latestAddress) {
+          resolvedAddressId = latestAddress.id;
+        }
+        // If still null — user has no addresses saved, order proceeds with null
+      }
+    }
+    // ─────────────────────────────────────────────────────────────────────────
 
     // Get user's cart
     const { data: cart, error: cartError } = await sb
@@ -83,7 +132,7 @@ Deno.serve(async req => {
         variant_id,
         quantity,
         price_per_unit,
-        ecommerce_products(id, name, vendor_id)
+        ecommerce_products(id, name, slug, vendor_id)
       `
       )
       .eq('cart_id', cart.id);
@@ -127,7 +176,6 @@ Deno.serve(async req => {
         });
       }
 
-      // Validate coupon dates
       const now = new Date();
       if (promo.start_date && new Date(promo.start_date) > now) {
         return new Response(JSON.stringify({ error: 'Coupon not yet active' }), {
@@ -141,34 +189,26 @@ Deno.serve(async req => {
           headers: { 'Content-Type': 'application/json' },
         });
       }
-
-      // Validate minimum order amount
       if (promo.min_order_amount && subtotal < promo.min_order_amount) {
         return new Response(
-          JSON.stringify({
-            error: `Minimum order amount is ${promo.min_order_amount}`,
-          }),
-          {
-            status: 400,
-            headers: { 'Content-Type': 'application/json' },
-          }
+          JSON.stringify({ error: `Minimum order amount is ${promo.min_order_amount}` }),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
         );
       }
-
-      // Validate usage limit
-      if (promo.usage_limit && promo.times_used >= promo.usage_limit) {
+      if (
+        promo.usage_limit &&
+        (promo.usage_count || promo.times_used || 0) >= promo.usage_limit
+      ) {
         return new Response(JSON.stringify({ error: 'Coupon usage limit reached' }), {
           status: 400,
           headers: { 'Content-Type': 'application/json' },
         });
       }
 
-      // Calculate discount
       if (promo.discount_type === 'percentage') {
         discount = subtotal * (promo.discount_value / 100);
-        if (promo.max_discount_amount) {
+        if (promo.max_discount_amount)
           discount = Math.min(discount, promo.max_discount_amount);
-        }
       } else if (promo.discount_type === 'fixed') {
         discount = promo.discount_value;
       }
@@ -176,7 +216,6 @@ Deno.serve(async req => {
       appliedPromoId = promo.id;
       appliedPromoCode = promo.code;
     } else if (appliedPromoId) {
-      // Use existing promo from cart
       const { data: existingPromo } = await sb
         .from('marketplace_promo_codes')
         .select('*')
@@ -186,9 +225,8 @@ Deno.serve(async req => {
       if (existingPromo) {
         if (existingPromo.discount_type === 'percentage') {
           discount = subtotal * (existingPromo.discount_value / 100);
-          if (existingPromo.max_discount_amount) {
+          if (existingPromo.max_discount_amount)
             discount = Math.min(discount, existingPromo.max_discount_amount);
-          }
         } else if (existingPromo.discount_type === 'fixed') {
           discount = existingPromo.discount_value;
         }
@@ -197,13 +235,11 @@ Deno.serve(async req => {
       }
     }
 
-    // Calculate total after discount
     const totalAfterDiscount = subtotal - discount;
     let amountToPay = totalAfterDiscount;
 
     // Handle wallet balance deduction
     let walletDeduction = 0;
-
     if (use_wallet_balance) {
       const { data: wallet } = await sb
         .from('user_wallets')
@@ -217,29 +253,21 @@ Deno.serve(async req => {
       }
     }
 
-    // Validate shipping address if provided
-    if (address_id) {
-      const { data: address, error: addrError } = await sb
-        .from('user_addresses')
-        .select('id')
-        .eq('id', address_id)
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (addrError || !address) {
-        return new Response(JSON.stringify({ error: 'Invalid shipping address' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      }
-    }
-
     // Generate order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
-    // Determine payment status
-    const paymentStatus = amountToPay > 0 ? 'pending' : 'paid';
-    const orderStatus = amountToPay > 0 ? 'pending_payment' : 'confirmed';
+    // Determine payment & order status
+    const isCashOnDelivery = payment_method === 'cash';
+    const paymentStatus = isCashOnDelivery
+      ? 'pending'
+      : amountToPay > 0
+        ? 'pending'
+        : 'paid';
+    const orderStatus = isCashOnDelivery
+      ? 'confirmed'
+      : amountToPay > 0
+        ? 'pending_payment'
+        : 'confirmed';
 
     // Create order
     const { data: order, error: orderError } = await sb
@@ -248,13 +276,13 @@ Deno.serve(async req => {
         user_id: userId,
         order_number: orderNumber,
         status: orderStatus,
-        subtotal: subtotal,
+        subtotal,
         discount_amount: discount,
         total_amount: totalAfterDiscount,
-        shipping_address_id: address_id || null,
+        shipping_address_id: resolvedAddressId,
         promo_code_id: appliedPromoId || null,
         promo_code: appliedPromoCode,
-        payment_method: payment_method,
+        payment_method,
         payment_status: paymentStatus,
         customer_notes: delivery_notes || null,
       })
@@ -263,10 +291,13 @@ Deno.serve(async req => {
 
     if (orderError) {
       console.error('Order creation error:', orderError);
-      return new Response(JSON.stringify({ error: 'Failed to create order' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'Failed to create order', details: orderError.message }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     // Create order items
@@ -277,6 +308,8 @@ Deno.serve(async req => {
       quantity: item.quantity,
       price_per_unit: item.price_per_unit,
       subtotal: (item.price_per_unit || 0) * (item.quantity || 0),
+      product_name: item.ecommerce_products?.name || 'Unknown Product',
+      product_slug: item.ecommerce_products?.slug || item.product_id,
       vendor_id: item.ecommerce_products?.vendor_id || null,
     }));
 
@@ -286,12 +319,17 @@ Deno.serve(async req => {
 
     if (orderItemsError) {
       console.error('Order items error:', orderItemsError);
-      // Rollback order
       await sb.from('ecommerce_orders').delete().eq('id', order.id);
-      return new Response(JSON.stringify({ error: 'Failed to create order items' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({
+          error: 'Failed to create order items',
+          details: orderItemsError.message,
+        }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     // Deduct wallet balance if used
@@ -303,29 +341,26 @@ Deno.serve(async req => {
         .single();
 
       if (wallet) {
-        // Update wallet balance
         await sb
           .from('user_wallets')
           .update({ balance: wallet.balance - walletDeduction })
           .eq('id', wallet.id);
-
-        // Record wallet transaction
         await sb.from('wallet_transactions').insert({
           wallet_id: wallet.id,
-          user_id: userId,
-          type: 'debit',
+          transaction_type: 'debit',
           amount: walletDeduction,
           description: `Payment for order ${orderNumber}`,
           reference_id: order.id,
           reference_type: 'ecommerce_order',
+          balance_before: wallet.balance,
           balance_after: wallet.balance - walletDeduction,
         });
       }
     }
 
-    // Create payment record if payment is needed
+    // Create payment record (skip for cash on delivery)
     let paymentRecord = null;
-    if (amountToPay > 0) {
+    if (amountToPay > 0 && !isCashOnDelivery) {
       const { data: payment, error: paymentError } = await sb
         .from('payments')
         .insert({
@@ -334,7 +369,7 @@ Deno.serve(async req => {
           user_id: userId,
           amount: amountToPay,
           currency: 'NGN',
-          payment_method: payment_method,
+          payment_method,
           payment_status: 'pending',
           metadata: {
             order_number: orderNumber,
@@ -346,13 +381,8 @@ Deno.serve(async req => {
         .select()
         .single();
 
-      if (paymentError) {
-        console.error('Payment record error:', paymentError);
-        // Don't fail checkout, just log the error
-      } else {
+      if (!paymentError && payment) {
         paymentRecord = payment;
-
-        // Update order with payment_id
         await sb
           .from('ecommerce_orders')
           .update({ payment_id: payment.id })
@@ -362,27 +392,19 @@ Deno.serve(async req => {
 
     // Update promo code usage
     if (appliedPromoId && discount > 0) {
-      // Increment times_used
-      await sb
+      const { data: promoData } = await sb
         .from('marketplace_promo_codes')
-        .update({ times_used: sb.rpc('increment', { x: 1 }) })
+        .select('usage_count')
         .eq('id', appliedPromoId)
-        .catch(() => {
-          // Fallback: fetch and update manually
-          sb.from('marketplace_promo_codes')
-            .select('times_used')
-            .eq('id', appliedPromoId)
-            .single()
-            .then(({ data }) => {
-              if (data) {
-                sb.from('marketplace_promo_codes')
-                  .update({ times_used: (data.times_used || 0) + 1 })
-                  .eq('id', appliedPromoId);
-              }
-            });
-        });
+        .single();
 
-      // Record promo usage
+      if (promoData) {
+        await sb
+          .from('marketplace_promo_codes')
+          .update({ usage_count: (promoData.usage_count || 0) + 1 })
+          .eq('id', appliedPromoId);
+      }
+
       await sb
         .from('marketplace_promo_code_usage')
         .insert({
@@ -394,54 +416,60 @@ Deno.serve(async req => {
         .catch(() => {});
     }
 
-    // Clear cart items
+    // Clear cart
     await sb.from('ecommerce_cart_items').delete().eq('cart_id', cart.id);
-
-    // Reset cart
     await sb
       .from('ecommerce_carts')
       .update({ promo_code_id: null, subtotal: 0, total_amount: 0 })
       .eq('id', cart.id);
 
-    // Prepare response
+    // Build response
     const response: any = {
       success: true,
       order: {
         id: order.id,
         order_number: orderNumber,
         status: orderStatus,
-        subtotal: subtotal,
-        discount: discount,
+        subtotal,
+        discount,
         wallet_deduction: walletDeduction,
         total_amount: totalAfterDiscount,
         amount_to_pay: amountToPay,
+        shipping_address_id: resolvedAddressId,
+        address_auto_selected: !requestedAddressId && resolvedAddressId !== null,
         item_count: cartItems.length,
         created_at: order.created_at,
       },
     };
 
-    // If payment is needed, provide payment info
-    if (amountToPay > 0) {
+    if (isCashOnDelivery) {
+      response.payment = {
+        required: false,
+        payment_method: 'cash',
+        message: 'Cash on delivery — payment will be collected upon receipt',
+        amount_due: amountToPay,
+        currency: 'NGN',
+      };
+    } else if (amountToPay > 0) {
       response.payment = {
         required: true,
         payment_id: paymentRecord?.id || null,
         amount: amountToPay,
         currency: 'NGN',
-        payment_method: payment_method,
-        // Payment service endpoint info
+        payment_method,
         payment_service: {
           endpoint: '/api/payments',
           payload: {
             module: 'ecommerce',
             amount: amountToPay,
             currency: 'NGN',
-            userId: userId,
+            userId,
             branchId: 'ecommerce',
             stateId: 'checkout',
             metadata: {
               moduleTransactionId: order.id,
               customerEmail: userEmail,
-              orderNumber: orderNumber,
+              orderNumber,
               paymentId: paymentRecord?.id || null,
             },
           },
@@ -465,10 +493,7 @@ Deno.serve(async req => {
     console.error('Checkout error:', err);
     return new Response(
       JSON.stringify({ error: err.message || 'Internal server error' }),
-      {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      }
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 });
