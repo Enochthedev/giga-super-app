@@ -249,6 +249,33 @@ logger.info('Auth proxy configured', { authApiUrl, projectRef });
  *                         type: string
  *                     active_role:
  *                       type: string
+ *                     permissions:
+ *                       type: object
+ *                       description: Boolean flags for each role the user holds
+ *                       properties:
+ *                         isCustomer:
+ *                           type: boolean
+ *                         isDriver:
+ *                           type: boolean
+ *                         isVendor:
+ *                           type: boolean
+ *                         isHost:
+ *                           type: boolean
+ *                         isAdvertiser:
+ *                           type: boolean
+ *                         isCourier:
+ *                           type: boolean
+ *                         isDop:
+ *                           type: boolean
+ *                         isPmg:
+ *                           type: boolean
+ *                         isRegionalManager:
+ *                           type: boolean
+ *                         isModuleAdmin:
+ *                           type: boolean
+ *                         isAdmin:
+ *                           type: boolean
+ *                           description: Legacy — replaced by DOP
  *                     addresses:
  *                       type: array
  *                       items:
@@ -467,6 +494,8 @@ router.get('/me', async (req: Request, res: Response) => {
       .eq('user_id', user.id)
       .maybeSingle();
 
+    const roles = rolesData?.map((r: { role_name: string }) => r.role_name) || [];
+
     const response = {
       success: true,
       data: {
@@ -476,8 +505,21 @@ router.get('/me', async (req: Request, res: Response) => {
         email_confirmed_at: user.email_confirmed_at,
         created_at: user.created_at,
         profile: profile || null,
-        roles: rolesData?.map((r: { role_name: string }) => r.role_name) || [],
+        roles,
         active_role: activeRoleData?.active_role || null,
+        permissions: {
+          isCustomer: roles.includes('CUSTOMER'),
+          isDriver: roles.includes('DRIVER'),
+          isVendor: roles.includes('VENDOR'),
+          isHost: roles.includes('HOST'),
+          isAdvertiser: roles.includes('ADVERTISER'),
+          isCourier: roles.includes('COURIER'),
+          isDop: roles.includes('DOP'),
+          isPmg: roles.includes('PMG'),
+          isRegionalManager: roles.includes('REGIONAL_MANAGER'),
+          isModuleAdmin: roles.includes('MODULE_ADMIN'),
+          isAdmin: roles.includes('ADMIN'),
+        },
         addresses: addresses || [],
         wallet: wallet || null,
       },
