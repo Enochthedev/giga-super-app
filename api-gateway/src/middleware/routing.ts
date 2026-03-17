@@ -228,6 +228,7 @@ export const routingMiddleware = (
               path.startsWith('/api/media/') ||
               path.startsWith('/api/operations/') ||
               path.startsWith('/api/managers/') ||
+              path.startsWith('/api/nipost-admin/') ||
               path.startsWith('/api/pending-entries/')
             ) {
               return path; // Keep as-is - admin service expects these paths
