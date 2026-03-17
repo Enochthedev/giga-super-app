@@ -154,6 +154,7 @@ class ServiceRegistry {
           '/api/v1/admin*',
           '/api/v1/dashboard*',
           '/api/v1/nipost*',
+          '/api/nipost-admin*',
           // Note: /api/v1/ads* goes to Supabase for user-facing operations
           '/api/v1/campaign*',
           '/api/v1/advertiser*',

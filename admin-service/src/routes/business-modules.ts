@@ -1646,17 +1646,36 @@ router.get(
         results.hotels = hotels || [];
       }
 
-      // Get pending taxi drivers
+      // Get pending taxi drivers (from role_applications)
       if (!module || module === 'taxi') {
-        const { data: drivers } = await supabase
-          .from('taxi_drivers')
+        const { data: driverApps } = await supabase
+          .from('role_applications')
           .select(
-            'id, first_name, last_name, email, phone, city, license_number, vehicle_make, vehicle_model, plate_number, approval_status, created_at'
+            'id, user_id, role_name, status, application_data, document_urls, created_at, user:user_profiles(first_name, last_name, email, phone)'
           )
-          .eq('approval_status', 'pending')
-          .is('deleted_at', null)
+          .eq('role_name', 'DRIVER')
+          .eq('status', 'pending')
           .order('created_at', { ascending: false });
-        results.drivers = drivers || [];
+
+        // Map it to match the expected format or just pass it through
+        results.drivers =
+          driverApps?.map((app: any) => ({
+            id: app.id,
+            first_name: app.user?.first_name || '',
+            last_name: app.user?.last_name || '',
+            email: app.user?.email || '',
+            phone: app.user?.phone || '',
+            // Map JSON fields if they exist in application_data
+            city: app.application_data?.city || '',
+            license_number: app.application_data?.license_number || '',
+            vehicle_make: app.application_data?.vehicle_make || '',
+            vehicle_model: app.application_data?.vehicle_model || '',
+            plate_number: app.application_data?.plate_number || '',
+            approval_status: app.status,
+            created_at: app.created_at,
+            user_id: app.user_id,
+            original_application: app, // keeping full object for details page
+          })) || [];
       }
 
       // Get pending media content
@@ -1731,9 +1750,11 @@ router.post(
       const tableMap: Record<string, string> = {
         products: 'ecommerce_products',
         hotels: 'hotels',
-        drivers: 'taxi_drivers',
+        drivers: 'role_applications', // Now points to role_applications
         media: 'media_content',
       };
+      
+      const statusField = module === 'drivers' ? 'status' : 'approval_status';
 
       const tableName = tableMap[module];
       if (!tableName) {
@@ -1746,7 +1767,7 @@ router.post(
       const { data, error } = await supabase
         .from(tableName)
         .update({
-          approval_status: 'approved',
+          [statusField]: 'approved',
           approved_at: new Date().toISOString(),
           approved_by: approvedBy,
         })
@@ -1816,9 +1837,11 @@ router.post(
       const tableMap: Record<string, string> = {
         products: 'ecommerce_products',
         hotels: 'hotels',
-        drivers: 'taxi_drivers',
+        drivers: 'role_applications', // Now points to role_applications
         media: 'media_content',
       };
+      
+      const statusField = module === 'drivers' ? 'status' : 'approval_status';
 
       const tableName = tableMap[module];
       if (!tableName) {
@@ -1831,7 +1854,7 @@ router.post(
       const { data, error } = await supabase
         .from(tableName)
         .update({
-          approval_status: 'rejected',
+          [statusField]: 'rejected',
           approved_by: rejectedBy,
           rejection_reason: reason || 'No reason provided',
         })
