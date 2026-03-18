@@ -277,14 +277,23 @@ export const requireAnyAccess = requireAccessLevel(['national', 'state', 'branch
 
 // Convenience middleware for common roles
 // Updated to include NIPOST admin roles (DOP, PMG, etc.)
-export const requireAdmin = requireRole([
-  'admin',
-  'super_admin',
-  'DOP',
-  'PMG',
-  'REGIONAL_MANAGER',
-  'MODULE_ADMIN',
-]);
+const ADMIN_ROLES = ['admin', 'super_admin', 'DOP', 'PMG', 'REGIONAL_MANAGER', 'MODULE_ADMIN', 'ADMIN'];
+
+export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
+  const role = req.user?.role || (req.user as any)?.active_role;
+  // Case-insensitive check
+  const roleUpper = role ? role.toUpperCase() : '';
+  const adminRolesUpper = ADMIN_ROLES.map(r => r.toUpperCase());
+  
+  if (!adminRolesUpper.includes(roleUpper)) {
+    return res.status(403).json({
+      error: 'Insufficient role permissions',
+      code: 'INSUFFICIENT_ROLE',
+      details: { required: ADMIN_ROLES, current: role }
+    });
+  }
+  next();
+};
 export const requireManager = requireRole([
   'admin',
   'super_admin',
