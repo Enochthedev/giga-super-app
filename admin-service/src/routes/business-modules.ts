@@ -1648,14 +1648,33 @@ router.get(
 
       // Get pending taxi drivers (from role_applications)
       if (!module || module === 'taxi') {
-        const { data: driverApps } = await supabase
+        const { data: driverAppsRaw } = await supabase
           .from('role_applications')
           .select(
-            'id, user_id, role_name, status, application_data, document_urls, created_at, user:user_profiles(first_name, last_name, email, phone)'
+            'id, user_id, role_name, status, application_data, document_urls, created_at'
           )
           .eq('role_name', 'DRIVER')
           .eq('status', 'pending')
           .order('created_at', { ascending: false });
+
+        let driverApps = driverAppsRaw || [];
+        if (driverApps.length > 0) {
+          const userIds = driverApps.map((app: any) => app.user_id).filter(Boolean);
+          if (userIds.length > 0) {
+            const { data: profiles } = await supabase
+              .from('user_profiles')
+              .select('id, first_name, last_name, email, phone')
+              .in('id', userIds);
+
+            const profileMap = new Map();
+            profiles?.forEach((p: any) => profileMap.set(p.id, p));
+
+            driverApps = driverApps.map((app: any) => ({
+              ...app,
+              user: profileMap.get(app.user_id) || null
+            }));
+          }
+        }
 
         // Map it to match the expected format or just pass it through
         results.drivers =
@@ -1776,6 +1795,37 @@ router.post(
         .single();
 
       if (error) throw error;
+
+      // If module is drivers, complete driver onboarding
+      if (module === 'drivers' && data) {
+        // 1. Create driver_profiles record
+        await supabase.from('driver_profiles').insert({
+          user_id: data.user_id,
+          license_number: data.application_data?.license_number,
+          vehicle_type: data.application_data?.vehicle_type || 'car',
+          vehicle_info: {
+            make: data.application_data?.vehicle_make,
+            model: data.application_data?.vehicle_model,
+            plate_number: data.application_data?.plate_number,
+            color: data.application_data?.vehicle_color,
+            year: data.application_data?.vehicle_year,
+          },
+          is_verified: true,
+          subscription_tier: 'BASIC'
+        });
+
+        // 2. Grant DRIVER role
+        await supabase.from('user_roles').insert({
+          user_id: data.user_id,
+          role_name: 'DRIVER',
+          granted_by: approvedBy
+        });
+
+        // 3. Set active role
+        await supabase.from('user_active_roles')
+          .update({ active_role: 'DRIVER' })
+          .eq('user_id', data.user_id);
+      }
 
       await createAudit(req, `approve_${module}`, tableName, id);
 
