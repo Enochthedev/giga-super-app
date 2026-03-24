@@ -1584,7 +1584,7 @@ router.get(
  *         name: module
  *         schema:
  *           type: string
- *           enum: [ecommerce, hotels, taxi, media]
+ *           enum: [ecommerce, hotels, taxi, media, sellers]
  *         description: Filter by specific module
  *     responses:
  *       200:
@@ -1710,6 +1710,53 @@ router.get(
         results.media = media || [];
       }
 
+      // Get pending sellers (VENDOR role applications)
+      if (!module || module === 'sellers') {
+        const { data: vendorAppsRaw } = await supabase
+          .from('role_applications')
+          .select(
+            'id, user_id, role_name, status, application_data, document_urls, created_at'
+          )
+          .eq('role_name', 'VENDOR')
+          .eq('status', 'pending')
+          .order('created_at', { ascending: false });
+
+        let vendorApps = vendorAppsRaw || [];
+        if (vendorApps.length > 0) {
+          const vendorUserIds = vendorApps.map((app: any) => app.user_id).filter(Boolean);
+          if (vendorUserIds.length > 0) {
+            const { data: vendorProfiles } = await supabase
+              .from('user_profiles')
+              .select('id, first_name, last_name, email, phone')
+              .in('id', vendorUserIds);
+
+            const vendorProfileMap = new Map();
+            vendorProfiles?.forEach((p: any) => vendorProfileMap.set(p.id, p));
+
+            vendorApps = vendorApps.map((app: any) => ({
+              ...app,
+              user: vendorProfileMap.get(app.user_id) || null
+            }));
+          }
+        }
+
+        results.sellers =
+          vendorApps?.map((app: any) => ({
+            id: app.id,
+            first_name: app.user?.first_name || '',
+            last_name: app.user?.last_name || '',
+            email: app.user?.email || '',
+            phone: app.user?.phone || '',
+            business_name: app.application_data?.business_name || '',
+            business_type: app.application_data?.business_type || '',
+            description: app.application_data?.description || '',
+            approval_status: app.status,
+            created_at: app.created_at,
+            user_id: app.user_id,
+            original_application: app,
+          })) || [];
+      }
+
       await createAudit(req, 'view_pending_entries', 'pending_entries');
 
       res.json({
@@ -1721,6 +1768,7 @@ router.get(
             products: results.products?.length || 0,
             hotels: results.hotels?.length || 0,
             drivers: results.drivers?.length || 0,
+            sellers: results.sellers?.length || 0,
             media: results.media?.length || 0,
           },
         },
@@ -1747,7 +1795,7 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
- *           enum: [products, hotels, drivers, media]
+ *           enum: [products, hotels, drivers, sellers, media]
  *       - in: path
  *         name: id
  *         required: true
@@ -1769,27 +1817,38 @@ router.post(
       const tableMap: Record<string, string> = {
         products: 'ecommerce_products',
         hotels: 'hotels',
-        drivers: 'role_applications', // Now points to role_applications
+        drivers: 'role_applications',
+        sellers: 'role_applications',
         media: 'media_content',
       };
-      
-      const statusField = module === 'drivers' ? 'status' : 'approval_status';
+
+      // role_applications uses 'status', 'reviewed_by', 'reviewed_at'
+      // all other tables use 'approval_status', 'approved_by', 'approved_at'
+      const isRoleApplication = module === 'drivers' || module === 'sellers';
 
       const tableName = tableMap[module];
       if (!tableName) {
         return res.status(400).json({
           success: false,
-          error: 'Invalid module. Valid modules: products, hotels, drivers, media',
+          error: 'Invalid module. Valid modules: products, hotels, drivers, sellers, media',
         });
       }
 
+      const updatePayload = isRoleApplication
+        ? {
+            status: 'approved',
+            reviewed_by: approvedBy,
+            reviewed_at: new Date().toISOString(),
+          }
+        : {
+            approval_status: 'approved',
+            approved_by: approvedBy,
+            approved_at: new Date().toISOString(),
+          };
+
       const { data, error } = await supabase
         .from(tableName)
-        .update({
-          [statusField]: 'approved',
-          approved_at: new Date().toISOString(),
-          approved_by: approvedBy,
-        })
+        .update(updatePayload)
         .eq('id', id)
         .select()
         .single();
@@ -1824,6 +1883,38 @@ router.post(
         // 3. Set active role
         await supabase.from('user_active_roles')
           .update({ active_role: 'DRIVER' })
+          .eq('user_id', data.user_id);
+      }
+
+      // If module is sellers, complete vendor onboarding
+      if (module === 'sellers' && data) {
+        const appData = data.application_data || {};
+
+        // 1. Create ecommerce_vendors record (upsert in case it exists)
+        await supabase.from('ecommerce_vendors').upsert({
+          id: data.user_id,
+          user_id: data.user_id,
+          business_name: appData.business_name || '',
+          business_registration: appData.business_registration || null,
+          tax_id: appData.tax_id || null,
+          bank_name: appData.bank_name || null,
+          account_number: appData.account_number || null,
+          account_name: appData.account_name || null,
+          is_verified: true,
+          is_active: true,
+          verified_at: new Date().toISOString(),
+        }, { onConflict: 'id' });
+
+        // 2. Grant VENDOR role
+        await supabase.from('user_roles').insert({
+          user_id: data.user_id,
+          role_name: 'VENDOR',
+          granted_by: approvedBy
+        });
+
+        // 3. Set active role
+        await supabase.from('user_active_roles')
+          .update({ active_role: 'VENDOR' })
           .eq('user_id', data.user_id);
       }
 
@@ -1887,27 +1978,39 @@ router.post(
       const tableMap: Record<string, string> = {
         products: 'ecommerce_products',
         hotels: 'hotels',
-        drivers: 'role_applications', // Now points to role_applications
+        drivers: 'role_applications',
+        sellers: 'role_applications',
         media: 'media_content',
       };
-      
-      const statusField = module === 'drivers' ? 'status' : 'approval_status';
+
+      // role_applications uses 'status', 'reviewed_by', 'reviewed_at', 'rejection_reason'
+      // all other tables use 'approval_status', 'approved_by' / 'rejected_by', 'rejection_reason'
+      const isRoleApplication = module === 'drivers' || module === 'sellers';
 
       const tableName = tableMap[module];
       if (!tableName) {
         return res.status(400).json({
           success: false,
-          error: 'Invalid module. Valid modules: products, hotels, drivers, media',
+          error: 'Invalid module. Valid modules: products, hotels, drivers, sellers, media',
         });
       }
 
+      const updatePayload = isRoleApplication
+        ? {
+            status: 'rejected',
+            reviewed_by: rejectedBy,
+            reviewed_at: new Date().toISOString(),
+            rejection_reason: reason || 'No reason provided',
+          }
+        : {
+            approval_status: 'rejected',
+            approved_by: rejectedBy,
+            rejection_reason: reason || 'No reason provided',
+          };
+
       const { data, error } = await supabase
         .from(tableName)
-        .update({
-          [statusField]: 'rejected',
-          approved_by: rejectedBy,
-          rejection_reason: reason || 'No reason provided',
-        })
+        .update(updatePayload)
         .eq('id', id)
         .select()
         .single();
