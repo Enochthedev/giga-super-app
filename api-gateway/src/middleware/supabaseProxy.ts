@@ -34,30 +34,9 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/user/addresses': 'add-user-address',
   '/api/v1/user/switch-role': 'switch-role',
 
-  // Rides/Taxi - Passenger
-  '/api/v1/rides/request': 'request-ride',
-  '/api/v1/rides/estimate': 'get-ride-estimate',
-  '/api/v1/rides/active': 'get-active-ride',
-  '/api/v1/rides/history': 'get-ride-history',
-  '/api/v1/rides/cancel': 'cancel-ride',
-  '/api/v1/rides/rate': 'rate-driver',
-  '/api/v1/rides/:id': 'get-ride-details',
-  '/api/v1/rides/:id/accept': 'accept-ride',
-  '/api/v1/rides/:id/start': 'start-ride',
-  '/api/v1/rides/:id/complete': 'complete-ride',
-  '/api/v1/rides/:id/cancel': 'cancel-ride',
-  '/api/v1/drivers/nearby': 'get-nearby-drivers',
-
-  // Rides/Taxi - Driver
-  '/api/v1/driver/rides/requests': 'get-ride-requests',
-  '/api/v1/driver/rides/accept': 'accept-ride',
-  '/api/v1/driver/rides/reject': 'reject-ride',
-  '/api/v1/driver/rides/start': 'start-ride',
-  '/api/v1/driver/rides/complete': 'complete-ride',
-  '/api/v1/driver/location': 'update-location',
-  '/api/v1/driver/availability': 'toggle-availability',
-  '/api/v1/driver/earnings': 'get-earnings',
-  '/api/v1/driver/analytics': 'get-ride-analytics',
+  // Rides/Taxi — MIGRATED to Railway taxi-realtime-service (via serviceRegistry,
+  // which routes /api/v1/rides* and /api/v1/driver(s)* and rewrites to /api/rides
+  // and /api/drivers). Edge-function ride/driver mappings retired.
 
   // Payments
   '/api/v1/payments/initialize': 'Initialize-payment',
