@@ -828,18 +828,18 @@ import preferencesRouter from './routes/preferences';
 import templatesRouter from './routes/templates';
 import trackingRouter from './routes/tracking';
 
-// Authentication middleware (placeholder - integrate with your auth system)
+// Authentication middleware.
+// Requests reach this service only through the API gateway, which verifies the
+// Supabase JWT and forwards the authenticated identity via X-User-* headers.
+// Trust those headers to populate req.user (consumed by requireAuth/requireAdmin).
 app.use((req, res, next) => {
-  // Extract user from JWT token or session
-  // This is a placeholder - implement your actual authentication
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    try {
-      // Decode JWT token and extract user info
-      // req.user = { id: 'user-id', email: 'user@example.com', role: 'user' };
-    } catch (error) {
-      // Invalid token
-    }
+  const userId = req.headers['x-user-id'] as string | undefined;
+  if (userId) {
+    (req as any).user = {
+      id: userId,
+      email: (req.headers['x-user-email'] as string) || '',
+      role: (req.headers['x-user-role'] as string) || 'user',
+    };
   }
   next();
 });
