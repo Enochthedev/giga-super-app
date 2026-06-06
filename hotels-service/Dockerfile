@@ -1,5 +1,6 @@
 # Fast Dockerfile for hotels-service - single stage with pre-compilation
 FROM node:20-alpine
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 
 WORKDIR /app
 
@@ -12,7 +13,7 @@ COPY shared ./shared
 
 # Install shared dependencies
 WORKDIR /app/shared
-RUN npm ci --omit=dev
+RUN pnpm install --frozen-lockfile --prod
 
 # Copy service code
 WORKDIR /app
@@ -20,7 +21,7 @@ COPY hotels-service ./hotels-service
 
 # Install service dependencies and build
 WORKDIR /app/hotels-service
-RUN npm ci && npm run build && npm prune --production
+RUN pnpm install --frozen-lockfile && pnpm run build && pnpm prune --prod
 
 # Set environment
 ENV NODE_ENV=production
