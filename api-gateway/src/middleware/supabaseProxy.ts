@@ -76,11 +76,7 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/cart/item': 'add-to-cart',
   '/api/v1/cart/checkout': 'checkout-cart',
 
-  // Notifications
-  '/api/v1/notifications/history': 'get-notification-history',
-  '/api/v1/notifications/preferences': 'get-notification-preferences',
-  '/api/v1/notifications/preferences/update': 'update-notification-preferences',
-  '/api/v1/notifications/send': 'send-notification',
+  // Notifications — MIGRATED to Railway notifications-service (via serviceRegistry).
 
   // Ads
   '/api/v1/ads/campaigns': 'get-ad-campaigns',

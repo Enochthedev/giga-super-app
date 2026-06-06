@@ -253,9 +253,14 @@ export const routingMiddleware = (
             if (path.startsWith('/api/v1/delivery/')) {
               return path.replace('/api/v1/delivery', '/api/v1');
             }
-            // Notifications service: /api/v1/notifications -> /api/v1 (assuming it expects /api/v1)
-            if (path.startsWith('/api/v1/notifications/')) {
-              return path.replace('/api/v1/notifications', '/api/v1');
+            // Notifications service mounts /api/v1/notifications, /api/v1/preferences,
+            // /api/v1/templates directly — forward unchanged (do NOT strip the prefix).
+            if (
+              path.startsWith('/api/v1/notifications/') ||
+              path.startsWith('/api/v1/preferences/') ||
+              path.startsWith('/api/v1/templates/')
+            ) {
+              return path;
             }
             // Taxi realtime service: /api/v1/taxi-realtime -> /api (service expects /api)
             if (path.startsWith('/api/v1/taxi-realtime/')) {
