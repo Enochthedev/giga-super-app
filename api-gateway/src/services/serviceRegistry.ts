@@ -95,19 +95,9 @@ class ServiceRegistry {
       },
     });
 
-    // Notifications service (Supabase functions)
-    this.registerService('supabase-notifications', {
-      id: 'supabase-notifications',
-      name: 'Notifications Service',
-      baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
-      platform: 'supabase',
-      patterns: ['/api/v1/notifications*'],
-      headers: {
-        apikey: config.supabaseAnonKey,
-        Authorization: `Bearer ${config.supabaseAnonKey}`,
-      },
-    });
+    // Notifications — MIGRATED to Railway notifications-service (registered below).
+    // The supabase-notifications edge-function entry has been retired so it no
+    // longer shadows railway-notifications (which was registered after it).
 
     // Ads service (Supabase functions)
     this.registerService('supabase-ads', {
@@ -280,7 +270,14 @@ class ServiceRegistry {
         baseUrl: config.services.notifications,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/notifications*', '/api/v1/push*', '/api/v1/alert*'],
+        patterns: [
+          '/api/v1/notifications*',
+          '/api/v1/push*',
+          '/api/v1/alert*',
+          // Other routers mounted by notifications-service (previously unclaimed)
+          '/api/v1/preferences*',
+          '/api/v1/templates*',
+        ],
       });
     }
 
