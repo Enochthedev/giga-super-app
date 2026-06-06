@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.5"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       ad_campaigns: {
@@ -747,6 +722,11 @@ export type Database = {
       courier_profiles: {
         Row: {
           account_holder_name: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
+          approving_state: string | null
+          approving_state_id: string | null
           availability_status:
             | Database["public"]["Enums"]["courier_availability_status"]
             | null
@@ -777,8 +757,13 @@ export type Database = {
           max_delivery_radius_km: number | null
           phone_number: string
           rating: number | null
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
           shift_end_time: string | null
           shift_start_time: string | null
+          state: string | null
+          state_id: string | null
           successful_deliveries: number | null
           total_deliveries: number | null
           updated_at: string
@@ -789,6 +774,11 @@ export type Database = {
         }
         Insert: {
           account_holder_name?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          approving_state?: string | null
+          approving_state_id?: string | null
           availability_status?:
             | Database["public"]["Enums"]["courier_availability_status"]
             | null
@@ -819,8 +809,13 @@ export type Database = {
           max_delivery_radius_km?: number | null
           phone_number: string
           rating?: number | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           shift_end_time?: string | null
           shift_start_time?: string | null
+          state?: string | null
+          state_id?: string | null
           successful_deliveries?: number | null
           total_deliveries?: number | null
           updated_at?: string
@@ -831,6 +826,11 @@ export type Database = {
         }
         Update: {
           account_holder_name?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          approving_state?: string | null
+          approving_state_id?: string | null
           availability_status?:
             | Database["public"]["Enums"]["courier_availability_status"]
             | null
@@ -861,8 +861,13 @@ export type Database = {
           max_delivery_radius_km?: number | null
           phone_number?: string
           rating?: number | null
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           shift_end_time?: string | null
           shift_start_time?: string | null
+          state?: string | null
+          state_id?: string | null
           successful_deliveries?: number | null
           total_deliveries?: number | null
           updated_at?: string
@@ -1123,7 +1128,7 @@ export type Database = {
             foreignKeyName: "delivery_assignments_delivery_address_id_fkey"
             columns: ["delivery_address_id"]
             isOneToOne: false
-            referencedRelation: "shipping_addresses"
+            referencedRelation: "user_addresses"
             referencedColumns: ["id"]
           },
           {
@@ -1137,7 +1142,7 @@ export type Database = {
             foreignKeyName: "delivery_assignments_pickup_address_id_fkey"
             columns: ["pickup_address_id"]
             isOneToOne: false
-            referencedRelation: "shipping_addresses"
+            referencedRelation: "user_addresses"
             referencedColumns: ["id"]
           },
         ]
@@ -1266,15 +1271,19 @@ export type Database = {
         Row: {
           actual_delivery: string | null
           created_at: string | null
+          current_location: string | null
           deleted_at: string | null
           deleted_by: string | null
           deletion_reason: string | null
           delivery_fee: number | null
           delivery_instructions: string | null
           estimated_delivery: string | null
+          estimated_delivery_date: string | null
           id: string
+          last_status_update: string | null
           package_description: string | null
           package_dimensions: Json | null
+          package_type: string | null
           package_weight: number | null
           priority: string | null
           proof_of_delivery: string | null
@@ -1291,20 +1300,25 @@ export type Database = {
           sender_name: string
           sender_phone: string
           status: string | null
+          tracking_number: string | null
           updated_at: string | null
         }
         Insert: {
           actual_delivery?: string | null
           created_at?: string | null
+          current_location?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
           deletion_reason?: string | null
           delivery_fee?: number | null
           delivery_instructions?: string | null
           estimated_delivery?: string | null
+          estimated_delivery_date?: string | null
           id?: string
+          last_status_update?: string | null
           package_description?: string | null
           package_dimensions?: Json | null
+          package_type?: string | null
           package_weight?: number | null
           priority?: string | null
           proof_of_delivery?: string | null
@@ -1321,20 +1335,25 @@ export type Database = {
           sender_name: string
           sender_phone: string
           status?: string | null
+          tracking_number?: string | null
           updated_at?: string | null
         }
         Update: {
           actual_delivery?: string | null
           created_at?: string | null
+          current_location?: string | null
           deleted_at?: string | null
           deleted_by?: string | null
           deletion_reason?: string | null
           delivery_fee?: number | null
           delivery_instructions?: string | null
           estimated_delivery?: string | null
+          estimated_delivery_date?: string | null
           id?: string
+          last_status_update?: string | null
           package_description?: string | null
           package_dimensions?: Json | null
+          package_type?: string | null
           package_weight?: number | null
           priority?: string | null
           proof_of_delivery?: string | null
@@ -1351,6 +1370,7 @@ export type Database = {
           sender_name?: string
           sender_phone?: string
           status?: string | null
+          tracking_number?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -1449,6 +1469,44 @@ export type Database = {
             columns: ["courier_id"]
             isOneToOne: false
             referencedRelation: "courier_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_status_history: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          location: string | null
+          notes: string | null
+          package_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          package_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          location?: string | null
+          notes?: string | null
+          package_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_status_history_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_packages"
             referencedColumns: ["id"]
           },
         ]
@@ -2114,7 +2172,7 @@ export type Database = {
             foreignKeyName: "ecommerce_orders_billing_address_id_fkey"
             columns: ["billing_address_id"]
             isOneToOne: false
-            referencedRelation: "shipping_addresses"
+            referencedRelation: "user_addresses"
             referencedColumns: ["id"]
           },
           {
@@ -2128,7 +2186,7 @@ export type Database = {
             foreignKeyName: "ecommerce_orders_shipping_address_id_fkey"
             columns: ["shipping_address_id"]
             isOneToOne: false
-            referencedRelation: "shipping_addresses"
+            referencedRelation: "user_addresses"
             referencedColumns: ["id"]
           },
           {
@@ -5181,8 +5239,14 @@ export type Database = {
       }
       nipost_officials: {
         Row: {
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
           clearance_level: number
           created_at: string | null
+          deleted_at: string | null
+          deleted_by: string | null
+          deletion_reason: string | null
           department: string
           employee_id: string
           hire_date: string
@@ -5193,14 +5257,26 @@ export type Database = {
           position: string
           rank: string
           region_id: string
+          rejected_at: string | null
+          rejected_by: string | null
+          rejection_reason: string | null
           reporting_to: string | null
+          suspended_at: string | null
+          suspended_by: string | null
+          suspension_reason: string | null
           termination_date: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
           clearance_level: number
           created_at?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          deletion_reason?: string | null
           department: string
           employee_id: string
           hire_date: string
@@ -5211,14 +5287,26 @@ export type Database = {
           position: string
           rank: string
           region_id: string
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           reporting_to?: string | null
+          suspended_at?: string | null
+          suspended_by?: string | null
+          suspension_reason?: string | null
           termination_date?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
           clearance_level?: number
           created_at?: string | null
+          deleted_at?: string | null
+          deleted_by?: string | null
+          deletion_reason?: string | null
           department?: string
           employee_id?: string
           hire_date?: string
@@ -5229,7 +5317,13 @@ export type Database = {
           position?: string
           rank?: string
           region_id?: string
+          rejected_at?: string | null
+          rejected_by?: string | null
+          rejection_reason?: string | null
           reporting_to?: string | null
+          suspended_at?: string | null
+          suspended_by?: string | null
+          suspension_reason?: string | null
           termination_date?: string | null
           updated_at?: string | null
           user_id?: string
@@ -5391,6 +5485,7 @@ export type Database = {
           created_by: string | null
           id: string
           is_active: boolean | null
+          module_permissions: Json | null
           permissions: string[] | null
           role: string
           state_id: string | null
@@ -5406,6 +5501,7 @@ export type Database = {
           created_by?: string | null
           id?: string
           is_active?: boolean | null
+          module_permissions?: Json | null
           permissions?: string[] | null
           role: string
           state_id?: string | null
@@ -5421,6 +5517,7 @@ export type Database = {
           created_by?: string | null
           id?: string
           is_active?: boolean | null
+          module_permissions?: Json | null
           permissions?: string[] | null
           role?: string
           state_id?: string | null
@@ -5880,6 +5977,45 @@ export type Database = {
           updated_at?: string | null
           variables?: string[] | null
           version?: number | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          id: string
+          message: string
+          read: boolean | null
+          read_at: string | null
+          title: string
+          type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          message: string
+          read?: boolean | null
+          read_at?: string | null
+          title: string
+          type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          message?: string
+          read?: boolean | null
+          read_at?: string | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -6484,6 +6620,7 @@ export type Database = {
           staff_type: string
           state: string | null
           updated_at: string | null
+          user_id: string | null
           years_of_service: number | null
         }
         Insert: {
@@ -6519,6 +6656,7 @@ export type Database = {
           staff_type: string
           state?: string | null
           updated_at?: string | null
+          user_id?: string | null
           years_of_service?: number | null
         }
         Update: {
@@ -6554,6 +6692,7 @@ export type Database = {
           staff_type?: string
           state?: string | null
           updated_at?: string | null
+          user_id?: string | null
           years_of_service?: number | null
         }
         Relationships: []
@@ -6590,6 +6729,38 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      ride_rejections: {
+        Row: {
+          created_at: string | null
+          driver_id: string
+          id: string
+          reason: string | null
+          ride_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          driver_id: string
+          id?: string
+          reason?: string | null
+          ride_id: string
+        }
+        Update: {
+          created_at?: string | null
+          driver_id?: string
+          id?: string
+          reason?: string | null
+          ride_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ride_rejections_ride_id_fkey"
+            columns: ["ride_id"]
+            isOneToOne: false
+            referencedRelation: "rides"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ride_tracking: {
         Row: {
@@ -6630,6 +6801,7 @@ export type Database = {
         Row: {
           accepted_at: string | null
           actual_distance_km: number | null
+          actual_dropoff_location: Json | null
           actual_duration_minutes: number | null
           base_fare: number
           cancellation_fee: number | null
@@ -6642,7 +6814,7 @@ export type Database = {
           distance_fare: number | null
           distance_km: number | null
           driver_eta_minutes: number | null
-          driver_id: string
+          driver_id: string | null
           driver_notes: string | null
           dropoff_address: string | null
           dropoff_location: Json
@@ -6671,6 +6843,7 @@ export type Database = {
         Insert: {
           accepted_at?: string | null
           actual_distance_km?: number | null
+          actual_dropoff_location?: Json | null
           actual_duration_minutes?: number | null
           base_fare: number
           cancellation_fee?: number | null
@@ -6683,7 +6856,7 @@ export type Database = {
           distance_fare?: number | null
           distance_km?: number | null
           driver_eta_minutes?: number | null
-          driver_id: string
+          driver_id?: string | null
           driver_notes?: string | null
           dropoff_address?: string | null
           dropoff_location: Json
@@ -6712,6 +6885,7 @@ export type Database = {
         Update: {
           accepted_at?: string | null
           actual_distance_km?: number | null
+          actual_dropoff_location?: Json | null
           actual_duration_minutes?: number | null
           base_fare?: number
           cancellation_fee?: number | null
@@ -6724,7 +6898,7 @@ export type Database = {
           distance_fare?: number | null
           distance_km?: number | null
           driver_eta_minutes?: number | null
-          driver_id?: string
+          driver_id?: string | null
           driver_notes?: string | null
           dropoff_address?: string | null
           dropoff_location?: Json
@@ -8169,6 +8343,7 @@ export type Database = {
           granted_at: string | null
           granted_by: string | null
           id: string
+          is_active: boolean
           role_name: string
           user_id: string
         }
@@ -8176,6 +8351,7 @@ export type Database = {
           granted_at?: string | null
           granted_by?: string | null
           id?: string
+          is_active?: boolean
           role_name: string
           user_id: string
         }
@@ -8183,6 +8359,7 @@ export type Database = {
           granted_at?: string | null
           granted_by?: string | null
           id?: string
+          is_active?: boolean
           role_name?: string
           user_id?: string
         }
@@ -8392,11 +8569,17 @@ export type Database = {
           balance_after: number
           balance_before: number
           created_at: string | null
+          currency: string | null
           description: string
           id: string
+          metadata: Json | null
+          reference: string | null
           reference_id: string | null
           reference_type: string | null
+          status: string | null
           transaction_type: string
+          type: string | null
+          user_id: string | null
           wallet_id: string
         }
         Insert: {
@@ -8404,11 +8587,17 @@ export type Database = {
           balance_after: number
           balance_before: number
           created_at?: string | null
+          currency?: string | null
           description: string
           id?: string
+          metadata?: Json | null
+          reference?: string | null
           reference_id?: string | null
           reference_type?: string | null
+          status?: string | null
           transaction_type: string
+          type?: string | null
+          user_id?: string | null
           wallet_id: string
         }
         Update: {
@@ -8416,11 +8605,17 @@ export type Database = {
           balance_after?: number
           balance_before?: number
           created_at?: string | null
+          currency?: string | null
           description?: string
           id?: string
+          metadata?: Json | null
+          reference?: string | null
           reference_id?: string | null
           reference_type?: string | null
+          status?: string | null
           transaction_type?: string
+          type?: string | null
+          user_id?: string | null
           wallet_id?: string
         }
         Relationships: [
@@ -9540,6 +9735,14 @@ export type Database = {
           visibility: string
         }[]
       }
+      credit_wallet: {
+        Args: { p_amount: number; p_user_id: string }
+        Returns: number
+      }
+      debit_wallet: {
+        Args: { p_amount: number; p_user_id: string }
+        Returns: number
+      }
       decrypt_sensitive_data: {
         Args: { encrypted_data: string }
         Returns: string
@@ -9760,6 +9963,9 @@ export type Database = {
         Returns: Json
       }
       get_national_summary: { Args: never; Returns: Json }
+      get_nipost_access_level: { Args: { uid: string }; Returns: string }
+      get_nipost_role: { Args: { uid: string }; Returns: string }
+      get_nipost_state_id: { Args: { uid: string }; Returns: string }
       get_platform_setting:
         | {
             Args: {
@@ -9770,6 +9976,7 @@ export type Database = {
             Returns: string
           }
         | { Args: { setting_key: string }; Returns: string }
+      get_pmg_state: { Args: { uid: string }; Returns: string }
       get_sales_comparison: {
         Args: { current_period_end?: string; current_period_start?: string }
         Returns: Json
@@ -9783,6 +9990,7 @@ export type Database = {
           state_id: string
         }[]
       }
+      get_wallet_balance: { Args: { p_user_id: string }; Returns: number }
       gettransactionid: { Args: never; Returns: unknown }
       has_permission: {
         Args: { required_permission: string }
@@ -9790,6 +9998,11 @@ export type Database = {
       }
       has_role: { Args: { required_roles: string[] }; Returns: boolean }
       is_admin_user: { Args: never; Returns: boolean }
+      is_courier: { Args: { uid: string }; Returns: boolean }
+      is_dop: { Args: { uid: string }; Returns: boolean }
+      is_module_admin: { Args: { uid: string }; Returns: boolean }
+      is_postmaster_general: { Args: { uid: string }; Returns: boolean }
+      is_regional_manager: { Args: { uid: string }; Returns: boolean }
       longtransactionsenabled: { Args: never; Returns: boolean }
       mask_sensitive_data: {
         Args: { data: string; mask_type?: string }
@@ -10604,9 +10817,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {
       courier_availability_status: ["available", "busy", "offline", "on_break"],
@@ -10645,5 +10855,3 @@ export const Constants = {
     },
   },
 } as const
-A new version of Supabase CLI is available: v2.75.0 (currently installed v2.58.5)
-We recommend updating regularly for new features and bug fixes: https://supabase.com/docs/guides/cli/getting-started#updating-the-supabase-cli
