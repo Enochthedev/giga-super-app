@@ -1,5 +1,6 @@
 # Simple Dockerfile for api-gateway using tsx
 FROM node:20-alpine
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 
 WORKDIR /app
 
@@ -13,11 +14,11 @@ COPY api-gateway ./api-gateway
 
 # Install shared dependencies first
 WORKDIR /app/shared
-RUN npm ci --omit=dev
+RUN pnpm install --frozen-lockfile --prod
 
 # Install api-gateway dependencies
 WORKDIR /app/api-gateway
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Set environment
 ENV NODE_ENV=production

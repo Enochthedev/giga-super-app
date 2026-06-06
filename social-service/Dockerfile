@@ -1,5 +1,6 @@
 # Simple Dockerfile for social-service using tsx
 FROM node:20-alpine
+RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 
 WORKDIR /app
 
@@ -13,11 +14,11 @@ COPY social-service ./social-service
 
 # Install shared dependencies first
 WORKDIR /app/shared
-RUN npm ci --omit=dev
+RUN pnpm install --frozen-lockfile --prod
 
 # Install service dependencies
 WORKDIR /app/social-service
-RUN npm ci
+RUN pnpm install --frozen-lockfile
 
 # Set environment
 ENV NODE_ENV=production
