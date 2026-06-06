@@ -160,19 +160,32 @@ export const supabaseProxy = async (req: Request, res: Response, next: NextFunct
     // Merge path params with query params (path params take precedence)
     const mergedParams = { ...req.query, ...pathParams };
 
+    // File uploads (multipart/form-data) must be streamed through untouched —
+    // express.json()/urlencoded() don't parse them, so req.body is empty and the
+    // raw request stream is still intact. Re-serializing req.body here would
+    // corrupt the upload ("Body can not be decoded as form data"). Stream the
+    // original request and preserve its Content-Type (which carries the boundary).
+    const contentType = req.headers['content-type'] || '';
+    const isMultipart = contentType.includes('multipart/form-data');
+
     // Forward request to Supabase
     const response = await axios({
       method: req.method,
       url: supabaseFunctionUrl,
       headers: {
         Authorization: req.headers.authorization || `Bearer ${SUPABASE_ANON_KEY}`,
-        'Content-Type': 'application/json',
+        'Content-Type': isMultipart ? contentType : 'application/json',
+        ...(isMultipart && req.headers['content-length']
+          ? { 'Content-Length': req.headers['content-length'] }
+          : {}),
         apikey: SUPABASE_ANON_KEY,
         'X-Request-ID': (req as any).id || '',
       },
-      data: req.body,
+      data: isMultipart ? req : req.body,
       params: mergedParams,
-      timeout: 30000, // 30 second timeout
+      timeout: 60000, // allow time for file uploads
+      maxBodyLength: Infinity,
+      maxContentLength: Infinity,
       validateStatus: () => true, // Don't throw on any status code
     });
 
