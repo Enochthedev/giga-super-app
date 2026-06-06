@@ -67,5 +67,6 @@
     "typescript"
   ],
   "author": "Giga Platform Team",
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.0"
 }
