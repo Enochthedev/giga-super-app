@@ -113,12 +113,9 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/admin/dashboard-stats': 'admin-dashboard-stats',
   '/api/v1/admin/manage-users': 'admin-manage-users',
 
-  // Social
-  '/api/v1/social/feed': 'get-social-feed',
-  '/api/v1/social/posts': 'get-user-posts',
-  '/api/v1/social/post/create': 'create-social-post',
-  '/api/v1/social/stories': 'get-stories',
-  '/api/v1/social/friends': 'get-friends',
+  // Social — MIGRATED to Railway social-service (routed via serviceRegistry).
+  // Do NOT proxy social routes to edge functions; they fall through to
+  // routingMiddleware -> railway-social (/api/v1/social/* -> /api/v1/*).
 
   // Vendors
   '/api/v1/vendors/apply': 'apply-vendor',
