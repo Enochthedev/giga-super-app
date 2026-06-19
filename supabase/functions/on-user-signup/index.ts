@@ -34,6 +34,10 @@ interface WebhookPayload {
       last_name?: string;
       phone?: string;
       is_admin?: boolean;
+      // Location-based registration: an explicit region choice takes priority
+      // over deriving the region from the phone's dialing code.
+      region_id?: string;
+      region_code?: string;
     };
     raw_app_meta_data?: {
       role?: string;
@@ -41,6 +45,63 @@ interface WebhookPayload {
     };
   };
   old_record: null | Record<string, unknown>;
+}
+
+/**
+ * Resolve the region (nipost_regions.id) to stamp onto a new user.
+ *
+ * Priority:
+ *   1. Explicit region_id from signup metadata (validated against nipost_regions)
+ *   2. Explicit region_code from signup metadata
+ *   3. Derived from the phone's E.164 dialing code (longest-prefix match against
+ *      country-level phone_code values)
+ *
+ * Returns null when no region can be determined (user stays unscoped until tagged).
+ */
+async function resolveRegionId(
+  supabaseAdmin: ReturnType<typeof createClient>,
+  opts: { regionId?: string; regionCode?: string; phone?: string | null }
+): Promise<string | null> {
+  // 1. Explicit region_id
+  if (opts.regionId) {
+    const { data } = await supabaseAdmin
+      .from('nipost_regions')
+      .select('id')
+      .eq('id', opts.regionId)
+      .maybeSingle();
+    if (data?.id) return data.id as string;
+    console.warn(`region_id ${opts.regionId} not found; falling back`);
+  }
+
+  // 2. Explicit region_code
+  if (opts.regionCode) {
+    const { data } = await supabaseAdmin
+      .from('nipost_regions')
+      .select('id')
+      .eq('region_code', opts.regionCode)
+      .maybeSingle();
+    if (data?.id) return data.id as string;
+    console.warn(`region_code ${opts.regionCode} not found; falling back`);
+  }
+
+  // 3. Derive from phone dialing code
+  const phone = (opts.phone || '').trim();
+  if (phone.startsWith('+')) {
+    const { data: countries } = await supabaseAdmin
+      .from('nipost_regions')
+      .select('id, phone_code')
+      .not('phone_code', 'is', null);
+    if (countries && countries.length) {
+      // Longest dialing-code prefix wins (e.g. +1242 beats +1).
+      const match = countries
+        .filter((c: any) => phone.startsWith(c.phone_code))
+        .sort((a: any, b: any) => b.phone_code.length - a.phone_code.length)[0];
+      if (match) return match.id as string;
+    }
+    console.warn(`No region matched phone dialing code for ${phone}`);
+  }
+
+  return null;
 }
 
 serve(async (req: Request) => {
@@ -101,14 +162,28 @@ serve(async (req: Request) => {
     // Track results for logging
     const results: string[] = [];
 
-    // 1. Create user_profiles entry
+    // 1. Create user_profiles entry (with location-based region tag)
+    const phone = userMetadata.phone || user.phone || null;
+    const regionId = await resolveRegionId(supabaseAdmin, {
+      regionId: userMetadata.region_id,
+      regionCode: userMetadata.region_code,
+      phone,
+    });
+    if (regionId) {
+      console.log(`📍 Region resolved for ${email}: ${regionId}`);
+      results.push('📍 Region tagged');
+    } else {
+      console.log(`📍 No region resolved for ${email}`);
+    }
+
     const { error: profileError } = await supabaseAdmin.from('user_profiles').upsert(
       {
         id: userId,
         email: email,
         first_name: userMetadata.first_name || null,
         last_name: userMetadata.last_name || null,
-        phone: userMetadata.phone || user.phone || null,
+        phone,
+        region_id: regionId,
         created_at: user.created_at,
         updated_at: new Date().toISOString(),
       },

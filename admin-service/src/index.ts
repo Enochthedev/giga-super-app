@@ -24,6 +24,7 @@ import nipostRoutes from './routes/nipost';
 import nipostAdminRoutes from './routes/nipost-admin'; // NIPOST admin hierarchy routes
 import postalMonitoringRoutes from './routes/postal-monitoring';
 import publicApplicationRoutes from './routes/public-applications';
+import regionsRoutes from './routes/regions';
 import usersRoutes from './routes/users';
 
 dotenv.config();
@@ -88,6 +89,7 @@ app.use('/api', healthRoutes);
 app.use('/api/admin', nipostRoutes);
 app.use('/api/admin', adminPanelRoutes);
 app.use('/api/admin/users', usersRoutes);
+app.use('/api/admin/regions', regionsRoutes);
 app.use('/api/nipost-admin', nipostAdminRoutes); // NIPOST admin hierarchy routes
 app.use('/api/public', publicApplicationRoutes); // Public role application endpoints (no admin auth required)
 app.use('/api/dashboard', dashboardRoutes);

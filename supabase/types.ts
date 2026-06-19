@@ -5377,6 +5377,7 @@ export type Database = {
           is_active: boolean | null
           languages: string[] | null
           parent_region_id: string | null
+          phone_code: string | null
           population: number | null
           region_code: string
           region_name: string
@@ -5394,6 +5395,7 @@ export type Database = {
           is_active?: boolean | null
           languages?: string[] | null
           parent_region_id?: string | null
+          phone_code?: string | null
           population?: number | null
           region_code: string
           region_name: string
@@ -5411,6 +5413,7 @@ export type Database = {
           is_active?: boolean | null
           languages?: string[] | null
           parent_region_id?: string | null
+          phone_code?: string | null
           population?: number | null
           region_code?: string
           region_name?: string
@@ -5487,6 +5490,7 @@ export type Database = {
           is_active: boolean | null
           module_permissions: Json | null
           permissions: string[] | null
+          region_id: string | null
           role: string
           state_id: string | null
           state_name: string | null
@@ -5503,6 +5507,7 @@ export type Database = {
           is_active?: boolean | null
           module_permissions?: Json | null
           permissions?: string[] | null
+          region_id?: string | null
           role: string
           state_id?: string | null
           state_name?: string | null
@@ -5519,13 +5524,22 @@ export type Database = {
           is_active?: boolean | null
           module_permissions?: Json | null
           permissions?: string[] | null
+          region_id?: string | null
           role?: string
           state_id?: string | null
           state_name?: string | null
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "nipost_user_permissions_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "nipost_regions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notification_analytics: {
         Row: {
@@ -8282,6 +8296,7 @@ export type Database = {
           last_name: string | null
           marital_status: string | null
           phone: string | null
+          region_id: string | null
           state: string | null
           updated_at: string | null
         }
@@ -8306,6 +8321,7 @@ export type Database = {
           last_name?: string | null
           marital_status?: string | null
           phone?: string | null
+          region_id?: string | null
           state?: string | null
           updated_at?: string | null
         }
@@ -8330,10 +8346,19 @@ export type Database = {
           last_name?: string | null
           marital_status?: string | null
           phone?: string | null
+          region_id?: string | null
           state?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "nipost_regions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -9971,6 +9996,10 @@ export type Database = {
           }
         | { Args: { setting_key: string }; Returns: string }
       get_pmg_state: { Args: { uid: string }; Returns: string }
+      get_region_descendants: {
+        Args: { p_region_id: string }
+        Returns: string[]
+      }
       get_sales_comparison: {
         Args: { current_period_end?: string; current_period_start?: string }
         Returns: Json
@@ -9996,6 +10025,10 @@ export type Database = {
       is_dop: { Args: { uid: string }; Returns: boolean }
       is_module_admin: { Args: { uid: string }; Returns: boolean }
       is_postmaster_general: { Args: { uid: string }; Returns: boolean }
+      is_region_in_scope: {
+        Args: { p_scope: string; p_target: string }
+        Returns: boolean
+      }
       is_regional_manager: { Args: { uid: string }; Returns: boolean }
       longtransactionsenabled: { Args: never; Returns: boolean }
       mask_sensitive_data: {
