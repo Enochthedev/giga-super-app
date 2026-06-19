@@ -23,6 +23,7 @@ export interface AuthUser {
   branchId?: string;
   stateId?: string;
   stateName?: string;
+  regionId?: string; // nipost_regions.id — drives geo-scoped visibility (Phase 2)
   role: string;
   permissions: string[]; // Array of permission strings
   isNipostAdmin: boolean; // Flag to identify NIPOST admin users
@@ -85,6 +86,7 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
         branchId: nipostPermissions.branch_id,
         stateId: nipostPermissions.state_id,
         stateName: nipostPermissions.state_name,
+        regionId: nipostPermissions.region_id || undefined,
         role: nipostPermissions.role,
         permissions: userPermissions,
         isNipostAdmin: true,
@@ -355,6 +357,73 @@ export const requireNipostAdmin = (req: AuthRequest, res: Response, next: NextFu
   }
 
   next();
+};
+
+/**
+ * Tree-aware region scope guard (Phase 2).
+ *
+ * Validates that a requested region (from query/body/params) falls within the
+ * admin's region subtree. National-access admins pass through (global). Admins
+ * without a region tag also pass through (unchanged behavior until tagged).
+ *
+ * Reads the target region from: req.query.region_id, req.body.region_id,
+ * req.params.regionId.
+ */
+export const requireRegionScope = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      error: 'Authentication required',
+      code: 'AUTHENTICATION_REQUIRED',
+    });
+  }
+
+  // Global admins and not-yet-tagged admins are unrestricted.
+  if (req.user.accessLevel === 'national' || !req.user.regionId) {
+    return next();
+  }
+
+  const requested =
+    (req.query.region_id as string) || req.body?.region_id || req.params.regionId;
+
+  // No region specified on the request → nothing to validate here; the
+  // route's own query-level applyRegionScope still constrains the data.
+  if (!requested) return next();
+
+  try {
+    const { data, error } = await supabase.rpc('is_region_in_scope', {
+      p_target: requested,
+      p_scope: req.user.regionId,
+    });
+
+    if (error || data !== true) {
+      logger.warn('Region access denied', {
+        userId: req.user.id,
+        userRegion: req.user.regionId,
+        requestedRegion: requested,
+        path: req.path,
+      });
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied to this region',
+        code: 'REGION_ACCESS_DENIED',
+        details: { userRegion: req.user.regionId, requestedRegion: requested },
+      });
+    }
+
+    return next();
+  } catch (err: any) {
+    logger.error('Region scope check failed', { error: err.message });
+    return res.status(500).json({
+      success: false,
+      error: 'Region scope validation failed',
+      code: 'REGION_SCOPE_ERROR',
+    });
+  }
 };
 
 /**

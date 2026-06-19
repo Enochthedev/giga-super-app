@@ -19,6 +19,9 @@ supabase/.temp/
 *~
 .vscode/
 
+# Claude Code local config (not for the repo)
+.claude/
+
 # OS
 .DS_Store
 Thumbs.db

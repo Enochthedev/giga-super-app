@@ -82,6 +82,7 @@ export const SELECT_FIELDS = {
     gender,
     is_phone_verified,
     is_active,
+    region_id,
     last_login_at,
     created_at,
     updated_at

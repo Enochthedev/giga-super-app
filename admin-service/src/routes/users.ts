@@ -1,13 +1,24 @@
 import { Response, Router } from 'express';
 import winston from 'winston';
 import { createAudit, createFailedAudit } from '../middleware/audit';
-import { AuthRequest, authenticate, requireNationalAccess } from '../middleware/auth';
+import {
+  AuthRequest,
+  authenticate,
+  requireAnyAccess,
+  requireNationalAccess,
+} from '../middleware/auth';
 import {
   SELECT_FIELDS,
   calculatePagination,
   getPaginationRange,
   supabase,
 } from '../utils/database';
+import {
+  applyRegionScope,
+  getAllowedRegionIds,
+  isRegionInScope,
+  resolveRegionId,
+} from '../utils/regionScope';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -108,16 +119,22 @@ const logger = winston.createLogger({
  *       500:
  *         description: Internal server error
  */
-router.get('/', authenticate, requireNationalAccess, async (req: AuthRequest, res: Response) => {
+router.get('/', authenticate, requireAnyAccess, async (req: AuthRequest, res: Response) => {
   try {
     const { page = '1', limit = '50', search, is_active } = req.query;
     const { from, to } = getPaginationRange(page as string, limit as string);
+
+    // Geo-scope: national admins see all users; a region-tagged admin only sees
+    // users within their region subtree.
+    const allowedRegionIds = await getAllowedRegionIds(req.user!);
 
     let query = supabase
       .from('user_profiles')
       .select(SELECT_FIELDS.USER_PROFILE, { count: 'exact' })
       .range(from, to)
       .order('created_at', { ascending: false });
+
+    query = applyRegionScope(query, allowedRegionIds);
 
     if (search) {
       query = query.or(
@@ -143,6 +160,218 @@ router.get('/', authenticate, requireNationalAccess, async (req: AuthRequest, re
   } catch (error: any) {
     logger.error('Failed to get users', { error: error.message });
     res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+// Roles accepted by the user_roles / user_active_roles CHECK constraints.
+const ROLE_ENUM = [
+  'CUSTOMER',
+  'VENDOR',
+  'DRIVER',
+  'HOST',
+  'ADVERTISER',
+  'ADMIN',
+  'DOP',
+  'PMG',
+  'REGIONAL_MANAGER',
+  'MODULE_ADMIN',
+  'COURIER',
+];
+const VALID_USER_TYPES = [
+  'ADMIN',
+  'CUSTOMER',
+  'VENDOR',
+  'DRIVER',
+  'HOST',
+  'ADVERTISER',
+  'NIPOST_OFFICIAL',
+];
+
+/**
+ * POST /api/admin/users
+ * Create a user with a location-based region tag and geo-scope enforcement.
+ *
+ * Replaces the admin-create-user edge function with a Railway-deployed endpoint
+ * (no Supabase function cap). A national admin (global) can register anyone in
+ * any region; a region-tagged admin may only register within their own subtree.
+ *
+ * Body: { email, password, user_type, metadata?, nipost_details? }
+ */
+router.post('/', authenticate, requireAnyAccess, async (req: AuthRequest, res: Response) => {
+  try {
+    const { email, password, user_type, metadata, nipost_details } = req.body;
+
+    // --- Validate ---
+    if (!email || !password || !user_type) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing required fields: email, password, user_type',
+        code: 'MISSING_FIELDS',
+      });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res
+        .status(400)
+        .json({ success: false, error: 'Invalid email format', code: 'INVALID_EMAIL' });
+    }
+    if (password.length < 8) {
+      return res.status(400).json({
+        success: false,
+        error: 'Password must be at least 8 characters long',
+        code: 'WEAK_PASSWORD',
+      });
+    }
+    if (!VALID_USER_TYPES.includes(user_type)) {
+      return res.status(400).json({
+        success: false,
+        error: `Invalid user_type. Must be one of: ${VALID_USER_TYPES.join(', ')}`,
+        code: 'INVALID_USER_TYPE',
+      });
+    }
+
+    // --- Rate limit: max 20 admin user creations per hour (per acting admin) ---
+    const { count } = await supabase
+      .from('nipost_admin_audit')
+      .select('*', { count: 'exact', head: true })
+      .eq('action_type', 'create_user')
+      .eq('admin_id', req.user!.id)
+      .gte('created_at', new Date(Date.now() - 3600000).toISOString());
+    if (count && count >= 20) {
+      return res.status(429).json({
+        success: false,
+        error: 'Too many user creations in the last hour. Please try again later.',
+        code: 'RATE_LIMITED',
+      });
+    }
+
+    // --- Region scope enforcement ---
+    const isGlobal = req.user!.accessLevel === 'national';
+    const callerRegionId = req.user!.regionId || null;
+
+    const requestedRegionId =
+      user_type === 'NIPOST_OFFICIAL'
+        ? await resolveRegionId({ regionId: nipost_details?.region_id })
+        : await resolveRegionId({
+            regionId: metadata?.region_id,
+            regionCode: metadata?.region_code,
+          });
+
+    let effectiveRegionId = requestedRegionId;
+    if (!isGlobal) {
+      if (!effectiveRegionId) effectiveRegionId = callerRegionId;
+      const inScope = await isRegionInScope(req.user!, effectiveRegionId);
+      if (!inScope) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only register users within your assigned region',
+          code: 'REGION_OUT_OF_SCOPE',
+          details: { yourRegion: callerRegionId, requestedRegion: effectiveRegionId },
+        });
+      }
+    }
+
+    // --- Determine the precise role (NIPOST officials use their rank) ---
+    const roleName = user_type === 'NIPOST_OFFICIAL' ? nipost_details?.rank : user_type;
+    if (!roleName || !ROLE_ENUM.includes(roleName)) {
+      return res.status(400).json({
+        success: false,
+        error:
+          user_type === 'NIPOST_OFFICIAL'
+            ? `nipost_details.rank must be one of: ${ROLE_ENUM.join(', ')}`
+            : 'Unsupported role',
+        code: 'INVALID_ROLE',
+      });
+    }
+    const isAdminType =
+      user_type === 'ADMIN' ||
+      user_type === 'NIPOST_OFFICIAL' ||
+      ['DOP', 'PMG', 'REGIONAL_MANAGER', 'MODULE_ADMIN'].includes(roleName);
+
+    // --- Create the auth user (signup trigger handles profile/role/wallet + region tag) ---
+    const userMetadata: Record<string, any> = { ...(metadata || {}) };
+    if (effectiveRegionId) userMetadata.region_id = effectiveRegionId;
+
+    const { data: created, error: createError } = await supabase.auth.admin.createUser({
+      email,
+      password,
+      email_confirm: true,
+      user_metadata: userMetadata,
+      app_metadata: { role: isAdminType ? 'ADMIN' : user_type },
+    });
+
+    if (createError || !created.user) {
+      return res.status(400).json({
+        success: false,
+        error: createError?.message || 'User creation failed',
+        code: 'USER_CREATION_FAILED',
+      });
+    }
+    const userId = created.user.id;
+
+    // --- Set the precise role (trigger only assigns ADMIN/CUSTOMER) ---
+    await supabase
+      .from('user_roles')
+      .upsert(
+        { user_id: userId, role_name: roleName },
+        { onConflict: 'user_id,role_name', ignoreDuplicates: true }
+      );
+    await supabase
+      .from('user_active_roles')
+      .upsert({ user_id: userId, active_role: roleName }, { onConflict: 'user_id' });
+
+    // --- NIPOST official setup ---
+    if (user_type === 'NIPOST_OFFICIAL') {
+      const required = ['employee_id', 'office_id', 'position', 'clearance_level'];
+      const missing = required.filter(k => nipost_details?.[k] === undefined);
+      if (missing.length || !effectiveRegionId) {
+        return res.status(400).json({
+          success: false,
+          error: `NIPOST official requires region + nipost_details: ${required.join(', ')}`,
+          code: 'MISSING_NIPOST_DETAILS',
+          details: { missing, region: effectiveRegionId },
+        });
+      }
+
+      await supabase.from('nipost_officials').insert({
+        user_id: userId,
+        employee_id: nipost_details.employee_id,
+        office_id: nipost_details.office_id,
+        region_id: effectiveRegionId,
+        position: nipost_details.position,
+        rank: roleName,
+        department: nipost_details.department || 'Operations',
+        clearance_level: nipost_details.clearance_level,
+        reporting_to: nipost_details.reporting_to || null,
+        hire_date: new Date().toISOString().split('T')[0],
+        is_active: true,
+      });
+
+      const accessLevel = nipost_details.clearance_level >= 8 ? 'national' : 'state';
+      await supabase.from('nipost_user_permissions').insert({
+        user_id: userId,
+        access_level: accessLevel,
+        role: roleName,
+        region_id: accessLevel === 'national' ? null : effectiveRegionId,
+        state_id: accessLevel === 'national' ? null : effectiveRegionId,
+        is_active: true,
+      });
+    }
+
+    await createAudit(req, 'create_user', 'user', userId, {
+      user_type,
+      role: roleName,
+      region_id: effectiveRegionId,
+    });
+
+    res.status(201).json({
+      success: true,
+      data: { id: userId, email: created.user.email, role: roleName, region_id: effectiveRegionId },
+      message: `${user_type} user created successfully`,
+    });
+  } catch (error: any) {
+    logger.error('Failed to create user', { error: error.message });
+    await createFailedAudit(req, 'create_user', 'user', error.message);
+    res.status(500).json({ success: false, error: 'Failed to create user' });
   }
 });
 
@@ -298,12 +527,15 @@ router.get('/', authenticate, requireNationalAccess, async (req: AuthRequest, re
 router.get(
   '/:userId',
   authenticate,
-  requireNationalAccess,
+  requireAnyAccess,
   async (req: AuthRequest, res: Response) => {
     try {
       const { userId } = req.params;
 
-      const { data: user, error } = await supabase
+      // Geo-scope: region-tagged admins can only fetch users in their subtree.
+      const allowedRegionIds = await getAllowedRegionIds(req.user!);
+
+      let detailQuery = supabase
         .from('user_profiles')
         .select(
           `
@@ -312,12 +544,16 @@ router.get(
         user_active_roles(active_role)
       `
         )
-        .eq('id', userId)
-        .single();
+        .eq('id', userId);
+
+      detailQuery = applyRegionScope(detailQuery, allowedRegionIds);
+
+      const { data: user, error } = await detailQuery.maybeSingle();
 
       if (error) throw error;
 
       if (!user) {
+        // Either missing or outside the admin's region scope.
         return res.status(404).json({ error: 'User not found' });
       }
 
