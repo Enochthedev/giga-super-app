@@ -29,7 +29,6 @@ export interface Database {
           phone: string | null;
           first_name: string;
           last_name: string;
-          avatar: string | null;
           avatar_url: string | null;
           date_of_birth: string | null;
           gender: string | null;
@@ -53,7 +52,6 @@ export interface Database {
           phone?: string | null;
           first_name?: string;
           last_name?: string;
-          avatar?: string | null;
           avatar_url?: string | null;
           date_of_birth?: string | null;
           gender?: string | null;
@@ -77,7 +75,6 @@ export interface Database {
           phone?: string | null;
           first_name?: string;
           last_name?: string;
-          avatar?: string | null;
           avatar_url?: string | null;
           date_of_birth?: string | null;
           gender?: string | null;

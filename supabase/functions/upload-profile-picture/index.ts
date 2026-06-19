@@ -117,7 +117,7 @@ serve(async req => {
     const { error: updateError } = await supabaseClient
       .from('user_profiles')
       .update({
-        avatar: publicUrl,
+        avatar_url: publicUrl,
       })
       .eq('id', user.id);
     if (updateError) throw updateError;

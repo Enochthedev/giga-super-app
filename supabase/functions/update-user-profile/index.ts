@@ -49,7 +49,7 @@ serve(async req => {
       'first_name',
       'last_name',
       'phone',
-      'avatar',
+      'avatar_url',
       'date_of_birth',
       'gender',
       'marital_status',

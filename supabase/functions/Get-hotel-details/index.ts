@@ -181,7 +181,7 @@ serve(async req => {
           // Fetch user profile
           const { data: userProfile } = await supabaseClient
             .from('user_profiles')
-            .select('first_name, last_name, avatar, avatar_url')
+            .select('first_name, last_name, avatar_url')
             .eq('id', review.user_id)
             .single();
           return {
@@ -190,7 +190,7 @@ serve(async req => {
               ? {
                   first_name: userProfile.first_name,
                   last_name: userProfile.last_name,
-                  avatar: userProfile.avatar || userProfile.avatar_url,
+                  avatar: userProfile.avatar_url,
                   display_name:
                     `${userProfile.first_name} ${userProfile.last_name}`.trim() ||
                     'Anonymous',

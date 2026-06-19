@@ -8264,7 +8264,6 @@ export type Database = {
         Row: {
           age_group: string | null
           areas_of_interest: string[] | null
-          avatar: string | null
           avatar_url: string | null
           body_weight: number | null
           created_at: string | null
@@ -8289,7 +8288,6 @@ export type Database = {
         Insert: {
           age_group?: string | null
           areas_of_interest?: string[] | null
-          avatar?: string | null
           avatar_url?: string | null
           body_weight?: number | null
           created_at?: string | null
@@ -8314,7 +8312,6 @@ export type Database = {
         Update: {
           age_group?: string | null
           areas_of_interest?: string[] | null
-          avatar?: string | null
           avatar_url?: string | null
           body_weight?: number | null
           created_at?: string | null
@@ -9190,7 +9187,6 @@ export type Database = {
         Row: {
           age_group: string | null
           areas_of_interest: string[] | null
-          avatar: string | null
           avatar_url: string | null
           body_weight: number | null
           created_at: string | null
@@ -9214,7 +9210,6 @@ export type Database = {
         Insert: {
           age_group?: string | null
           areas_of_interest?: string[] | null
-          avatar?: string | null
           avatar_url?: string | null
           body_weight?: number | null
           created_at?: string | null
@@ -9238,7 +9233,6 @@ export type Database = {
         Update: {
           age_group?: string | null
           areas_of_interest?: string[] | null
-          avatar?: string | null
           avatar_url?: string | null
           body_weight?: number | null
           created_at?: string | null
