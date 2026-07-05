@@ -15,6 +15,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import axios from 'axios';
 import { Request, Response, Router } from 'express';
 import { Options, createProxyMiddleware } from 'http-proxy-middleware';
 
@@ -536,6 +537,223 @@ router.get('/me', async (req: Request, res: Response) => {
 });
 
 // =====================================================
+// PASSWORD MANAGEMENT
+// =====================================================
+// These must be explicit handlers (registered before the proxy) because
+// GoTrue has no single endpoint that both verifies a recovery token AND
+// sets a new password. POST /verify only verifies the token and returns a
+// session; the password must then be set via PUT /user with that session.
+
+/**
+ * POST /auth/reset-password
+ * Body: { token | token_hash | access_token, email?, password | new_password }
+ * Two-step flow against Supabase Auth:
+ *   1. POST /verify (type=recovery) -> session
+ *   2. PUT /user with the session's access token -> set new password
+ */
+router.post('/reset-password', async (req: Request, res: Response) => {
+  try {
+    const { token, token_hash, access_token, email, password, new_password } = req.body || {};
+    const newPassword = new_password || password;
+
+    if (!newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_ERROR', message: 'password (or new_password) is required' },
+      });
+    }
+
+    const authHeaders = {
+      apikey: config.supabaseAnonKey,
+      'Content-Type': 'application/json',
+    };
+
+    // Step 1: verify the recovery token to obtain a session.
+    // Email links carry a token_hash; OTP codes require token + email.
+    let sessionToken: string | null = null;
+
+    if (token_hash || token || email) {
+      const verifyBody: Record<string, string> = { type: 'recovery' };
+      if (token_hash) {
+        verifyBody.token_hash = token_hash;
+      } else {
+        if (!token || !email) {
+          return res.status(400).json({
+            success: false,
+            error: {
+              code: 'VALIDATION_ERROR',
+              message: 'Provide token_hash, or token together with email',
+            },
+          });
+        }
+        verifyBody.token = token;
+        verifyBody.email = email;
+      }
+
+      const verifyResp = await axios.post(`${authApiUrl}/verify`, verifyBody, {
+        headers: authHeaders,
+        validateStatus: () => true,
+      });
+
+      if (verifyResp.status >= 400 || !verifyResp.data?.access_token) {
+        logger.warn('Password reset token verification failed', {
+          status: verifyResp.status,
+          error: verifyResp.data?.msg || verifyResp.data?.error_description,
+        });
+        return res.status(verifyResp.status >= 400 ? verifyResp.status : 401).json({
+          success: false,
+          error: {
+            code: 'INVALID_RESET_TOKEN',
+            message:
+              verifyResp.data?.msg ||
+              verifyResp.data?.error_description ||
+              'Invalid or expired reset token',
+          },
+        });
+      }
+
+      sessionToken = verifyResp.data.access_token;
+    } else if (access_token) {
+      // Client already verified the token (e.g. via the email redirect) and
+      // holds a recovery session access token.
+      sessionToken = access_token;
+    } else {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Provide token_hash, token + email, or access_token',
+        },
+      });
+    }
+
+    // Step 2: set the new password using the recovery session.
+    const updateResp = await axios.put(
+      `${authApiUrl}/user`,
+      { password: newPassword },
+      {
+        headers: { ...authHeaders, Authorization: `Bearer ${sessionToken}` },
+        validateStatus: () => true,
+      }
+    );
+
+    if (updateResp.status >= 400) {
+      logger.warn('Password reset update failed', {
+        status: updateResp.status,
+        error: updateResp.data?.msg,
+      });
+      return res.status(updateResp.status).json({
+        success: false,
+        error: {
+          code: updateResp.data?.error_code || 'PASSWORD_UPDATE_FAILED',
+          message: updateResp.data?.msg || 'Failed to update password',
+        },
+      });
+    }
+
+    return res.json({
+      success: true,
+      message: 'Password reset successful',
+      data: { user: updateResp.data },
+    });
+  } catch (error: any) {
+    logger.error('Password reset error', { error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Password reset failed' },
+    });
+  }
+});
+
+/**
+ * POST /auth/change-password
+ * Authenticated password change for logged-in users.
+ * Body: { current_password?, password | new_password }
+ * If current_password is provided it is verified first via a login attempt.
+ */
+router.post('/change-password', async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'AUTHENTICATION_REQUIRED', message: 'Authorization header required' },
+      });
+    }
+
+    const { current_password, password, new_password } = req.body || {};
+    const newPassword = new_password || password;
+
+    if (!newPassword) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_ERROR', message: 'new_password is required' },
+      });
+    }
+
+    const authHeaders = {
+      apikey: config.supabaseAnonKey,
+      'Content-Type': 'application/json',
+    };
+
+    // Optionally verify the current password before allowing the change
+    if (current_password) {
+      const meResp = await axios.get(`${authApiUrl}/user`, {
+        headers: { ...authHeaders, Authorization: authHeader },
+        validateStatus: () => true,
+      });
+
+      if (meResp.status >= 400 || !meResp.data?.email) {
+        return res.status(401).json({
+          success: false,
+          error: { code: 'INVALID_TOKEN', message: 'Invalid or expired session' },
+        });
+      }
+
+      const loginResp = await axios.post(
+        `${authApiUrl}/token?grant_type=password`,
+        { email: meResp.data.email, password: current_password },
+        { headers: authHeaders, validateStatus: () => true }
+      );
+
+      if (loginResp.status >= 400) {
+        return res.status(400).json({
+          success: false,
+          error: { code: 'INVALID_CURRENT_PASSWORD', message: 'Current password is incorrect' },
+        });
+      }
+    }
+
+    const updateResp = await axios.put(
+      `${authApiUrl}/user`,
+      { password: newPassword },
+      {
+        headers: { ...authHeaders, Authorization: authHeader },
+        validateStatus: () => true,
+      }
+    );
+
+    if (updateResp.status >= 400) {
+      return res.status(updateResp.status).json({
+        success: false,
+        error: {
+          code: updateResp.data?.error_code || 'PASSWORD_UPDATE_FAILED',
+          message: updateResp.data?.msg || 'Failed to update password',
+        },
+      });
+    }
+
+    return res.json({ success: true, message: 'Password changed successfully' });
+  } catch (error: any) {
+    logger.error('Password change error', { error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Password change failed' },
+    });
+  }
+});
+
+// =====================================================
 // PROXY MIDDLEWARE
 // =====================================================
 // Note: All route transformations are handled directly in the proxy middleware
@@ -566,9 +784,8 @@ const proxyOptions: Options = {
     if (newPath === '/forgot-password') {
       return '/recover';
     }
-    if (newPath === '/reset-password') {
-      return '/verify';
-    }
+    // NOTE: /reset-password and /change-password are handled by explicit
+    // routes above and never reach this proxy.
 
     // Default: return the path with /auth prefix removed
     return newPath || '/';
@@ -605,14 +822,6 @@ const proxyOptions: Options = {
       // Transform refresh body to include grant_type
       const { refresh_token } = req.body;
       req.body = { refresh_token, grant_type: 'refresh_token' };
-    } else if (originalPath === '/reset-password' && req.body) {
-      // Transform reset-password body
-      const { token, access_token, password, new_password } = req.body;
-      req.body = {
-        type: 'recovery',
-        token: token || access_token,
-        password: new_password || password,
-      };
     }
 
     // Re-serialize the body if it exists

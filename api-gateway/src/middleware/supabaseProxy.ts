@@ -70,9 +70,11 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/calls/leave': 'leave-call',
 
   // Roles
+  // NOTE: /api/v1/roles/review is handled by Railway admin-service
+  // (POST /api/roles/review) — the legacy review-role-application edge fn
+  // only accepted user_roles=ADMIN and rejected NIPOST panel admins.
   '/api/v1/roles/switch': 'switch-role',
   '/api/v1/roles/apply': 'apply-for-role',
-  '/api/v1/roles/review': 'review-role-application',
 
   // Media
   '/api/v1/media/upload': 'upload-file',
@@ -83,10 +85,10 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   '/api/v1/support/tickets/create': 'create-support-ticket',
   '/api/v1/support/tickets/:id': 'get-ticket-details',
 
-  // Admin
-  '/api/v1/admin/create-user': 'admin-create-user',
-  '/api/v1/admin/dashboard-stats': 'admin-dashboard-stats',
-  '/api/v1/admin/manage-users': 'admin-manage-users',
+  // Admin — MIGRATED to Railway admin-service (via serviceRegistry /api/v1/admin*).
+  // The old edge-fn mappings pointed at dead/misnamed functions
+  // (admin-dashboard-stats never existed; admin-create-user is superseded by
+  // POST /api/admin/users) and shadowed the Railway admin-service.
 
   // Social — MIGRATED to Railway social-service (routed via serviceRegistry).
   // Do NOT proxy social routes to edge functions; they fall through to

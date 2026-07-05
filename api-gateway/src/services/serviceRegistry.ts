@@ -162,6 +162,8 @@ class ServiceRegistry {
           '/api/managers*',
           '/api/ads*', // Admin ads management (approve/reject/incoming)
           '/api/pending-entries*',
+          '/api/roles*', // Role application review (approve/reject)
+          '/api/v1/roles/review*', // Legacy path for role application review
         ],
       });
     }

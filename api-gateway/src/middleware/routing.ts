@@ -209,6 +209,16 @@ export const routingMiddleware = (
             if (path.startsWith('/api/v1/social/')) {
               return path.replace('/api/v1/social', '/api/v1');
             }
+            // Admin service: legacy edge-fn paths -> their admin-service equivalents
+            if (path === '/api/v1/admin/dashboard-stats') {
+              return '/api/dashboard/stats';
+            }
+            if (path === '/api/v1/roles/review') {
+              return '/api/roles/review';
+            }
+            if (path === '/api/v1/admin/create-user' || path === '/api/v1/admin/manage-users') {
+              return '/api/admin/users';
+            }
             // Admin service: /api/v1/admin/postal-monitoring -> /api/postal-monitoring
             if (path.startsWith('/api/v1/admin/')) {
               return path.replace('/api/v1/admin', '/api');

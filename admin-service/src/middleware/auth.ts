@@ -278,8 +278,21 @@ export const requireStateOrHigher = requireAccessLevel(['national', 'state']);
 export const requireAnyAccess = requireAccessLevel(['national', 'state', 'branch']);
 
 // Convenience middleware for common roles
-// Updated to include NIPOST admin roles (DOP, PMG, etc.)
-const ADMIN_ROLES = ['admin', 'super_admin', 'DOP', 'PMG', 'REGIONAL_MANAGER', 'MODULE_ADMIN', 'ADMIN'];
+// Updated to include NIPOST admin roles (DOP, PMG, etc.).
+// DIRECTOR/CONTROLLER: nipost_user_permissions.role is free-form and panel
+// admin accounts exist with these role names — anyone with an active row in
+// that table has already passed the admin gate in authenticate().
+const ADMIN_ROLES = [
+  'admin',
+  'super_admin',
+  'DOP',
+  'PMG',
+  'REGIONAL_MANAGER',
+  'MODULE_ADMIN',
+  'ADMIN',
+  'DIRECTOR',
+  'CONTROLLER',
+];
 
 export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction) => {
   const role = req.user?.role || (req.user as any)?.active_role;
@@ -301,6 +314,8 @@ export const requireManager = requireRole([
   'super_admin',
   'manager',
   'DOP',
+  'DIRECTOR',
+  'CONTROLLER',
   'PMG',
   'REGIONAL_MANAGER',
 ]);
@@ -310,22 +325,26 @@ export const requireStaff = requireRole([
   'manager',
   'staff',
   'DOP',
+  'DIRECTOR',
+  'CONTROLLER',
   'PMG',
   'REGIONAL_MANAGER',
   'MODULE_ADMIN',
 ]);
 
 // NIPOST-specific role middleware
-export const requireDOP = requireRole(['DOP']);
+// DIRECTOR is treated as DOP-tier (Director of Operations accounts exist with
+// role 'DIRECTOR' in nipost_user_permissions).
+export const requireDOP = requireRole(['DOP', 'DIRECTOR']);
 export const requirePMG = requireRole(['PMG']);
 export const requireRegionalManager = requireRole(['REGIONAL_MANAGER']);
 export const requireModuleAdmin = requireRole(['MODULE_ADMIN']);
 export const requireCourier = requireRole(['COURIER']);
 
 // NIPOST hierarchical access (DOP can access everything, PMG can access state-level, etc.)
-export const requireDOPOrHigher = requireRole(['DOP']);
-export const requirePMGOrHigher = requireRole(['DOP', 'PMG']);
-export const requireRegionalManagerOrHigher = requireRole(['DOP', 'PMG', 'REGIONAL_MANAGER']);
+export const requireDOPOrHigher = requireRole(['DOP', 'DIRECTOR']);
+export const requirePMGOrHigher = requireRole(['DOP', 'DIRECTOR', 'PMG']);
+export const requireRegionalManagerOrHigher = requireRole(['DOP', 'DIRECTOR', 'PMG', 'REGIONAL_MANAGER']);
 
 /**
  * Require NIPOST admin (any NIPOST role)

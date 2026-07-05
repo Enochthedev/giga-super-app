@@ -1571,6 +1571,194 @@ router.get(
 // ============================================================================
 
 /**
+ * Fetch pending role_applications for a role and enrich with user profiles.
+ */
+async function getPendingRoleApplications(roleName: string) {
+  const { data: appsRaw } = await supabase
+    .from('role_applications')
+    .select('id, user_id, role_name, status, application_data, document_urls, created_at')
+    .eq('role_name', roleName)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false });
+
+  let apps = appsRaw || [];
+  if (apps.length > 0) {
+    const userIds = apps.map((app: any) => app.user_id).filter(Boolean);
+    if (userIds.length > 0) {
+      const { data: profiles } = await supabase
+        .from('user_profiles')
+        .select('id, first_name, last_name, email, phone')
+        .in('id', userIds);
+
+      const profileMap = new Map();
+      profiles?.forEach((p: any) => profileMap.set(p.id, p));
+      apps = apps.map((app: any) => ({ ...app, user: profileMap.get(app.user_id) || null }));
+    }
+  }
+  return apps;
+}
+
+/**
+ * Role-specific onboarding once a role application is approved.
+ * Mirrors what the legacy review-role-application edge fn + pending-entries did.
+ */
+async function completeRoleOnboarding(application: any, approvedBy: string) {
+  const roleName = application.role_name;
+  const appData = application.application_data || {};
+
+  if (roleName === 'DRIVER') {
+    await supabase.from('driver_profiles').insert({
+      user_id: application.user_id,
+      license_number: appData.license_number,
+      vehicle_type: appData.vehicle_type || 'car',
+      vehicle_info: {
+        make: appData.vehicle_make,
+        model: appData.vehicle_model,
+        plate_number: appData.plate_number,
+        color: appData.vehicle_color,
+        year: appData.vehicle_year,
+      },
+      is_verified: true,
+      subscription_tier: 'BASIC',
+    });
+  }
+
+  if (roleName === 'VENDOR') {
+    await supabase.from('ecommerce_vendors').upsert(
+      {
+        id: application.user_id,
+        user_id: application.user_id,
+        business_name: appData.business_name || '',
+        business_registration: appData.business_registration || null,
+        tax_id: appData.tax_id || null,
+        bank_name: appData.bank_name || null,
+        account_number: appData.account_number || null,
+        account_name: appData.account_name || null,
+        is_verified: true,
+        is_active: true,
+        verified_at: new Date().toISOString(),
+      },
+      { onConflict: 'id' }
+    );
+  }
+
+  // Grant the role (ignore duplicate-role errors)
+  await supabase.from('user_roles').insert({
+    user_id: application.user_id,
+    role_name: roleName,
+    granted_by: approvedBy,
+  });
+
+  // Make it the active role
+  await supabase
+    .from('user_active_roles')
+    .update({ active_role: roleName })
+    .eq('user_id', application.user_id);
+}
+
+/**
+ * @swagger
+ * /api/roles/review:
+ *   post:
+ *     tags: [Pending Entries]
+ *     summary: Review a role application (approve/reject)
+ *     description: |
+ *       Admin review of a pending role application (VENDOR, DRIVER, HOST, ADVERTISER).
+ *       Replaces the legacy review-role-application edge function, which only
+ *       accepted users holding the user_roles ADMIN role and therefore rejected
+ *       NIPOST panel admins (directors/controllers).
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [application_id, action]
+ *             properties:
+ *               application_id:
+ *                 type: string
+ *               action:
+ *                 type: string
+ *                 enum: [approve, reject]
+ *               rejection_reason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Application reviewed successfully
+ */
+router.post(
+  '/roles/review',
+  authenticate,
+  requireAdmin,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { application_id, action, rejection_reason } = req.body || {};
+      const reviewedBy = req.user?.id;
+
+      if (!application_id || !['approve', 'reject'].includes(action)) {
+        return res.status(400).json({
+          success: false,
+          error: 'application_id and action (approve|reject) are required',
+        });
+      }
+
+      const { data: application, error: appError } = await supabase
+        .from('role_applications')
+        .select('*')
+        .eq('id', application_id)
+        .eq('status', 'pending')
+        .single();
+
+      if (appError || !application) {
+        return res.status(404).json({
+          success: false,
+          error: 'Application not found or already processed',
+        });
+      }
+
+      const updatePayload =
+        action === 'approve'
+          ? {
+              status: 'approved',
+              reviewed_by: reviewedBy,
+              reviewed_at: new Date().toISOString(),
+            }
+          : {
+              status: 'rejected',
+              reviewed_by: reviewedBy,
+              reviewed_at: new Date().toISOString(),
+              rejection_reason: rejection_reason || 'No reason provided',
+            };
+
+      const { error: updateError } = await supabase
+        .from('role_applications')
+        .update(updatePayload)
+        .eq('id', application_id);
+
+      if (updateError) throw updateError;
+
+      if (action === 'approve') {
+        await completeRoleOnboarding(application, reviewedBy || 'system');
+      }
+
+      await createAudit(req, `${action}_role_application`, 'role_applications', application_id, {
+        role_name: application.role_name,
+      });
+
+      res.json({
+        success: true,
+        data: { application_id, action, role_name: application.role_name },
+      });
+    } catch (error: any) {
+      logger.error('Failed to review role application', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to review role application' });
+    }
+  }
+);
+
+/**
  * @swagger
  * /api/pending-entries:
  *   get:
@@ -1648,33 +1836,7 @@ router.get(
 
       // Get pending taxi drivers (from role_applications)
       if (!module || module === 'taxi') {
-        const { data: driverAppsRaw } = await supabase
-          .from('role_applications')
-          .select(
-            'id, user_id, role_name, status, application_data, document_urls, created_at'
-          )
-          .eq('role_name', 'DRIVER')
-          .eq('status', 'pending')
-          .order('created_at', { ascending: false });
-
-        let driverApps = driverAppsRaw || [];
-        if (driverApps.length > 0) {
-          const userIds = driverApps.map((app: any) => app.user_id).filter(Boolean);
-          if (userIds.length > 0) {
-            const { data: profiles } = await supabase
-              .from('user_profiles')
-              .select('id, first_name, last_name, email, phone')
-              .in('id', userIds);
-
-            const profileMap = new Map();
-            profiles?.forEach((p: any) => profileMap.set(p.id, p));
-
-            driverApps = driverApps.map((app: any) => ({
-              ...app,
-              user: profileMap.get(app.user_id) || null
-            }));
-          }
-        }
+        const driverApps = await getPendingRoleApplications('DRIVER');
 
         // Map it to match the expected format or just pass it through
         results.drivers =
@@ -1712,33 +1874,7 @@ router.get(
 
       // Get pending sellers (VENDOR role applications)
       if (!module || module === 'sellers') {
-        const { data: vendorAppsRaw } = await supabase
-          .from('role_applications')
-          .select(
-            'id, user_id, role_name, status, application_data, document_urls, created_at'
-          )
-          .eq('role_name', 'VENDOR')
-          .eq('status', 'pending')
-          .order('created_at', { ascending: false });
-
-        let vendorApps = vendorAppsRaw || [];
-        if (vendorApps.length > 0) {
-          const vendorUserIds = vendorApps.map((app: any) => app.user_id).filter(Boolean);
-          if (vendorUserIds.length > 0) {
-            const { data: vendorProfiles } = await supabase
-              .from('user_profiles')
-              .select('id, first_name, last_name, email, phone')
-              .in('id', vendorUserIds);
-
-            const vendorProfileMap = new Map();
-            vendorProfiles?.forEach((p: any) => vendorProfileMap.set(p.id, p));
-
-            vendorApps = vendorApps.map((app: any) => ({
-              ...app,
-              user: vendorProfileMap.get(app.user_id) || null
-            }));
-          }
-        }
+        const vendorApps = await getPendingRoleApplications('VENDOR');
 
         results.sellers =
           vendorApps?.map((app: any) => ({
@@ -1749,6 +1885,44 @@ router.get(
             phone: app.user?.phone || '',
             business_name: app.application_data?.business_name || '',
             business_type: app.application_data?.business_type || '',
+            description: app.application_data?.description || '',
+            approval_status: app.status,
+            created_at: app.created_at,
+            user_id: app.user_id,
+            original_application: app,
+          })) || [];
+      }
+
+      // Get pending hotel hosts (HOST role applications)
+      if (!module || module === 'hosts') {
+        const hostApps = await getPendingRoleApplications('HOST');
+        results.hosts =
+          hostApps?.map((app: any) => ({
+            id: app.id,
+            first_name: app.user?.first_name || '',
+            last_name: app.user?.last_name || '',
+            email: app.user?.email || '',
+            phone: app.user?.phone || '',
+            business_name: app.application_data?.business_name || '',
+            description: app.application_data?.description || '',
+            approval_status: app.status,
+            created_at: app.created_at,
+            user_id: app.user_id,
+            original_application: app,
+          })) || [];
+      }
+
+      // Get pending advertisers (ADVERTISER role applications)
+      if (!module || module === 'advertisers') {
+        const advertiserApps = await getPendingRoleApplications('ADVERTISER');
+        results.advertisers =
+          advertiserApps?.map((app: any) => ({
+            id: app.id,
+            first_name: app.user?.first_name || '',
+            last_name: app.user?.last_name || '',
+            email: app.user?.email || '',
+            phone: app.user?.phone || '',
+            business_name: app.application_data?.business_name || '',
             description: app.application_data?.description || '',
             approval_status: app.status,
             created_at: app.created_at,
@@ -1769,6 +1943,8 @@ router.get(
             hotels: results.hotels?.length || 0,
             drivers: results.drivers?.length || 0,
             sellers: results.sellers?.length || 0,
+            hosts: results.hosts?.length || 0,
+            advertisers: results.advertisers?.length || 0,
             media: results.media?.length || 0,
           },
         },
@@ -1819,18 +1995,21 @@ router.post(
         hotels: 'hotels',
         drivers: 'role_applications',
         sellers: 'role_applications',
+        hosts: 'role_applications',
+        advertisers: 'role_applications',
         media: 'media_content',
       };
 
       // role_applications uses 'status', 'reviewed_by', 'reviewed_at'
       // all other tables use 'approval_status', 'approved_by', 'approved_at'
-      const isRoleApplication = module === 'drivers' || module === 'sellers';
+      const isRoleApplication = tableMap[module] === 'role_applications';
 
       const tableName = tableMap[module];
       if (!tableName) {
         return res.status(400).json({
           success: false,
-          error: 'Invalid module. Valid modules: products, hotels, drivers, sellers, media',
+          error:
+            'Invalid module. Valid modules: products, hotels, drivers, sellers, hosts, advertisers, media',
         });
       }
 
@@ -1855,67 +2034,9 @@ router.post(
 
       if (error) throw error;
 
-      // If module is drivers, complete driver onboarding
-      if (module === 'drivers' && data) {
-        // 1. Create driver_profiles record
-        await supabase.from('driver_profiles').insert({
-          user_id: data.user_id,
-          license_number: data.application_data?.license_number,
-          vehicle_type: data.application_data?.vehicle_type || 'car',
-          vehicle_info: {
-            make: data.application_data?.vehicle_make,
-            model: data.application_data?.vehicle_model,
-            plate_number: data.application_data?.plate_number,
-            color: data.application_data?.vehicle_color,
-            year: data.application_data?.vehicle_year,
-          },
-          is_verified: true,
-          subscription_tier: 'BASIC'
-        });
-
-        // 2. Grant DRIVER role
-        await supabase.from('user_roles').insert({
-          user_id: data.user_id,
-          role_name: 'DRIVER',
-          granted_by: approvedBy
-        });
-
-        // 3. Set active role
-        await supabase.from('user_active_roles')
-          .update({ active_role: 'DRIVER' })
-          .eq('user_id', data.user_id);
-      }
-
-      // If module is sellers, complete vendor onboarding
-      if (module === 'sellers' && data) {
-        const appData = data.application_data || {};
-
-        // 1. Create ecommerce_vendors record (upsert in case it exists)
-        await supabase.from('ecommerce_vendors').upsert({
-          id: data.user_id,
-          user_id: data.user_id,
-          business_name: appData.business_name || '',
-          business_registration: appData.business_registration || null,
-          tax_id: appData.tax_id || null,
-          bank_name: appData.bank_name || null,
-          account_number: appData.account_number || null,
-          account_name: appData.account_name || null,
-          is_verified: true,
-          is_active: true,
-          verified_at: new Date().toISOString(),
-        }, { onConflict: 'id' });
-
-        // 2. Grant VENDOR role
-        await supabase.from('user_roles').insert({
-          user_id: data.user_id,
-          role_name: 'VENDOR',
-          granted_by: approvedBy
-        });
-
-        // 3. Set active role
-        await supabase.from('user_active_roles')
-          .update({ active_role: 'VENDOR' })
-          .eq('user_id', data.user_id);
+      // Complete role-specific onboarding (driver profile, vendor record, role grant)
+      if (isRoleApplication && data) {
+        await completeRoleOnboarding(data, approvedBy);
       }
 
       await createAudit(req, `approve_${module}`, tableName, id);
@@ -1980,18 +2101,21 @@ router.post(
         hotels: 'hotels',
         drivers: 'role_applications',
         sellers: 'role_applications',
+        hosts: 'role_applications',
+        advertisers: 'role_applications',
         media: 'media_content',
       };
 
       // role_applications uses 'status', 'reviewed_by', 'reviewed_at', 'rejection_reason'
       // all other tables use 'approval_status', 'approved_by' / 'rejected_by', 'rejection_reason'
-      const isRoleApplication = module === 'drivers' || module === 'sellers';
+      const isRoleApplication = tableMap[module] === 'role_applications';
 
       const tableName = tableMap[module];
       if (!tableName) {
         return res.status(400).json({
           success: false,
-          error: 'Invalid module. Valid modules: products, hotels, drivers, sellers, media',
+          error:
+            'Invalid module. Valid modules: products, hotels, drivers, sellers, hosts, advertisers, media',
         });
       }
 
