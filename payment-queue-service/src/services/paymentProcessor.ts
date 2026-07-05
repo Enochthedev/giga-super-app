@@ -3,6 +3,7 @@ import Stripe from 'stripe';
 import { v4 as uuidv4 } from 'uuid';
 
 import { config } from '../config';
+import { selectProcessor } from './currency.service';
 import { CircuitBreakerState, PaymentRequest, PaymentResponse } from '../types';
 import supabase from '../utils/database';
 import { PaymentProcessingError, ServiceUnavailableError } from '../utils/errors';
@@ -263,8 +264,9 @@ export const processPayment = async (request: PaymentRequest): Promise<PaymentRe
     paymentMethod: request.paymentMethod,
   });
 
-  // Determine payment method
-  const paymentMethod = request.paymentMethod || 'paystack';
+  // The processor is determined by the currency the platform can settle.
+  // Honour an explicit request value, otherwise route by currency.
+  const paymentMethod = request.paymentMethod || selectProcessor(request.currency);
 
   try {
     let result: PaymentResponse;

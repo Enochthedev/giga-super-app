@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { initializeCheckout } from '../../controllers/checkout.controller';
 import {
   createPaymentRequest,
   getPaymentStatus,
@@ -33,7 +34,6 @@ const router = Router();
  *             required:
  *               - module
  *               - amount
- *               - currency
  *               - userId
  *             properties:
  *               module:
@@ -43,6 +43,12 @@ const router = Router();
  *                 type: number
  *               currency:
  *                 type: string
+ *                 enum: [NGN, GHS, KES, ZAR, USD, EUR, GBP]
+ *                 description: >-
+ *                   Optional/advisory. The server resolves the authoritative currency
+ *                   from the transaction region and selects the processor (Paystack for
+ *                   NGN/GHS/KES/ZAR/USD, Stripe for EUR/GBP). If supplied it must match
+ *                   the resolved currency or the request is rejected.
  *               userId:
  *                 type: string
  *                 format: uuid
@@ -66,6 +72,44 @@ router.post(
   encryptSensitiveFields(['email', 'phone']),
   asyncHandler(createPaymentRequest)
 );
+
+/**
+ * @swagger
+ * /api/v1/payments/initialize:
+ *   post:
+ *     summary: Initialize a payment (edge-compatible)
+ *     description: >-
+ *       Drop-in replacement for the Supabase Initialize-payment edge function.
+ *       Currency is resolved server-side from the paid entity's region and the
+ *       processor is chosen by currency (Paystack: NGN/GHS/KES/ZAR/USD, Stripe:
+ *       EUR/GBP). Returns a hosted checkout URL.
+ *     tags: [Payments]
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [moduleType, referenceId, amount]
+ *             properties:
+ *               moduleType:
+ *                 type: string
+ *                 enum: [hotel_booking, ecommerce_order, taxi_ride, ad_campaign]
+ *               referenceId: { type: string, format: uuid }
+ *               amount: { type: number }
+ *               paymentMethod: { type: string }
+ *               paymentProvider:
+ *                 type: string
+ *                 description: Ignored except 'mock'; the real processor is chosen by currency.
+ *               depositOnly: { type: boolean }
+ *     responses:
+ *       200: { description: Payment initialized (returns payment_url) }
+ *       400: { description: Invalid request }
+ *       401: { description: Unauthorized }
+ */
+router.post('/initialize', auth, asyncHandler(initializeCheckout));
 
 /**
  * @swagger

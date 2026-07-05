@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
+import { SUPPORTED_CURRENCIES } from '../config/currency';
 import { BadRequestError } from '../utils/errors';
 import { Validator } from '../utils/validator';
 
@@ -35,9 +36,11 @@ export const validatePaymentRequest = [
       return true;
     }),
   
+  // Currency is resolved server-side from the region; accepted as an optional
+  // advisory hint that must be a supported code if present.
   body('currency')
-    .notEmpty().withMessage('Currency is required')
-    .isIn(['NGN', 'USD', 'EUR', 'GBP']).withMessage('Invalid currency'),
+    .optional()
+    .isIn(SUPPORTED_CURRENCIES).withMessage('Invalid currency'),
   
   body('userId')
     .notEmpty().withMessage('User ID is required')

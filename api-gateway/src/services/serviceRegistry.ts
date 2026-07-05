@@ -54,13 +54,17 @@ class ServiceRegistry {
       },
     });
 
+    // Payments (/api/v1/payments*) MIGRATED to Railway payment-queue-service
+    // (railway-payment). This entry is narrowed to wallet only so it no longer
+    // shadows railway-payment (registered later), matching the notifications
+    // migration pattern.
     this.registerService('supabase-payments', {
       id: 'supabase-payments',
-      name: 'Payment Core Service',
+      name: 'Wallet Core Service',
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/payment*', '/api/v1/wallet*'],
+      patterns: ['/api/v1/wallet*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -210,7 +214,8 @@ class ServiceRegistry {
         baseUrl: config.services.payment,
         healthEndpoint: '/health',
         platform: 'railway',
-        patterns: ['/api/v1/payments*', '/api/v1/wallet*', '/api/v1/payment-queue*'],
+        // Wallet stays on edge (supabase-payments) for now; payments migrated here.
+        patterns: ['/api/v1/payments*', '/api/v1/payment-queue*'],
       });
     }
 

@@ -1,5 +1,7 @@
 import { BadRequestError } from './errors';
 
+import { isSupportedCurrency, SUPPORTED_CURRENCIES } from '../config/currency';
+
 export class Validator {
   /**
    * Validate email format
@@ -37,8 +39,7 @@ export class Validator {
    * Validate currency code (ISO 4217)
    */
   static isValidCurrency(currency: string): boolean {
-    const validCurrencies = ['NGN', 'USD', 'EUR', 'GBP'];
-    return validCurrencies.includes(currency.toUpperCase());
+    return isSupportedCurrency(currency);
   }
 
   /**
@@ -83,10 +84,10 @@ export class Validator {
       errors.push('Invalid amount. Must be a positive number');
     }
 
-    if (!data.currency) {
-      errors.push('Currency is required');
-    } else if (!this.isValidCurrency(data.currency)) {
-      errors.push('Invalid currency. Must be one of: NGN, USD, EUR, GBP');
+    // Currency is resolved server-side from the region; only validate when the
+    // client supplies one as an advisory hint.
+    if (data.currency && !this.isValidCurrency(data.currency)) {
+      errors.push(`Invalid currency. Must be one of: ${SUPPORTED_CURRENCIES.join(', ')}`);
     }
 
     if (!data.userId) {

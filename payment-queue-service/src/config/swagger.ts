@@ -86,7 +86,7 @@ Centralized payment processing service using BullMQ for reliable queue managemen
         // Request schemas
         PaymentRequest: {
           type: 'object',
-          required: ['amount', 'currency', 'email', 'module', 'reference_id'],
+          required: ['amount', 'email', 'module', 'reference_id'],
           properties: {
             amount: {
               type: 'number',
@@ -96,8 +96,9 @@ Centralized payment processing service using BullMQ for reliable queue managemen
             },
             currency: {
               type: 'string',
-              enum: ['NGN', 'USD', 'EUR', 'GBP'],
-              default: 'NGN',
+              enum: ['NGN', 'GHS', 'KES', 'ZAR', 'USD', 'EUR', 'GBP'],
+              description:
+                'Optional/advisory. The server resolves the authoritative currency from the transaction region; if supplied it must match, or the request is rejected. Processor is chosen by currency (Paystack: NGN/GHS/KES/ZAR/USD, Stripe: EUR/GBP).',
               example: 'NGN',
             },
             email: { type: 'string', format: 'email', example: 'customer@example.com' },

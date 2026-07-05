@@ -80,6 +80,28 @@ serve(async req => {
             payment.payment_status = 'completed';
             payment.paid_at = new Date().toISOString();
           }
+        } else if (payment.payment_provider === 'stripe') {
+          // Stripe: retrieve the Checkout Session (stored as provider_reference).
+          const stripeResult = await verifyWithStripe(
+            providerConfig.secret_key,
+            payment.provider_reference
+          );
+          if (stripeResult.paid) {
+            await supabaseClient
+              .from('payments')
+              .update({
+                payment_status: 'completed',
+                paid_at: new Date().toISOString(),
+                provider_transaction_id: stripeResult.paymentIntentId,
+                metadata: {
+                  ...payment.metadata,
+                  verified_at: new Date().toISOString(),
+                },
+              })
+              .eq('id', payment.id);
+            payment.payment_status = 'completed';
+            payment.paid_at = new Date().toISOString();
+          }
         }
       }
     }
@@ -149,4 +171,23 @@ async function verifyWithPaystack(secretKey, reference) {
     }
   );
   return await response.json();
+}
+// Verify payment with Stripe by retrieving the Checkout Session.
+async function verifyWithStripe(secretKey, sessionId) {
+  const response = await fetch(
+    `https://api.stripe.com/v1/checkout/sessions/${sessionId}`,
+    {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${secretKey}`,
+      },
+    }
+  );
+  const json = await response.json();
+  const paymentIntent = json.payment_intent;
+  return {
+    paid: json.payment_status === 'paid',
+    paymentIntentId:
+      typeof paymentIntent === 'string' ? paymentIntent : paymentIntent?.id,
+  };
 }
