@@ -38,8 +38,10 @@ const ROUTE_TO_FUNCTION_MAP: Record<string, string> = {
   // which routes /api/v1/rides* and /api/v1/driver(s)* and rewrites to /api/rides
   // and /api/drivers). Edge-function ride/driver mappings retired.
 
-  // Payments
-  '/api/v1/payments/initialize': 'Initialize-payment',
+  // Payments — MIGRATED to Railway payment-queue-service (railway-payment):
+  // /api/v1/payments/initialize now owned by the Node service. Verify + intent
+  // stay on edge for now (they read the shared `payments` table the Node
+  // service writes to).
   '/api/v1/payments/verify': 'Verify-payment',
   '/api/v1/payments/:id/verify': 'Verify-payment',
   '/api/v1/payments/intent': 'create-payment-intent',

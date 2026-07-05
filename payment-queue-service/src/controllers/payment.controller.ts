@@ -6,6 +6,11 @@ import logger from '../utils/logger';
 import { BadRequestError, NotFoundError } from '../utils/errors';
 import { Validator } from '../utils/validator';
 import { commissionService } from '../services/commission.service';
+import {
+  isSupportedCurrency,
+  resolveRegionCurrency,
+  selectProcessor,
+} from '../services/currency.service';
 import { addPaymentJob, getPaymentJobStatus } from '../queues/payment.queue';
 import { AuthenticatedRequest } from '../middleware/rbac.middleware';
 
@@ -17,19 +22,26 @@ const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
  */
 export async function createPaymentRequest(req: AuthenticatedRequest, res: Response) {
   try {
-    const {
-      module,
-      amount,
-      currency,
-      userId,
-      branchId,
-      stateId,
-      metadata,
-      paymentMethod = 'paystack',
-    } = req.body;
+    const { module, amount, currency, userId, branchId, stateId, metadata } = req.body;
 
     // Validate request
     Validator.validatePaymentRequest(req.body);
+
+    // Currency is authoritative on the server: derive it from the region this
+    // transaction belongs to rather than trusting the client. A client-supplied
+    // currency is only accepted if it matches the region's resolved currency.
+    const resolvedCurrency = await resolveRegionCurrency(branchId, stateId);
+    if (currency && currency.toUpperCase() !== resolvedCurrency) {
+      throw new BadRequestError(
+        `Currency ${currency.toUpperCase()} does not match region currency ${resolvedCurrency}`
+      );
+    }
+    if (!isSupportedCurrency(resolvedCurrency)) {
+      throw new BadRequestError(`Unsupported currency for region: ${resolvedCurrency}`);
+    }
+
+    // Route to the processor that can settle the resolved currency.
+    const paymentMethod = selectProcessor(resolvedCurrency);
 
     // Generate payment ID
     const paymentId = uuidv4();
@@ -51,7 +63,7 @@ export async function createPaymentRequest(req: AuthenticatedRequest, res: Respo
         state_id: stateId,
         module,
         amount,
-        currency,
+        currency: resolvedCurrency,
         commission_rate: commission.commissionRate,
         commission_amount: commission.commissionAmount,
         net_amount: commission.netAmount,
@@ -72,7 +84,7 @@ export async function createPaymentRequest(req: AuthenticatedRequest, res: Respo
       paymentId,
       module,
       amount,
-      currency,
+      currency: resolvedCurrency,
       userId,
       branchId,
       stateId,
@@ -81,7 +93,13 @@ export async function createPaymentRequest(req: AuthenticatedRequest, res: Respo
     });
 
     // Generate checkout URL
-    const checkoutUrl = generateCheckoutURL(paymentId, paymentMethod, amount, currency, metadata);
+    const checkoutUrl = generateCheckoutURL(
+      paymentId,
+      paymentMethod,
+      amount,
+      resolvedCurrency,
+      metadata
+    );
 
     logger.info('Payment request created', {
       paymentId,
@@ -96,7 +114,8 @@ export async function createPaymentRequest(req: AuthenticatedRequest, res: Respo
         paymentId,
         checkoutUrl,
         amount,
-        currency,
+        currency: resolvedCurrency,
+        paymentMethod,
         commissionAmount: commission.commissionAmount,
         netAmount: commission.netAmount,
         status: 'pending',

@@ -20,6 +20,7 @@ INSERT INTO public.nipost_regions (region_name, region_code, region_type, timezo
 ('South America', 'SA', 'continent', 'UTC', NULL, ARRAY['es', 'pt', 'en'], true)
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 -- Insert Countries under Africa
@@ -37,6 +38,7 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'AF'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, country_code, timezone, currency, languages, is_active) 
@@ -53,10 +55,11 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'AF'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, country_code, timezone, currency, languages, is_active)
-SELECT 
+SELECT
     'Kenya',
     'KE',
     'country',
@@ -69,6 +72,42 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'AF'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
+    is_active = EXCLUDED.is_active;
+
+INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, country_code, timezone, currency, languages, is_active)
+SELECT
+    'South Africa',
+    'ZA',
+    'country',
+    id,
+    'ZA',
+    'Africa/Johannesburg',
+    'ZAR',
+    ARRAY['en', 'af', 'zu', 'xh'],
+    true
+FROM public.nipost_regions WHERE region_code = 'AF'
+ON CONFLICT (region_code) DO UPDATE SET
+    region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
+    is_active = EXCLUDED.is_active;
+
+-- Insert Countries under Europe
+INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, country_code, timezone, currency, languages, is_active)
+SELECT
+    'United Kingdom',
+    'GB',
+    'country',
+    id,
+    'GB',
+    'Europe/London',
+    'GBP',
+    ARRAY['en'],
+    true
+FROM public.nipost_regions WHERE region_code = 'EU'
+ON CONFLICT (region_code) DO UPDATE SET
+    region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 -- Insert States under Nigeria
@@ -83,6 +122,7 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'NG'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, timezone, is_active) 
@@ -96,6 +136,7 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'NG'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, timezone, is_active)
@@ -109,6 +150,7 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'NG'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 -- Insert Cities under Lagos
@@ -123,6 +165,7 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'LOS'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, timezone, is_active) 
@@ -136,6 +179,7 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'LOS'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, timezone, is_active)
@@ -149,6 +193,37 @@ SELECT
 FROM public.nipost_regions WHERE region_code = 'LOS'
 ON CONFLICT (region_code) DO UPDATE SET
     region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
+    is_active = EXCLUDED.is_active;
+
+-- Insert Cities under United Kingdom
+INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, timezone, is_active)
+SELECT
+    'London',
+    'LDN',
+    'city',
+    id,
+    'Europe/London',
+    true
+FROM public.nipost_regions WHERE region_code = 'GB'
+ON CONFLICT (region_code) DO UPDATE SET
+    region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
+    is_active = EXCLUDED.is_active;
+
+-- Insert Cities under South Africa
+INSERT INTO public.nipost_regions (region_name, region_code, region_type, parent_region_id, timezone, is_active)
+SELECT
+    'Johannesburg',
+    'JNB',
+    'city',
+    id,
+    'Africa/Johannesburg',
+    true
+FROM public.nipost_regions WHERE region_code = 'ZA'
+ON CONFLICT (region_code) DO UPDATE SET
+    region_name = EXCLUDED.region_name,
+    currency = EXCLUDED.currency,
     is_active = EXCLUDED.is_active;
 
 -- ============================================================================
