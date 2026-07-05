@@ -121,6 +121,70 @@ router.get('/', authenticate, requireAnyAccess, async (req: AuthRequest, res: Re
 
 /**
  * @swagger
+ * /api/managers/ecommerce/orders/latest:
+ *   get:
+ *     tags: [Manager - E-commerce]
+ *     summary: Get latest orders for dashboard
+ *     description: Returns the most recent orders with product details for dashboard display
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *           maximum: 50
+ *     responses:
+ *       200:
+ *         description: Latest orders retrieved
+ */
+// NOTE: must be registered BEFORE /:id or Express matches "latest" as an order id
+router.get('/latest', authenticate, requireAnyAccess, async (req: AuthRequest, res: Response) => {
+  try {
+    const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 50);
+
+    const { data: orders, error } = await supabase
+      .from('ecommerce_orders')
+      .select(
+        `id, order_number, total_amount, status, created_at,
+         items:ecommerce_order_items(product_name, quantity)`
+      )
+      .is('deleted_at', null)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+
+    const formattedOrders = (orders || []).map((order: Record<string, unknown>) => {
+      const items = (order.items as Array<{ product_name: string; quantity: number }>) || [];
+      const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
+      const productNames = items.map(item => item.product_name).join(', ');
+      const revenue = Number(order.total_amount) || 0;
+
+      return {
+        id: order.id,
+        order_number: order.order_number,
+        products: productNames || 'N/A',
+        quantity: totalQty,
+        date: (order.created_at as string).split('T')[0],
+        revenue,
+        net_profit: Math.round(revenue * 0.2 * 100) / 100, // Estimated 20% margin
+        status: order.status,
+      };
+    });
+
+    await createAudit(req, 'view_latest_orders', 'ecommerce_orders');
+    res.json({ success: true, data: { orders: formattedOrders } });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to get latest orders', { error: msg });
+    res.status(500).json({ success: false, error: 'Failed to fetch latest orders' });
+  }
+});
+
+/**
+ * @swagger
  * /api/managers/ecommerce/orders/{id}:
  *   get:
  *     tags: [Manager - E-commerce]
@@ -170,8 +234,8 @@ router.get('/:id', authenticate, requireAnyAccess, async (req: AuthRequest, res:
       .select(
         `*,
          user_profiles(first_name, last_name, email, phone),
-         items:ecommerce_order_items(id, product_id, product_name, quantity, unit_price, total_price),
-         status_history:ecommerce_order_status_history(status, notes, created_at, created_by)`
+         items:ecommerce_order_items(id, product_id, product_name, quantity, unit_price:price_per_unit, total_price:subtotal),
+         status_history:ecommerce_order_status_history(status:to_status, notes, created_at, created_by)`
       )
       .eq('id', id)
       .is('deleted_at', null)
@@ -256,17 +320,30 @@ router.put('/:id/status', authenticate, requireAdmin, async (req: AuthRequest, r
       return res.status(400).json({ success: false, error: 'Status is required' });
     }
 
+    // Must stay in sync with the ecommerce_orders_status_check DB constraint
     const validStatuses = [
       'pending',
+      'pending_payment',
+      'confirmed',
       'processing',
+      'packed',
       'shipped',
+      'out_for_delivery',
       'delivered',
       'cancelled',
       'refunded',
+      'failed',
     ];
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ success: false, error: 'Invalid status' });
     }
+
+    const { data: existingOrder } = await supabase
+      .from('ecommerce_orders')
+      .select('status')
+      .eq('id', id)
+      .is('deleted_at', null)
+      .single();
 
     const updateData: Record<string, unknown> = { status, updated_at: new Date().toISOString() };
     if (tracking_number) updateData.tracking_number = tracking_number;
@@ -285,12 +362,16 @@ router.put('/:id/status', authenticate, requireAdmin, async (req: AuthRequest, r
       return res.status(404).json({ success: false, error: 'Order not found' });
     }
 
-    await supabase.from('ecommerce_order_status_history').insert({
+    const { error: historyError } = await supabase.from('ecommerce_order_status_history').insert({
       order_id: id,
-      status,
+      from_status: existingOrder?.status || null,
+      to_status: status,
       notes: notes || null,
       created_by: req.user?.id,
     });
+    if (historyError) {
+      logger.error('Failed to record order status history', { error: historyError.message, orderId: id });
+    }
 
     await createAudit(req, 'update_order_status', 'ecommerce_orders', id);
     res.json({ success: true, data: { order } });
@@ -298,91 +379,6 @@ router.put('/:id/status', authenticate, requireAdmin, async (req: AuthRequest, r
     const msg = error instanceof Error ? error.message : 'Unknown error';
     logger.error('Failed to update order status', { error: msg });
     res.status(500).json({ success: false, error: 'Failed to update order status' });
-  }
-});
-
-/**
- * @swagger
- * /api/managers/ecommerce/orders/latest:
- *   get:
- *     tags: [Manager - E-commerce]
- *     summary: Get latest orders for dashboard
- *     description: Returns the most recent orders with product details for dashboard display
- *     security:
- *       - BearerAuth: []
- *     parameters:
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *           maximum: 50
- *     responses:
- *       200:
- *         description: Latest orders retrieved
- *         content:
- *           application/json:
- *             example:
- *               success: true
- *               data:
- *                 orders:
- *                   - id: "o1234567-89ab-cdef-0123-456789abcdef"
- *                     order_number: "ORD-2026-001234"
- *                     products: "Premium Headphones, Wireless Mouse"
- *                     quantity: 3
- *                     date: "2026-02-15"
- *                     revenue: 24900
- *                     net_profit: 4980
- *                     status: "processing"
- *                   - id: "o2345678-9abc-def0-1234-56789abcdef0"
- *                     order_number: "ORD-2026-001235"
- *                     products: "Laptop Stand"
- *                     quantity: 1
- *                     date: "2026-02-15"
- *                     revenue: 8500
- *                     net_profit: 1700
- *                     status: "delivered"
- */
-router.get('/latest', authenticate, requireAnyAccess, async (req: AuthRequest, res: Response) => {
-  try {
-    const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 50);
-
-    const { data: orders, error } = await supabase
-      .from('ecommerce_orders')
-      .select(
-        `id, order_number, total_amount, status, created_at,
-         items:ecommerce_order_items(product_name, quantity)`
-      )
-      .is('deleted_at', null)
-      .order('created_at', { ascending: false })
-      .limit(limit);
-
-    if (error) throw error;
-
-    const formattedOrders = (orders || []).map((order: Record<string, unknown>) => {
-      const items = (order.items as Array<{ product_name: string; quantity: number }>) || [];
-      const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
-      const productNames = items.map(item => item.product_name).join(', ');
-      const revenue = Number(order.total_amount) || 0;
-
-      return {
-        id: order.id,
-        order_number: order.order_number,
-        products: productNames || 'N/A',
-        quantity: totalQty,
-        date: (order.created_at as string).split('T')[0],
-        revenue,
-        net_profit: Math.round(revenue * 0.2 * 100) / 100, // Estimated 20% margin
-        status: order.status,
-      };
-    });
-
-    await createAudit(req, 'view_latest_orders', 'ecommerce_orders');
-    res.json({ success: true, data: { orders: formattedOrders } });
-  } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    logger.error('Failed to get latest orders', { error: msg });
-    res.status(500).json({ success: false, error: 'Failed to fetch latest orders' });
   }
 });
 
