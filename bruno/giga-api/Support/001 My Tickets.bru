@@ -1,0 +1,23 @@
+meta {
+  name: My Tickets
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/support/tickets
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`get-my-tickets`.
+}

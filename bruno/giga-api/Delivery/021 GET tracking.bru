@@ -1,0 +1,27 @@
+meta {
+  name: GET tracking
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/api/v1/tracking/:assignmentId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/tracking/:assignmentId`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/tracking.ts` · route: `/tracking/:assignmentId`.
+
+Auth: bearer ({{token}}).
+}

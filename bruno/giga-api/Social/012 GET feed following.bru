@@ -1,0 +1,27 @@
+meta {
+  name: GET feed following
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{baseUrl}}/api/v1/feed/following
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/feed/following`
+
+Service: **social-service** · file: `social-service/src/routes/feed.ts` · route: `/following`.
+
+Auth: bearer ({{token}}).
+}

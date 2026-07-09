@@ -1,0 +1,33 @@
+meta {
+  name: Call End
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/calls/end
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "conversationId": "REPLACE_CONV",
+    "callType": "audio",
+    "participantIds": [
+      "{{customer2Id}}"
+    ]
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`end-call` edge fn.
+}

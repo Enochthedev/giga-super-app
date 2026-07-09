@@ -1,0 +1,27 @@
+meta {
+  name: GET state branches
+  type: http
+  seq: 88
+}
+
+get {
+  url: {{baseUrl}}/api/admin/state/:stateId/branches
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/state/:stateId/branches`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost.ts` · route: `/state/:stateId/branches`.
+
+Auth: admin bearer ({{adminToken}}).
+}

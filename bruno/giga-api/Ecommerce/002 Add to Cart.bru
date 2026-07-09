@@ -1,0 +1,30 @@
+meta {
+  name: Add to Cart
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/cart/add
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "product_id": "REPLACE_PRODUCT_UUID",
+    "quantity": 1
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`add-to-cart`. Body: product_id + quantity, OR items[]. NOTE catalog may be empty (G4).
+}

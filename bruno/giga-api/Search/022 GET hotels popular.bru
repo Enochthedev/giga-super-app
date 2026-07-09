@@ -1,0 +1,27 @@
+meta {
+  name: GET hotels popular
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/hotels/popular
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/hotels/popular`
+
+Service: **search-service** · file: `search-service/src/routes/hotels.ts` · route: `/popular`.
+
+Auth: bearer ({{token}}).
+}

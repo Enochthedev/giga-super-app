@@ -1,0 +1,27 @@
+meta {
+  name: GET ecommerce vendors
+  type: http
+  seq: 57
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/vendors/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/vendors/:id`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-vendors.ts` · route: `/:id`.
+
+Auth: admin bearer ({{adminToken}}).
+}

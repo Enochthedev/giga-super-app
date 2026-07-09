@@ -1,0 +1,30 @@
+meta {
+  name: Track Ad Event
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/api/v1/ads/track
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "campaign_id": "REPLACE",
+    "event": "impression"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`track-ad-event`.
+}

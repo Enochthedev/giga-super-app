@@ -1,0 +1,23 @@
+meta {
+  name: List Addresses
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/v1/user/addresses
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+Lists saved addresses (fixed E9 — was 500 on empty body).
+}

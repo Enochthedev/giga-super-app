@@ -1,0 +1,27 @@
+meta {
+  name: GET admin vendors
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/admin/vendors
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/admin/vendors`
+
+Service: **search-service** · file: `search-service/src/routes/admin.ts` · route: `/vendors`.
+
+Auth: bearer ({{token}}).
+}

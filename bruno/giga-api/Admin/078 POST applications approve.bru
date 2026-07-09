@@ -1,0 +1,33 @@
+meta {
+  name: POST applications approve
+  type: http
+  seq: 78
+}
+
+post {
+  url: {{baseUrl}}/api/nipost-admin/postal-staff/applications/:id/approve
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "review_notes": "Approved"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/nipost-admin/postal-staff/applications/:id/approve`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost-admin.ts` · route: `/postal-staff/applications/:id/approve`.
+
+Auth: admin bearer ({{adminToken}}).
+}

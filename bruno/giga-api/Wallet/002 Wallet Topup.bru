@@ -1,0 +1,30 @@
+meta {
+  name: Wallet Topup
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/wallet/topup
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "amount": 1000,
+    "paymentProvider": "mock"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`Topup-wallet`. Auth fixed (redeploy). KNOWN E1b: RPC `topup_wallet_atomic` missing → currently 400.
+}

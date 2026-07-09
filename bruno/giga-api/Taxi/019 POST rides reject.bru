@@ -1,0 +1,33 @@
+meta {
+  name: POST rides reject
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{baseUrl}}/api/v1/rides/:rideId/reject
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "reason": "Does not meet criteria"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/rides/:rideId/reject`
+
+Service: **taxi-realtime-service** · file: `taxi-realtime-service/src/routes/rides.ts` · route: `/:rideId/reject`.
+
+Auth: bearer ({{token}}).
+}

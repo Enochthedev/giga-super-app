@@ -1,0 +1,33 @@
+meta {
+  name: Call Initiate
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/calls/initiate
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "conversationId": "REPLACE_CONV",
+    "callType": "audio",
+    "participantIds": [
+      "{{customer2Id}}"
+    ]
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`initiate-call` edge fn.
+}

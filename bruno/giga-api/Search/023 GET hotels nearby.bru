@@ -1,0 +1,27 @@
+meta {
+  name: GET hotels nearby
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/hotels/nearby
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/hotels/nearby`
+
+Service: **search-service** · file: `search-service/src/routes/hotels.ts` · route: `/nearby`.
+
+Auth: bearer ({{token}}).
+}

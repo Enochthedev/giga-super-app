@@ -1,0 +1,27 @@
+meta {
+  name: GET ecommerce bestsellers
+  type: http
+  seq: 48
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/bestsellers
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/bestsellers`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-analytics.ts` · route: `/bestsellers`.
+
+Auth: admin bearer ({{adminToken}}).
+}

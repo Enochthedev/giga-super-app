@@ -1,0 +1,27 @@
+meta {
+  name: GET analytics delivery-rates
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/analytics/delivery-rates
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/analytics/delivery-rates`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/analytics.ts` · route: `/delivery-rates`.
+
+Auth: bearer ({{token}}).
+}

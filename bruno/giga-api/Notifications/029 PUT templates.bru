@@ -1,0 +1,27 @@
+meta {
+  name: PUT templates
+  type: http
+  seq: 29
+}
+
+put {
+  url: {{baseUrl}}/api/v1/templates/:id
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/v1/templates/:id`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/templates.ts` · route: `/:id`.
+
+Auth: bearer ({{token}}).
+}

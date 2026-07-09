@@ -1,0 +1,23 @@
+meta {
+  name: Get Profile _alt_
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/users/profile
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+Alias of Get Profile.
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET admin categories
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/admin/categories
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/categories`
+
+Service: **admin-service** · file: `admin-service/src/routes/admin-panel.ts` · route: `/categories`.
+
+Auth: admin bearer ({{adminToken}}).
+}

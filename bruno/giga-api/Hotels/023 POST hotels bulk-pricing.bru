@@ -1,0 +1,27 @@
+meta {
+  name: POST hotels bulk-pricing
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/api/v1/management/hotels/:hotelId/bulk-pricing
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/management/hotels/:hotelId/bulk-pricing`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/hotels/:hotelId/bulk-pricing`.
+
+Auth: bearer ({{token}}).
+}

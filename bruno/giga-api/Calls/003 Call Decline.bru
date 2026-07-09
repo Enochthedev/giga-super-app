@@ -1,0 +1,33 @@
+meta {
+  name: Call Decline
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/calls/decline
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "conversationId": "REPLACE_CONV",
+    "callType": "audio",
+    "participantIds": [
+      "{{customer2Id}}"
+    ]
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`decline-call` edge fn.
+}

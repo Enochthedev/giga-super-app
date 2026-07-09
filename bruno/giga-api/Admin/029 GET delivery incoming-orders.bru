@@ -1,0 +1,27 @@
+meta {
+  name: GET delivery incoming-orders
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/api/delivery/incoming-orders
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/delivery/incoming-orders`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/delivery/incoming-orders`.
+
+Auth: admin bearer ({{adminToken}}).
+}

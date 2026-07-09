@@ -1,0 +1,27 @@
+meta {
+  name: GET admin drivers
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/admin/drivers
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/admin/drivers`
+
+Service: **search-service** · file: `search-service/src/routes/admin.ts` · route: `/drivers`.
+
+Auth: bearer ({{token}}).
+}

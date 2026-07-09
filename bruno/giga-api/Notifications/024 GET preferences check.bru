@@ -1,0 +1,27 @@
+meta {
+  name: GET preferences check
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/api/v1/preferences/check/:type
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/preferences/check/:type`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/preferences.ts` · route: `/check/:type`.
+
+Auth: bearer ({{token}}).
+}

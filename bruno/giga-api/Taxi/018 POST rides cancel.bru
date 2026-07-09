@@ -1,0 +1,33 @@
+meta {
+  name: POST rides cancel
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/api/v1/rides/:rideId/cancel
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "reason": "changed plans"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/rides/:rideId/cancel`
+
+Service: **taxi-realtime-service** · file: `taxi-realtime-service/src/routes/rides.ts` · route: `/:rideId/cancel`.
+
+Auth: bearer ({{token}}).
+}

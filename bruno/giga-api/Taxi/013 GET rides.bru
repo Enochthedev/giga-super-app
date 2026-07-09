@@ -1,0 +1,27 @@
+meta {
+  name: GET rides
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/api/v1/rides/:rideId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/rides/:rideId`
+
+Service: **taxi-realtime-service** · file: `taxi-realtime-service/src/routes/rides.ts` · route: `/:rideId`.
+
+Auth: bearer ({{token}}).
+}

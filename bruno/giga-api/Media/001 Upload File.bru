@@ -1,0 +1,30 @@
+meta {
+  name: Upload File
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/media/upload
+  body: multipartForm
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:multipart-form {
+  file: @file(/absolute/path/to/image.png)
+  entityType: post
+  entityId: 00000000-0000-0000-0000-000000000000
+  accessLevel: public
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`upload-file` edge fn. Replace the `file` path with a real local file. Fields: file, entityType, entityId, accessLevel(public|private). Returns a URL + a file_metadata row. Verified 200 in QA.
+}

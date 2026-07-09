@@ -1,0 +1,33 @@
+meta {
+  name: PUT orders status
+  type: http
+  seq: 55
+}
+
+put {
+  url: {{baseUrl}}/api/managers/ecommerce/orders/:id/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "active"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/managers/ecommerce/orders/:id/status`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-orders.ts` · route: `/:id/status`.
+
+Auth: admin bearer ({{adminToken}}).
+}

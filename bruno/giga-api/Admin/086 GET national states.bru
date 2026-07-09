@@ -1,0 +1,27 @@
+meta {
+  name: GET national states
+  type: http
+  seq: 86
+}
+
+get {
+  url: {{baseUrl}}/api/admin/national/states
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/national/states`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost.ts` · route: `/national/states`.
+
+Auth: admin bearer ({{adminToken}}).
+}

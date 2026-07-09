@@ -1,0 +1,27 @@
+meta {
+  name: GET managers chart-data
+  type: http
+  seq: 40
+}
+
+get {
+  url: {{baseUrl}}/api/managers/chart-data
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/chart-data`
+
+Service: **admin-service** · file: `admin-service/src/routes/managers.ts` · route: `/chart-data`.
+
+Auth: admin bearer ({{adminToken}}).
+}

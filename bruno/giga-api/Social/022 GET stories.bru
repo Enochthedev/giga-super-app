@@ -1,0 +1,27 @@
+meta {
+  name: GET stories
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{baseUrl}}/api/v1/stories
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/stories`
+
+Service: **social-service** · file: `social-service/src/routes/stories.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

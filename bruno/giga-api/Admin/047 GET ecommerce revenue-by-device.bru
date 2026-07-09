@@ -1,0 +1,27 @@
+meta {
+  name: GET ecommerce revenue-by-device
+  type: http
+  seq: 47
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/revenue-by-device
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/revenue-by-device`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-analytics.ts` · route: `/revenue-by-device`.
+
+Auth: admin bearer ({{adminToken}}).
+}

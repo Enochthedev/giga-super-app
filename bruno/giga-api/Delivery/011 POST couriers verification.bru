@@ -1,0 +1,27 @@
+meta {
+  name: POST couriers verification
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/api/v1/couriers/:courierId/verification
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/couriers/:courierId/verification`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/couriers.ts` · route: `/couriers/:courierId/verification`.
+
+Auth: bearer ({{token}}).
+}

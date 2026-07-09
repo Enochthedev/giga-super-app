@@ -1,0 +1,33 @@
+meta {
+  name: PUT packages update-status
+  type: http
+  seq: 34
+}
+
+put {
+  url: {{baseUrl}}/api/delivery/packages/:packageId/update-status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "active"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/delivery/packages/:packageId/update-status`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/delivery/packages/:packageId/update-status`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET packages recent
+  type: http
+  seq: 32
+}
+
+get {
+  url: {{baseUrl}}/api/delivery/packages/recent
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/delivery/packages/recent`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/delivery/packages/recent`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,23 @@
+meta {
+  name: POST apply postal-staff
+  type: http
+  seq: 95
+}
+
+post {
+  url: {{baseUrl}}/api/public/apply/postal-staff
+  body: json
+  auth: none
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/public/apply/postal-staff`
+
+Service: **admin-service** · file: `admin-service/src/routes/public-applications.ts` · route: `/apply/postal-staff`.
+
+Auth: none (public).
+}

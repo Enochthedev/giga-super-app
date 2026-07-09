@@ -1,0 +1,23 @@
+meta {
+  name: Advertiser Profile
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/v1/advertiser/profile
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`get-advertiser-profile`.
+}

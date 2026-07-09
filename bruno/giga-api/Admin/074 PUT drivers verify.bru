@@ -1,0 +1,27 @@
+meta {
+  name: PUT drivers verify
+  type: http
+  seq: 74
+}
+
+put {
+  url: {{baseUrl}}/api/managers/taxi/drivers/:id/verify
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/managers/taxi/drivers/:id/verify`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/taxi.ts` · route: `/drivers/:id/verify`.
+
+Auth: admin bearer ({{adminToken}}).
+}

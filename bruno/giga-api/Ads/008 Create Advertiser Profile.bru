@@ -1,0 +1,30 @@
+meta {
+  name: Create Advertiser Profile
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/advertiser/profile/create
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "business_name": "QA Ads",
+    "contact_email": "ads@example.com"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`create-advertiser-profile`.
+}

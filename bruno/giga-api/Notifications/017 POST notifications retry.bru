@@ -1,0 +1,27 @@
+meta {
+  name: POST notifications retry
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/api/v1/notifications/retry/:id
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/notifications/retry/:id`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/notifications.ts` · route: `/retry/:id`.
+
+Auth: bearer ({{token}}).
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Search Users
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/v1/users/search?q=qa
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`search-users` edge fn.
+}

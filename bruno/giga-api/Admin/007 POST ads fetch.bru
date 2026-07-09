@@ -1,0 +1,27 @@
+meta {
+  name: POST ads fetch
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/ads/fetch
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/ads/fetch`
+
+Service: **admin-service** · file: `admin-service/src/routes/advertisements.ts` · route: `/fetch`.
+
+Auth: admin bearer ({{adminToken}}).
+}

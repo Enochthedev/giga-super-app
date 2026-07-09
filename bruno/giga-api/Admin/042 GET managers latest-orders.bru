@@ -1,0 +1,27 @@
+meta {
+  name: GET managers latest-orders
+  type: http
+  seq: 42
+}
+
+get {
+  url: {{baseUrl}}/api/managers/latest-orders
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/latest-orders`
+
+Service: **admin-service** · file: `admin-service/src/routes/managers.ts` · route: `/latest-orders`.
+
+Auth: admin bearer ({{adminToken}}).
+}

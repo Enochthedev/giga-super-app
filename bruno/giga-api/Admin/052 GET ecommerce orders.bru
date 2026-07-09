@@ -1,0 +1,27 @@
+meta {
+  name: GET ecommerce orders
+  type: http
+  seq: 52
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/orders
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/orders`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-orders.ts` · route: `/`.
+
+Auth: admin bearer ({{adminToken}}).
+}

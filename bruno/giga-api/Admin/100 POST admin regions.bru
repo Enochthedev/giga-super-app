@@ -1,0 +1,27 @@
+meta {
+  name: POST admin regions
+  type: http
+  seq: 100
+}
+
+post {
+  url: {{baseUrl}}/api/admin/regions
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/admin/regions`
+
+Service: **admin-service** · file: `admin-service/src/routes/regions.ts` · route: `/`.
+
+Auth: admin bearer ({{adminToken}}).
+}

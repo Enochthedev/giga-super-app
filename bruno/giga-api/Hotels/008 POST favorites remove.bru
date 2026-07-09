@@ -1,0 +1,27 @@
+meta {
+  name: POST favorites remove
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/favorites/remove
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/favorites/remove`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/favorites.ts` · route: `/remove`.
+
+Auth: bearer ({{token}}).
+}

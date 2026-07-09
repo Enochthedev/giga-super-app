@@ -1,0 +1,30 @@
+meta {
+  name: Update Profile
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/api/v1/users/profile/update
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "bio": "Hello",
+    "first_name": "QA"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`update-user-profile`. JSON only. Numbers for body_weight/height; arrays for areas_of_interest; date_of_birth=YYYY-MM-DD.
+}

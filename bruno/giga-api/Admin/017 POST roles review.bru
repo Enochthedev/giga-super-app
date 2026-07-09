@@ -1,0 +1,27 @@
+meta {
+  name: POST roles review
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/api/roles/review
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/roles/review`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/roles/review`.
+
+Auth: admin bearer ({{adminToken}}).
+}

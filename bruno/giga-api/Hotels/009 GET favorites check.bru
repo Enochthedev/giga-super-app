@@ -1,0 +1,27 @@
+meta {
+  name: GET favorites check
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/api/v1/favorites/check/:hotelId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/favorites/check/:hotelId`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/favorites.ts` · route: `/check/:hotelId`.
+
+Auth: bearer ({{token}}).
+}

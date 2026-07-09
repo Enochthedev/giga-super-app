@@ -1,0 +1,33 @@
+meta {
+  name: PUT advertisements status
+  type: http
+  seq: 70
+}
+
+put {
+  url: {{baseUrl}}/api/managers/media/advertisements/:id/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "active"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/managers/media/advertisements/:id/status`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/media.ts` · route: `/advertisements/:id/status`.
+
+Auth: admin bearer ({{adminToken}}).
+}

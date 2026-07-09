@@ -1,0 +1,27 @@
+meta {
+  name: GET taxi dashboard-stats
+  type: http
+  seq: 76
+}
+
+get {
+  url: {{baseUrl}}/api/managers/taxi/dashboard-stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/taxi/dashboard-stats`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/taxi.ts` · route: `/dashboard-stats`.
+
+Auth: admin bearer ({{adminToken}}).
+}

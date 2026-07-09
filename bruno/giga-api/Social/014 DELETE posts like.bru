@@ -1,0 +1,27 @@
+meta {
+  name: DELETE posts like
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/posts/{{postId}}/like
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`DELETE /api/v1/posts/{{postId}}/like`
+
+Service: **social-service** · file: `social-service/src/routes/likes.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET assignments
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/assignments/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/assignments/:id`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/assignments.ts` · route: `/:id`.
+
+Auth: bearer ({{token}}).
+}

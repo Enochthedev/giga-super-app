@@ -1,0 +1,29 @@
+meta {
+  name: Checkout Cart
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/cart/checkout
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "payment_method": "wallet"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`checkout-cart`. Fixed E41 (payment_type enum). Requires a non-empty cart.
+}

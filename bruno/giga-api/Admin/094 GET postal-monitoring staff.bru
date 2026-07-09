@@ -1,0 +1,27 @@
+meta {
+  name: GET postal-monitoring staff
+  type: http
+  seq: 94
+}
+
+get {
+  url: {{baseUrl}}/api/postal-monitoring/staff
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/postal-monitoring/staff`
+
+Service: **admin-service** · file: `admin-service/src/routes/postal-monitoring.ts` · route: `/staff`.
+
+Auth: admin bearer ({{adminToken}}).
+}

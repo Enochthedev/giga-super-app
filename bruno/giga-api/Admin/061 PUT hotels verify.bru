@@ -1,0 +1,27 @@
+meta {
+  name: PUT hotels verify
+  type: http
+  seq: 61
+}
+
+put {
+  url: {{baseUrl}}/api/managers/hotel/hotels/:id/verify
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/managers/hotel/hotels/:id/verify`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/hotel.ts` · route: `/hotels/:id/verify`.
+
+Auth: admin bearer ({{adminToken}}).
+}

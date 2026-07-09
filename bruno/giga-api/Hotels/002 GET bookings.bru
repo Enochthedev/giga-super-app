@@ -1,0 +1,27 @@
+meta {
+  name: GET bookings
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/bookings/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/bookings/:id`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/bookings.ts` · route: `/:id`.
+
+Auth: bearer ({{token}}).
+}

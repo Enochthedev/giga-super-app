@@ -1,0 +1,27 @@
+meta {
+  name: GET drivers nearby
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/drivers/nearby
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/drivers/nearby`
+
+Service: **search-service** · file: `search-service/src/routes/drivers.ts` · route: `/nearby`.
+
+Auth: bearer ({{token}}).
+}

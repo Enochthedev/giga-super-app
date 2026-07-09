@@ -1,0 +1,27 @@
+meta {
+  name: GET posts
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/v1/posts
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/posts`
+
+Service: **social-service** · file: `social-service/src/routes/posts.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET national dashboard
+  type: http
+  seq: 84
+}
+
+get {
+  url: {{baseUrl}}/api/admin/national/dashboard
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/national/dashboard`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost.ts` · route: `/national/dashboard`.
+
+Auth: admin bearer ({{adminToken}}).
+}

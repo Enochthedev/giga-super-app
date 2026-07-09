@@ -1,0 +1,27 @@
+meta {
+  name: GET like users
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/v1/posts/{{postId}}/like/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/posts/{{postId}}/like/users`
+
+Service: **social-service** · file: `social-service/src/routes/likes.ts` · route: `/users`.
+
+Auth: bearer ({{token}}).
+}

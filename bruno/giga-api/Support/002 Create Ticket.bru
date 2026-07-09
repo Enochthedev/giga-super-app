@@ -1,0 +1,31 @@
+meta {
+  name: Create Ticket
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/support/tickets/create
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "subject": "Help",
+    "description": "Something broke",
+    "category": "general"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`create-support-ticket`. (Was undeployed E4 — redeploy if 404.)
+}

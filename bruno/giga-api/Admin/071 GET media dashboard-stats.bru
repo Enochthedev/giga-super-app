@@ -1,0 +1,27 @@
+meta {
+  name: GET media dashboard-stats
+  type: http
+  seq: 71
+}
+
+get {
+  url: {{baseUrl}}/api/managers/media/dashboard-stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/media/dashboard-stats`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/media.ts` · route: `/dashboard-stats`.
+
+Auth: admin bearer ({{adminToken}}).
+}

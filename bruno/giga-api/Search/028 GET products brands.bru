@@ -1,0 +1,27 @@
+meta {
+  name: GET products brands
+  type: http
+  seq: 28
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/products/brands
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/products/brands`
+
+Service: **search-service** · file: `search-service/src/routes/products.ts` · route: `/brands`.
+
+Auth: bearer ({{token}}).
+}

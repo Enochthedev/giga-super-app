@@ -1,0 +1,32 @@
+meta {
+  name: Initialize Payment
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/payments/initialize
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "moduleType": "hotel_booking",
+    "referenceId": "{{bookingId}}",
+    "amount": 70000,
+    "paymentMethod": "card"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+Node payment-queue-service (mock). moduleType ∈ {hotel_booking, ecommerce_order, taxi_ride}. Currency resolved server-side by region.
+}

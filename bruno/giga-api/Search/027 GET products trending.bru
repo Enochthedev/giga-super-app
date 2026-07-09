@@ -1,0 +1,27 @@
+meta {
+  name: GET products trending
+  type: http
+  seq: 27
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/products/trending
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/products/trending`
+
+Service: **search-service** · file: `search-service/src/routes/products.ts` · route: `/trending`.
+
+Auth: bearer ({{token}}).
+}

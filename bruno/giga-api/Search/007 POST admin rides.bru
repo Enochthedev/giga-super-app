@@ -1,0 +1,38 @@
+meta {
+  name: POST admin rides
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/search/admin/rides
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "pickup_lat": 6.5244,
+    "pickup_lng": 3.3792,
+    "pickup_address": "Ikeja",
+    "dropoff_lat": 6.4281,
+    "dropoff_lng": 3.4219,
+    "dropoff_address": "VI"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/search/admin/rides`
+
+Service: **search-service** · file: `search-service/src/routes/admin.ts` · route: `/rides`.
+
+Auth: bearer ({{token}}).
+}
