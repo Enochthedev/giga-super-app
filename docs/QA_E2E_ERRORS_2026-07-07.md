@@ -317,6 +317,12 @@ Driver reads all work with a profile present: `drivers/profile`, `stats`, `earni
 - Not a DB trigger (`rides` only has a benign `updated_at` trigger). Hang is in the handler before its UPDATE commits —
   prime suspects: `getDistanceAndDuration` (Google Maps, no key/timeout) or the passenger-notification call blocking.
   **Fix**: add timeouts / make the maps + notification calls non-blocking; check taxi-realtime Railway logs to pin it.
+  **Update (2026-07-09):** `getDistanceAndDuration` is **ruled out** — it has a 5s timeout + a no-key fallback, and
+  logs show it correctly falling back on a Maps 403. Logs during the hang show `BadRequestError: request aborted`
+  (client disconnect). The ride never leaves `requested`, so the hang is before the UPDATE commits but after the two
+  cheap lookups. Estimate (same service, POST+body) works, so not general body-forwarding. Prime remaining suspects:
+  a **row-lock/contention** cascade (a prior hung accept holding the row) or a service-level stall. **Needs a fresh
+  log capture taken during a single clean accept attempt** to pin — best done interactively.
 
 ### E44. No product-create endpoint — vendors can't add products
 - `POST /api/v1/products` → 404 `Requested function was not found` (no create-product edge fn / route). With no way to
