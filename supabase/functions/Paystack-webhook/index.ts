@@ -254,8 +254,8 @@ async function handleSuccessfulPayment(supabase, data) {
       await supabase
         .from('rides')
         .update({
+          // E42: 'confirmed' is not a valid rides.status enum value; only mark payment paid.
           payment_status: 'paid',
-          status: 'confirmed',
           paid_at: new Date().toISOString(),
         })
         .eq('id', payment.reference_id);

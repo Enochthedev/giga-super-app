@@ -364,7 +364,7 @@ Deno.serve(async req => {
       const { data: payment, error: paymentError } = await sb
         .from('payments')
         .insert({
-          payment_type: 'ecommerce',
+          payment_type: 'ecommerce_order',
           reference_id: order.id,
           user_id: userId,
           amount: amountToPay,

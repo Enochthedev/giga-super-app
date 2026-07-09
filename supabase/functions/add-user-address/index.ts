@@ -45,6 +45,19 @@ serve(async req => {
         }
       );
     }
+    // E9: GET lists the user's addresses (this fn previously crashed on GET's empty body)
+    if (req.method === 'GET') {
+      const { data, error } = await supabaseClient
+        .from('user_addresses')
+        .select('*')
+        .eq('user_id', user.id);
+      if (error) throw error;
+      return new Response(JSON.stringify({ success: true, data: data ?? [] }), {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
     // Get address data from request
     const body = await req.json();
 

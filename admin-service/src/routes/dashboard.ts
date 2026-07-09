@@ -57,7 +57,7 @@ async function getRevenueForPeriod(startDate: Date, endDate: Date): Promise<Cate
       .lt('created_at', endStr)
       .eq('status', 'completed'),
     supabase
-      .from('advertisements')
+      .from('ad_campaigns')
       .select('budget')
       .gte('created_at', startStr)
       .lt('created_at', endStr)

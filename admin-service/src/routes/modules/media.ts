@@ -473,7 +473,7 @@ router.put(
       }
 
       const { data: ad, error } = await supabase
-        .from('advertisements')
+        .from('ad_campaigns')
         .update({ status, updated_at: new Date().toISOString() })
         .eq('id', id)
         .is('deleted_at', null)
@@ -592,7 +592,7 @@ router.get(
 
       // Get ads stats
       const { data: ads } = await supabase
-        .from('advertisements')
+        .from('ad_campaigns')
         .select('id, budget, impressions, clicks, status')
         .gte('created_at', startDate.toISOString())
         .lte('created_at', endDate.toISOString())

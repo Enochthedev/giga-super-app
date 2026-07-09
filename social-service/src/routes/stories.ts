@@ -284,13 +284,13 @@ router.get('/:storyId', async (req: Request, res: Response) => {
         .from('story_views')
         .select('id')
         .eq('story_id', storyId)
-        .eq('viewer_id', req.user.id)
+        .eq('user_id', req.user.id)
         .single();
 
       if (!existingView) {
         await supabase.from('story_views').insert({
           story_id: storyId,
-          viewer_id: req.user.id,
+          user_id: req.user.id,
         });
 
         // Increment view count
@@ -437,7 +437,7 @@ router.get('/:storyId/viewers', async (req: Request, res: Response) => {
       .select(
         `
         viewed_at,
-        viewer_id
+        user_id
       `
       )
       .eq('story_id', storyId)
@@ -446,7 +446,7 @@ router.get('/:storyId/viewers', async (req: Request, res: Response) => {
     if (error) throw error;
 
     // Fetch user profiles separately (FK points to auth.users, not user_profiles)
-    const viewerIds = [...new Set(views?.map(v => v.viewer_id).filter(Boolean) || [])];
+    const viewerIds = [...new Set(views?.map(v => v.user_id).filter(Boolean) || [])];
     let userProfiles: Record<string, any> = {};
 
     if (viewerIds.length > 0) {
@@ -464,9 +464,9 @@ router.get('/:storyId/viewers', async (req: Request, res: Response) => {
     }
 
     const viewers = views?.map((v: any) => {
-      const profile = userProfiles[v.viewer_id];
+      const profile = userProfiles[v.user_id];
       return {
-        id: profile?.id || v.viewer_id,
+        id: profile?.id || v.user_id,
         first_name: profile?.first_name,
         last_name: profile?.last_name,
         avatar_url: profile?.avatar_url,

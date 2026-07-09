@@ -369,7 +369,8 @@ router.post(
         .eq('id', adId)
         .eq('status', 'pending_approval')
         .select()
-        .single();
+        // E17: maybeSingle so a non-matching id returns null (404) instead of a coercion 500
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -457,7 +458,8 @@ router.post(
         .eq('id', adId)
         .eq('status', 'pending_approval')
         .select()
-        .single();
+        // E17: maybeSingle so a non-matching id returns null (404) instead of a coercion 500
+        .maybeSingle();
 
       if (error) throw error;
 

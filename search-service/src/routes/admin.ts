@@ -635,7 +635,7 @@ router.post(
       let query = db.supabase
         .from('ecommerce_orders')
         .select(
-          'id, order_number, user_id, status, payment_status, payment_method, subtotal, shipping_fee, tax_amount, discount_amount, total_amount, shipping_address, notes, created_at, updated_at',
+          'id, order_number, user_id, status, payment_status, payment_method, subtotal, shipping_fee:shipping_cost, tax_amount, discount_amount, total_amount, shipping_address_id, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
@@ -1306,7 +1306,7 @@ router.get(
       let query = db.supabase
         .from('ecommerce_orders')
         .select(
-          'id, order_number, user_id, status, payment_status, payment_method, subtotal, shipping_fee, tax_amount, discount_amount, total_amount, shipping_address, notes, created_at, updated_at',
+          'id, order_number, user_id, status, payment_status, payment_method, subtotal, shipping_fee:shipping_cost, tax_amount, discount_amount, total_amount, shipping_address_id, created_at, updated_at',
           { count: 'exact' }
         )
         .is('deleted_at', null);
