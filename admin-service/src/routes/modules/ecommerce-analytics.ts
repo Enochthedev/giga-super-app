@@ -358,7 +358,7 @@ router.get(
 
       const { data: orders } = await supabase
         .from('ecommerce_orders')
-        .select('total_amount, device_type')
+        .select('total_amount')
         .gte('created_at', startDate.toISOString())
         .is('deleted_at', null)
         .neq('status', 'cancelled');

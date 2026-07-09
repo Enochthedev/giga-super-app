@@ -160,7 +160,8 @@ router.get('/search', async (req, res) => {
  * GET /api/v1/hotels/:id
  * Get hotel details
  */
-router.get('/:id', async (req, res) => {
+// E10: constrain :id to a UUID so literal routes (e.g. /recommended) don't match here
+router.get('/:id([0-9a-fA-F-]{36})', async (req, res) => {
   try {
     const { id } = req.params;
     const { lat, lng } = req.query;

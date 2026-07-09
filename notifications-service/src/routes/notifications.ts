@@ -715,10 +715,10 @@ router.post('/retry/:id', requireAdmin, async (req: AuthenticatedRequest, res: R
     await supabase
       .from('notification_logs')
       .update({
+        // E27: notification_logs has no updated_at column
         status: 'queued',
         error_message: null,
         metadata: retryJobData.metadata,
-        updated_at: new Date().toISOString(),
       })
       .eq('id', id);
 

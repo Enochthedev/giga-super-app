@@ -207,6 +207,10 @@ export const routingMiddleware = (
             // For Railway services, strip the service-specific prefix
             // Social service: /api/v1/social/posts -> /api/v1/posts
             if (path.startsWith('/api/v1/social/')) {
+              // E5b: legacy "friends" alias -> the real connections router
+              if (path === '/api/v1/social/friends') {
+                return '/api/v1/connections';
+              }
               return path.replace('/api/v1/social', '/api/v1');
             }
             // Admin service: legacy edge-fn paths -> their admin-service equivalents

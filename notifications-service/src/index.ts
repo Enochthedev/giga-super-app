@@ -399,7 +399,8 @@ async function generateUnsubscribeToken(
 async function updateNotificationHistory(id: string, updates: any): Promise<void> {
   await supabase
     .from('notification_logs')
-    .update({ ...updates, updated_at: new Date().toISOString() })
+    // E27: notification_logs has no updated_at column
+    .update({ ...updates })
     .eq('id', id);
 }
 

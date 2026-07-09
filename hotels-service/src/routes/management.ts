@@ -940,7 +940,7 @@ router.post('/reviews/:id/respond', async (req: AuthenticatedRequest, res) => {
 
     const { data, error } = await databaseService.supabase
       .from('hotel_reviews')
-      .update({ response_from_host: response, response_date: new Date().toISOString() })
+      .update({ response_from_host: response, responded_at: new Date().toISOString() })
       .eq('id', id)
       .select()
       .single();

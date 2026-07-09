@@ -133,6 +133,7 @@ class ServiceRegistry {
           '/api/v1/feed*',
           '/api/v1/stor*',
           '/api/v1/share*',
+          '/api/v1/connection*', // E6: connections router was unreachable (SERVICE_NOT_FOUND)
         ],
       });
     }
@@ -284,6 +285,7 @@ class ServiceRegistry {
           // Other routers mounted by notifications-service (previously unclaimed)
           '/api/v1/preferences*',
           '/api/v1/templates*',
+          '/api/v1/analytics*', // E20: notification analytics router was unreachable (SERVICE_NOT_FOUND)
         ],
       });
     }

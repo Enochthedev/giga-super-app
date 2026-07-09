@@ -791,7 +791,7 @@ router.get(
       // Get products
       const { data: products } = await supabase
         .from('ecommerce_products')
-        .select('id, name, price, stock_quantity, is_active')
+        .select('id, name, price:base_price, stock_quantity, is_active')
         .eq('vendor_id', id)
         .eq('is_active', true)
         .limit(20);
@@ -2544,6 +2544,24 @@ router.post(
     try {
       const { id } = req.params;
       const approvedBy = req.user?.id || 'system';
+
+      // E16: the approval trigger RAISEs if user_id is null (staff hasn't created their
+      // account yet). Guard here so we return a clean 400 instead of a raw 500.
+      const { data: existing } = await supabase
+        .from('postal_staff')
+        .select('user_id')
+        .eq('id', id)
+        .single();
+      if (!existing) {
+        return res.status(404).json({ success: false, error: 'Staff not found' });
+      }
+      if (!existing.user_id) {
+        return res.status(400).json({
+          success: false,
+          error: 'This staff member has not created their account yet',
+          code: 'MISSING_USER_ACCOUNT',
+        });
+      }
 
       const { data: staff, error } = await supabase
         .from('postal_staff')
