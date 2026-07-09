@@ -1,0 +1,19 @@
+meta {
+  name: Postal Staff
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/postal/staff
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+docs {
+List postal staff. Deactivate = DELETE /api/postal/staff/:id (E15 cascade trigger revokes roles).
+}

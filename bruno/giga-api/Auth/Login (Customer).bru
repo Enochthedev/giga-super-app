@@ -1,0 +1,46 @@
+meta {
+  name: Login (Customer)
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{customerEmail}}",
+    "password": "{{password}}"
+  }
+}
+
+script:post-response {
+  if (res.body && res.body.access_token) {
+    bru.setEnvVar("token", res.body.access_token);
+  }
+}
+
+tests {
+  test("200 + token", function(){
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property("access_token");
+  });
+}
+
+docs {
+Logs in the QA customer and stores `access_token` into the `{{token}}` env var used by every other request.
+
+**Sample response 200**
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiI...",
+  "token_type": "bearer",
+  "expires_in": 3600,
+  "refresh_token": "…",
+  "user": { "id": "92383fcd-8934-4167-b62d-abb425d2693e", "email": "qa.customer1@gigaqa.test" }
+}
+```
+}

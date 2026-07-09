@@ -1,0 +1,28 @@
+meta {
+  name: Create Story
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/v1/stories
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "media_url": "https://example.com/img.jpg",
+    "media_type": "image",
+    "caption": "hi",
+    "duration_seconds": 5
+  }
+}
+
+docs {
+Creates a story. media_type: image|video.
+}

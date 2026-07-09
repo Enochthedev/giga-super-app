@@ -1,0 +1,26 @@
+meta {
+  name: Update Preferences
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/api/v1/preferences
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "email_enabled": true,
+    "push_enabled": true
+  }
+}
+
+docs {
+Update notification channel preferences.
+}

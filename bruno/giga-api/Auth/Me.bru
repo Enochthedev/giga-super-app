@@ -1,0 +1,23 @@
+meta {
+  name: Me
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/auth/me
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("200", function(){ expect(res.status).to.equal(200); });
+}
+
+docs {
+Returns the current user from the bearer token.
+}

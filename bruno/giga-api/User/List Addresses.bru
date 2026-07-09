@@ -1,0 +1,19 @@
+meta {
+  name: List Addresses
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/user/addresses
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+Lists the user's saved addresses. (Fixed E9 — GET used to 500 on empty body.)
+}

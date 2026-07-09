@@ -1,0 +1,32 @@
+meta {
+  name: Search Hotels
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/hotels/search
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+params:query {
+  city: Lagos
+  limit: 5
+}
+
+script:post-response {
+  try { var h=(res.body.data||res.body.hotels||[]); if(h[0]) bru.setEnvVar("hotelId", h[0].id); } catch(e){}
+}
+
+tests {
+  test("200", function(){ expect(res.status).to.equal(200); });
+}
+
+docs {
+Search hotels; stores the first hotelId. (List route is /hotels/search, not /hotels.)
+}

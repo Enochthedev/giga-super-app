@@ -1,0 +1,19 @@
+meta {
+  name: Recommended
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/hotels/recommended
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+Recommended hotels. (Fixed E10 — /recommended used to be captured by /:id.)
+}

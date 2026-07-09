@@ -1,0 +1,28 @@
+meta {
+  name: Search Products
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/products
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+params:query {
+  q: phone
+}
+
+tests {
+  test("200", function(){ expect(res.status).to.equal(200); });
+}
+
+docs {
+Product search. Response: `data.results[]`, `data.total_results`.
+NOTE: pagination param `page` currently 400s (E22, pending fix) — omit it for now.
+}

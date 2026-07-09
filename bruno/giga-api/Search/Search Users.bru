@@ -1,0 +1,23 @@
+meta {
+  name: Search Users
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/users/search
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+params:query {
+  q: qa
+}
+
+docs {
+User search (search-users edge fn).
+}

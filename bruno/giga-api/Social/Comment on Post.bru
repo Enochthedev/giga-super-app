@@ -1,0 +1,25 @@
+meta {
+  name: Comment on Post
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/posts/{{postId}}/comments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "content": "Nice post!"
+  }
+}
+
+docs {
+Adds a comment. NOTE: post `comment_count` denormaliser is a known bug (E12) — count may stay 0.
+}
