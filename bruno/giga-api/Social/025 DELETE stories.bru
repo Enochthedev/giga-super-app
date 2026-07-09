@@ -1,0 +1,27 @@
+meta {
+  name: DELETE stories
+  type: http
+  seq: 25
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/stories/:storyId
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`DELETE /api/v1/stories/:storyId`
+
+Service: **social-service** · file: `social-service/src/routes/stories.ts` · route: `/:storyId`.
+
+Auth: bearer ({{token}}).
+}

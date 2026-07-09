@@ -1,0 +1,27 @@
+meta {
+  name: POST assignments find-couriers
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/assignments/find-couriers
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/assignments/find-couriers`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/assignments.ts` · route: `/find-couriers`.
+
+Auth: bearer ({{token}}).
+}

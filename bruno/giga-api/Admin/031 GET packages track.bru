@@ -1,0 +1,27 @@
+meta {
+  name: GET packages track
+  type: http
+  seq: 31
+}
+
+get {
+  url: {{baseUrl}}/api/delivery/packages/track/:trackingId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/delivery/packages/track/:trackingId`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/delivery/packages/track/:trackingId`.
+
+Auth: admin bearer ({{adminToken}}).
+}

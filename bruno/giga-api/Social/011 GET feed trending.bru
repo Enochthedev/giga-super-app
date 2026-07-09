@@ -1,0 +1,27 @@
+meta {
+  name: GET feed trending
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/feed/trending
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/feed/trending`
+
+Service: **social-service** · file: `social-service/src/routes/feed.ts` · route: `/trending`.
+
+Auth: bearer ({{token}}).
+}

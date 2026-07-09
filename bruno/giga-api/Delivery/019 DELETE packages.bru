@@ -1,0 +1,27 @@
+meta {
+  name: DELETE packages
+  type: http
+  seq: 19
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/packages/:packageId
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`DELETE /api/v1/packages/:packageId`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/packages.ts` · route: `/:packageId`.
+
+Auth: bearer ({{token}}).
+}

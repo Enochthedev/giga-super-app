@@ -1,0 +1,27 @@
+meta {
+  name: POST preferences resubscribe
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/api/v1/preferences/resubscribe
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/preferences/resubscribe`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/preferences.ts` · route: `/resubscribe`.
+
+Auth: bearer ({{token}}).
+}

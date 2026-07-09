@@ -1,0 +1,27 @@
+meta {
+  name: GET search suggestions
+  type: http
+  seq: 32
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/suggestions
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/suggestions`
+
+Service: **search-service** · file: `search-service/src/routes/search.ts` · route: `/suggestions`.
+
+Auth: bearer ({{token}}).
+}

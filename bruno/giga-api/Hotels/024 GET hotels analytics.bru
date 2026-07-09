@@ -1,0 +1,27 @@
+meta {
+  name: GET hotels analytics
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/api/v1/management/hotels/:hotelId/analytics
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/management/hotels/:hotelId/analytics`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/hotels/:hotelId/analytics`.
+
+Auth: bearer ({{token}}).
+}

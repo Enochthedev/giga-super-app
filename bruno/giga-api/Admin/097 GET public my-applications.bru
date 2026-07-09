@@ -1,0 +1,23 @@
+meta {
+  name: GET public my-applications
+  type: http
+  seq: 97
+}
+
+get {
+  url: {{baseUrl}}/api/public/my-applications
+  body: none
+  auth: none
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/public/my-applications`
+
+Service: **admin-service** · file: `admin-service/src/routes/public-applications.ts` · route: `/my-applications`.
+
+Auth: none (public).
+}

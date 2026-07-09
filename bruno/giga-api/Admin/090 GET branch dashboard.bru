@@ -1,0 +1,27 @@
+meta {
+  name: GET branch dashboard
+  type: http
+  seq: 90
+}
+
+get {
+  url: {{baseUrl}}/api/admin/branch/:branchId/dashboard
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/branch/:branchId/dashboard`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost.ts` · route: `/branch/:branchId/dashboard`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Apply for Role
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/api/v1/roles/apply
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "role": "DRIVER"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`apply-for-role`.
+}

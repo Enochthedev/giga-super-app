@@ -1,0 +1,27 @@
+meta {
+  name: GET pending-entries
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/api/pending-entries
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/pending-entries`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/pending-entries`.
+
+Auth: admin bearer ({{adminToken}}).
+}

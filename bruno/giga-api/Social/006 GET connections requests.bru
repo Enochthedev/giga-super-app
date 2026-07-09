@@ -1,0 +1,27 @@
+meta {
+  name: GET connections requests
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/connections/requests
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/connections/requests`
+
+Service: **social-service** · file: `social-service/src/routes/connections.ts` · route: `/requests`.
+
+Auth: bearer ({{token}}).
+}

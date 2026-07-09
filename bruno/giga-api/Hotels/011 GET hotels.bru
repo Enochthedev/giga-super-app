@@ -1,0 +1,27 @@
+meta {
+  name: GET hotels
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/hotels/:id([0-9a-fA-F-]{36})
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/hotels/:id([0-9a-fA-F-]{36})`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/hotels.ts` · route: `/:id([0-9a-fA-F-]{36})`.
+
+Auth: bearer ({{token}}).
+}

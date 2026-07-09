@@ -1,0 +1,36 @@
+meta {
+  name: POST notifications send
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/api/v1/notifications/send
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "type": "push",
+    "recipient": "device-token",
+    "title": "Hi",
+    "body": "Test"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/notifications/send`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/notifications.ts` · route: `/send`.
+
+Auth: bearer ({{token}}).
+}

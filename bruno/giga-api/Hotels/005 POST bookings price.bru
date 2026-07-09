@@ -1,0 +1,38 @@
+meta {
+  name: POST bookings price
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings/price
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "hotelId": "{{hotelId}}",
+    "roomTypeId": "{{roomTypeId}}",
+    "checkInDate": "2026-09-01",
+    "checkOutDate": "2026-09-03",
+    "numberOfRooms": 1,
+    "guestCount": 2
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/bookings/price`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/bookings.ts` · route: `/price`.
+
+Auth: bearer ({{token}}).
+}

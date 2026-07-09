@@ -1,0 +1,27 @@
+meta {
+  name: GET search filters
+  type: http
+  seq: 34
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/filters
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/filters`
+
+Service: **search-service** · file: `search-service/src/routes/search.ts` · route: `/filters`.
+
+Auth: bearer ({{token}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET search drivers
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/drivers
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/drivers`
+
+Service: **search-service** · file: `search-service/src/routes/drivers.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

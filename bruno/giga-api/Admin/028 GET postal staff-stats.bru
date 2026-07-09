@@ -1,0 +1,27 @@
+meta {
+  name: GET postal staff-stats
+  type: http
+  seq: 28
+}
+
+get {
+  url: {{baseUrl}}/api/postal/staff-stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/postal/staff-stats`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/postal/staff-stats`.
+
+Auth: admin bearer ({{adminToken}}).
+}

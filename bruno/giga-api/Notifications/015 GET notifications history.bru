@@ -1,0 +1,27 @@
+meta {
+  name: GET notifications history
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/v1/notifications/history
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/notifications/history`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/notifications.ts` · route: `/history`.
+
+Auth: bearer ({{token}}).
+}

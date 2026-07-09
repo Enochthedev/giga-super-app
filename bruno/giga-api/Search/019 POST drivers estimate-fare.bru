@@ -1,0 +1,37 @@
+meta {
+  name: POST drivers estimate-fare
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{baseUrl}}/api/v1/search/drivers/estimate-fare
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "pickup_lat": 6.5244,
+    "pickup_lng": 3.3792,
+    "dropoff_lat": 6.4281,
+    "dropoff_lng": 3.4219,
+    "vehicle_type": "standard"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/search/drivers/estimate-fare`
+
+Service: **search-service** · file: `search-service/src/routes/drivers.ts` · route: `/estimate-fare`.
+
+Auth: bearer ({{token}}).
+}

@@ -1,0 +1,23 @@
+meta {
+  name: Ad Analytics
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/v1/ads/analytics
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`get-ad-analytics`.
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET national financial-summary
+  type: http
+  seq: 85
+}
+
+get {
+  url: {{baseUrl}}/api/admin/national/financial-summary
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/national/financial-summary`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost.ts` · route: `/national/financial-summary`.
+
+Auth: admin bearer ({{adminToken}}).
+}

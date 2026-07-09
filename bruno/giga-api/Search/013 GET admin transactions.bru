@@ -1,0 +1,27 @@
+meta {
+  name: GET admin transactions
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/admin/transactions
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/admin/transactions`
+
+Service: **search-service** · file: `search-service/src/routes/admin.ts` · route: `/transactions`.
+
+Auth: bearer ({{token}}).
+}

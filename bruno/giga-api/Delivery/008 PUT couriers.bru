@@ -1,0 +1,27 @@
+meta {
+  name: PUT couriers
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/api/v1/couriers/:courierId
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/v1/couriers/:courierId`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/couriers.ts` · route: `/couriers/:courierId`.
+
+Auth: bearer ({{token}}).
+}

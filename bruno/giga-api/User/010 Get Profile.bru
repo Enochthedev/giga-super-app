@@ -1,0 +1,23 @@
+meta {
+  name: Get Profile
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/v1/user/profile
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`get-user-profile` edge fn. Returns `data.profile` (avatar_url, first_name, region_id, roles).
+}

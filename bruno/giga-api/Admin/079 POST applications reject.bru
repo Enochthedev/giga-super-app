@@ -1,0 +1,33 @@
+meta {
+  name: POST applications reject
+  type: http
+  seq: 79
+}
+
+post {
+  url: {{baseUrl}}/api/nipost-admin/postal-staff/applications/:id/reject
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "reason": "Does not meet criteria"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/nipost-admin/postal-staff/applications/:id/reject`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost-admin.ts` · route: `/postal-staff/applications/:id/reject`.
+
+Auth: admin bearer ({{adminToken}}).
+}

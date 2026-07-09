@@ -1,0 +1,27 @@
+meta {
+  name: GET hotel hotels
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/api/hotel/hotels/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/hotel/hotels/:id`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/hotel/hotels/:id`.
+
+Auth: admin bearer ({{adminToken}}).
+}

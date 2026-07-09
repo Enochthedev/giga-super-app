@@ -1,0 +1,27 @@
+meta {
+  name: GET templates
+  type: http
+  seq: 26
+}
+
+get {
+  url: {{baseUrl}}/api/v1/templates
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/templates`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/templates.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

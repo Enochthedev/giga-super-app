@@ -1,0 +1,23 @@
+meta {
+  name: Fetch Ads
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/api/v1/ads/fetch
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`fetch-ads` — ads to display.
+}

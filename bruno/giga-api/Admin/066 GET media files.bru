@@ -1,0 +1,27 @@
+meta {
+  name: GET media files
+  type: http
+  seq: 66
+}
+
+get {
+  url: {{baseUrl}}/api/managers/media/files/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/media/files/:id`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/media.ts` · route: `/files/:id`.
+
+Auth: admin bearer ({{adminToken}}).
+}

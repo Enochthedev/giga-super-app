@@ -1,0 +1,27 @@
+meta {
+  name: GET managers dashboard-stats
+  type: http
+  seq: 39
+}
+
+get {
+  url: {{baseUrl}}/api/managers/dashboard-stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/dashboard-stats`
+
+Service: **admin-service** · file: `admin-service/src/routes/managers.ts` · route: `/dashboard-stats`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET search hotels
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/hotels
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/hotels`
+
+Service: **search-service** · file: `search-service/src/routes/hotels.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

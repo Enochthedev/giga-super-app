@@ -1,0 +1,27 @@
+meta {
+  name: GET packages status
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/v1/packages/status/:status
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/packages/status/:status`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/packages.ts` · route: `/status/:status`.
+
+Auth: bearer ({{token}}).
+}

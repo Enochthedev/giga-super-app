@@ -1,0 +1,33 @@
+meta {
+  name: POST staff reject
+  type: http
+  seq: 26
+}
+
+post {
+  url: {{baseUrl}}/api/postal/staff/:id/reject
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "reason": "Does not meet criteria"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/postal/staff/:id/reject`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/postal/staff/:id/reject`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET admin users
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/admin/users
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/admin/users`
+
+Service: **search-service** · file: `search-service/src/routes/admin.ts` · route: `/users`.
+
+Auth: bearer ({{token}}).
+}

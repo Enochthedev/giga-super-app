@@ -1,0 +1,36 @@
+meta {
+  name: Apply as Vendor
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/vendors/apply
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "business_name": "QA Store",
+    "business_registration": "RC123",
+    "tax_id": "TIN1",
+    "bank_details": {
+      "bank_name": "GTB",
+      "account_number": "0123456789",
+      "account_name": "QA Store"
+    }
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`apply-vendor`. Fixed E8 — validates business_name/bank_details (400 not 500).
+}

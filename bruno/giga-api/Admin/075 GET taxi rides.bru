@@ -1,0 +1,27 @@
+meta {
+  name: GET taxi rides
+  type: http
+  seq: 75
+}
+
+get {
+  url: {{baseUrl}}/api/managers/taxi/rides
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/taxi/rides`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/taxi.ts` · route: `/rides`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET analytics engagement
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/analytics/engagement
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/analytics/engagement`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/analytics.ts` · route: `/engagement`.
+
+Auth: bearer ({{token}}).
+}

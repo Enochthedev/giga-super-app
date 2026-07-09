@@ -1,0 +1,27 @@
+meta {
+  name: POST ecommerce traders
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/api/ecommerce/traders
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/ecommerce/traders`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/ecommerce/traders`.
+
+Auth: admin bearer ({{adminToken}}).
+}

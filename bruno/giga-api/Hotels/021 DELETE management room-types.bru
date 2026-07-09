@@ -1,0 +1,27 @@
+meta {
+  name: DELETE management room-types
+  type: http
+  seq: 21
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/management/room-types/:id
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`DELETE /api/v1/management/room-types/:id`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/room-types/:id`.
+
+Auth: bearer ({{token}}).
+}

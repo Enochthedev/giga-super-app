@@ -1,0 +1,36 @@
+meta {
+  name: POST postal staff
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/api/postal/staff
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "staff_type": "admin_staff",
+    "first_name": "QA",
+    "last_name": "Staff",
+    "email": "qa.staff@example.com"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/postal/staff`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/postal/staff`.
+
+Auth: admin bearer ({{adminToken}}).
+}

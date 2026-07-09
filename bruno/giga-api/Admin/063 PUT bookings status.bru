@@ -1,0 +1,33 @@
+meta {
+  name: PUT bookings status
+  type: http
+  seq: 63
+}
+
+put {
+  url: {{baseUrl}}/api/managers/hotel/bookings/:id/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "status": "active"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/managers/hotel/bookings/:id/status`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/hotel.ts` · route: `/bookings/:id/status`.
+
+Auth: admin bearer ({{adminToken}}).
+}

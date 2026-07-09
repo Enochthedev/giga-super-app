@@ -1,0 +1,34 @@
+meta {
+  name: POST stories
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/api/v1/stories
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "media_url": "https://example.com/s.jpg",
+    "media_type": "image"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/stories`
+
+Service: **social-service** · file: `social-service/src/routes/stories.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

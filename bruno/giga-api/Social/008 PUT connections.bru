@@ -1,0 +1,34 @@
+meta {
+  name: PUT connections
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/api/v1/connections/:connectionId
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "connected_user_id": "{{customer2Id}}",
+    "connection_type": "friend"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/v1/connections/:connectionId`
+
+Service: **social-service** · file: `social-service/src/routes/connections.ts` · route: `/:connectionId`.
+
+Auth: bearer ({{token}}).
+}

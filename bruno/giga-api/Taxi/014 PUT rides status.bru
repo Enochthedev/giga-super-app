@@ -1,0 +1,33 @@
+meta {
+  name: PUT rides status
+  type: http
+  seq: 14
+}
+
+put {
+  url: {{baseUrl}}/api/v1/rides/:rideId/status
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "status": "active"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/v1/rides/:rideId/status`
+
+Service: **taxi-realtime-service** · file: `taxi-realtime-service/src/routes/rides.ts` · route: `/:rideId/status`.
+
+Auth: bearer ({{token}}).
+}

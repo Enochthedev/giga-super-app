@@ -1,0 +1,27 @@
+meta {
+  name: DELETE reviews
+  type: http
+  seq: 34
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/reviews/:id
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`DELETE /api/v1/reviews/:id`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/reviews.ts` · route: `/:id`.
+
+Auth: bearer ({{token}}).
+}

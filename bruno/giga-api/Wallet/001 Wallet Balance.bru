@@ -1,0 +1,23 @@
+meta {
+  name: Wallet Balance
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/wallet/balance
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`Get-vendor-balance`. KNOWN: E1 — was rejecting valid tokens; auth fixed via redeploy 2026-07-09.
+}

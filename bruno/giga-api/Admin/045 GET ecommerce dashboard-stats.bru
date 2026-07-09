@@ -1,0 +1,27 @@
+meta {
+  name: GET ecommerce dashboard-stats
+  type: http
+  seq: 45
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/dashboard-stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/dashboard-stats`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-analytics.ts` · route: `/dashboard-stats`.
+
+Auth: admin bearer ({{adminToken}}).
+}

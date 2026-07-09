@@ -1,0 +1,27 @@
+meta {
+  name: GET drivers stats
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/drivers/stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/drivers/stats`
+
+Service: **taxi-realtime-service** · file: `taxi-realtime-service/src/routes/drivers.ts` · route: `/stats`.
+
+Auth: bearer ({{token}}).
+}

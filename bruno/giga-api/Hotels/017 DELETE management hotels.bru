@@ -1,0 +1,27 @@
+meta {
+  name: DELETE management hotels
+  type: http
+  seq: 17
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/management/hotels/:id
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`DELETE /api/v1/management/hotels/:id`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/hotels/:id`.
+
+Auth: bearer ({{token}}).
+}

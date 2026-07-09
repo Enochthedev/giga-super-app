@@ -1,0 +1,33 @@
+meta {
+  name: POST posts comments
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/api/v1/posts/{{postId}}/comments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "content": "Nice!"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/posts/{{postId}}/comments`
+
+Service: **social-service** · file: `social-service/src/routes/comments.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

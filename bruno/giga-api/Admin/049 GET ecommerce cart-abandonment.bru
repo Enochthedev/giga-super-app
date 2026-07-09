@@ -1,0 +1,27 @@
+meta {
+  name: GET ecommerce cart-abandonment
+  type: http
+  seq: 49
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/cart-abandonment
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/cart-abandonment`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-analytics.ts` · route: `/cart-abandonment`.
+
+Auth: admin bearer ({{adminToken}}).
+}

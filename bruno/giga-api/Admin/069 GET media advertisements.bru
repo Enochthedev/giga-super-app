@@ -1,0 +1,27 @@
+meta {
+  name: GET media advertisements
+  type: http
+  seq: 69
+}
+
+get {
+  url: {{baseUrl}}/api/managers/media/advertisements/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/media/advertisements/:id`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/media.ts` · route: `/advertisements/:id`.
+
+Auth: admin bearer ({{adminToken}}).
+}

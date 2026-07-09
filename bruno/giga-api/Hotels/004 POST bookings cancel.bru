@@ -1,0 +1,33 @@
+meta {
+  name: POST bookings cancel
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings/:id/cancel
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "reason": "changed plans"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/bookings/:id/cancel`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/bookings.ts` · route: `/:id/cancel`.
+
+Auth: bearer ({{token}}).
+}

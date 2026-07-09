@@ -1,0 +1,27 @@
+meta {
+  name: GET admin regions
+  type: http
+  seq: 99
+}
+
+get {
+  url: {{baseUrl}}/api/admin/regions/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/regions/:id`
+
+Service: **admin-service** · file: `admin-service/src/routes/regions.ts` · route: `/:id`.
+
+Auth: admin bearer ({{adminToken}}).
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET hotel bookings
+  type: http
+  seq: 62
+}
+
+get {
+  url: {{baseUrl}}/api/managers/hotel/bookings
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/hotel/bookings`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/hotel.ts` · route: `/bookings`.
+
+Auth: admin bearer ({{adminToken}}).
+}

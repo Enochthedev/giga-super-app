@@ -1,0 +1,27 @@
+meta {
+  name: GET branch analytics
+  type: http
+  seq: 92
+}
+
+get {
+  url: {{baseUrl}}/api/admin/branch/:branchId/analytics
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/admin/branch/:branchId/analytics`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost.ts` · route: `/branch/:branchId/analytics`.
+
+Auth: admin bearer ({{adminToken}}).
+}

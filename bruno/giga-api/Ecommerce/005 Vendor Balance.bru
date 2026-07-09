@@ -1,0 +1,23 @@
+meta {
+  name: Vendor Balance
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/v1/vendors/balance
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`Get-vendor-balance`. Service-provider role required.
+}

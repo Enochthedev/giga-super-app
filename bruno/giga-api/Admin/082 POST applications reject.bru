@@ -1,0 +1,33 @@
+meta {
+  name: POST applications reject
+  type: http
+  seq: 82
+}
+
+post {
+  url: {{baseUrl}}/api/nipost-admin/couriers/applications/:id/reject
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "reason": "Does not meet criteria"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/nipost-admin/couriers/applications/:id/reject`
+
+Service: **admin-service** · file: `admin-service/src/routes/nipost-admin.ts` · route: `/couriers/applications/:id/reject`.
+
+Auth: admin bearer ({{adminToken}}).
+}

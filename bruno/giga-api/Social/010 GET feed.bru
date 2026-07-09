@@ -1,0 +1,27 @@
+meta {
+  name: GET feed
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/api/v1/feed
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/feed`
+
+Service: **social-service** · file: `social-service/src/routes/feed.ts` · route: `/`.
+
+Auth: bearer ({{token}}).
+}

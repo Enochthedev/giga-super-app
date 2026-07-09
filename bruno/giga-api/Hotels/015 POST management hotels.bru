@@ -1,0 +1,27 @@
+meta {
+  name: POST management hotels
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/api/v1/management/hotels
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/management/hotels`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/hotels`.
+
+Auth: bearer ({{token}}).
+}

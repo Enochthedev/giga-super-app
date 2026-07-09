@@ -1,0 +1,27 @@
+meta {
+  name: GET media content
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/api/media/content/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/media/content/:id`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/media/content/:id`.
+
+Auth: admin bearer ({{adminToken}}).
+}

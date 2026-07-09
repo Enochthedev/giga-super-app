@@ -1,0 +1,27 @@
+meta {
+  name: GET hotels availability
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/api/v1/hotels/:id/availability
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/hotels/:id/availability`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/hotels.ts` · route: `/:id/availability`.
+
+Auth: bearer ({{token}}).
+}

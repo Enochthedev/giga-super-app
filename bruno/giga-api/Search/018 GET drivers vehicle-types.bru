@@ -1,0 +1,27 @@
+meta {
+  name: GET drivers vehicle-types
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/drivers/vehicle-types
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/drivers/vehicle-types`
+
+Service: **search-service** · file: `search-service/src/routes/drivers.ts` · route: `/vehicle-types`.
+
+Auth: bearer ({{token}}).
+}

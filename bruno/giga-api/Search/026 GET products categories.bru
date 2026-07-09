@@ -1,0 +1,27 @@
+meta {
+  name: GET products categories
+  type: http
+  seq: 26
+}
+
+get {
+  url: {{baseUrl}}/api/v1/search/products/categories
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/search/products/categories`
+
+Service: **search-service** · file: `search-service/src/routes/products.ts` · route: `/categories`.
+
+Auth: bearer ({{token}}).
+}

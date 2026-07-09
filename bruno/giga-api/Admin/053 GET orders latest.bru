@@ -1,0 +1,27 @@
+meta {
+  name: GET orders latest
+  type: http
+  seq: 53
+}
+
+get {
+  url: {{baseUrl}}/api/managers/ecommerce/orders/latest
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/managers/ecommerce/orders/latest`
+
+Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce-orders.ts` · route: `/latest`.
+
+Auth: admin bearer ({{adminToken}}).
+}

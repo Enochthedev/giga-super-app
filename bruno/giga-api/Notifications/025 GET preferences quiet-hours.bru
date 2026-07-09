@@ -1,0 +1,27 @@
+meta {
+  name: GET preferences quiet-hours
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/api/v1/preferences/quiet-hours
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/preferences/quiet-hours`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/preferences.ts` · route: `/quiet-hours`.
+
+Auth: bearer ({{token}}).
+}

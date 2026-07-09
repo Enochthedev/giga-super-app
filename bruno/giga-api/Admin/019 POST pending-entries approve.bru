@@ -1,0 +1,33 @@
+meta {
+  name: POST pending-entries approve
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{baseUrl}}/api/pending-entries/:module/:id/approve
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "review_notes": "Approved"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/pending-entries/:module/:id/approve`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/pending-entries/:module/:id/approve`.
+
+Auth: admin bearer ({{adminToken}}).
+}

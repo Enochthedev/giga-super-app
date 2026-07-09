@@ -1,0 +1,33 @@
+meta {
+  name: Create Campaign
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v1/ads/campaigns/create
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "campaign_name": "QA Promo",
+    "budget": 10000,
+    "campaign_type": "banner",
+    "start_date": "2026-08-01",
+    "end_date": "2026-08-31"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`create-ad-campaign`.
+}

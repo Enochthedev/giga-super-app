@@ -1,0 +1,27 @@
+meta {
+  name: POST promo-codes validate
+  type: http
+  seq: 30
+}
+
+post {
+  url: {{baseUrl}}/api/v1/management/promo-codes/validate
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/v1/management/promo-codes/validate`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/promo-codes/validate`.
+
+Auth: bearer ({{token}}).
+}

@@ -1,0 +1,23 @@
+meta {
+  name: POST apply courier
+  type: http
+  seq: 96
+}
+
+post {
+  url: {{baseUrl}}/api/public/apply/courier
+  body: json
+  auth: none
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/public/apply/courier`
+
+Service: **admin-service** · file: `admin-service/src/routes/public-applications.ts` · route: `/apply/courier`.
+
+Auth: none (public).
+}

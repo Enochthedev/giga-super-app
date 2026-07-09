@@ -1,0 +1,27 @@
+meta {
+  name: GET campaigns
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/api/v1/campaigns/:id
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/campaigns/:id`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/campaigns.ts` · route: `/:id`.
+
+Auth: bearer ({{token}}).
+}

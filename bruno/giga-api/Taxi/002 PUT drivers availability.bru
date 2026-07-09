@@ -1,0 +1,33 @@
+meta {
+  name: PUT drivers availability
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{baseUrl}}/api/v1/drivers/availability
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "is_online": true
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/v1/drivers/availability`
+
+Service: **taxi-realtime-service** · file: `taxi-realtime-service/src/routes/drivers.ts` · route: `/availability`.
+
+Auth: bearer ({{token}}).
+}

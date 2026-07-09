@@ -1,0 +1,33 @@
+meta {
+  name: POST ads approve
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/api/ads/:adId/approve
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "review_notes": "Approved"
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`POST /api/ads/:adId/approve`
+
+Service: **admin-service** · file: `admin-service/src/routes/advertisements.ts` · route: `/:adId/approve`.
+
+Auth: admin bearer ({{adminToken}}).
+}

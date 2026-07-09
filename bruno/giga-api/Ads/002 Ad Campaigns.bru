@@ -1,0 +1,23 @@
+meta {
+  name: Ad Campaigns
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/ads/campaigns
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`get-ad-campaigns`.
+}

@@ -1,0 +1,27 @@
+meta {
+  name: GET packages search
+  type: http
+  seq: 33
+}
+
+get {
+  url: {{baseUrl}}/api/delivery/packages/search
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/delivery/packages/search`
+
+Service: **admin-service** · file: `admin-service/src/routes/business-modules.ts` · route: `/delivery/packages/search`.
+
+Auth: admin bearer ({{adminToken}}).
+}

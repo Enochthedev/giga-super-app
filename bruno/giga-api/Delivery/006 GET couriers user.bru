@@ -1,0 +1,27 @@
+meta {
+  name: GET couriers user
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/api/v1/couriers/user/:userId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/couriers/user/:userId`
+
+Service: **delivery-service** · file: `delivery-service/src/routes/couriers.ts` · route: `/couriers/user/:userId`.
+
+Auth: bearer ({{token}}).
+}

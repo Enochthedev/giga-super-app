@@ -1,0 +1,27 @@
+meta {
+  name: GET notifications stats
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/api/v1/notifications/stats
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`GET /api/v1/notifications/stats`
+
+Service: **notifications-service** · file: `notifications-service/src/routes/notifications.ts` · route: `/stats`.
+
+Auth: bearer ({{token}}).
+}

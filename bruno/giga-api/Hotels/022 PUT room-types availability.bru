@@ -1,0 +1,33 @@
+meta {
+  name: PUT room-types availability
+  type: http
+  seq: 22
+}
+
+put {
+  url: {{baseUrl}}/api/v1/management/room-types/:id/availability
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "is_online": true
+  }
+}
+
+tests {
+  test("responds", function(){ expect(res.status).to.be.below(500); });
+}
+
+docs {
+`PUT /api/v1/management/room-types/:id/availability`
+
+Service: **hotels-service** · file: `hotels-service/src/routes/management.ts` · route: `/room-types/:id/availability`.
+
+Auth: bearer ({{token}}).
+}
