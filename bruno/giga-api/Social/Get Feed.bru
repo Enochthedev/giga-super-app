@@ -1,0 +1,23 @@
+meta {
+  name: Get Feed
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/feed
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("200", function(){ expect(res.status).to.equal(200); });
+}
+
+docs {
+Returns the social feed (public + friends posts).
+}

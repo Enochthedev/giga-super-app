@@ -1,0 +1,25 @@
+meta {
+  name: Cancel Booking
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/api/v1/bookings/{{bookingId}}/cancel
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "reason": "changed plans"
+  }
+}
+
+docs {
+Cancels a booking. (E3 refund_amount column added via migration 20260709000000.)
+}

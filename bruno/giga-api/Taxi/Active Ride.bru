@@ -1,0 +1,19 @@
+meta {
+  name: Active Ride
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/rides/active
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+Current active ride, if any.
+}

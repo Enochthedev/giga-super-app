@@ -1,0 +1,19 @@
+meta {
+  name: Regions
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/api/admin/regions
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+docs {
+NIPOST region tree (scoped).
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Get Post
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/api/v1/posts/{{postId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+Fetch a single post by id (uses `{{postId}}` from Create Post).
+}

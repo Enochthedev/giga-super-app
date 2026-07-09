@@ -1,0 +1,23 @@
+meta {
+  name: History
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/api/v1/notifications/history
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("200", function(){ expect(res.status).to.equal(200); });
+}
+
+docs {
+Paginated notification history for the user.
+}

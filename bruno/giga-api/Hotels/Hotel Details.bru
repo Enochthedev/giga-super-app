@@ -1,0 +1,23 @@
+meta {
+  name: Hotel Details
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/api/v1/hotels/{{hotelId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+script:post-response {
+  try { var rt=res.body.data.room_types; if(rt&&rt[0]) bru.setEnvVar("roomTypeId", rt[0].id); } catch(e){}
+}
+
+docs {
+Hotel detail incl. `room_types[]`; stores the first roomTypeId.
+}
