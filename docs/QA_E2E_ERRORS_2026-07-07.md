@@ -12,6 +12,14 @@ Legend: 🔴 blocker · 🟠 broken feature · 🟡 gap/minor · ✅ verified wo
 
 ## 🛠️ FIX LOG (branch `fix/qa-e2e-batch-2026-07-08`, 2026-07-08/09)
 
+**✅ VERIFIED LIVE 2026-07-09** (12/12 pass through prod gateway): E9 addresses GET→200, E6 /connections→200,
+E5b /social/friends→200, E10 /hotels/recommended→200, E8 apply-vendor→400, E18 story viewers→200,
+E3 booking cancel→200 (migration applied), E20 analytics routing (now reaches service; 403 = A2 role issue, not routing),
+E17 ad approve bad id→404, E39 admin ecommerce→200, E16 staff approve w/o account→400.
+Also: 48 dead edge fns deleted (98→50); 4 edge fixes deployed (checkout-cart/Paystack-webhook/apply-vendor/add-user-address).
+A2 remains: notifications-service `requireAdmin` doesn't accept the NIPOST/DOP role → admin notif analytics/templates 403.
+
+
 **Applied (code, typechecks clean):**
 - **E18** story_views `viewer_id`→`user_id` (+ viewers query) — `social-service/routes/stories.ts`
 - **E25** hotel review response `response_date`→`responded_at` — `hotels-service/routes/management.ts`
