@@ -26,7 +26,7 @@
       "bookings"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1277ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"bookings\":[{\"id\":\"0eb68ede-f53e-47e3-a070-405ffdda6e91\",\"booking_number\":\"BK1783595437978MUT1\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"room_id\":null,\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"guest_name\":\"QA\",\"guest_email\":\"qa.customer1@gigaqa.test\",\"guest_phone\":\"+2348000000000\",\"guest_count\":2,\"check_in_date\":\"2026-09-01\",\"check_out_date\":\"2026-09-03\",\"number_of_nights\":2,\"number_of_rooms\":1,\"room_rate\":35000,\"subtotal\":70000,\"tax_amount\":5250,\"service_fee\":1400,\"discount_amount\":0,\"total_amount\":76650,\"payment_status\":\"pending\",\"booking_status\":\"cancelled\",\"special_requests\":null,\"purpose_of_visit\":null,\"estimated_arrival_time\":null,\"cancellation_reason\":\"User requested cancellation\",\"cancelled_at\":\"2026-07-09T11:10:39.578+00:00\",\"cancelled_by\":null,\"checked_in_at\":null,\"checked_out_at\":null,\"promo_code\":null,\"promo_code_id\":null,\"created_at\":\"2026-07-09T11:10:38.113376+00:00\",\"updated_at\":\"2026-07-09T11:10:39.686915+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"currency\":\"NGN\",\"refund_amount\":76650,\"has_review\":false,\"host_notes\":null,\"hotel\":{\"id\":\"47acdc21-966\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1013ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"bookings\":[{\"id\":\"0eb68ede-f53e-47e3-a070-405ffdda6e91\",\"booking_number\":\"BK1783595437978MUT1\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"room_id\":null,\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"guest_name\":\"QA\",\"guest_email\":\"qa.customer1@gigaqa.test\",\"guest_phone\":\"+2348000000000\",\"guest_count\":2,\"check_in_date\":\"2026-09-01\",\"check_out_date\":\"2026-09-03\",\"number_of_nights\":2,\"number_of_rooms\":1,\"room_rate\":35000,\"subtotal\":70000,\"tax_amount\":5250,\"service_fee\":1400,\"discount_amount\":0,\"total_amount\":76650,\"payment_status\":\"pending\",\"booking_status\":\"cancelled\",\"special_requests\":null,\"purpose_of_visit\":null,\"estimated_arrival_time\":null,\"cancellation_reason\":\"User requested cancellation\",\"cancelled_at\":\"2026-07-09T11:10:39.578+00:00\",\"cancelled_by\":null,\"checked_in_at\":null,\"checked_out_at\":null,\"promo_code\":null,\"promo_code_id\":null,\"created_at\":\"2026-07-09T11:10:38.113376+00:00\",\"updated_at\":\"2026-07-09T11:10:39.686915+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"currency\":\"NGN\",\"refund_amount\":76650,\"has_review\":false,\"host_notes\":null,\"hotel\":{\"id\":\"47acdc21-966\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -81,7 +81,7 @@
       "{{bookingId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1055ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"0eb68ede-f53e-47e3-a070-405ffdda6e91\",\"booking_number\":\"BK1783595437978MUT1\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"room_id\":null,\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"guest_name\":\"QA\",\"guest_email\":\"qa.customer1@gigaqa.test\",\"guest_phone\":\"+2348000000000\",\"guest_count\":2,\"check_in_date\":\"2026-09-01\",\"check_out_date\":\"2026-09-03\",\"number_of_nights\":2,\"number_of_rooms\":1,\"room_rate\":35000,\"subtotal\":70000,\"tax_amount\":5250,\"service_fee\":1400,\"discount_amount\":0,\"total_amount\":76650,\"payment_status\":\"pending\",\"booking_status\":\"cancelled\",\"special_requests\":null,\"purpose_of_visit\":null,\"estimated_arrival_time\":null,\"cancellation_reason\":\"User requested cancellation\",\"cancelled_at\":\"2026-07-09T11:10:39.578+00:00\",\"cancelled_by\":null,\"checked_in_at\":null,\"checked_out_at\":null,\"promo_code\":null,\"promo_code_id\":null,\"created_at\":\"2026-07-09T11:10:38.113376+00:00\",\"updated_at\":\"2026-07-09T11:10:39.686915+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"currency\":\"NGN\",\"refund_amount\":76650,\"has_review\":false,\"host_notes\":null,\"hotel\":{\"id\":\"47acdc21-966c-42b3-828c-0\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1017ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"0eb68ede-f53e-47e3-a070-405ffdda6e91\",\"booking_number\":\"BK1783595437978MUT1\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"room_id\":null,\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"guest_name\":\"QA\",\"guest_email\":\"qa.customer1@gigaqa.test\",\"guest_phone\":\"+2348000000000\",\"guest_count\":2,\"check_in_date\":\"2026-09-01\",\"check_out_date\":\"2026-09-03\",\"number_of_nights\":2,\"number_of_rooms\":1,\"room_rate\":35000,\"subtotal\":70000,\"tax_amount\":5250,\"service_fee\":1400,\"discount_amount\":0,\"total_amount\":76650,\"payment_status\":\"pending\",\"booking_status\":\"cancelled\",\"special_requests\":null,\"purpose_of_visit\":null,\"estimated_arrival_time\":null,\"cancellation_reason\":\"User requested cancellation\",\"cancelled_at\":\"2026-07-09T11:10:39.578+00:00\",\"cancelled_by\":null,\"checked_in_at\":null,\"checked_out_at\":null,\"promo_code\":null,\"promo_code_id\":null,\"created_at\":\"2026-07-09T11:10:38.113376+00:00\",\"updated_at\":\"2026-07-09T11:10:39.686915+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"currency\":\"NGN\",\"refund_amount\":76650,\"has_review\":false,\"host_notes\":null,\"hotel\":{\"id\":\"47acdc21-966c-42b3-828c-0\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -141,7 +141,7 @@
       "cancel"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1281ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: ghost id \u2014 non-destructive\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1004ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: ghost id \u2014 non-destructive\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -209,7 +209,7 @@
       "create"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1312ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe: ghost room_type avoids creating a real booking\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 982ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe: ghost room_type avoids creating a real booking\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -277,7 +277,7 @@
       "price"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1429ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 950ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/bookings.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -340,7 +340,7 @@
       "favorites"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1442ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1012ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"e534d980-1fae-4e83-8125-569ff79e1a5e\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"created_at\":\"2026-08-18T20:59:59.647142+00:00\",\"hotel\":{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"city\":\"Lagos\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"country\":\"Nigeria\",\"star_rating\":5,\"total_reviews\":0,\"average_rating\":0,\"featured_image\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\"}}]}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -399,7 +399,7 @@
       "add"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1573ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1204ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -464,7 +464,7 @@
       "{{hotelId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1121ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"isFavorite\":false}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 994ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"isFavorite\":true}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -523,7 +523,7 @@
       "remove"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1021ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 958ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/favorites.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -587,7 +587,7 @@
       "{{hotelId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 984ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"description\":\"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"105102\",\"latitude\":6.4474,\"longitude\":3.4647,\"distance_miles\":null,\"phone\":\"+234 809 555 1234\",\"email\":\"reservations@lekkisuites.com\",\"website\":null,\"images\":{\"featured\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"gallery\":[]},\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"review_stats\":{\"total\":0,\"average\":0,\"breakdown\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}},\"min_price\":35000,\"amenities_list\":[\"wifi\",\"air-conditioning\",\"parking\",\"swimming-pool\",\"gym\",\"spa\",\"restaurant\"],\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\",\"cancellation_policy\":null,\"house_rules\":null,\"policies\":{},\"room_types\":[{\"id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"name\":\"Premium Suite\",\"slug\":\"premium-suite\",\"images\":[],\"bed_type\":\"King\",\"capacity\":4,\"amen\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1039ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"description\":\"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"105102\",\"latitude\":6.4474,\"longitude\":3.4647,\"distance_miles\":null,\"phone\":\"+234 809 555 1234\",\"email\":\"reservations@lekkisuites.com\",\"website\":null,\"images\":{\"featured\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"gallery\":[]},\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"review_stats\":{\"total\":0,\"average\":0,\"breakdown\":{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":0}},\"min_price\":35000,\"amenities_list\":[\"wifi\",\"air-conditioning\",\"parking\",\"swimming-pool\",\"gym\",\"spa\",\"restaurant\"],\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\",\"cancellation_policy\":null,\"house_rules\":null,\"policies\":{},\"room_types\":[{\"id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"name\":\"Premium Suite\",\"slug\":\"premium-suite\",\"images\":[],\"bed_type\":\"King\",\"capacity\":4,\"amen\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -657,7 +657,7 @@
       }
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1371ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"hotel_name\":\"Lekki Luxury Suites\",\"check_in_date\":\"2026-10-01\",\"check_out_date\":\"2026-10-03\",\"nights\":2,\"rooms_requested\":1,\"guests\":{\"adults\":2,\"children\":0},\"available_rooms\":[{\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"name\":\"Premium Suite\",\"description\":\"Elegant suite with ocean view and premium amenities\",\"capacity\":4,\"max_adults\":2,\"max_children\":2,\"available_rooms\":12,\"base_price\":35000,\"total_price\":70000,\"amenities\":[\"AC\",\"WiFi\",\"Smart TV\",\"Mini Bar\",\"Ocean View\",\"Balcony\"],\"images\":[],\"breakfast_included\":true,\"refundable\":true}],\"total_available_types\":1}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1209ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"hotel_name\":\"Lekki Luxury Suites\",\"check_in_date\":\"2026-10-01\",\"check_out_date\":\"2026-10-03\",\"nights\":2,\"rooms_requested\":1,\"guests\":{\"adults\":2,\"children\":0},\"available_rooms\":[{\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"name\":\"Premium Suite\",\"description\":\"Elegant suite with ocean view and premium amenities\",\"capacity\":4,\"max_adults\":2,\"max_children\":2,\"available_rooms\":12,\"base_price\":35000,\"total_price\":70000,\"amenities\":[\"AC\",\"WiFi\",\"Smart TV\",\"Mini Bar\",\"Ocean View\",\"Balcony\"],\"images\":[],\"breakfast_included\":true,\"refundable\":true}],\"total_available_types\":1}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -713,7 +713,7 @@
       "reviews"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 857ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":10,\"total\":0,\"totalPages\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 779ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":10,\"total\":0,\"totalPages\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -768,7 +768,7 @@
       "recommended"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1396ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"host_id\":\"cf58622a-78ad-49bf-850b-af8b04b8e868\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"description\":\"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"105102\",\"latitude\":6.4474,\"longitude\":3.4647,\"phone\":\"+234 809 555 1234\",\"email\":\"reservations@lekkisuites.com\",\"website\":null,\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\",\"cancellation_policy\":null,\"house_rules\":null,\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":true,\"verified_at\":\"2025-11-05T08:08:09.416247+00:00\",\"featured_image\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"images\":[],\"video_url\":null,\"amenities\":[\"wifi\",\"air-conditioning\",\"parking\",\"swimming-pool\",\"gym\",\"spa\",\"restaurant\"],\"nearby_attractions\":{},\"policies\":{},\"created_at\":\"2025-11-05T08:08:09.416247+00:00\",\"updated_at\":\"2026-02-12T07:02:40.293712+00:\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1234ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"host_id\":\"cf58622a-78ad-49bf-850b-af8b04b8e868\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"description\":\"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"105102\",\"latitude\":6.4474,\"longitude\":3.4647,\"phone\":\"+234 809 555 1234\",\"email\":\"reservations@lekkisuites.com\",\"website\":null,\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\",\"cancellation_policy\":null,\"house_rules\":null,\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":true,\"verified_at\":\"2025-11-05T08:08:09.416247+00:00\",\"featured_image\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"images\":[],\"video_url\":null,\"amenities\":[\"wifi\",\"air-conditioning\",\"parking\",\"swimming-pool\",\"gym\",\"spa\",\"restaurant\"],\"nearby_attractions\":{},\"policies\":{},\"created_at\":\"2025-11-05T08:08:09.416247+00:00\",\"updated_at\":\"2026-02-12T07:02:40.293712+00:\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -833,7 +833,7 @@
       }
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1000ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"distance_miles\":null,\"featured_image\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"amenities\":[\"wifi\",\"air-conditioning\",\"parking\",\"swimming-pool\",\"gym\",\"spa\",\"restaurant\"],\"min_price\":35000,\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\"},{\"id\":\"404e4c1d-6a79-40d9-b565-56ffed3bf9fa\",\"name\":\"Ikeja Business Hotel\",\"slug\":\"ikeja-business-hotel\",\"short_description\":\"Business hotel near Lagos airport\",\"address\":\"45 Obafemi Awolowo Way\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"distance_miles\":null,\"featured_image\":\"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800\",\"star_rating\":3,\"average_rating\":0,\"total_reviews\":0,\"amenities\":[\"wifi\",\"parking\",\"conference-rooms\",\"airport-shuttle\",\"restaurant\",\"gym\"],\"min_price\":22000,\"check_in_time\":\"14:00:00\",\"check_out_time\":\"12:00:00\"},{\"id\":\"796cede2-0282-47\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 851ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"distance_miles\":null,\"featured_image\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"amenities\":[\"wifi\",\"air-conditioning\",\"parking\",\"swimming-pool\",\"gym\",\"spa\",\"restaurant\"],\"min_price\":35000,\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\"},{\"id\":\"404e4c1d-6a79-40d9-b565-56ffed3bf9fa\",\"name\":\"Ikeja Business Hotel\",\"slug\":\"ikeja-business-hotel\",\"short_description\":\"Business hotel near Lagos airport\",\"address\":\"45 Obafemi Awolowo Way\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"distance_miles\":null,\"featured_image\":\"https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800\",\"star_rating\":3,\"average_rating\":0,\"total_reviews\":0,\"amenities\":[\"wifi\",\"parking\",\"conference-rooms\",\"airport-shuttle\",\"restaurant\",\"gym\"],\"min_price\":22000,\"check_in_time\":\"14:00:00\",\"check_out_time\":\"12:00:00\"},{\"id\":\"796cede2-0282-47\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -894,7 +894,7 @@
       "check-in"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1033ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1013ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -964,7 +964,7 @@
       "check-out"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 998ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1016ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1034,7 +1034,7 @@
       "status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 797ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 782ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1098,7 +1098,7 @@
       "hotels"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1149ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1000ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1157,7 +1157,7 @@
       "hotels"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1373ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 964ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1223,7 +1223,7 @@
       "analytics"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1050ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 972ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1284,7 +1284,7 @@
       "bulk-pricing"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 968ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 973ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1350,7 +1350,7 @@
       "calendar"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 984ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 979ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1411,7 +1411,7 @@
       "promo-codes"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1020ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 943ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1481,7 +1481,7 @@
       "room-types"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1024ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 989ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1546,7 +1546,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1589ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 997ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1606,7 +1606,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1393ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 976ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1675,7 +1675,7 @@
       "validate"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 815ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 843ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1745,7 +1745,7 @@
       "respond"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 797ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 905ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1810,7 +1810,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1645ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1018ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1870,7 +1870,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 984ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1176ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1940,7 +1940,7 @@
       "availability"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1037ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 999ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/management.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2007,7 +2007,7 @@
       "reviews"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1613ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: ghost booking \u2014 probe only\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1097ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: ghost booking \u2014 probe only\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2071,7 +2071,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1534ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1315ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2130,7 +2130,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 991ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1064ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2199,7 +2199,7 @@
       "helpful"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1206ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1574ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2263,7 +2263,7 @@
       "my-reviews"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1163ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1007ms.\n\nService: `hotels-service` \u00b7 source: `hotels-service/src/routes/reviews.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [

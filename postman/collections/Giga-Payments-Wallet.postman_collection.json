@@ -28,7 +28,7 @@
       "branch"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 603ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/admin.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Endpoint not found",
+    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 577ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/admin.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -85,7 +85,7 @@
       "national"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 603ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/admin.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Endpoint not found",
+    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 605ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/admin.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -142,7 +142,7 @@
       "state"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 553ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/admin.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Endpoint not found",
+    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 619ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/admin.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -203,7 +203,7 @@
       "refund"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 596ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Payment Queue Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 829ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -230,7 +230,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -238,8 +238,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -269,7 +268,7 @@
       "status"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 619ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Payment Queue Service is currently unavailable",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 982ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -287,7 +286,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -295,8 +294,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -329,7 +327,7 @@
       "initialize"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 608ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Payment Queue Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1215ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Internal server error\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -356,7 +354,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 500",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -364,8 +362,8 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
+       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
       ]
      }
     }
@@ -398,7 +396,7 @@
       "request"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 606ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Payment Queue Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 807ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/payments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -425,7 +423,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -433,8 +431,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -463,7 +460,7 @@
       "balance"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 valid token rejected (legacy JWT)** \u2014 last verified 2026-08-18, HTTP `401` in 677ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V2** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `401` ",
+    "description": "**\ud83d\udd34 BROKEN \u2014 valid token rejected (legacy JWT)** \u2014 last verified 2026-08-18, HTTP `401` in 706ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V2** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `401` ",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -523,7 +520,7 @@
       "topup"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 valid token rejected (legacy JWT)** \u2014 last verified 2026-08-18, HTTP `401` in 729ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V2** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `401` \n\nProbe note: probe only\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 valid token rejected (legacy JWT)** \u2014 last verified 2026-08-18, HTTP `401` in 615ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V2** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `401` \n\nProbe note: probe only\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -590,7 +587,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 616ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Wallet Core Service is currently unavailable",
+    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 557ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Wallet Core Service is currently unavailable",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -646,7 +643,7 @@
       "transactions"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 603ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Wallet Core Service is currently unavailable",
+    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 724ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/wallet.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Wallet Core Service is currently unavailable",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -706,7 +703,7 @@
       "paystack"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 572ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/webhooks.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 639ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/webhooks.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -733,16 +730,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -775,7 +771,7 @@
       "stripe"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 561ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/webhooks.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 620ms.\n\nService: `payment-queue-service` \u00b7 source: `payment-queue-service/src/routes/v1/webhooks.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -802,16 +798,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }

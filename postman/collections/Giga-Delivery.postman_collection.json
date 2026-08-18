@@ -30,7 +30,7 @@
       "assignments"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 581ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 542ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -94,7 +94,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 845ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 829ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -153,7 +153,7 @@
       "find-couriers"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 583ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 572ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -216,7 +216,7 @@
       "couriers"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1011ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"verification_status\":\"verified\",\"availability_status\":\"available\",\"is_online\":true,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"QA-VREG-001\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},{\"id\":\"ddb960f5-a490-4fc7-a559-9b6ed6f888a5\",\"user_id\":\"71961077-324b-492d-bf7c-f8a85e262de6\",\"courier_code\":\"CUR-LGS-00142\",\"first_name\":\"Gija\",\"last_name\":\"Gija\",\"phone_number\":\"+2348031234567\",\"email\":\"ebube+test1@giga.com\",\"verification_status\":\"verified\",\"availability_status\":\"offline\",\"is_online\":false,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"LND-074-XYZ\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metric\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 984ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"verification_status\":\"verified\",\"availability_status\":\"available\",\"is_online\":true,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"QA-VREG-001\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},{\"id\":\"ddb960f5-a490-4fc7-a559-9b6ed6f888a5\",\"user_id\":\"71961077-324b-492d-bf7c-f8a85e262de6\",\"courier_code\":\"CUR-LGS-00142\",\"first_name\":\"Gija\",\"last_name\":\"Gija\",\"phone_number\":\"+2348031234567\",\"email\":\"ebube+test1@giga.com\",\"verification_status\":\"verified\",\"availability_status\":\"offline\",\"is_online\":false,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"LND-074-XYZ\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metric\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -274,7 +274,7 @@
       "couriers"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 863ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 856ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -338,7 +338,7 @@
       "{{courierId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1000ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"verification_status\":\"verified\",\"availability_status\":\"available\",\"is_online\":true,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"QA-VREG-001\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.373Z\",\"request_id\":\"get-courier\",\"version\":\"1.0.0\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1010ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"verification_status\":\"verified\",\"availability_status\":\"available\",\"is_online\":true,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"QA-VREG-001\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:14.244Z\",\"request_id\":\"get-courier\",\"version\":\"1.0.0\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -397,7 +397,7 @@
       "{{courierId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1235ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update courier\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1592ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update courier\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -467,7 +467,7 @@
       "availability"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 787ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 762ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -536,7 +536,7 @@
       "location"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 802ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 821ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -601,7 +601,7 @@
       "stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1632ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"courier_id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"courier_code\":\"QA-CUR-TEST\",\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"verification_status\":\"verified\",\"availability_status\":\"available\",\"current_load_kg\":0,\"active_deliveries\":0},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.893Z\",\"request_id\":\"get-courier-stats\",\"version\":\"1.0.0\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1433ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"courier_id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"courier_code\":\"QA-CUR-TEST\",\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"verification_status\":\"verified\",\"availability_status\":\"available\",\"current_load_kg\":0,\"active_deliveries\":0},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:14.691Z\",\"request_id\":\"get-courier-stats\",\"version\":\"1.0.0\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -661,7 +661,7 @@
       "verification"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 786ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 821ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -726,7 +726,7 @@
       "{{userId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1057ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1084ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -784,7 +784,7 @@
       "packages"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 772ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 753ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -848,7 +848,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1027ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 997ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -903,7 +903,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1131ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 981ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -962,7 +962,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1033ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 980ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1031,7 +1031,7 @@
       "cancel"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 975ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 982ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1096,7 +1096,7 @@
       "{{userId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1555ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.607Z\",\"request_id\":\"get-sender-packages\",\"version\":\"1.0.0\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 956ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:14.803Z\",\"request_id\":\"get-sender-packages\",\"version\":\"1.0.0\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1152,7 +1152,7 @@
       "pending"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1102ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ef50d35-b0aa-4b66-9f9c-26c3e9ebdc59\",\"sender_id\":null,\"recipient_id\":null,\"sender_name\":\"Eve Martinez\",\"sender_phone\":\"+1-555-0107\",\"sender_address\":\"999 Cedar Ln, Denver, CO\",\"sender_lat\":39.7392,\"sender_lng\":-104.9903,\"recipient_name\":\"Frank Garcia\",\"recipient_phone\":\"+1-555-0108\",\"recipient_address\":\"111 Birch St, Boston, MA\",\"recipient_lat\":42.3601,\"recipient_lng\":-71.0589,\"package_description\":\"Books - Textbooks\",\"package_weight\":3,\"package_dimensions\":null,\"delivery_fee\":35,\"status\":\"pending\",\"priority\":\"normal\",\"delivery_instructions\":null,\"estimated_delivery\":null,\"actual_delivery\":null,\"proof_of_delivery\":null,\"created_at\":\"2026-02-28T13:39:34.178243+00:00\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"}],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.735Z\",\"request_id\":\"get-packages-by-status\",\"version\":\"1.0.0\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":1,\"total_pages\":1,\"has_previous\":false,\"has_next\":false}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 981ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ef50d35-b0aa-4b66-9f9c-26c3e9ebdc59\",\"sender_id\":null,\"recipient_id\":null,\"sender_name\":\"Eve Martinez\",\"sender_phone\":\"+1-555-0107\",\"sender_address\":\"999 Cedar Ln, Denver, CO\",\"sender_lat\":39.7392,\"sender_lng\":-104.9903,\"recipient_name\":\"Frank Garcia\",\"recipient_phone\":\"+1-555-0108\",\"recipient_address\":\"111 Birch St, Boston, MA\",\"recipient_lat\":42.3601,\"recipient_lng\":-71.0589,\"package_description\":\"Books - Textbooks\",\"package_weight\":3,\"package_dimensions\":null,\"delivery_fee\":35,\"status\":\"pending\",\"priority\":\"normal\",\"delivery_instructions\":null,\"estimated_delivery\":null,\"actual_delivery\":null,\"proof_of_delivery\":null,\"created_at\":\"2026-02-28T13:39:34.178243+00:00\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"}],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:14.934Z\",\"request_id\":\"get-packages-by-status\",\"version\":\"1.0.0\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":1,\"total_pages\":1,\"has_previous\":false,\"has_next\":false}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1211,7 +1211,7 @@
       "cleanup"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 664ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/scheduler.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 746ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/scheduler.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1238,16 +1238,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1276,7 +1275,7 @@
       "stats"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 584ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/scheduler.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 806ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/scheduler.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1294,16 +1293,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 403",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1335,7 +1333,7 @@
       "track-delivery"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 869ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 792ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1362,16 +1360,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1400,7 +1397,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1710ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1414ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1460,7 +1457,7 @@
       "cleanup"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1796ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1400ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1525,7 +1522,7 @@
       "progress"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1632ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1798ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1584,7 +1581,7 @@
       "broadcast"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 596ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 828ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1611,16 +1608,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1653,7 +1649,7 @@
       "cleanup"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 609ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 789ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1680,16 +1676,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 403",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1718,7 +1713,7 @@
       "stats"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 626ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 785ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1736,16 +1731,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 403",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }

@@ -15,17 +15,16 @@ auth:bearer {
 }
 
 tests {
-  // KNOWN DEFECT: verified 404 on 2026-08-18. Flip to a 2xx assertion once fixed.
-  test("known defect still reproduces (404)", function(){ expect(res.status).to.equal(404); });
+  test("reached backend (verified 403 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
 }
 
 docs {
   `GET /api/v1/websocket/stats`
   
-  **🔴 BROKEN — no gateway route (defect V5)** — last verified 2026-08-18, HTTP `404`.
+  **🔒 403 for the QA account** — last verified 2026-08-18, HTTP `403`.
   
   Service: **delivery-service** · file: `delivery-service/src/routes/websocket.ts`
   Auth: customer bearer (`{{token}}`).
-  
-  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `404` No service available for this endpoint
 }

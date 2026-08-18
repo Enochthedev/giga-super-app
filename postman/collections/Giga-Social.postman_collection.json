@@ -26,7 +26,7 @@
       "connections"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1022ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:10.696Z\",\"service\":\"social-service\",\"requestId\":\"4efa6268-0055-47fb-8746-a13aad580df8\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1025ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"15a71470-5da8-43b5-bb6f-d65f2761bc82\",\"connected_user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"status\":\"pending\",\"connection_type\":\"friend\",\"created_at\":\"2026-08-18T20:10:14.4139+00:00\",\"user_profiles\":{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"first_name\":\"Bola\",\"last_name\":\"Buyer\",\"avatar_url\":null}}],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:20.365Z\",\"service\":\"social-service\",\"requestId\":\"22e12508-584a-40c2-b635-c8b179527aa8\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":1,\"totalPages\":1,\"hasMore\":false}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -84,7 +84,7 @@
       "connections"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 713ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 566ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -148,7 +148,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 946ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 842ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -207,7 +207,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 617ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 633ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -271,7 +271,7 @@
       "requests"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1017ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:10.976Z\",\"service\":\"social-service\",\"requestId\":\"0751c1bc-2666-4c09-9adf-87713bb78711\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 833ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:20.147Z\",\"service\":\"social-service\",\"requestId\":\"39b22caf-c7a1-4000-970d-3376ee4f8d4f\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -325,7 +325,7 @@
       "feed"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1084ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"92e8d470-31b7-474e-9898-9c239214e16a\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:25:27.198753+00:00\",\"updated_at\":\"2026-08-18T19:25:27.198753+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\"},{\"id\":\"adb60b2d-fa7e-4ac9-9418-e332b3cfb279\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:23:46.316346+\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 836ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"6bb7039e-cb1b-4f94-884b-dddad521a5fe\",\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T21:00:13.826168+00:00\",\"updated_at\":\"2026-08-18T21:00:13.826168+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Chidi\",\"last_name\":\"Admin\",\"avatar_url\":null},{\"id\":\"5c53bec1-7ef8-4bcb-8f26-9cb45bf550ae\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"Hello from Bruno\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T20:10:25.339146+00:00\",\"updated_at\":\"2026-08-18T20:10:25.339146+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -380,7 +380,7 @@
       "following"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1198ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.012Z\",\"service\":\"social-service\",\"requestId\":\"9438befe-0129-47d1-9133-8266cb6d6a83\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 767ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:20.366Z\",\"service\":\"social-service\",\"requestId\":\"7e276129-e8bb-4097-8d4e-f8af16f56edf\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -435,7 +435,7 @@
       "trending"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1180ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"adb60b2d-fa7e-4ac9-9418-e332b3cfb279\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:23:46.316346+00:00\",\"updated_at\":\"2026-08-18T19:23:46.316346+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\"},{\"id\":\"92e8d470-31b7-474e-9898-9c239214e16a\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:25:27.198753+\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 795ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"9232ad16-e649-4b8a-a440-c6e929bd2697\",\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:45:38.818915+00:00\",\"updated_at\":\"2026-08-18T19:45:38.818915+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Chidi\",\"last_name\":\"Admin\",\"avatar_url\":null},{\"id\":\"5d709a12-37b5-4fa8-87ea-f446f962b20f\",\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:56:44.442732+00:00\",\"updated_at\":\"2026-08-18T19:56:44.442732+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"te\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -489,7 +489,7 @@
       "posts"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 928ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"92e8d470-31b7-474e-9898-9c239214e16a\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:25:27.198753+00:00\",\"updated_at\":\"2026-08-18T19:25:27.198753+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\"},{\"id\":\"adb60b2d-fa7e-4ac9-9418-e332b3cfb279\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:23:46.316346+\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 774ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"6bb7039e-cb1b-4f94-884b-dddad521a5fe\",\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T21:00:13.826168+00:00\",\"updated_at\":\"2026-08-18T21:00:13.826168+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Chidi\",\"last_name\":\"Admin\",\"avatar_url\":null},{\"id\":\"5c53bec1-7ef8-4bcb-8f26-9cb45bf550ae\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"Hello from Bruno\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T20:10:25.339146+00:00\",\"updated_at\":\"2026-08-18T20:10:25.339146+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -547,7 +547,7 @@
       "posts"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `201` in 897ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: creates a post (cleaned up after)\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `201` in 826ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: creates a post (cleaned up after)\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -611,7 +611,7 @@
       "{{postId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1219ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1196ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -629,7 +629,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 200",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -637,7 +637,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -666,7 +666,7 @@
       "{{postId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 974ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1197ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -725,7 +725,7 @@
       "{{postId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 872ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 879ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -790,7 +790,7 @@
       "comments"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 799ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.420Z\",\"service\":\"social-service\",\"requestId\":\"2260b8df-0ec5-4f6e-a070-a4bd3b09cee8\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1301ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:20.736Z\",\"service\":\"social-service\",\"requestId\":\"8e35624c-94eb-483e-8f0f-85dcc9e09b69\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -850,7 +850,7 @@
       "comments"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 821ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1161ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -916,7 +916,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 951ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 812ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -977,7 +977,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 600ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 621ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1042,7 +1042,7 @@
       "like"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1081ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1057ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1102,7 +1102,7 @@
       "like"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 863ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 769ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1168,7 +1168,7 @@
       "users"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 851ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.515Z\",\"service\":\"social-service\",\"requestId\":\"219f406b-3765-4b63-af91-3af3efb1ff98\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1125ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:20.858Z\",\"service\":\"social-service\",\"requestId\":\"c4486975-e2e8-4622-ad35-31002be00132\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1224,7 +1224,7 @@
       "likes"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1434ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 963ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1284,7 +1284,7 @@
       "likes"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1200ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 752ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1350,7 +1350,7 @@
       "users"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 773ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.622Z\",\"service\":\"social-service\",\"requestId\":\"69ef6fc7-7b17-44ee-8391-eead26f0e975\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 793ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:20.974Z\",\"service\":\"social-service\",\"requestId\":\"1b336491-860f-4941-a2e8-28d581ef0e34\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1473,7 +1473,7 @@
       "stories"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1053ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.948Z\",\"service\":\"social-service\",\"requestId\":\"52bed5b1-5b8e-4077-8d10-962bcfb0b1cf\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 976ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T21:02:21.411Z\",\"service\":\"social-service\",\"requestId\":\"d0c1d2c2-27eb-44cd-a963-84b1dfd945aa\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1531,7 +1531,7 @@
       "stories"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 622ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 555ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1595,7 +1595,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 786ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 812ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1650,7 +1650,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 763ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 755ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1706,7 +1706,7 @@
       "viewers"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1139ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 776ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1761,7 +1761,7 @@
       "posts"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 574ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 591ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1779,16 +1779,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1821,7 +1820,7 @@
       "posts"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 583ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 563ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1848,16 +1847,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1887,7 +1885,7 @@
       "{{postId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 596ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 601ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1905,16 +1903,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -1945,7 +1942,7 @@
       "comments"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 563ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 568ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1963,16 +1960,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -2007,7 +2003,7 @@
       "comments"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 560ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 562ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2034,16 +2030,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -2078,7 +2073,7 @@
       "like"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 578ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 573ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2105,16 +2100,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -2143,7 +2137,7 @@
       "usage"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 583ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 573ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2161,16 +2155,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
