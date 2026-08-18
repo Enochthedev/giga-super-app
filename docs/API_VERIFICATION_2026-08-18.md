@@ -66,10 +66,13 @@ customer (`qa.customer1@gigaqa.test`) and QA admin (`qa.admin@gigaqa.test`) logi
 > GET  /api                            404  — bare index route, not a real endpoint
 > ```
 >
-> Awaiting deploy at time of writing (code validated, commit `10e2268` queued on Railway):
-> `POST /api/v1/templates` (category/channels are NOT NULL and were never supplied) and
-> `/api/v1/wallet/{transactions,topup/verify}` (pinned to payment-queue-service, which is the
-> only service that implements them).
+> ✅ Both items that were pending deploy are now **verified live**:
+> `POST /api/v1/templates` → **201** (category/channels are NOT NULL and were never supplied),
+> `GET /api/v1/wallet/transactions` → **200**, and `GET /api/v1/wallet/topup/verify/:ref` →
+> a correct **404 "Transaction not found"** from payment-queue-service.
+>
+> That leaves **2 genuine 500s** across all 335 routes, both waiting on credentials or a
+> function redeploy rather than code.
 >
 > Also still undeployed edge functions, unchanged from the July log: the `/api/v1/ads/*`
 > family and `create-support-ticket` return 404 "Requested function was not found".
