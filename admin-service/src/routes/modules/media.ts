@@ -288,10 +288,15 @@ router.get(
       const { page = '1', limit = '20', status } = req.query;
       const { from, to } = getPaginationRange(page as string, limit as string);
 
+      // E29/V8: there is no `advertisements` table — ad data lives in `ad_campaigns`.
+      // Fields are aliased to preserve the previous response shape:
+      //   title -> campaign_name, placement -> campaign_type, media_url/media_type ->
+      //   creative_assets (jsonb) + landing_url. Every request here used to 500.
       let query = supabase
-        .from('advertisements')
+        .from('ad_campaigns')
         .select(
-          `id, title, description, media_url, media_type, target_audience, placement,
+          `id, title:campaign_name, description, placement:campaign_type,
+         creative_assets, landing_url, target_audience,
          budget, impressions, clicks, start_date, end_date, status, created_at,
          advertiser_profiles!inner(id, business_name, contact_email)`,
           { count: 'exact' }
@@ -366,12 +371,13 @@ router.get(
     try {
       const { id } = req.params;
 
+      // E29/V8: `advertisements` does not exist; the data is in `ad_campaigns`.
       const { data: ad, error } = await supabase
-        .from('advertisements')
+        .from('ad_campaigns')
         .select(`*, advertiser_profiles!inner(id, business_name, contact_email)`)
         .eq('id', id)
         .is('deleted_at', null)
-        .single();
+        .maybeSingle();
 
       if (error || !ad) {
         return res.status(404).json({ success: false, error: 'Advertisement not found' });

@@ -2,6 +2,16 @@ import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import winston from 'winston';
 import { isPlatformAdmin } from '../utils/adminRoles.js';
+import {
+  countLogs,
+  deliveryRates,
+  engagement as engagementRows,
+  templatePerformance,
+  userAnalytics,
+  volume as volumeRows,
+  type GroupBy,
+  type LogFilters,
+} from '../utils/analyticsQueries.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -77,57 +87,19 @@ router.get('/delivery-rates', requireAdmin, async (req: AuthenticatedRequest, re
     // Build date truncation based on group_by
     const dateTrunc = group_by === 'day' ? 'day' : group_by === 'week' ? 'week' : 'month';
 
-    let query = `
-      SELECT 
-        DATE_TRUNC('${dateTrunc}', created_at) as period,
-        type,
-        COUNT(*) as total_sent,
-        COUNT(*) FILTER (WHERE status IN ('sent', 'delivered', 'opened', 'clicked')) as successful,
-        COUNT(*) FILTER (WHERE status = 'delivered') as delivered,
-        COUNT(*) FILTER (WHERE status = 'failed') as failed,
-        COUNT(*) FILTER (WHERE status = 'bounced') as bounced,
-        ROUND(
-          (COUNT(*) FILTER (WHERE status IN ('sent', 'delivered', 'opened', 'clicked'))::numeric / 
-           NULLIF(COUNT(*), 0) * 100), 2
-        ) as success_rate,
-        ROUND(
-          (COUNT(*) FILTER (WHERE status = 'delivered')::numeric / 
-           NULLIF(COUNT(*), 0) * 100), 2
-        ) as delivery_rate
-      FROM notification_logs 
-      WHERE 1=1
-    `;
-
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    if (date_from) {
-      query += ` AND created_at >= $${paramIndex}`;
-      params.push(date_from);
-      paramIndex++;
+    // V8: replaced a non-existent `execute_sql` RPC (see utils/analyticsQueries.ts).
+    const filters: LogFilters = {
+      date_from: date_from as string | undefined,
+      date_to: date_to as string | undefined,
+      type: type as string | undefined,
+    };
+    let data: unknown[] | null = null;
+    let error: { message: string } | null = null;
+    try {
+      data = await deliveryRates(dateTrunc as GroupBy, filters);
+    } catch (e) {
+      error = { message: (e as Error).message };
     }
-
-    if (date_to) {
-      query += ` AND created_at <= $${paramIndex}`;
-      params.push(date_to);
-      paramIndex++;
-    }
-
-    if (type && ['email', 'sms', 'push'].includes(type as string)) {
-      query += ` AND type = $${paramIndex}`;
-      params.push(type);
-      paramIndex++;
-    }
-
-    query += `
-      GROUP BY DATE_TRUNC('${dateTrunc}', created_at), type
-      ORDER BY period DESC, type
-    `;
-
-    const { data, error } = await supabase.rpc('execute_sql', {
-      query,
-      params,
-    });
 
     if (error) {
       logger.error('Failed to fetch delivery rates', { error, requestId: req.requestId });
@@ -221,61 +193,19 @@ router.get('/engagement', requireAdmin, async (req: AuthenticatedRequest, res: R
 
     const dateTrunc = group_by === 'day' ? 'day' : group_by === 'week' ? 'week' : 'month';
 
-    let query = `
-      SELECT 
-        DATE_TRUNC('${dateTrunc}', created_at) as period,
-        type,
-        template_id,
-        COUNT(*) FILTER (WHERE status IN ('sent', 'delivered', 'opened', 'clicked')) as sent,
-        COUNT(*) FILTER (WHERE status IN ('delivered', 'opened', 'clicked')) as delivered,
-        COUNT(*) FILTER (WHERE status IN ('opened', 'clicked')) as opened,
-        COUNT(*) FILTER (WHERE status = 'clicked') as clicked,
-        ROUND(
-          (COUNT(*) FILTER (WHERE status IN ('opened', 'clicked'))::numeric / 
-           NULLIF(COUNT(*) FILTER (WHERE status IN ('delivered', 'opened', 'clicked')), 0) * 100), 2
-        ) as open_rate,
-        ROUND(
-          (COUNT(*) FILTER (WHERE status = 'clicked')::numeric / 
-           NULLIF(COUNT(*) FILTER (WHERE status IN ('opened', 'clicked')), 0) * 100), 2
-        ) as click_rate,
-        ROUND(
-          (COUNT(*) FILTER (WHERE status = 'clicked')::numeric / 
-           NULLIF(COUNT(*) FILTER (WHERE status IN ('delivered', 'opened', 'clicked')), 0) * 100), 2
-        ) as click_through_rate
-      FROM notification_logs 
-      WHERE type = 'email'
-    `;
-
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    if (date_from) {
-      query += ` AND created_at >= $${paramIndex}`;
-      params.push(date_from);
-      paramIndex++;
+    // V8: replaced a non-existent `execute_sql` RPC (see utils/analyticsQueries.ts).
+    const filters: LogFilters = {
+      date_from: date_from as string | undefined,
+      date_to: date_to as string | undefined,
+      type: type as string | undefined,
+    };
+    let data: unknown[] | null = null;
+    let error: { message: string } | null = null;
+    try {
+      data = await engagementRows(dateTrunc as GroupBy, filters);
+    } catch (e) {
+      error = { message: (e as Error).message };
     }
-
-    if (date_to) {
-      query += ` AND created_at <= $${paramIndex}`;
-      params.push(date_to);
-      paramIndex++;
-    }
-
-    if (template_id) {
-      query += ` AND template_id = $${paramIndex}`;
-      params.push(template_id);
-      paramIndex++;
-    }
-
-    query += `
-      GROUP BY DATE_TRUNC('${dateTrunc}', created_at), type, template_id
-      ORDER BY period DESC, type, template_id
-    `;
-
-    const { data, error } = await supabase.rpc('execute_sql', {
-      query,
-      params,
-    });
 
     if (error) {
       logger.error('Failed to fetch engagement metrics', { error, requestId: req.requestId });
@@ -373,54 +303,19 @@ router.get('/volume', requireAdmin, async (req: AuthenticatedRequest, res: Respo
 
     const dateTrunc = group_by as string;
 
-    let query = `
-      SELECT 
-        DATE_TRUNC('${dateTrunc}', created_at) as period,
-        type,
-        COUNT(*) as total_notifications,
-        COUNT(DISTINCT user_id) as unique_users,
-        COUNT(DISTINCT template_id) as unique_templates,
-        AVG(
-          CASE 
-            WHEN sent_at IS NOT NULL AND created_at IS NOT NULL 
-            THEN EXTRACT(EPOCH FROM (sent_at - created_at))
-            ELSE NULL 
-          END
-        ) as avg_processing_time_seconds
-      FROM notification_logs 
-      WHERE 1=1
-    `;
-
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    if (date_from) {
-      query += ` AND created_at >= $${paramIndex}`;
-      params.push(date_from);
-      paramIndex++;
+    // V8: replaced a non-existent `execute_sql` RPC (see utils/analyticsQueries.ts).
+    const filters: LogFilters = {
+      date_from: date_from as string | undefined,
+      date_to: date_to as string | undefined,
+      type: type as string | undefined,
+    };
+    let data: unknown[] | null = null;
+    let error: { message: string } | null = null;
+    try {
+      data = await volumeRows(dateTrunc as GroupBy, filters);
+    } catch (e) {
+      error = { message: (e as Error).message };
     }
-
-    if (date_to) {
-      query += ` AND created_at <= $${paramIndex}`;
-      params.push(date_to);
-      paramIndex++;
-    }
-
-    if (type && ['email', 'sms', 'push'].includes(type as string)) {
-      query += ` AND type = $${paramIndex}`;
-      params.push(type);
-      paramIndex++;
-    }
-
-    query += `
-      GROUP BY DATE_TRUNC('${dateTrunc}', created_at), type
-      ORDER BY period DESC, type
-    `;
-
-    const { data, error } = await supabase.rpc('execute_sql', {
-      query,
-      params,
-    });
 
     if (error) {
       logger.error('Failed to fetch volume statistics', { error, requestId: req.requestId });
@@ -517,66 +412,19 @@ router.get('/templates', requireAdmin, async (req: AuthenticatedRequest, res: Re
   try {
     const { date_from, date_to, type, limit = 10 } = req.query;
 
-    let query = `
-      SELECT 
-        nt.id,
-        nt.name,
-        nt.type,
-        COUNT(nl.*) as total_sent,
-        COUNT(*) FILTER (WHERE nl.status IN ('delivered', 'opened', 'clicked')) as delivered,
-        COUNT(*) FILTER (WHERE nl.status IN ('opened', 'clicked')) as opened,
-        COUNT(*) FILTER (WHERE nl.status = 'clicked') as clicked,
-        COUNT(*) FILTER (WHERE nl.status = 'failed') as failed,
-        ROUND(
-          (COUNT(*) FILTER (WHERE nl.status IN ('delivered', 'opened', 'clicked'))::numeric / 
-           NULLIF(COUNT(nl.*), 0) * 100), 2
-        ) as delivery_rate,
-        ROUND(
-          (COUNT(*) FILTER (WHERE nl.status IN ('opened', 'clicked'))::numeric / 
-           NULLIF(COUNT(*) FILTER (WHERE nl.status IN ('delivered', 'opened', 'clicked')), 0) * 100), 2
-        ) as open_rate,
-        ROUND(
-          (COUNT(*) FILTER (WHERE nl.status = 'clicked')::numeric / 
-           NULLIF(COUNT(*) FILTER (WHERE nl.status IN ('opened', 'clicked')), 0) * 100), 2
-        ) as click_rate
-      FROM notification_templates nt
-      LEFT JOIN notification_logs nl ON nt.id = nl.template_id
-      WHERE nt.is_active = true
-    `;
-
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    if (date_from) {
-      query += ` AND nl.created_at >= $${paramIndex}`;
-      params.push(date_from);
-      paramIndex++;
+    // V8: replaced a non-existent `execute_sql` RPC (see utils/analyticsQueries.ts).
+    const filters: LogFilters = {
+      date_from: date_from as string | undefined,
+      date_to: date_to as string | undefined,
+      type: type as string | undefined,
+    };
+    let data: unknown[] | null = null;
+    let error: { message: string } | null = null;
+    try {
+      data = await templatePerformance(filters);
+    } catch (e) {
+      error = { message: (e as Error).message };
     }
-
-    if (date_to) {
-      query += ` AND nl.created_at <= $${paramIndex}`;
-      params.push(date_to);
-      paramIndex++;
-    }
-
-    if (type && ['email', 'sms', 'push'].includes(type as string)) {
-      query += ` AND nt.type = $${paramIndex}`;
-      params.push(type);
-      paramIndex++;
-    }
-
-    query += `
-      GROUP BY nt.id, nt.name, nt.type
-      HAVING COUNT(nl.*) > 0
-      ORDER BY total_sent DESC
-      LIMIT $${paramIndex}
-    `;
-    params.push(parseInt(limit as string));
-
-    const { data, error } = await supabase.rpc('execute_sql', {
-      query,
-      params,
-    });
 
     if (error) {
       logger.error('Failed to fetch template analytics', { error, requestId: req.requestId });
@@ -632,58 +480,19 @@ router.get('/users', requireAdmin, async (req: AuthenticatedRequest, res: Respon
   try {
     const { date_from, date_to, type, limit = 20 } = req.query;
 
-    let query = `
-      SELECT 
-        nl.user_id,
-        up.email,
-        COUNT(*) as total_notifications,
-        COUNT(*) FILTER (WHERE nl.status IN ('delivered', 'opened', 'clicked')) as delivered,
-        COUNT(*) FILTER (WHERE nl.status IN ('opened', 'clicked')) as opened,
-        COUNT(*) FILTER (WHERE nl.status = 'clicked') as clicked,
-        COUNT(DISTINCT nl.template_id) as unique_templates_received,
-        MAX(nl.created_at) as last_notification_at,
-        ROUND(
-          (COUNT(*) FILTER (WHERE nl.status IN ('opened', 'clicked'))::numeric / 
-           NULLIF(COUNT(*) FILTER (WHERE nl.status IN ('delivered', 'opened', 'clicked')), 0) * 100), 2
-        ) as engagement_rate
-      FROM notification_logs nl
-      LEFT JOIN user_profiles up ON nl.user_id = up.id
-      WHERE 1=1
-    `;
-
-    const params: any[] = [];
-    let paramIndex = 1;
-
-    if (date_from) {
-      query += ` AND nl.created_at >= $${paramIndex}`;
-      params.push(date_from);
-      paramIndex++;
+    // V8: replaced a non-existent `execute_sql` RPC (see utils/analyticsQueries.ts).
+    const filters: LogFilters = {
+      date_from: date_from as string | undefined,
+      date_to: date_to as string | undefined,
+      type: type as string | undefined,
+    };
+    let data: unknown[] | null = null;
+    let error: { message: string } | null = null;
+    try {
+      data = await userAnalytics(filters);
+    } catch (e) {
+      error = { message: (e as Error).message };
     }
-
-    if (date_to) {
-      query += ` AND nl.created_at <= $${paramIndex}`;
-      params.push(date_to);
-      paramIndex++;
-    }
-
-    if (type && ['email', 'sms', 'push'].includes(type as string)) {
-      query += ` AND nl.type = $${paramIndex}`;
-      params.push(type);
-      paramIndex++;
-    }
-
-    query += `
-      GROUP BY nl.user_id, up.email
-      HAVING COUNT(*) > 0
-      ORDER BY engagement_rate DESC, total_notifications DESC
-      LIMIT $${paramIndex}
-    `;
-    params.push(parseInt(limit as string));
-
-    const { data, error } = await supabase.rpc('execute_sql', {
-      query,
-      params,
-    });
 
     if (error) {
       logger.error('Failed to fetch user analytics', { error, requestId: req.requestId });
@@ -730,38 +539,16 @@ async function calculateTrends(dateFrom: string, dateTo: string, type: string, g
     const prevToDate = new Date(fromDate.getTime());
 
     // Get current period stats
-    let currentQuery = `
-      SELECT COUNT(*) as total
-      FROM notification_logs 
-      WHERE created_at >= $1 AND created_at <= $2
-    `;
-
-    const currentParams = [dateFrom, dateTo];
-    if (type && ['email', 'sms', 'push'].includes(type)) {
-      currentQuery += ' AND type = $3';
-      currentParams.push(type);
-    }
-
-    // Get previous period stats
-    let prevQuery = `
-      SELECT COUNT(*) as total
-      FROM notification_logs 
-      WHERE created_at >= $1 AND created_at <= $2
-    `;
-
-    const prevParams = [prevFromDate.toISOString(), prevToDate.toISOString()];
-    if (type && ['email', 'sms', 'push'].includes(type)) {
-      prevQuery += ' AND type = $3';
-      prevParams.push(type);
-    }
-
-    const [currentResult, prevResult] = await Promise.all([
-      supabase.rpc('execute_sql', { query: currentQuery, params: currentParams }),
-      supabase.rpc('execute_sql', { query: prevQuery, params: prevParams }),
+    // V8: replaced the non-existent `execute_sql` RPC with plain counts.
+    const typeFilter = type && ['email', 'sms', 'push'].includes(type) ? type : undefined;
+    const [currentTotal, prevTotal] = await Promise.all([
+      countLogs({ date_from: dateFrom, date_to: dateTo, type: typeFilter }),
+      countLogs({
+        date_from: prevFromDate.toISOString(),
+        date_to: prevToDate.toISOString(),
+        type: typeFilter,
+      }),
     ]);
-
-    const currentTotal = currentResult.data?.[0]?.total || 0;
-    const prevTotal = prevResult.data?.[0]?.total || 0;
 
     let growthRate = 0;
     if (prevTotal > 0) {

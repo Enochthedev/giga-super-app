@@ -682,10 +682,28 @@ router.post(
         user_agent: req.get('User-Agent'),
       };
 
-      // Store in database (async, don't wait)
-      (getDatabase() as any).storeSearchAnalytics(analyticsData).catch((error: Error) => {
-        req.logger?.error('Failed to store search analytics', error);
-      });
+      // Store in database (async, don't wait).
+      //
+      // V8: DatabaseService has no storeSearchAnalytics method — the `as any` cast hid
+      // that, so this threw "is not a function" synchronously, before .catch() could
+      // attach, and the endpoint returned 500 on every call. There is also no
+      // search-analytics table in the schema to write to, so persistence is a separate
+      // piece of work (migration + method). Until then, record the payload in the logs
+      // and let the request succeed, which is what the fire-and-forget shape intended.
+      const db = getDatabase() as unknown as {
+        storeSearchAnalytics?: (data: unknown) => Promise<unknown>;
+      };
+      if (typeof db.storeSearchAnalytics === 'function') {
+        db.storeSearchAnalytics(analyticsData).catch((error: Error) => {
+          req.logger?.error('Failed to store search analytics', error);
+        });
+      } else {
+        req.logger?.info('Search analytics not persisted (no storage configured)', {
+          query: analyticsData.query,
+          category: analyticsData.category,
+          results_count: analyticsData.results_count,
+        });
+      }
 
       const executionTime = Date.now() - startTime;
 

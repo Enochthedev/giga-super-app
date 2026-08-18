@@ -652,16 +652,19 @@ router.put(
       const { orderId } = req.params;
       const { status, notes } = req.body;
 
+      // V8: `notes` is not a column on ecommerce_orders (it has customer_notes /
+      // admin_notes), so PostgREST rejected the write and every call 500'd. A manager
+      // note is an admin note. `.single()` also threw on a non-existent id.
       const { data: order, error } = await supabase
         .from('ecommerce_orders')
         .update({
           status,
-          notes,
+          ...(notes === undefined ? {} : { admin_notes: notes }),
           updated_at: new Date().toISOString(),
         })
         .eq('id', orderId)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
@@ -704,7 +707,8 @@ router.delete(
         })
         .eq('id', orderId)
         .select()
-        .single();
+        // V8: `.single()` threw on a non-existent id, turning a 404 into a 500.
+        .maybeSingle();
 
       if (error) throw error;
 

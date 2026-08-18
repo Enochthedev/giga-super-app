@@ -535,15 +535,13 @@ router.get(
       // Geo-scope: region-tagged admins can only fetch users in their subtree.
       const allowedRegionIds = await getAllowedRegionIds(req.user!);
 
+      // V8: user_roles / user_active_roles carry no foreign key to user_profiles, so
+      // PostgREST cannot resolve them as embedded selects — including them here made
+      // every request 500 (the list endpoint works precisely because it has no embeds).
+      // Fetch the profile plainly, then join the role rows in a second round trip.
       let detailQuery = supabase
         .from('user_profiles')
-        .select(
-          `
-        ${SELECT_FIELDS.USER_PROFILE},
-        user_roles(role_name, granted_at),
-        user_active_roles(active_role)
-      `
-        )
+        .select(SELECT_FIELDS.USER_PROFILE)
         .eq('id', userId);
 
       detailQuery = applyRegionScope(detailQuery, allowedRegionIds);
@@ -557,9 +555,22 @@ router.get(
         return res.status(404).json({ error: 'User not found' });
       }
 
+      const [{ data: roles }, { data: activeRole }] = await Promise.all([
+        supabase.from('user_roles').select('role_name, granted_at, is_active').eq('user_id', userId),
+        supabase.from('user_active_roles').select('active_role').eq('user_id', userId).maybeSingle(),
+      ]);
+
       await createAudit(req, 'view_user_details', 'user_profile', userId);
 
-      res.json({ success: true, data: user });
+      res.json({
+        success: true,
+        data: {
+          // SELECT_FIELDS.USER_PROFILE is a runtime string, so the row type is opaque to TS.
+          ...(user as unknown as Record<string, unknown>),
+          user_roles: roles ?? [],
+          user_active_roles: activeRole ? [activeRole] : [],
+        },
+      });
     } catch (error: any) {
       logger.error('Failed to get user', { error: error.message });
       res.status(500).json({ error: 'Failed to fetch user' });
@@ -593,9 +604,24 @@ router.patch(
         })
         .eq('id', userId)
         .select()
-        .single();
+        // V8: `.single()` throws when no row matches, turning "unknown user" into a 500.
+        .maybeSingle();
+
+      // V8: an unknown field in the body is a client error, not a server fault.
+      // PostgREST reports it as 42703 / PGRST204; surface it as a 400 with the detail.
+      if (error && (error.code === '42703' || error.code === 'PGRST204')) {
+        return res.status(400).json({
+          success: false,
+          error: 'Unknown field in update payload',
+          details: error.message,
+        });
+      }
 
       if (error) throw error;
+
+      if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+      }
 
       await createAudit(req, 'update_user', 'user_profile', userId, updates);
 

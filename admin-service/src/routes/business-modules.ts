@@ -2907,7 +2907,7 @@ router.get(
           updated_at,
           ecommerce_order_items(
             quantity,
-            unit_price,
+            unit_price:price_per_unit,
             ecommerce_products(name)
           )
         `,
@@ -3034,7 +3034,9 @@ router.put(
         .eq('id', orderId)
         .is('deleted_at', null)
         .select()
-        .single();
+        // V8: `.single()` threw on a non-existent/deleted order, so the 404 branch
+        // below was unreachable and the caller got a 500 instead.
+        .maybeSingle();
 
       if (error) throw error;
 

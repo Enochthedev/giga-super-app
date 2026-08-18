@@ -390,10 +390,16 @@ router.get('/bookings', authenticate, requireAnyAccess, async (req: AuthRequest,
     let query = supabase
       .from('hotel_bookings')
       .select(
-        `id, booking_reference, hotel_id, user_id, room_type_id, check_in_date, check_out_date,
-         num_guests, total_price, booking_status, payment_status, created_at,
+        // Aliased to the real hotel_bookings schema: the table has booking_number /
+        // guest_count / total_amount, not booking_reference / num_guests / total_price.
+        // The user_profiles!inner embed was also dropped — hotel_bookings.user_id has no
+        // FK to user_profiles, so PostgREST could not resolve the relationship and every
+        // request 500'd. Guest details live directly on the booking row.
+        `id, booking_reference:booking_number, hotel_id, user_id, room_type_id,
+         check_in_date, check_out_date, num_guests:guest_count, total_price:total_amount,
+         booking_status, payment_status, created_at,
+         guest_name, guest_email, guest_phone,
          hotels!inner(id, name, city),
-         user_profiles!inner(first_name, last_name, email, phone),
          room_types(name)`,
         { count: 'exact' }
       )

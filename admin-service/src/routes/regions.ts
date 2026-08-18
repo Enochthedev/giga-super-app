@@ -217,15 +217,33 @@ router.get(
   async (req: AuthRequest, res: Response) => {
     try {
       const { id } = req.params;
-      const { data, error } = await supabase
+      // V8: nipost_user_permissions.user_id has no FK to user_profiles, so PostgREST
+      // cannot resolve a `user_profiles!inner(...)` embed — it 500'd on every call.
+      // Fetch the permission rows, then look the profiles up in one follow-up query.
+      const { data: perms, error } = await supabase
         .from('nipost_user_permissions')
-        .select(
-          'user_id, access_level, role, region_id, state_name, is_active, user_profiles!inner(email, first_name, last_name)'
-        )
+        .select('user_id, access_level, role, region_id, state_name, is_active')
         .eq('region_id', id)
         .eq('is_active', true);
 
       if (error) throw error;
+
+      const userIds = [...new Set((perms ?? []).map(p => p.user_id).filter(Boolean))];
+      const profiles = userIds.length
+        ? (
+            await supabase
+              .from('user_profiles')
+              .select('id, email, first_name, last_name')
+              .in('id', userIds)
+          ).data ?? []
+        : [];
+      const byId = new Map(profiles.map(p => [p.id, p]));
+
+      const data = (perms ?? []).map(p => ({
+        ...p,
+        user_profiles: byId.get(p.user_id) ?? null,
+      }));
+
       res.json({ success: true, data });
     } catch (error: any) {
       logger.error('Failed to list region admins', { error: error.message });
