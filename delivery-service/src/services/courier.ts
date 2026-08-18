@@ -222,6 +222,19 @@ export class CourierService {
         .single();
 
       if (error) {
+        // V8: an unknown/unwritable field in the payload is a client error. PostgREST
+        // reports it as 42703 / PGRST204; returning 500 hid a simple bad request.
+        if (error.code === '42703' || error.code === 'PGRST204') {
+          logger.warn('Rejected courier update with unknown field', {
+            error: error.message,
+            request_id: requestId,
+          });
+          throw new ServiceError(
+            `Unknown field in update payload: ${error.message}`,
+            'VALIDATION_ERROR',
+            400
+          );
+        }
         logger.error('Failed to update courier', { error: error.message, request_id: requestId });
         throw new ServiceError('Failed to update courier', 'DATABASE_ERROR', 500);
       }

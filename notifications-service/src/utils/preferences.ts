@@ -70,13 +70,20 @@ export class PreferencesService {
     userId: string,
     updates: Partial<UserPreferences>
   ): Promise<UserPreferences> {
+    // V8: upsert() conflicts on the PRIMARY KEY (id) by default. No id is supplied
+    // here, so for a user who already has a preferences row this ran as an INSERT and
+    // tripped the UNIQUE (user_id) constraint — every update 500'd. Conflict on
+    // user_id, which is the column that actually identifies the row.
     const { data, error } = await supabase
       .from('notification_preferences')
-      .upsert({
-        user_id: userId,
-        ...updates,
-        updated_at: new Date().toISOString(),
-      })
+      .upsert(
+        {
+          user_id: userId,
+          ...updates,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      )
       .select()
       .single();
 
