@@ -24,8 +24,8 @@ customer (`qa.customer1@gigaqa.test`) and QA admin (`qa.admin@gigaqa.test`) logi
 > | **V3** empty `{}` body hangs forever | ✅ **FIXED** | `POST /api/admin/users` with `{}` → 400 in **1.1s** (was: never returned). Auth proxy → 401 in 0.8s |
 > | **V4** reject/approve 500 on missing id | ✅ **FIXED** | all 4 endpoints → clean `404` with a real message |
 > | **V5** 19 unroutable endpoints | ✅ **FIXED** | `/api/public/*`, `/api/v1/tenant/*`, `/scheduler/*`, `/websocket/*`, `/webhooks/*` all reach their service |
-> | **V6** pattern collisions | ✅ **FIXED** | `/tracking/health` → notifications (200), `/campaigns` → notifications, `/admin/payments/*` → payment service |
-> | **V7** notification admin 403s | ⏳ second fix deploying | see below |
+> | **V6** pattern collisions | ✅ **FIXED** | `/tracking/health` → notifications (200), `/campaigns` → notifications (200), `/admin/payments/*` → payment service (403 = correct gating) |
+> | **V7** notification admin 403s | ✅ **FIXED** | `/api/v1/templates` and `/api/v1/campaigns` → **200** with real data for the DOP admin |
 > | **V9** `/docs/{service}/` redirect loop | ✅ **FIXED** | `/docs/admin/` → **200** |
 > | **V10** empty notifications spec | ✅ **FIXED** | `/docs/notifications/json` → **32 paths / 38 operations** (was 0) |
 > | **V2** legacy anon key | ❌ **NOT FIXED** — env change on Railway, see below |
@@ -77,6 +77,11 @@ customer (`qa.customer1@gigaqa.test`) and QA admin (`qa.admin@gigaqa.test`) logi
 > `getPaymentQueueMetrics`. The Dockerfile runs `npx tsx src/index.ts` — **no typecheck** — so the
 > import silently resolved to `undefined` and `/health` threw on every probe. The gateway marked
 > the service unhealthy and 503'd every payment route. A `tsc` run catches it immediately.
+>
+> `/api/v1/admin/payments/{national,state,branch}` also needed the generic
+> `/api/v1/admin` → `/api` rewrite guarded (it rewrote them to `/api/payments/...`). They now reach
+> payment-queue-service and return a correct `403 "Admin level national required"` — proper
+> authorization, not a routing failure.
 >
 > **Still open after the fixes:**
 > - **V2** requires rotating `SUPABASE_ANON_KEY` to the new publishable key in Railway — an env
