@@ -1,0 +1,37 @@
+meta {
+  name: GET api v1 hotels id
+  type: http
+  seq: 37
+}
+
+get {
+  url: {{baseUrl}}/api/v1/hotels/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 47acdc21-966c-42b3-828c-00fdf812696b
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /api/v1/hotels/:id`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **hotels-service** · file: `hotels-service/src/routes/hotels.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"id":"47acdc21-966c-42b3-828c-00fdf812696b","name":"Lekki Luxury Suites","slug":"lekki-luxury-suites","description":"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.","short_description":"Premium suites in Lekki with ocean views","address":"15 Admiralty Way, Lekki Phase 1","city":"Lagos","state":"Lagos","country":"Nigeria","postal_code":"105102","latitude":6.4474,"longitude":3.4647,"distance_miles":null,"phone":"+234 809 555 1234","email":"reservations@lekkisuites.com","website":null,"images":{"featured":"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800","gallery":[]},"star_rating":5,"a
+  ```
+}

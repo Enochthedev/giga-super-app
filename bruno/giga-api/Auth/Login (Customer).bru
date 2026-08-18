@@ -31,16 +31,22 @@ tests {
 }
 
 docs {
-Logs in the QA customer and stores `access_token` into the `{{token}}` env var used by every other request.
+  Logs in the QA customer and stores `access_token` into the `{{token}}` env var used by every
+  other request in the collection.
 
-**Sample response 200**
-```json
-{
-  "access_token": "eyJhbGciOiJIUzI1NiI...",
-  "token_type": "bearer",
-  "expires_in": 3600,
-  "refresh_token": "…",
-  "user": { "id": "92383fcd-8934-4167-b62d-abb425d2693e", "email": "qa.customer1@gigaqa.test" }
-}
-```
+  ✅ Verified live 2026-08-18 → 200.
+
+  **Sample response 200**
+  ```json
+  {
+    "access_token": "eyJhbGciOiJIUzI1NiI...",
+    "token_type": "bearer",
+    "expires_in": 3600,
+    "refresh_token": "...",
+    "user": {
+      "id": "92383fcd-8934-4167-b62d-abb425d2693e",
+      "email": "qa.customer1@gigaqa.test"
+    }
+  }
+  ```
 }

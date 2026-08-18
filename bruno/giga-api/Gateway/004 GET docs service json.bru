@@ -1,0 +1,37 @@
+meta {
+  name: GET docs service json
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/docs/:service/json
+  body: none
+  auth: bearer
+}
+
+params:path {
+  service: admin
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /docs/:service/json`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/docs.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"openapi":"3.0.3","info":{"title":"GIGA Dashboard & Admin Service API","version":"2.1.2","description":"\n## GIGA Dashboard & Admin Service API\n\nThis service provides comprehensive dashboard analytics and administrative functionality for the GIGA platform.\n\n### 🎯 GIGA Dashboard API\nComplete dashboard API with statistics, business modules, and management features:\n- **Dashboard Statistics**: Revenue, orders, visitors, conversion rates\n- **Business Modules**: E-commerce, taxi, hotel, media management\n- **Postal Monitoring**: Staff and operations management\n- **Advertisement Management**: Ad review and approval workflow\n\n### 🔐 Authentication\nAll endpoints require JWT authentication
+  ```
+}

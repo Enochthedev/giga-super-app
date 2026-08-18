@@ -1,0 +1,33 @@
+meta {
+  name: GET api operations staff
+  type: http
+  seq: 116
+}
+
+get {
+  url: {{baseUrl}}/api/operations/staff
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /api/operations/staff`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **admin-service** · file: `admin-service/src/routes/postal-monitoring.ts`
+  Auth: admin (DOP) bearer (`{{adminToken}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":[{"id":"1e499566-1261-452c-b160-e5b22288e338","employee_id":"NIPOST001","user_id":"ad3354e2-4807-4b02-91e7-78f9e1b4d65e","position":"Postal Officer","rank":"officer","department":"operations","clearance_level":5,"is_active":true,"created_at":"2026-02-10T19:39:05.006578+00:00","user_profiles":{"email":"test@example.com","phone":null,"last_name":"","first_name":"User"},"nipost_offices":{"city":"Lagos","office_name":"Lagos Headquarters","state_province":"Lagos"},"nipost_regions":{"region_code":"NG","region_name":"Nigeria"}},{"id":"61eab207-2509-4c48-930a-cb21e35c7201","employee_id":"NIPOST002","user_id":"a84ae787-88c3-494b-a42e-0cc0bf2f39be","position":"DOP","rank":"direc
+  ```
+}

@@ -37,6 +37,20 @@ const requireAuth = (req: AuthenticatedRequest, res: Response, next: Function) =
   next();
 };
 
+/**
+ * @swagger
+ * /preferences:
+ *   get:
+ *     tags: [Preferences]
+ *     summary: Get user preferences
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 200.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 // GET /api/v1/preferences - Get user preferences
 router.get('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -74,6 +88,31 @@ router.get('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =>
   }
 });
 
+/**
+ * @swagger
+ * /preferences:
+ *   put:
+ *     tags: [Preferences]
+ *     summary: Update user preferences
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 500.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       500:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // PUT /api/v1/preferences - Update user preferences
 router.put('/', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -124,6 +163,31 @@ router.put('/', requireAuth, async (req: AuthenticatedRequest, res: Response) =>
   }
 });
 
+/**
+ * @swagger
+ * /preferences/unsubscribe:
+ *   post:
+ *     tags: [Preferences]
+ *     summary: Generate unsubscribe token and optionally unsubscribe
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 400.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       400:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/preferences/unsubscribe - Generate unsubscribe token and optionally unsubscribe
 router.post('/unsubscribe', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -223,6 +287,26 @@ router.post('/unsubscribe', requireAuth, async (req: AuthenticatedRequest, res: 
   }
 });
 
+/**
+ * @swagger
+ * /preferences/unsubscribe/{token}:
+ *   get:
+ *     tags: [Preferences]
+ *     summary: Handle unsubscribe link (public endpoint)
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404.
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/unsubscribe/:token - Handle unsubscribe link (public endpoint)
 router.get('/unsubscribe/:token', async (req: Request, res: Response) => {
   try {
@@ -327,6 +411,31 @@ router.get('/unsubscribe/:token', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /preferences/resubscribe:
+ *   post:
+ *     tags: [Preferences]
+ *     summary: Resubscribe to notifications
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 400.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       400:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/preferences/resubscribe - Resubscribe to notifications
 router.post('/resubscribe', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -389,6 +498,26 @@ router.post('/resubscribe', requireAuth, async (req: AuthenticatedRequest, res: 
   }
 });
 
+/**
+ * @swagger
+ * /preferences/check/{type}:
+ *   get:
+ *     tags: [Preferences]
+ *     summary: Check if notification type is allowed
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 200.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 // GET /api/v1/preferences/check/:type - Check if notification type is allowed
 router.get('/check/:type', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -436,6 +565,20 @@ router.get('/check/:type', requireAuth, async (req: AuthenticatedRequest, res: R
   }
 });
 
+/**
+ * @swagger
+ * /preferences/quiet-hours:
+ *   get:
+ *     tags: [Preferences]
+ *     summary: Check if currently in quiet hours
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 200.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 // GET /api/v1/preferences/quiet-hours - Check if currently in quiet hours
 router.get('/quiet-hours', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {

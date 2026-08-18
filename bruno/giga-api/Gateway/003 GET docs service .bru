@@ -1,0 +1,70 @@
+meta {
+  name: GET docs service 
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/docs/:service/*
+  body: none
+  auth: bearer
+}
+
+params:path {
+  service: admin
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /docs/:service/*`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/docs.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  
+  <!-- HTML for static distribution bundle build -->
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    
+    <title>Admin Service API Docs</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" /><link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <style>
+      html
+      {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+      }
+      *,
+      *:before,
+      *:after
+      {
+        box-sizing: inherit;
+      }
+  
+      body {
+        margin:0;
+        background: #fafafa;
+      }
+    </style>
+  </head>
+  
+  <body>
+  
+  <svg xmlns="http://www.w3.
+  ```
+}

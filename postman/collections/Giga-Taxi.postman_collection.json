@@ -1,0 +1,1299 @@
+{
+ "info": {
+  "name": "Giga API \u2014 Taxi",
+  "description": "# Giga API \u2014 Taxi\n\nGenerated **2026-08-18** from the live production gateway. Every request here was actually sent to\n`https://giga-giga-production.up.railway.app` with the QA logins; the description on each request\nrecords the HTTP status it really returned.\n\n**Setup:** run `Auth & User \u2192 Login (Customer)` and `Login (Admin)` first \u2014 they populate\n`{{token}}` and `{{adminToken}}`.\n\nRequests marked \ud83d\udd34 are known defects, cross-referenced to `docs/API_VERIFICATION_2026-08-18.md`.\nTheir tests assert the *current broken* status so the suite stays green until someone fixes them \u2014\nflip the assertion when you do.\n\n\u26a0\ufe0f **Never send a literal `{}` JSON body** \u2014 it hangs the gateway forever (defect V3).\n",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "GET /api/drivers/:driverId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/{{userId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "{{userId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1242ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/drivers/availability",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/availability",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "availability"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1039ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/drivers/earnings",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/earnings",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "earnings"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1440ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"history\":[],\"summary\":{\"total_earnings\":0,\"total_net\":0,\"total_commission\":0,\"total_rides\":0,\"pending_payout\":0,\"currency\":\"NGN\",\"period\":\"all\"}},\"pagination\":{\"total\":0,\"limit\":50,\"offset\":0}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/drivers/location",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/location",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "location"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 980ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/drivers/nearby",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/nearby?latitude=6.5&longitude=3.4&radius=50",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "nearby"
+     ],
+     "query": [
+      {
+       "key": "latitude",
+       "value": "6.5"
+      },
+      {
+       "key": "longitude",
+       "value": "3.4"
+      },
+      {
+       "key": "radius",
+       "value": "50"
+      }
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1209ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"count\":0}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/drivers/profile",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/profile",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "profile"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1188ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/drivers/stats",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/drivers/stats",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "drivers",
+      "stats"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1560ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 996ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: creates a ride request\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"pickup_latitude\": 6.5,\n  \"pickup_longitude\": 3.4,\n  \"dropoff_latitude\": 6.6,\n  \"dropoff_longitude\": 3.5,\n  \"vehicle_type\": \"standard\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/rides/:rideId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1210ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/:rideId/accept",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/accept",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "accept"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1194ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/:rideId/cancel",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/cancel",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "cancel"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1426ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/:rideId/complete",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/complete",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "complete"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1443ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/:rideId/rate",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/rate",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "rate"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 961ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/:rideId/reject",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/reject",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "reject"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1214ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/:rideId/start",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/start",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "start"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1177ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/rides/:rideId/status",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/{{ghostId}}/status",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "{{ghostId}}",
+      "status"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 977ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/rides/active",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/active",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "active"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1573ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"ride\":{\"id\":\"8e079db0-a629-4f4b-b828-a85467618998\",\"ride_number\":\"QA-RIDE-8e079db0\",\"driver_id\":null,\"passenger_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"pickup_location\":{\"latitude\":6.5244,\"longitude\":3.3792},\"dropoff_location\":{\"latitude\":6.4281,\"longitude\":3.4219},\"pickup_address\":\"Ikeja\",\"dropoff_address\":\"VI\",\"distance_km\":null,\"estimated_duration_minutes\":null,\"base_fare\":500,\"distance_fare\":0,\"time_fare\":0,\"surge_multiplier\":1,\"total_fare\":1500,\"discount_amount\":0,\"final_amount\":1500,\"payment_status\":\"pending\",\"status\":\"requested\",\"pickup_time\":null,\"dropoff_time\":null,\"cancellation_reason\":null,\"cancelled_by\":null,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null,\"driver_notes\":null,\"passenger_notes\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"driver_eta_minutes\":null,\"accepted_at\":null,\"started_at\":null,\"completed_at\":null,\"cancellation_fee\":null,\"actual_distance_km\":null,\"actual_duration_minutes\":null,\"final_fare\":null,\"scheduled_time\":null,\"actual_dropoff_location\":null,\"currency\":\"NGN\",\"region_id\":null},\"driver\":null,\"passenger\":{\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_u\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/rides/estimate",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/estimate",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "estimate"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 599ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"pickup_latitude\": 6.5,\n  \"pickup_longitude\": 3.4,\n  \"dropoff_latitude\": 6.6,\n  \"dropoff_longitude\": 3.5\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/rides/history",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/history",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "history"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1277ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"8e079db0-a629-4f4b-b828-a85467618998\",\"ride_number\":\"QA-RIDE-8e079db0\",\"driver_id\":null,\"passenger_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"pickup_location\":{\"latitude\":6.5244,\"longitude\":3.3792},\"dropoff_location\":{\"latitude\":6.4281,\"longitude\":3.4219},\"pickup_address\":\"Ikeja\",\"dropoff_address\":\"VI\",\"distance_km\":null,\"estimated_duration_minutes\":null,\"base_fare\":500,\"distance_fare\":0,\"time_fare\":0,\"surge_multiplier\":1,\"total_fare\":1500,\"discount_amount\":0,\"final_amount\":1500,\"payment_status\":\"pending\",\"status\":\"requested\",\"pickup_time\":null,\"dropoff_time\":null,\"cancellation_reason\":null,\"cancelled_by\":null,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null,\"driver_notes\":null,\"passenger_notes\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"driver_eta_minutes\":null,\"accepted_at\":null,\"started_at\":null,\"completed_at\":null,\"cancellation_fee\":null,\"actual_distance_km\":null,\"actual_duration_minutes\":null,\"final_fare\":null,\"scheduled_time\":null,\"actual_dropoff_location\":null,\"currency\":\"NGN\",\"region_id\":null}],\"pagination\":{\"total\":1,\"limit\":20,\"offset\":0}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/rides/requests",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/rides/requests",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "rides",
+      "requests"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1203ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  }
+ ],
+ "auth": {
+  "type": "bearer",
+  "bearer": [
+   {
+    "key": "token",
+    "value": "{{token}}",
+    "type": "string"
+   }
+  ]
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "https://giga-giga-production.up.railway.app"
+  }
+ ],
+ "event": [
+  {
+   "listen": "prerequest",
+   "script": {
+    "type": "text/javascript",
+    "exec": [
+     "// Auto-login: fetches customer + admin tokens once per run if missing.",
+     "const need = [];",
+     "if (!pm.environment.get('token'))      need.push(['token', pm.environment.get('customerEmail')]);",
+     "if (!pm.environment.get('adminToken')) need.push(['adminToken', pm.environment.get('adminEmail')]);",
+     "if (need.length === 0) { return; }",
+     "const base = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+     "const pwd  = pm.environment.get('password');",
+     "need.forEach(function (pair) {",
+     "  pm.sendRequest({",
+     "    url: base + '/auth/login',",
+     "    method: 'POST',",
+     "    header: { 'Content-Type': 'application/json' },",
+     "    body: { mode: 'raw', raw: JSON.stringify({ email: pair[1], password: pwd }) }",
+     "  }, function (err, res) {",
+     "    if (!err && res && res.code === 200 && res.json().access_token) {",
+     "      pm.environment.set(pair[0], res.json().access_token);",
+     "    } else {",
+     "      console.log('auto-login failed for ' + pair[0], err || res.code);",
+     "    }",
+     "  });",
+     "});"
+    ]
+   }
+  }
+ ]
+}

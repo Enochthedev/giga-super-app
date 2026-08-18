@@ -2,15 +2,31 @@
 
 Complete index of all documentation in the GIGA platform.
 
+## ⚠️ Which doc should I trust?
+
+Several API docs in this repo are stale and contradict each other. Ranked by accuracy,
+**most accurate first**:
+
+| Rank | Source | Why | Last verified |
+|---|---|---|---|
+| 1 | **`postman/collections/`** | every request was actually sent to production; each carries its real status | 2026-08-18 |
+| 2 | **`docs/API_VERIFICATION_2026-08-18.md`** | the live behaviour report + all 14 known defects | 2026-08-18 |
+| 3 | **`bruno/giga-api/`** | generated from the route definitions, covers all 335 routes | 2026-08-18 |
+| 4 | **`/api-docs/`** on the gateway | generated from deployed code — but see V9/V10/V11: `/docs/{service}/` is a redirect loop, notifications & hotels specs are incomplete | live |
+| ⛔ | `postman/*.json` (repo root), `postman/API_REFERENCE.md`, `API_DOCUMENTATION_COMPLETE.md`, `QUICK_API_REFERENCE.md` | 2025-12 → 2026-02; predate ~6 months of route changes | stale |
+
+The Swagger UI URL is **`/api-docs/`** — with the trailing slash. `/docs/admin/` is an infinite
+redirect (defect V9); raw JSON per service still works at `/docs/{service}/json`.
+
 ## 🚀 Quick Navigation
 
 ### For Frontend/Mobile Developers
 
-**Start Here**: `flows/NIPOST_ADMIN_FLOWS.md`
+**Start Here**: `../postman/collections/README.md`, then `flows/NIPOST_ADMIN_FLOWS.md`
 
 ### For Backend Developers
 
-**Start Here**: `ARCHITECTURE_CLEANUP.md`
+**Start Here**: `API_VERIFICATION_2026-08-18.md`, then `ARCHITECTURE_CLEANUP.md`
 
 ---
 

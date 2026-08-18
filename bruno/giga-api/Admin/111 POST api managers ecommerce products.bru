@@ -1,0 +1,36 @@
+meta {
+  name: POST api managers ecommerce products
+  type: http
+  seq: 111
+}
+
+post {
+  url: {{baseUrl}}/api/managers/ecommerce/products
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "_replace": "real fields required - never send an empty {} body (defect V3)"
+  }
+}
+
+tests {
+  test("reached backend (verified 400 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
+}
+
+docs {
+  `POST /api/managers/ecommerce/products`
+  
+  **✅ reachable (probe payload → 400)** — last verified 2026-08-18, HTTP `400`.
+  
+  Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce.ts`
+  Auth: admin (DOP) bearer (`{{adminToken}}`).
+}

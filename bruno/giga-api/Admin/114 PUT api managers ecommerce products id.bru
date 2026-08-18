@@ -1,0 +1,40 @@
+meta {
+  name: PUT api managers ecommerce products id
+  type: http
+  seq: 114
+}
+
+put {
+  url: {{baseUrl}}/api/managers/ecommerce/products/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+body:json {
+  {
+    "_replace": "real fields required - never send an empty {} body (defect V3)"
+  }
+}
+
+tests {
+  test("reached backend (verified 404 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
+}
+
+docs {
+  `PUT /api/managers/ecommerce/products/:id`
+  
+  **✅ reachable (ghost id → 404)** — last verified 2026-08-18, HTTP `404`.
+  
+  Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce.ts`
+  Auth: admin (DOP) bearer (`{{adminToken}}`).
+}

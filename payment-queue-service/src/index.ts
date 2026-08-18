@@ -19,6 +19,10 @@ import './queues/workers';
 
 const app: Application = express();
 
+// Requests arrive via the API gateway, so without this the rate limiter below keys on
+// the GATEWAY's IP and every client shares one bucket (100 req / 15 min platform-wide).
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(helmet());
 app.use(cors());

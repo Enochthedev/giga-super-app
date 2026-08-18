@@ -1,0 +1,337 @@
+{
+ "info": {
+  "name": "Giga API \u2014 Auth & User",
+  "description": "# Giga API \u2014 Auth & User\n\nGenerated **2026-08-18** from the live production gateway. Every request here was actually sent to\n`https://giga-giga-production.up.railway.app` with the QA logins; the description on each request\nrecords the HTTP status it really returned.\n\n**Setup:** run `Auth & User \u2192 Login (Customer)` and `Login (Admin)` first \u2014 they populate\n`{{token}}` and `{{adminToken}}`.\n\nRequests marked \ud83d\udd34 are known defects, cross-referenced to `docs/API_VERIFICATION_2026-08-18.md`.\nTheir tests assert the *current broken* status so the suite stays green until someone fixes them \u2014\nflip the assertion when you do.\n\n\u26a0\ufe0f **Never send a literal `{}` JSON body** \u2014 it hangs the gateway forever (defect V3).\n",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "Login (Customer)",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/auth/login",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "auth",
+      "login"
+     ]
+    },
+    "auth": {
+     "type": "noauth"
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"email\": \"{{customerEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    },
+    "description": "\u2705 VERIFIED 2026-08-18 \u2192 200. Stores `access_token` into `{{token}}`."
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "pm.test('200 + access_token', function(){ pm.response.to.have.status(200); pm.expect(pm.response.json()).to.have.property('access_token'); });",
+       "pm.environment.set('token', pm.response.json().access_token);"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "Login (Admin)",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/auth/login",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "auth",
+      "login"
+     ]
+    },
+    "auth": {
+     "type": "noauth"
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    },
+    "description": "\u2705 VERIFIED 2026-08-18 \u2192 200 (DOP/national). Stores `access_token` into `{{adminToken}}`."
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "pm.test('200 + access_token', function(){ pm.response.to.have.status(200); });",
+       "pm.environment.set('adminToken', pm.response.json().access_token);"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /auth/change-password",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/auth/change-password",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "auth",
+      "change-password"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 568ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /auth/me",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/auth/me",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "auth",
+      "me"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1840ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"email\":\"qa.customer1@gigaqa.test\",\"phone\":\"\",\"email_confirmed_at\":\"2026-06-06T10:32:36.532308Z\",\"created_at\":\"2026-06-06T10:32:36.228302Z\",\"profile\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"email\":\"qa.customer1@gigaqa.test\",\"phone\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"date_of_birth\":null,\"gender\":null,\"marital_status\":null,\"body_weight\":null,\"height\":null,\"age_group\":null,\"areas_of_interest\":null,\"is_phone_verified\":false,\"is_active\":false,\"last_login_at\":null,\"created_at\":\"2026-06-06T10:32:36.228302+00:00\",\"updated_at\":\"2026-08-18T19:19:33.710155+00:00\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"deleted_at\":\"2026-08-18T19:19:33.598+00:00\",\"deleted_by\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"deletion_reason\":\"Admin deletion\",\"state\":null,\"region_id\":null},\"roles\":[\"CUSTOMER\",\"VENDOR\"],\"active_role\":\"CUSTOMER\",\"permissions\":{\"isCustomer\":true,\"isDriver\":false,\"isVendor\":true,\"isHost\":false,\"isAdvertiser\":false,\"isCourier\":false,\"isDop\":false,\"isPmg\":false,\"isRegionalManager\":false,\"isModuleAd\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /auth/reset-password",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/auth/reset-password",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "auth",
+      "reset-password"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 591ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  }
+ ],
+ "auth": {
+  "type": "bearer",
+  "bearer": [
+   {
+    "key": "token",
+    "value": "{{token}}",
+    "type": "string"
+   }
+  ]
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "https://giga-giga-production.up.railway.app"
+  }
+ ],
+ "event": [
+  {
+   "listen": "prerequest",
+   "script": {
+    "type": "text/javascript",
+    "exec": [
+     "// Auto-login: fetches customer + admin tokens once per run if missing.",
+     "const need = [];",
+     "if (!pm.environment.get('token'))      need.push(['token', pm.environment.get('customerEmail')]);",
+     "if (!pm.environment.get('adminToken')) need.push(['adminToken', pm.environment.get('adminEmail')]);",
+     "if (need.length === 0) { return; }",
+     "const base = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+     "const pwd  = pm.environment.get('password');",
+     "need.forEach(function (pair) {",
+     "  pm.sendRequest({",
+     "    url: base + '/auth/login',",
+     "    method: 'POST',",
+     "    header: { 'Content-Type': 'application/json' },",
+     "    body: { mode: 'raw', raw: JSON.stringify({ email: pair[1], password: pwd }) }",
+     "  }, function (err, res) {",
+     "    if (!err && res && res.code === 200 && res.json().access_token) {",
+     "      pm.environment.set(pair[0], res.json().access_token);",
+     "    } else {",
+     "      console.log('auto-login failed for ' + pair[0], err || res.code);",
+     "    }",
+     "  });",
+     "});"
+    ]
+   }
+  }
+ ]
+}

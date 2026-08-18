@@ -1,0 +1,33 @@
+meta {
+  name: GET health ready
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/health/ready
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /health/ready`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/health.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"status":"ready","services":14,"healthy":7,"unhealthy":7}}
+  ```
+}

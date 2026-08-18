@@ -1,0 +1,1803 @@
+{
+ "info": {
+  "name": "Giga API \u2014 Delivery",
+  "description": "# Giga API \u2014 Delivery\n\nGenerated **2026-08-18** from the live production gateway. Every request here was actually sent to\n`https://giga-giga-production.up.railway.app` with the QA logins; the description on each request\nrecords the HTTP status it really returned.\n\n**Setup:** run `Auth & User \u2192 Login (Customer)` and `Login (Admin)` first \u2014 they populate\n`{{token}}` and `{{adminToken}}`.\n\nRequests marked \ud83d\udd34 are known defects, cross-referenced to `docs/API_VERIFICATION_2026-08-18.md`.\nTheir tests assert the *current broken* status so the suite stays green until someone fixes them \u2014\nflip the assertion when you do.\n\n\u26a0\ufe0f **Never send a literal `{}` JSON body** \u2014 it hangs the gateway forever (defect V3).\n",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "POST /api/v1/assignments",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/assignments",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "assignments"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 581ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/assignments/:id",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/assignments/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "assignments",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 845ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/assignments/find-couriers",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/assignments/find-couriers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "assignments",
+      "find-couriers"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 583ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/assignments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"pickup_latitude\": 6.5,\n  \"pickup_longitude\": 3.4\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/couriers",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1011ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"verification_status\":\"verified\",\"availability_status\":\"available\",\"is_online\":true,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"QA-VREG-001\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},{\"id\":\"ddb960f5-a490-4fc7-a559-9b6ed6f888a5\",\"user_id\":\"71961077-324b-492d-bf7c-f8a85e262de6\",\"courier_code\":\"CUR-LGS-00142\",\"first_name\":\"Gija\",\"last_name\":\"Gija\",\"phone_number\":\"+2348031234567\",\"email\":\"ebube+test1@giga.com\",\"verification_status\":\"verified\",\"availability_status\":\"offline\",\"is_online\":false,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"LND-074-XYZ\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metric\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/couriers",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 863ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"first_name\": \"QA\",\n  \"last_name\": \"Probe\",\n  \"phone\": \"+2348000000000\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/couriers/:courierId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/{{courierId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "{{courierId}}"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1000ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"verification_status\":\"verified\",\"availability_status\":\"available\",\"is_online\":true,\"vehicle_info\":{\"type\":\"motorcycle\",\"registration\":\"QA-VREG-001\",\"capacity_kg\":50,\"max_delivery_radius_km\":10},\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.373Z\",\"request_id\":\"get-courier\",\"version\":\"1.0.0\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/v1/couriers/:courierId",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/{{courierId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "{{courierId}}"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1235ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update courier\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 500",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
+       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/couriers/:courierId/availability",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/{{courierId}}/availability",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "{{courierId}}",
+      "availability"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 787ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/couriers/:courierId/location",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/{{courierId}}/location",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "{{courierId}}",
+      "location"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 802ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/couriers/:courierId/stats",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/{{courierId}}/stats",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "{{courierId}}",
+      "stats"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1632ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"courier_id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"courier_code\":\"QA-CUR-TEST\",\"performance_metrics\":{\"total_deliveries\":0,\"completed_deliveries\":0,\"failed_deliveries\":0,\"average_rating\":5,\"completion_rate\":100,\"on_time_delivery_rate\":100,\"average_delivery_time_minutes\":0,\"total_earnings\":0},\"verification_status\":\"verified\",\"availability_status\":\"available\",\"current_load_kg\":0,\"active_deliveries\":0},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.893Z\",\"request_id\":\"get-courier-stats\",\"version\":\"1.0.0\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/couriers/:courierId/verification",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/{{courierId}}/verification",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "{{courierId}}",
+      "verification"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 786ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/couriers/user/:userId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/couriers/user/{{userId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "couriers",
+      "user",
+      "{{userId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1057ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/couriers.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/packages",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 772ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"recipient_name\": \"QA\",\n  \"recipient_phone\": \"+2348000000000\",\n  \"pickup_address\": \"Lagos\",\n  \"delivery_address\": \"Abuja\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/packages/:packageId",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1027ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/packages/:packageId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1131ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/v1/packages/:packageId",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1033ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/packages/:packageId/cancel",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages/{{ghostId}}/cancel",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages",
+      "{{ghostId}}",
+      "cancel"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 975ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/packages/sender/:senderId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages/sender/{{userId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages",
+      "sender",
+      "{{userId}}"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1555ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.607Z\",\"request_id\":\"get-sender-packages\",\"version\":\"1.0.0\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/packages/status/:status",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/packages/status/pending",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "packages",
+      "status",
+      "pending"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1102ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/packages.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ef50d35-b0aa-4b66-9f9c-26c3e9ebdc59\",\"sender_id\":null,\"recipient_id\":null,\"sender_name\":\"Eve Martinez\",\"sender_phone\":\"+1-555-0107\",\"sender_address\":\"999 Cedar Ln, Denver, CO\",\"sender_lat\":39.7392,\"sender_lng\":-104.9903,\"recipient_name\":\"Frank Garcia\",\"recipient_phone\":\"+1-555-0108\",\"recipient_address\":\"111 Birch St, Boston, MA\",\"recipient_lat\":42.3601,\"recipient_lng\":-71.0589,\"package_description\":\"Books - Textbooks\",\"package_weight\":3,\"package_dimensions\":null,\"delivery_fee\":35,\"status\":\"pending\",\"priority\":\"normal\",\"delivery_instructions\":null,\"estimated_delivery\":null,\"actual_delivery\":null,\"proof_of_delivery\":null,\"created_at\":\"2026-02-28T13:39:34.178243+00:00\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"}],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:05.735Z\",\"request_id\":\"get-packages-by-status\",\"version\":\"1.0.0\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":1,\"total_pages\":1,\"has_previous\":false,\"has_next\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/scheduler/cleanup",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/scheduler/cleanup",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "scheduler",
+      "cleanup"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 664ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/scheduler.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/scheduler/stats",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/scheduler/stats",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "scheduler",
+      "stats"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 584ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/scheduler.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/track-delivery",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/track-delivery",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "track-delivery"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 869ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"tracking_number\": \"QA-TEST-001\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/tracking/:assignmentId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tracking/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tracking",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1710ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/tracking/:assignmentId/cleanup",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tracking/{{ghostId}}/cleanup",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tracking",
+      "{{ghostId}}",
+      "cleanup"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1796ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/tracking/:assignmentId/progress",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tracking/{{ghostId}}/progress",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tracking",
+      "{{ghostId}}",
+      "progress"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1632ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/websocket/broadcast",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/websocket/broadcast",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "websocket",
+      "broadcast"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 596ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/websocket/cleanup",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/websocket/cleanup",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "websocket",
+      "cleanup"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 609ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/websocket/stats",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/websocket/stats",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "websocket",
+      "stats"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 626ms.\n\nService: `delivery-service` \u00b7 source: `delivery-service/src/routes/websocket.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  }
+ ],
+ "auth": {
+  "type": "bearer",
+  "bearer": [
+   {
+    "key": "token",
+    "value": "{{token}}",
+    "type": "string"
+   }
+  ]
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "https://giga-giga-production.up.railway.app"
+  }
+ ],
+ "event": [
+  {
+   "listen": "prerequest",
+   "script": {
+    "type": "text/javascript",
+    "exec": [
+     "// Auto-login: fetches customer + admin tokens once per run if missing.",
+     "const need = [];",
+     "if (!pm.environment.get('token'))      need.push(['token', pm.environment.get('customerEmail')]);",
+     "if (!pm.environment.get('adminToken')) need.push(['adminToken', pm.environment.get('adminEmail')]);",
+     "if (need.length === 0) { return; }",
+     "const base = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+     "const pwd  = pm.environment.get('password');",
+     "need.forEach(function (pair) {",
+     "  pm.sendRequest({",
+     "    url: base + '/auth/login',",
+     "    method: 'POST',",
+     "    header: { 'Content-Type': 'application/json' },",
+     "    body: { mode: 'raw', raw: JSON.stringify({ email: pair[1], password: pwd }) }",
+     "  }, function (err, res) {",
+     "    if (!err && res && res.code === 200 && res.json().access_token) {",
+     "      pm.environment.set(pair[0], res.json().access_token);",
+     "    } else {",
+     "      console.log('auto-login failed for ' + pair[0], err || res.code);",
+     "    }",
+     "  });",
+     "});"
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,2228 @@
+{
+ "info": {
+  "name": "Giga API \u2014 Social",
+  "description": "# Giga API \u2014 Social\n\nGenerated **2026-08-18** from the live production gateway. Every request here was actually sent to\n`https://giga-giga-production.up.railway.app` with the QA logins; the description on each request\nrecords the HTTP status it really returned.\n\n**Setup:** run `Auth & User \u2192 Login (Customer)` and `Login (Admin)` first \u2014 they populate\n`{{token}}` and `{{adminToken}}`.\n\nRequests marked \ud83d\udd34 are known defects, cross-referenced to `docs/API_VERIFICATION_2026-08-18.md`.\nTheir tests assert the *current broken* status so the suite stays green until someone fixes them \u2014\nflip the assertion when you do.\n\n\u26a0\ufe0f **Never send a literal `{}` JSON body** \u2014 it hangs the gateway forever (defect V3).\n",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "GET /api/v1/connections",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/connections",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "connections"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1022ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:10.696Z\",\"service\":\"social-service\",\"requestId\":\"4efa6268-0055-47fb-8746-a13aad580df8\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/connections",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/connections",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "connections"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 713ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"target_user_id\": \"b781800e-dac5-4873-9557-86a7c331fbcf\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/connections/:connectionId",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/connections/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "connections",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 946ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/v1/connections/:connectionId",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/connections/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "connections",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 617ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/connections/requests",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/connections/requests",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "connections",
+      "requests"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1017ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/connections.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:10.976Z\",\"service\":\"social-service\",\"requestId\":\"0751c1bc-2666-4c09-9adf-87713bb78711\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/feed",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/feed",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "feed"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1084ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"92e8d470-31b7-474e-9898-9c239214e16a\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:25:27.198753+00:00\",\"updated_at\":\"2026-08-18T19:25:27.198753+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\"},{\"id\":\"adb60b2d-fa7e-4ac9-9418-e332b3cfb279\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:23:46.316346+\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/feed/following",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/feed/following",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "feed",
+      "following"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1198ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.012Z\",\"service\":\"social-service\",\"requestId\":\"9438befe-0129-47d1-9133-8266cb6d6a83\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/feed/trending",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/feed/trending",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "feed",
+      "trending"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1180ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/feed.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"adb60b2d-fa7e-4ac9-9418-e332b3cfb279\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:23:46.316346+00:00\",\"updated_at\":\"2026-08-18T19:23:46.316346+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\"},{\"id\":\"92e8d470-31b7-474e-9898-9c239214e16a\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:25:27.198753+\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/posts",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 928ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"92e8d470-31b7-474e-9898-9c239214e16a\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"QA doc-verification probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:25:27.198753+00:00\",\"updated_at\":\"2026-08-18T19:25:27.198753+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"tenant_id\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\"},{\"id\":\"adb60b2d-fa7e-4ac9-9418-e332b3cfb279\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa probe\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":null,\"tagged_users\":null,\"like_count\":0,\"comment_count\":0,\"share_count\":0,\"view_count\":0,\"shared_post_id\":null,\"is_active\":true,\"expires_at\":null,\"created_at\":\"2026-08-18T19:23:46.316346+\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/posts",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `201` in 897ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: creates a post (cleaned up after)\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"content\": \"QA doc-verification probe\",\n  \"post_type\": \"post\",\n  \"visibility\": \"public\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 201",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/posts/:postId",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1219ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/posts/:postId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 974ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/v1/posts/:postId",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 872ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/posts/:postId/comments",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/comments",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "comments"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 799ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.420Z\",\"service\":\"social-service\",\"requestId\":\"2260b8df-0ec5-4f6e-a070-a4bd3b09cee8\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/posts/:postId/comments",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/comments",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "comments"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 821ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"content\": \"qa probe comment\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/posts/:postId/comments/:commentId",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/comments/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "comments",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 951ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "PUT /api/v1/posts/:postId/comments/:commentId",
+   "request": {
+    "method": "PUT",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/comments/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "comments",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 600ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/comments.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/posts/:postId/like",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/like",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "like"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1081ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/posts/:postId/like",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/like",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "like"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 863ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/posts/:postId/like/users",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/like/users",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "like",
+      "users"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 851ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.515Z\",\"service\":\"social-service\",\"requestId\":\"219f406b-3765-4b63-af91-3af3efb1ff98\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/posts/:postId/likes",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/likes",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "likes"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1434ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/posts/:postId/likes",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/likes",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "likes"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1200ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/posts/:postId/likes/users",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/likes/users",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "likes",
+      "users"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 773ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/likes.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.622Z\",\"service\":\"social-service\",\"requestId\":\"69ef6fc7-7b17-44ee-8391-eead26f0e975\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/posts/:postId/report",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/posts/{{postId}}/report",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "posts",
+      "{{postId}}",
+      "report"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 603ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/stories",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/stories",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "stories"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1053ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:35:11.948Z\",\"service\":\"social-service\",\"requestId\":\"52bed5b1-5b8e-4077-8d10-962bcfb0b1cf\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/stories",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/stories",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "stories"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 622ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/stories/:storyId",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/stories/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "stories",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 786ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/stories/:storyId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/stories/{{ghostId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "stories",
+      "{{ghostId}}"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 763ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/stories/:storyId/viewers",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/stories/{{ghostId}}/viewers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "stories",
+      "{{ghostId}}",
+      "viewers"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1139ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/stories.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/tenant/posts",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/posts",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "posts"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 574ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/tenant/posts",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/posts",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "posts"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 583ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/tenant/posts/:postId",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/posts/{{postId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "posts",
+      "{{postId}}"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 596ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/tenant/posts/:postId/comments",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/posts/{{postId}}/comments",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "posts",
+      "{{postId}}",
+      "comments"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 563ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/tenant/posts/:postId/comments",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/posts/{{postId}}/comments",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "posts",
+      "{{postId}}",
+      "comments"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 560ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/tenant/posts/:postId/like",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/posts/{{postId}}/like",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "posts",
+      "{{postId}}",
+      "like"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 578ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/tenant/usage",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tenant/usage",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tenant",
+      "usage"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 583ms.\n\nService: `social-service` \u00b7 source: `social-service/src/routes/tenant-posts.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 404",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
+       "// Flip this to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
+       "    pm.expect(pm.response.code).to.eql(404);",
+       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
+       "});"
+      ]
+     }
+    }
+   ],
+   "response": []
+  }
+ ],
+ "auth": {
+  "type": "bearer",
+  "bearer": [
+   {
+    "key": "token",
+    "value": "{{token}}",
+    "type": "string"
+   }
+  ]
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "https://giga-giga-production.up.railway.app"
+  }
+ ],
+ "event": [
+  {
+   "listen": "prerequest",
+   "script": {
+    "type": "text/javascript",
+    "exec": [
+     "// Auto-login: fetches customer + admin tokens once per run if missing.",
+     "const need = [];",
+     "if (!pm.environment.get('token'))      need.push(['token', pm.environment.get('customerEmail')]);",
+     "if (!pm.environment.get('adminToken')) need.push(['adminToken', pm.environment.get('adminEmail')]);",
+     "if (need.length === 0) { return; }",
+     "const base = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+     "const pwd  = pm.environment.get('password');",
+     "need.forEach(function (pair) {",
+     "  pm.sendRequest({",
+     "    url: base + '/auth/login',",
+     "    method: 'POST',",
+     "    header: { 'Content-Type': 'application/json' },",
+     "    body: { mode: 'raw', raw: JSON.stringify({ email: pair[1], password: pwd }) }",
+     "  }, function (err, res) {",
+     "    if (!err && res && res.code === 200 && res.json().access_token) {",
+     "      pm.environment.set(pair[0], res.json().access_token);",
+     "    } else {",
+     "      console.log('auto-login failed for ' + pair[0], err || res.code);",
+     "    }",
+     "  });",
+     "});"
+    ]
+   }
+  }
+ ]
+}

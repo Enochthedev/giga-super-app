@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 
 import { getNotificationQueueMetrics } from '../queues/notification.queue';
-import { getQueueMetrics as getPaymentQueueMetrics } from '../queues/payment.queue';
+import { getPaymentQueueMetrics } from '../queues/payment.queue';
 import { getRefundQueueMetrics } from '../queues/refund.queue';
 import { getSettlementQueueMetrics } from '../queues/settlement.queue';
 import { getWebhookQueueMetrics } from '../queues/webhook.queue';

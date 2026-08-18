@@ -1,0 +1,34 @@
+meta {
+  name: DELETE api managers ecommerce products id
+  type: http
+  seq: 112
+}
+
+delete {
+  url: {{baseUrl}}/api/managers/ecommerce/products/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 00000000-0000-0000-0000-000000000000
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("reached backend (verified 404 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
+}
+
+docs {
+  `DELETE /api/managers/ecommerce/products/:id`
+  
+  **✅ reachable (ghost id → 404)** — last verified 2026-08-18, HTTP `404`.
+  
+  Service: **admin-service** · file: `admin-service/src/routes/modules/ecommerce.ts`
+  Auth: admin (DOP) bearer (`{{adminToken}}`).
+}

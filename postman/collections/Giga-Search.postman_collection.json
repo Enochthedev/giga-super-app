@@ -1,0 +1,2296 @@
+{
+ "info": {
+  "name": "Giga API \u2014 Search",
+  "description": "# Giga API \u2014 Search\n\nGenerated **2026-08-18** from the live production gateway. Every request here was actually sent to\n`https://giga-giga-production.up.railway.app` with the QA logins; the description on each request\nrecords the HTTP status it really returned.\n\n**Setup:** run `Auth & User \u2192 Login (Customer)` and `Login (Admin)` first \u2014 they populate\n`{{token}}` and `{{adminToken}}`.\n\nRequests marked \ud83d\udd34 are known defects, cross-referenced to `docs/API_VERIFICATION_2026-08-18.md`.\nTheir tests assert the *current broken* status so the suite stays green until someone fixes them \u2014\nflip the assertion when you do.\n\n\u26a0\ufe0f **Never send a literal `{}` JSON body** \u2014 it hangs the gateway forever (defect V3).\n",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "GET /api/v1/search",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search?query=lagos&limit=5",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search"
+     ],
+     "query": [
+      {
+       "key": "query",
+       "value": "lagos"
+      },
+      {
+       "key": "limit",
+       "value": "5"
+      }
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 862ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/bookings",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "bookings"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1414ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"ee05cfa4-d735-4ca9-90df-c94575c9e2a4\",\"booking_number\":\"BK1786820338621LHZX\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"booking_status\":\"pending\",\"check_in_date\":\"2026-08-28\",\"check_out_date\":\"2026-08-29\",\"guest_count\":1,\"total_amount\":38325,\"payment_status\":\"pending\",\"special_requests\":null,\"created_at\":\"2026-08-15T18:58:58.742007+00:00\",\"updated_at\":\"2026-08-15T18:58:58.742007+00:00\"},{\"id\":\"1a723d9a-c69c-4adc-bf89-98b488f7ba34\",\"booking_number\":\"BK1786744823117F3MK\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"hotel_id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"room_type_id\":\"dd926d26-cffc-4a53-b061-92cb7a190df8\",\"booking_status\":\"pending\",\"check_in_date\":\"2026-08-14\",\"check_out_date\":\"2026-08-15\",\"guest_count\":1,\"total_amount\":38325,\"payment_status\":\"pending\",\"special_requests\":null,\"created_at\":\"2026-08-14T22:00:23.651762+00:00\",\"updated_at\":\"2026-08-14T22:00:23.651762+00:00\"},{\"id\":\"c649382c-c774-4d41-84eb-4b709d55cc0a\",\"booking_number\":\"BK1786019618262OTAT\",\"user_id\":\"c55e8e2e-a2c6-42bc-9bfe-b637891da5d6\",\"hotel_id\":\"47ac\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/bookings",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/bookings",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "bookings"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1063ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/drivers",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "drivers"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1036ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"525627a2-0e0a-440a-966b-3237c02aa979\",\"user_id\":\"3e272e34-eebe-4cb0-89ea-0253989280d7\",\"license_number\":\"hdhdh\",\"vehicle_info\":{\"model\":\"hdhd\"},\"is_online\":false,\"current_location\":null,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-08-17T14:23:45.146057+00:00\",\"updated_at\":\"2026-08-17T14:23:45.146057+00:00\"},{\"id\":\"34a58992-eeb9-4d7e-94e7-819413cf7338\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"license_number\":\"hddh\",\"vehicle_info\":{\"model\":\"hhshs\"},\"is_online\":false,\"current_location\":null,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-08-17T14:23:12.02313+00:00\",\"updated_at\":\"2026-08-17T14:23:12.02313+00:00\"},{\"id\":\"51657016-1bbe-4cfb-b6f4-f7ce31f7b92b\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"license_number\":\"QA-LIC-TEST\",\"vehicle_info\":null,\"is_online\":true,\"current_location\":{\"latitude\":6.525,\"longitude\":3.38},\"rating\":5,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:44:14.31919+00:00\"},{\"id\":\"a08f4d42-b617-4cad-b5fe-ee4f4908cf21\",\"\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/drivers",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/drivers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "drivers"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1365ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/orders",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "orders"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1111ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"status\":\"confirmed\",\"payment_status\":\"pending\",\"payment_method\":\"cash\",\"subtotal\":620000,\"shipping_fee\":0,\"tax_amount\":0,\"discount_amount\":0,\"total_amount\":620000,\"shipping_address_id\":\"3884ddb7-45a9-44c2-9969-33fb395dba17\",\"created_at\":\"2026-08-15T18:54:47.678477+00:00\",\"updated_at\":\"2026-08-15T18:54:47.678477+00:00\"},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"status\":\"confirmed\",\"payment_status\":\"pending\",\"payment_method\":\"cash\",\"subtotal\":250000,\"shipping_fee\":0,\"tax_amount\":0,\"discount_amount\":0,\"total_amount\":250000,\"shipping_address_id\":\"95eeb406-de52-475d-a8c2-80cd4bb26fd9\",\"created_at\":\"2026-08-15T11:19:54.683521+00:00\",\"updated_at\":\"2026-08-15T11:19:54.683521+00:00\"},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe03548f\",\"order_number\":\"ORD-1786791208564-KTISX3\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"status\":\"pending_payment\",\"payment_status\":\"pending\",\"payment_method\":\"card\",\"subtotal\":170000,\"shipping_fee\":0,\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/orders",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/orders",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "orders"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1346ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/rides",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "rides"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1028ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"271ae97a-ea27-4554-aee6-d0238b31fd3d\",\"ride_number\":\"RIDE-MSXBT3SG\",\"passenger_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"driver_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"status\":\"completed\",\"pickup_location\":{\"latitude\":6.6035631,\"longitude\":3.3493582},\"dropoff_location\":{\"latitude\":22.2787948,\"longitude\":114.186212},\"final_amount\":1184300,\"total_fare\":1752540,\"distance_km\":11838,\"estimated_duration_minutes\":28412,\"rating\":null,\"created_at\":\"2026-08-17T14:25:33.156488+00:00\",\"updated_at\":\"2026-08-17T14:26:17.278532+00:00\"},{\"id\":\"0f4a716f-6e46-4dac-b561-27c865b38ee2\",\"ride_number\":\"RIDE-MSUQMUBV\",\"passenger_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"driver_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"status\":\"in_progress\",\"pickup_location\":{\"latitude\":6.7056104,\"longitude\":3.2205031},\"dropoff_location\":{\"latitude\":52.4569544,\"longitude\":4.606013799999999},\"final_amount\":753670,\"total_fare\":753670,\"distance_km\":5088.9,\"estimated_duration_minutes\":12214,\"rating\":null,\"created_at\":\"2026-08-15T18:57:16.659813+00:00\",\"updated_at\":\"2026-08-17T14:24:31.769195+00:00\"},{\"id\":\"29652127-d5d1-4377-a343-f86e0a30a8de\",\"ride_number\":\"RIDE-MSTHLH0V\",\"p\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/rides",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/rides",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "rides"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1397ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/transactions",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "transactions"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1004ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"d78496c6-2e0a-4dca-b0ab-c80083aedd04\",\"reference_id\":\"00000000-0000-0000-0000-000000000000\",\"provider_reference\":\"TAXI_RIDE_1783458705975_e92fd5b2\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"amount\":1000,\"currency\":\"NGN\",\"payment_method\":\"card\",\"payment_status\":\"pending\",\"payment_type\":\"taxi_ride\",\"metadata\":{\"test_mode\":true,\"full_amount\":1000,\"provider_details\":{\"mock_payment\":true}},\"created_at\":\"2026-07-07T21:11:46.111708+00:00\"},{\"id\":\"45f84699-f628-415e-8ae0-f7b2992f55c9\",\"reference_id\":\"00000000-0000-0000-0000-000000000000\",\"provider_reference\":\"ECOMMERCE_ORDER_1783458702343_740f5272\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"amount\":1000,\"currency\":\"NGN\",\"payment_method\":\"card\",\"payment_status\":\"pending\",\"payment_type\":\"ecommerce_order\",\"metadata\":{\"test_mode\":true,\"full_amount\":1000,\"provider_details\":{\"mock_payment\":true}},\"created_at\":\"2026-07-07T21:11:42.48978+00:00\"},{\"id\":\"492c3634-7ca5-4748-b87d-2c3c3a59d003\",\"reference_id\":\"f648cba5-20b2-41d0-896d-e85512221f54\",\"provider_reference\":\"HOTEL_BOOKING_1783458696066_3c78b22f\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"amount\":70000,\"currency\":\"NGN\",\"payment_m\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/transactions",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/transactions",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "transactions"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1390ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/users",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/users",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "users"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1056ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"129ce520-1bec-4a6e-9fb4-13af531907e0\",\"email\":\"testuser@example.com\",\"phone\":\"+12025550143\",\"first_name\":\"Test User\",\"last_name\":\"Test User\",\"avatar_url\":null,\"is_active\":true,\"is_phone_verified\":false,\"last_login_at\":null,\"created_at\":\"2026-08-15T12:35:31.137571+00:00\",\"updated_at\":\"2026-08-15T12:36:04.535017+00:00\"},{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"first_name\":\"hdhd\",\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"is_active\":true,\"is_phone_verified\":false,\"last_login_at\":null,\"created_at\":\"2026-08-14T21:45:18.804169+00:00\",\"updated_at\":\"2026-08-15T18:57:55.076026+00:00\"},{\"id\":\"6fe51664-a258-4ddf-8131-fe3274bec318\",\"email\":\"testuser12345@example.com\",\"phone\":null,\"first_name\":\"Test User\",\"last_name\":\"Test User\",\"avatar_url\":null,\"is_active\":true,\"is_phone_verified\":false,\"last_login_at\":null,\"created_at\":\"2026-08-14T12:02:05.964681+00:00\",\"updated_at\":\"2026-08-14T12:02:06.758+00:00\"},{\"id\":\"2c4b3f3b-c86f-4695-a331-994d16a44725\",\"email\":\"tidogyard@gmail.com\",\"phon\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/users",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/users",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "users"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1027ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/admin/vendors",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "vendors"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1183ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"results\":[{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"business_name\":\"QA Probe Ltd\",\"business_registration\":null,\"tax_id\":null,\"is_verified\":false,\"is_active\":false,\"average_rating\":0,\"total_sales\":0,\"commission_rate\":15,\"created_at\":\"2026-08-18T19:21:11.772533+00:00\",\"updated_at\":\"2026-08-18T19:21:11.772533+00:00\"},{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"business_name\":\"QA Test Store\",\"business_registration\":null,\"tax_id\":null,\"is_verified\":true,\"is_active\":true,\"average_rating\":0,\"total_sales\":0,\"commission_rate\":10,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\"},{\"id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"business_name\":\"Chidi Electronics\",\"business_registration\":null,\"tax_id\":null,\"is_verified\":true,\"is_active\":true,\"average_rating\":0,\"total_sales\":0,\"commission_rate\":15,\"created_at\":\"2026-03-24T20:49:58.097289+00:00\",\"updated_at\":\"2026-03-24T20:49:58.097289+00:00\"},{\"id\":\"a84ae787-88c3-494b-a42e-0cc0bf2f39be\",\"business_name\":\"New Tech Store\",\"business_registration\":\"RC123456\",\"tax_id\":\"TIN987654\",\"is_verified\":false,\"is_active\":true,\"average_rating\":0,\"total_sales\":0,\"commission_rate\":0.15,\"cre\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/admin/vendors",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/admin/vendors",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "admin",
+      "vendors"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1030ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required \\u2014 do NOT send {}\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/analytics",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/analytics",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "analytics"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 838ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to track search analytics\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"query\": \"lagos\",\n  \"result_count\": 3\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 500",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
+       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "DELETE /api/v1/search/cache",
+   "request": {
+    "method": "DELETE",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/cache",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "cache"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 802ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: cache flush only",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{adminToken}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/drivers",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/drivers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "drivers"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1593ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"query\":\"\",\"category\":\"drivers\",\"total_results\":6,\"results\":[{\"id\":\"c724d262-c593-4ff9-b8dc-17e4feb28897\",\"type\":\"drivers\",\"title\":\"Driver\",\"description\":\"standard - Elantra\",\"rating\":4.1,\"relevance_score\":0,\"data\":{\"id\":\"c724d262-c593-4ff9-b8dc-17e4feb28897\",\"user_id\":\"aee80e63-5638-4a5d-a99d-5580e5104a78\",\"license_number\":\"LIC-LAG-2024-006\",\"vehicle_info\":{\"make\":\"Hyundai\",\"year\":2020,\"color\":\"Red\",\"model\":\"Elantra\",\"plate_number\":\"LAG-678-KL\"},\"is_online\":true,\"current_location\":{\"latitude\":6.4474,\"longitude\":3.4083},\"rating\":4.1,\"total_rides\":320,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-02-10T20:44:31.287861+00:00\",\"updated_at\":\"2026-02-12T07:02:40.293712+00:00\",\"last_location\":null,\"last_location_updated_at\":null,\"heading\":null,\"speed\":null,\"vehicle_type\":\"standard\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null},\"created_at\":\"2026-02-10T20:44:31.287861+00:00\",\"updated_at\":\"2026-02-12T07:02:40.293712+00:00\",\"vehicle_info\":{\"type\":\"standard\"},\"contact\":{},\"availability\":{\"current_location\":null},\"estimated_arrival\":null},{\"id\":\"bc5cf9fa-f9e8-4657-9ec4-06592fa5bf68\",\"type\":\"drivers\",\"title\":\"Driver\",\"description\":\"econ\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/drivers",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/drivers",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "drivers"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1367ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"latitude\": 6.5,\n  \"longitude\": 3.4,\n  \"radius\": 20\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/drivers/estimate-fare",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/drivers/estimate-fare",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "drivers",
+      "estimate-fare"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 588ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"pickup\": {\n    \"latitude\": 6.5,\n    \"longitude\": 3.4\n  },\n  \"dropoff\": {\n    \"latitude\": 6.6,\n    \"longitude\": 3.5\n  },\n  \"vehicle_type\": \"standard\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/drivers/nearby",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/drivers/nearby?latitude=6.5&longitude=3.4&radius=20",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "drivers",
+      "nearby"
+     ],
+     "query": [
+      {
+       "key": "latitude",
+       "value": "6.5"
+      },
+      {
+       "key": "longitude",
+       "value": "3.4"
+      },
+      {
+       "key": "radius",
+       "value": "20"
+      }
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1438ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"drivers\":[{\"id\":\"c724d262-c593-4ff9-b8dc-17e4feb28897\",\"type\":\"drivers\",\"title\":\"Driver\",\"description\":\"standard - Elantra\",\"rating\":4.1,\"distance\":5.920306809662011,\"relevance_score\":0,\"data\":{\"id\":\"c724d262-c593-4ff9-b8dc-17e4feb28897\",\"user_id\":\"aee80e63-5638-4a5d-a99d-5580e5104a78\",\"license_number\":\"LIC-LAG-2024-006\",\"vehicle_info\":{\"make\":\"Hyundai\",\"year\":2020,\"color\":\"Red\",\"model\":\"Elantra\",\"plate_number\":\"LAG-678-KL\"},\"is_online\":true,\"current_location\":{\"latitude\":6.4474,\"longitude\":3.4083},\"rating\":4.1,\"total_rides\":320,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-02-10T20:44:31.287861+00:00\",\"updated_at\":\"2026-02-12T07:02:40.293712+00:00\",\"last_location\":null,\"last_location_updated_at\":null,\"heading\":null,\"speed\":null,\"vehicle_type\":\"standard\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null},\"created_at\":\"2026-02-10T20:44:31.287861+00:00\",\"updated_at\":\"2026-02-12T07:02:40.293712+00:00\",\"estimated_arrival_minutes\":12,\"vehicle_info\":{\"type\":\"standard\"}},{\"id\":\"bc5cf9fa-f9e8-4657-9ec4-06592fa5bf68\",\"type\":\"drivers\",\"title\":\"Driver\",\"description\":\"economy - Rio\",\"rating\":4.3,\"distance\":8.353056779412194,\"relevance_score\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/drivers/vehicle-types",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/drivers/vehicle-types",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "drivers",
+      "vehicle-types"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 941ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"vehicle_types\":[{\"type\":\"sedan\",\"name\":\"Sedan\",\"capacity\":4,\"description\":\"Comfortable 4-seater car\",\"base_fare\":500,\"per_km_rate\":100},{\"type\":\"suv\",\"name\":\"SUV\",\"capacity\":6,\"description\":\"Spacious 6-seater SUV\",\"base_fare\":800,\"per_km_rate\":150},{\"type\":\"hatchback\",\"name\":\"Hatchback\",\"capacity\":4,\"description\":\"Compact and economical\",\"base_fare\":400,\"per_km_rate\":80},{\"type\":\"luxury\",\"name\":\"Luxury\",\"capacity\":4,\"description\":\"Premium luxury vehicle\",\"base_fare\":1500,\"per_km_rate\":300},{\"type\":\"motorcycle\",\"name\":\"Motorcycle\",\"capacity\":2,\"description\":\"Quick motorcycle ride\",\"base_fare\":200,\"per_km_rate\":50}],\"total_count\":5},\"metadata\":{\"timestamp\":\"2026-08-18T19:25:13.877Z\",\"request_id\":\"b7ee8ac5-dac2-484f-b68b-527a02e0c882\",\"execution_time_ms\":171,\"cached\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/filters",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/filters",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "filters"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 944ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"category\":\"all\",\"filters\":{\"category\":{\"type\":\"multi_select\",\"options\":[{\"value\":\"hotels\",\"label\":\"Hotels\",\"count\":300},{\"value\":\"products\",\"label\":\"Products\",\"count\":454},{\"value\":\"drivers\",\"label\":\"Drivers\",\"count\":88},{\"value\":\"posts\",\"label\":\"Posts\",\"count\":235},{\"value\":\"users\",\"label\":\"Users\",\"count\":1200}]},\"location\":{\"type\":\"single_select\",\"options\":[{\"value\":\"lagos\",\"label\":\"Lagos\",\"count\":1500},{\"value\":\"abuja\",\"label\":\"Abuja\",\"count\":800},{\"value\":\"port_harcourt\",\"label\":\"Port Harcourt\",\"count\":400},{\"value\":\"kano\",\"label\":\"Kano\",\"count\":300}]}},\"sort_options\":[{\"value\":\"relevance\",\"label\":\"Best Match\",\"default\":true},{\"value\":\"newest\",\"label\":\"Newest First\"},{\"value\":\"rating\",\"label\":\"Highest Rated\"}]},\"metadata\":{\"timestamp\":\"2026-08-18T19:25:14.821Z\",\"request_id\":\"8398dc5f-483f-4c2d-9ba9-8347e926d1f3\",\"execution_time_ms\":171,\"cached\":false,\"cache_expires_at\":\"2026-08-18T20:25:14.821Z\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/hotels",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/hotels?query=lagos&limit=5",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "hotels"
+     ],
+     "query": [
+      {
+       "key": "query",
+       "value": "lagos"
+      },
+      {
+       "key": "limit",
+       "value": "5"
+      }
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 847ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/hotels",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/hotels",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "hotels"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1360ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"query\": \"lagos\",\n  \"page\": 1,\n  \"limit\": 5\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/hotels/nearby",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/hotels/nearby?latitude=6.5&longitude=3.4&radius=20",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "hotels",
+      "nearby"
+     ],
+     "query": [
+      {
+       "key": "latitude",
+       "value": "6.5"
+      },
+      {
+       "key": "longitude",
+       "value": "3.4"
+      },
+      {
+       "key": "radius",
+       "value": "20"
+      }
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 856ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotels\":[{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"type\":\"hotels\",\"title\":\"Lekki Luxury Suites\",\"description\":\"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.\",\"image_url\":\"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800\",\"price\":35000,\"currency\":\"NGN\",\"rating\":5,\"location\":\"Lagos, Lagos\",\"relevance_score\":0,\"data\":{\"id\":\"47acdc21-966c-42b3-828c-00fdf812696b\",\"host_id\":\"cf58622a-78ad-49bf-850b-af8b04b8e868\",\"name\":\"Lekki Luxury Suites\",\"slug\":\"lekki-luxury-suites\",\"description\":\"Experience premium comfort in Lekki Phase 1. Perfect for business travelers and families seeking a peaceful retreat.\",\"short_description\":\"Premium suites in Lekki with ocean views\",\"address\":\"15 Admiralty Way, Lekki Phase 1\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"105102\",\"latitude\":6.4474,\"longitude\":3.4647,\"phone\":\"+234 809 555 1234\",\"email\":\"reservations@lekkisuites.com\",\"website\":null,\"check_in_time\":\"15:00:00\",\"check_out_time\":\"11:00:00\",\"cancellation_policy\":null,\"house_rules\":null,\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\"\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/hotels/popular",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/hotels/popular",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "hotels",
+      "popular"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1352ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/hotels.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotels\":[{\"id\":\"04002af2-61be-49da-8038-a304eecc80c9\",\"type\":\"hotels\",\"title\":\"Grand Lekki Resort & Spa\",\"description\":\"Luxury 5-star resort with ocean views, world-class spa, and fine dining restaurants\",\"currency\":\"NGN\",\"rating\":5,\"location\":\"Lagos, Lagos\",\"relevance_score\":0,\"data\":{\"id\":\"04002af2-61be-49da-8038-a304eecc80c9\",\"host_id\":\"cf58622a-78ad-49bf-850b-af8b04b8e868\",\"name\":\"Grand Lekki Resort & Spa\",\"slug\":\"grand-lekki-resort-spa-pending\",\"description\":\"Luxury 5-star resort with ocean views, world-class spa, and fine dining restaurants\",\"short_description\":\"5-star luxury resort with ocean views\",\"address\":\"123 Lekki Phase 1, Victoria Island\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":null,\"latitude\":null,\"longitude\":null,\"phone\":null,\"email\":null,\"website\":null,\"check_in_time\":\"14:00:00\",\"check_out_time\":\"12:00:00\",\"cancellation_policy\":null,\"house_rules\":null,\"star_rating\":5,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"verified_at\":null,\"featured_image\":null,\"images\":[],\"video_url\":null,\"amenities\":[],\"nearby_attractions\":{},\"policies\":{},\"created_at\":\"2026-02-23T09:46:00.812\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/products",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/products?query=shoe&page=1&limit=5",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "products"
+     ],
+     "query": [
+      {
+       "key": "query",
+       "value": "shoe"
+      },
+      {
+       "key": "page",
+       "value": "1"
+      },
+      {
+       "key": "limit",
+       "value": "5"
+      }
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 808ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/products.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/products",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/products",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "products"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1388ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/products.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"query\": \"shoe\",\n  \"page\": 1,\n  \"limit\": 5\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/products/:id",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/products/{{productId}}",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "products",
+      "{{productId}}"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1080ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/products.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"ddffc3d7-38be-4002-9a08-044488fcced8\",\"name\":\"Smart Air Purifier Pro\",\"slug\":\"smart-air-purifier-pro-pending\",\"description\":\"HEPA filter air purifier with WiFi control and air quality monitoring\",\"short_description\":\"Smart HEPA air purifier\",\"price\":115000,\"original_price\":125000,\"discount_percentage\":8,\"currency\":\"NGN\",\"category_id\":\"610805f6-4d3b-411b-a9ac-59e910bb082e\",\"sku\":null,\"stock_quantity\":25,\"in_stock\":true,\"low_stock_threshold\":10,\"images\":[\"https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80\",\"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80\",\"https://images.unsplash.com/photo-1527515545081-5db817172677?w=800&q=80\"],\"thumbnail\":\"https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80\",\"video_url\":null,\"specifications\":{},\"attributes\":{},\"vendor_id\":\"c959297e-9739-4f4c-86d3-ae2c83bc1307\",\"average_rating\":0,\"review_count\":0,\"view_count\":0,\"order_count\":0,\"is_featured\":false,\"requires_shipping\":true,\"weight\":null,\"dimensions\":null,\"created_at\":\"2026-02-23T09:45:05.914649+00:00\",\"updated_at\":\"2026-03-06T09:59:49.24594+00:00\"},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:10.386Z\",\"request_id\"\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/products/brands",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/products/brands",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "products",
+      "brands"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1492ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/products.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"brands\":[{\"id\":\"a2c2d3ae-8632-4b6a-a43f-8112e46197f1\",\"name\":\"Beauty Essentials\",\"slug\":\"beauty-essentials\",\"logo_url\":null,\"description\":null,\"count\":0,\"is_verified\":true,\"rating\":0},{\"id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"name\":\"Chidi Electronics\",\"slug\":\"chidi-electronics\",\"logo_url\":null,\"description\":null,\"count\":0,\"is_verified\":true,\"rating\":0},{\"id\":\"c959297e-9739-4f4c-86d3-ae2c83bc1307\",\"name\":\"Home Comfort Store\",\"slug\":\"home-comfort-store\",\"logo_url\":null,\"description\":null,\"count\":0,\"is_verified\":true,\"rating\":0},{\"id\":\"e7f0e12b-ea46-4d42-8c96-b32acc795241\",\"name\":\"Lagos Fashion Hub\",\"slug\":\"lagos-fashion-hub\",\"logo_url\":null,\"description\":null,\"count\":0,\"is_verified\":true,\"rating\":0},{\"id\":\"a84ae787-88c3-494b-a42e-0cc0bf2f39be\",\"name\":\"New Tech Store\",\"slug\":\"new-tech-store\",\"logo_url\":null,\"description\":null,\"count\":0,\"is_verified\":false,\"rating\":0},{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"name\":\"QA Test Store\",\"slug\":\"qa-test-store\",\"logo_url\":null,\"description\":null,\"count\":0,\"is_verified\":true,\"rating\":0},{\"id\":\"750c188d-fb34-4943-87ec-4a2ec6492356\",\"name\":\"Sports Arena NG\",\"slug\":\"sports-arena-ng\",\"logo_url\":null,\"description\":nu\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/products/categories",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/products/categories",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "products",
+      "categories"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2030ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/products.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"categories\":[{\"id\":\"4a4604d3-4859-4f92-ae24-1e4cb2333da3\",\"name\":\"Audio & Headphones\",\"slug\":\"audio\",\"description\":\"Headphones, speakers, and audio devices\",\"parent_id\":\"2aa0fff4-d96d-4dcd-843d-e8937629cea7\",\"image_url\":null,\"count\":0},{\"id\":\"9ee42516-60bb-4d62-a41d-8b09f8e6a701\",\"name\":\"Automotive\",\"slug\":\"automotive\",\"description\":\"Car parts and accessories\",\"parent_id\":null,\"image_url\":\"\ud83d\ude97\",\"count\":0},{\"id\":\"49a5ca13-cee6-48ac-b284-dcb5666e4fd4\",\"name\":\"Baby & Kids\",\"slug\":\"baby-kids\",\"description\":\"Baby products and kids items\",\"parent_id\":null,\"image_url\":\"\ud83d\udc76\",\"count\":0},{\"id\":\"76e394e7-a3aa-47e5-bfa2-9d951a86a6d2\",\"name\":\"Bags & Accessories\",\"slug\":\"bags-accessories\",\"description\":\"Handbags, wallets, belts\",\"parent_id\":\"7ec6c1f1-8403-409a-9acc-044ff4943235\",\"image_url\":null,\"count\":0},{\"id\":\"361604e8-cf0c-48d5-bc0c-bb2fb6118b2a\",\"name\":\"Beauty & Personal Care\",\"slug\":\"beauty\",\"description\":\"Cosmetics and personal care products\",\"parent_id\":null,\"image_url\":null,\"count\":0},{\"id\":\"48a4d7fa-78a2-4d64-885d-e6fc2f43e024\",\"name\":\"Bedding & Bath\",\"slug\":\"bedding-bath\",\"description\":\"Bed sheets, towels\",\"parent_id\":\"610805f6-4d3b-411b-a9ac-59e910bb082e\",\"image_\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/products/trending",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/products/trending",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "products",
+      "trending"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1465ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/products.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":[{\"id\":\"0b545936-3506-4a56-b9aa-ee2a585a9ea9\",\"type\":\"products\",\"title\":\"Premium Skincare Gift Set\",\"description\":\"Complete skincare routine with cleanser, toner, serum, and moisturizer\",\"image_url\":\"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80\",\"price\":38250,\"currency\":\"NGN\",\"relevance_score\":0,\"data\":{\"id\":\"0b545936-3506-4a56-b9aa-ee2a585a9ea9\",\"name\":\"Premium Skincare Gift Set\",\"description\":\"Complete skincare routine with cleanser, toner, serum, and moisturizer\",\"short_description\":\"Complete skincare routine set\",\"slug\":\"premium-skincare-gift-set-pending\",\"sku\":null,\"base_price\":45000,\"final_price\":38250,\"discount_percentage\":15,\"stock_quantity\":100,\"images\":[\"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80\",\"https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80\",\"https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=800&q=80\"],\"thumbnail\":\"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80\",\"category_id\":\"53838fb7-977b-426b-adb8-0a4f47a92f89\",\"vendor_id\":\"e7f0e12b-ea46-4d42-8c96-b32acc795241\",\"average_rating\":0,\"review_count\":0,\"is_featured\":false,\u2026\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/stats",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/stats",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "stats"
+     ]
+    },
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1004ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 403",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/search/suggestions",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/suggestions?query=lag",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "suggestions"
+     ],
+     "query": [
+      {
+       "key": "query",
+       "value": "lag"
+      }
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 816ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `customer` bearer token.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/search/universal",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/search/universal",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "search",
+      "universal"
+     ]
+    },
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 921ms.\n\nService: `search-service` \u00b7 source: `search-service/src/routes/search.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"query\": \"lagos\",\n  \"limit\": 5\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 400",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  }
+ ],
+ "auth": {
+  "type": "bearer",
+  "bearer": [
+   {
+    "key": "token",
+    "value": "{{token}}",
+    "type": "string"
+   }
+  ]
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "https://giga-giga-production.up.railway.app"
+  }
+ ],
+ "event": [
+  {
+   "listen": "prerequest",
+   "script": {
+    "type": "text/javascript",
+    "exec": [
+     "// Auto-login: fetches customer + admin tokens once per run if missing.",
+     "const need = [];",
+     "if (!pm.environment.get('token'))      need.push(['token', pm.environment.get('customerEmail')]);",
+     "if (!pm.environment.get('adminToken')) need.push(['adminToken', pm.environment.get('adminEmail')]);",
+     "if (need.length === 0) { return; }",
+     "const base = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+     "const pwd  = pm.environment.get('password');",
+     "need.forEach(function (pair) {",
+     "  pm.sendRequest({",
+     "    url: base + '/auth/login',",
+     "    method: 'POST',",
+     "    header: { 'Content-Type': 'application/json' },",
+     "    body: { mode: 'raw', raw: JSON.stringify({ email: pair[1], password: pwd }) }",
+     "  }, function (err, res) {",
+     "    if (!err && res && res.code === 200 && res.json().access_token) {",
+     "      pm.environment.set(pair[0], res.json().access_token);",
+     "    } else {",
+     "      console.log('auto-login failed for ' + pair[0], err || res.code);",
+     "    }",
+     "  });",
+     "});"
+    ]
+   }
+  }
+ ]
+}

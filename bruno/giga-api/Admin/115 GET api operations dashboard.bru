@@ -1,0 +1,33 @@
+meta {
+  name: GET api operations dashboard
+  type: http
+  seq: 115
+}
+
+get {
+  url: {{baseUrl}}/api/operations/dashboard
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{adminToken}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /api/operations/dashboard`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **admin-service** · file: `admin-service/src/routes/postal-monitoring.ts`
+  Auth: admin (DOP) bearer (`{{adminToken}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"stats":{"total_packages":5,"pending_packages":3,"delivered_packages":1,"total_revenue":210,"total_staff":2},"revenue_chart":[{"date":"2026-07-19","revenue":0},{"date":"2026-07-20","revenue":0},{"date":"2026-07-21","revenue":0},{"date":"2026-07-22","revenue":0},{"date":"2026-07-23","revenue":0},{"date":"2026-07-24","revenue":0},{"date":"2026-07-25","revenue":0},{"date":"2026-07-26","revenue":0},{"date":"2026-07-27","revenue":0},{"date":"2026-07-28","revenue":0},{"date":"2026-07-29","revenue":0},{"date":"2026-07-30","revenue":0},{"date":"2026-07-31","revenue":0},{"date":"2026-08-01","revenue":0},{"date":"2026-08-02","revenue":0},{"date":"2026-08-03","revenue":0},{"date
+  ```
+}

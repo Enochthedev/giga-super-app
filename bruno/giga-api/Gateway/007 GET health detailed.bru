@@ -1,0 +1,33 @@
+meta {
+  name: GET health detailed
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/health/detailed
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /health/detailed`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/health.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"gateway":{"status":"healthy","uptime":2321295.782240087,"memory":{"rss":126300160,"heapTotal":69861376,"heapUsed":58533224,"external":5021251,"arrayBuffers":491863}},"services":{"supabase-auth":{"name":"Authentication Service","platform":"supabase","healthy":false,"status":401,"responseTime":"unknown","lastCheck":"2026-08-18T19:35:04.241Z"},"supabase-hotels":{"name":"Hotel Core Service (Legacy)","platform":"supabase","healthy":false,"status":401,"responseTime":"unknown","lastCheck":"2026-08-18T19:35:04.252Z"},"supabase-payments":{"name":"Wallet Core Service","platform":"supabase","healthy":false,"status":401,"responseTime":"unknown","lastCheck":"2026-08-18T19:35:04.2
+  ```
+}
