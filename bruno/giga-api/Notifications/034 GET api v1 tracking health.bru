@@ -15,16 +15,19 @@ auth:bearer {
 }
 
 tests {
-  test("reached backend (verified 400 on 2026-08-18)", function(){
-    expect(res.status).to.be.below(500);
-  });
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
 }
 
 docs {
   `GET /api/v1/tracking/health`
   
-  **✅ reachable (probe payload → 400)** — last verified 2026-08-18, HTTP `400`.
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
   
   Service: **notifications-service** · file: `notifications-service/src/routes/tracking.ts`
   Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"service":"notification-tracking","timestamp":"2026-08-18T21:02:17.511Z","endpoints":{"email_open":"/api/v1/tracking/open/:notificationId.png","email_click":"/api/v1/tracking/click/:notificationId?url=<encoded_url>","twilio_webhook":"/api/v1/tracking/webhook/twilio","sendgrid_webhook":"/api/v1/tracking/webhook/sendgrid","firebase_webhook":"/api/v1/tracking/webhook/firebase"}}
+  ```
 }

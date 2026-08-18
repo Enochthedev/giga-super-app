@@ -26,7 +26,7 @@
       "{{userId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1242ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1196ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -84,7 +84,7 @@
       "availability"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1039ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 996ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -147,7 +147,7 @@
       "earnings"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1440ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"history\":[],\"summary\":{\"total_earnings\":0,\"total_net\":0,\"total_commission\":0,\"total_rides\":0,\"pending_payout\":0,\"currency\":\"NGN\",\"period\":\"all\"}},\"pagination\":{\"total\":0,\"limit\":50,\"offset\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1742ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"history\":[],\"summary\":{\"total_earnings\":0,\"total_net\":0,\"total_commission\":0,\"total_rides\":0,\"pending_payout\":0,\"currency\":\"NGN\",\"period\":\"all\"}},\"pagination\":{\"total\":0,\"limit\":50,\"offset\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -205,7 +205,7 @@
       "location"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 980ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1025ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -282,7 +282,7 @@
       }
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1209ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"count\":0}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1580ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"count\":0}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -336,7 +336,7 @@
       "profile"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1188ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1205ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -390,7 +390,7 @@
       "stats"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1560ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1166ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/drivers.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -447,7 +447,7 @@
       "rides"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 996ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: creates a ride request\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1024ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: creates a ride request\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -510,7 +510,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1210ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1186ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -569,7 +569,7 @@
       "accept"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1194ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1232ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -637,7 +637,7 @@
       "cancel"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1426ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1519ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -705,7 +705,7 @@
       "complete"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1443ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1739ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -773,7 +773,7 @@
       "rate"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 961ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1073ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -841,7 +841,7 @@
       "reject"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1214ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1176ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -909,7 +909,7 @@
       "start"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1177ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1190ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -977,7 +977,7 @@
       "status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 977ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 976ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1040,7 +1040,7 @@
       "active"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1573ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"ride\":{\"id\":\"8e079db0-a629-4f4b-b828-a85467618998\",\"ride_number\":\"QA-RIDE-8e079db0\",\"driver_id\":null,\"passenger_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"pickup_location\":{\"latitude\":6.5244,\"longitude\":3.3792},\"dropoff_location\":{\"latitude\":6.4281,\"longitude\":3.4219},\"pickup_address\":\"Ikeja\",\"dropoff_address\":\"VI\",\"distance_km\":null,\"estimated_duration_minutes\":null,\"base_fare\":500,\"distance_fare\":0,\"time_fare\":0,\"surge_multiplier\":1,\"total_fare\":1500,\"discount_amount\":0,\"final_amount\":1500,\"payment_status\":\"pending\",\"status\":\"requested\",\"pickup_time\":null,\"dropoff_time\":null,\"cancellation_reason\":null,\"cancelled_by\":null,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null,\"driver_notes\":null,\"passenger_notes\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"driver_eta_minutes\":null,\"accepted_at\":null,\"started_at\":null,\"completed_at\":null,\"cancellation_fee\":null,\"actual_distance_km\":null,\"actual_duration_minutes\":null,\"final_fare\":null,\"scheduled_time\":null,\"actual_dropoff_location\":null,\"currency\":\"NGN\",\"region_id\":null},\"driver\":null,\"passenger\":{\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_u\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1412ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"ride\":{\"id\":\"8e079db0-a629-4f4b-b828-a85467618998\",\"ride_number\":\"QA-RIDE-8e079db0\",\"driver_id\":null,\"passenger_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"pickup_location\":{\"latitude\":6.5244,\"longitude\":3.3792},\"dropoff_location\":{\"latitude\":6.4281,\"longitude\":3.4219},\"pickup_address\":\"Ikeja\",\"dropoff_address\":\"VI\",\"distance_km\":null,\"estimated_duration_minutes\":null,\"base_fare\":500,\"distance_fare\":0,\"time_fare\":0,\"surge_multiplier\":1,\"total_fare\":1500,\"discount_amount\":0,\"final_amount\":1500,\"payment_status\":\"pending\",\"status\":\"requested\",\"pickup_time\":null,\"dropoff_time\":null,\"cancellation_reason\":null,\"cancelled_by\":null,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null,\"driver_notes\":null,\"passenger_notes\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"driver_eta_minutes\":null,\"accepted_at\":null,\"started_at\":null,\"completed_at\":null,\"cancellation_fee\":null,\"actual_distance_km\":null,\"actual_duration_minutes\":null,\"final_fare\":null,\"scheduled_time\":null,\"actual_dropoff_location\":null,\"currency\":\"NGN\",\"region_id\":null},\"driver\":null,\"passenger\":{\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"avatar_u\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1098,7 +1098,7 @@
       "estimate"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 599ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 591ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1161,7 +1161,7 @@
       "history"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1277ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"8e079db0-a629-4f4b-b828-a85467618998\",\"ride_number\":\"QA-RIDE-8e079db0\",\"driver_id\":null,\"passenger_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"pickup_location\":{\"latitude\":6.5244,\"longitude\":3.3792},\"dropoff_location\":{\"latitude\":6.4281,\"longitude\":3.4219},\"pickup_address\":\"Ikeja\",\"dropoff_address\":\"VI\",\"distance_km\":null,\"estimated_duration_minutes\":null,\"base_fare\":500,\"distance_fare\":0,\"time_fare\":0,\"surge_multiplier\":1,\"total_fare\":1500,\"discount_amount\":0,\"final_amount\":1500,\"payment_status\":\"pending\",\"status\":\"requested\",\"pickup_time\":null,\"dropoff_time\":null,\"cancellation_reason\":null,\"cancelled_by\":null,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null,\"driver_notes\":null,\"passenger_notes\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"driver_eta_minutes\":null,\"accepted_at\":null,\"started_at\":null,\"completed_at\":null,\"cancellation_fee\":null,\"actual_distance_km\":null,\"actual_duration_minutes\":null,\"final_fare\":null,\"scheduled_time\":null,\"actual_dropoff_location\":null,\"currency\":\"NGN\",\"region_id\":null}],\"pagination\":{\"total\":1,\"limit\":20,\"offset\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1545ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"8e079db0-a629-4f4b-b828-a85467618998\",\"ride_number\":\"QA-RIDE-8e079db0\",\"driver_id\":null,\"passenger_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"pickup_location\":{\"latitude\":6.5244,\"longitude\":3.3792},\"dropoff_location\":{\"latitude\":6.4281,\"longitude\":3.4219},\"pickup_address\":\"Ikeja\",\"dropoff_address\":\"VI\",\"distance_km\":null,\"estimated_duration_minutes\":null,\"base_fare\":500,\"distance_fare\":0,\"time_fare\":0,\"surge_multiplier\":1,\"total_fare\":1500,\"discount_amount\":0,\"final_amount\":1500,\"payment_status\":\"pending\",\"status\":\"requested\",\"pickup_time\":null,\"dropoff_time\":null,\"cancellation_reason\":null,\"cancelled_by\":null,\"cancelled_at\":null,\"rating\":null,\"review_comment\":null,\"driver_notes\":null,\"passenger_notes\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"driver_eta_minutes\":null,\"accepted_at\":null,\"started_at\":null,\"completed_at\":null,\"cancellation_fee\":null,\"actual_distance_km\":null,\"actual_duration_minutes\":null,\"final_fare\":null,\"scheduled_time\":null,\"actual_dropoff_location\":null,\"currency\":\"NGN\",\"region_id\":null}],\"pagination\":{\"total\":1,\"limit\":20,\"offset\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1215,7 +1215,7 @@
       "requests"
      ]
     },
-    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1203ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1508ms.\n\nService: `taxi-realtime-service` \u00b7 source: `taxi-realtime-service/src/routes/rides.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [

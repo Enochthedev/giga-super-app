@@ -125,7 +125,7 @@
       "change-password"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 568ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 598ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -187,7 +187,7 @@
       "me"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1840ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"email\":\"qa.customer1@gigaqa.test\",\"phone\":\"\",\"email_confirmed_at\":\"2026-06-06T10:32:36.532308Z\",\"created_at\":\"2026-06-06T10:32:36.228302Z\",\"profile\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"email\":\"qa.customer1@gigaqa.test\",\"phone\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"date_of_birth\":null,\"gender\":null,\"marital_status\":null,\"body_weight\":null,\"height\":null,\"age_group\":null,\"areas_of_interest\":null,\"is_phone_verified\":false,\"is_active\":false,\"last_login_at\":null,\"created_at\":\"2026-06-06T10:32:36.228302+00:00\",\"updated_at\":\"2026-08-18T19:19:33.710155+00:00\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"deleted_at\":\"2026-08-18T19:19:33.598+00:00\",\"deleted_by\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"deletion_reason\":\"Admin deletion\",\"state\":null,\"region_id\":null},\"roles\":[\"CUSTOMER\",\"VENDOR\"],\"active_role\":\"CUSTOMER\",\"permissions\":{\"isCustomer\":true,\"isDriver\":false,\"isVendor\":true,\"isHost\":false,\"isAdvertiser\":false,\"isCourier\":false,\"isDop\":false,\"isPmg\":false,\"isRegionalManager\":false,\"isModuleAd\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2211ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"email\":\"qa.customer1@gigaqa.test\",\"phone\":\"\",\"email_confirmed_at\":\"2026-06-06T10:32:36.532308Z\",\"created_at\":\"2026-06-06T10:32:36.228302Z\",\"profile\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"email\":\"qa.customer1@gigaqa.test\",\"phone\":null,\"first_name\":\"Ada\",\"last_name\":\"Customer\",\"date_of_birth\":null,\"gender\":null,\"marital_status\":null,\"body_weight\":null,\"height\":null,\"age_group\":null,\"areas_of_interest\":null,\"is_phone_verified\":false,\"is_active\":false,\"last_login_at\":null,\"created_at\":\"2026-06-06T10:32:36.228302+00:00\",\"updated_at\":\"2026-08-18T20:59:35.414592+00:00\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"deleted_at\":\"2026-08-18T20:59:35.314+00:00\",\"deleted_by\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"deletion_reason\":\"Admin deletion\",\"state\":null,\"region_id\":null},\"roles\":[\"CUSTOMER\",\"VENDOR\"],\"active_role\":\"CUSTOMER\",\"permissions\":{\"isCustomer\":true,\"isDriver\":false,\"isVendor\":true,\"isHost\":false,\"isAdvertiser\":false,\"isCourier\":false,\"isDop\":false,\"isPmg\":false,\"isRegionalManager\":false,\"isModuleAd\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -244,7 +244,7 @@
       "reset-password"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 591ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 573ms.\n\nService: `api-gateway` \u00b7 source: `api-gateway/src/routes/auth.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [

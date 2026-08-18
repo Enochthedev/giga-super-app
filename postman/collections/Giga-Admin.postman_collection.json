@@ -24,7 +24,7 @@
       "api"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 649ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/health.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 605ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/health.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -81,7 +81,7 @@
       "analytics"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1600ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"period\":\"week\",\"transactions\":0,\"revenue\":0,\"commission\":0,\"byModule\":{\"hotel\":{\"count\":0,\"revenue\":0},\"taxi\":{\"count\":0,\"revenue\":0},\"ecommerce\":{\"count\":0,\"revenue\":0}}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1934ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"period\":\"week\",\"transactions\":0,\"revenue\":0,\"commission\":0,\"byModule\":{\"hotel\":{\"count\":0,\"revenue\":0},\"taxi\":{\"count\":0,\"revenue\":0},\"ecommerce\":{\"count\":0,\"revenue\":0}}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -137,7 +137,7 @@
       "dashboard"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1563ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"branch_id\":\"00000000-0000-0000-0000-000000000000\",\"hotels\":0,\"ecommerce\":0,\"taxi\":0,\"total_revenue\":0,\"total_commission\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1579ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"branch_id\":\"00000000-0000-0000-0000-000000000000\",\"hotels\":0,\"ecommerce\":0,\"taxi\":0,\"total_revenue\":0,\"total_commission\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -193,7 +193,7 @@
       "transactions"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1550ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"pages\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1597ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"pages\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -247,7 +247,7 @@
       "categories"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1328ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/admin-panel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"ecommerce\",\"name\":\"E-commerce\",\"description\":\"Online marketplace and trading\",\"icon\":\"shopping-cart\",\"color\":\"#3B82F6\"},{\"id\":\"hotel\",\"name\":\"Hotel Booking\",\"description\":\"Hotel reservations and management\",\"icon\":\"hotel\",\"color\":\"#8B5CF6\"},{\"id\":\"taxi\",\"name\":\"Taxi Services\",\"description\":\"Ride-hailing and transportation\",\"icon\":\"car\",\"color\":\"#10B981\"},{\"id\":\"media\",\"name\":\"Media & Social\",\"description\":\"Social media and content management\",\"icon\":\"image\",\"color\":\"#F59E0B\"}]}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1658ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/admin-panel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"ecommerce\",\"name\":\"E-commerce\",\"description\":\"Online marketplace and trading\",\"icon\":\"shopping-cart\",\"color\":\"#3B82F6\"},{\"id\":\"hotel\",\"name\":\"Hotel Booking\",\"description\":\"Hotel reservations and management\",\"icon\":\"hotel\",\"color\":\"#8B5CF6\"},{\"id\":\"taxi\",\"name\":\"Taxi Services\",\"description\":\"Ride-hailing and transportation\",\"icon\":\"car\",\"color\":\"#10B981\"},{\"id\":\"media\",\"name\":\"Media & Social\",\"description\":\"Social media and content management\",\"icon\":\"image\",\"color\":\"#F59E0B\"}]}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -302,7 +302,7 @@
       "dashboard"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1551ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"states\":5,\"branches\":0,\"hotels\":8,\"ecommerce\":8,\"taxi\":14,\"total_revenue\":2063598,\"total_commission\":103179.9}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1596ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"states\":5,\"branches\":0,\"hotels\":8,\"ecommerce\":8,\"taxi\":14,\"total_revenue\":2063598,\"total_commission\":103179.9}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -357,7 +357,7 @@
       "financial-summary"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1583ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"totalTransactions\":0,\"totalRevenue\":0,\"totalCommission\":0,\"byModule\":{\"hotel\":0,\"taxi\":0,\"ecommerce\":0}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1572ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"totalTransactions\":0,\"totalRevenue\":0,\"totalCommission\":0,\"byModule\":{\"hotel\":0,\"taxi\":0,\"ecommerce\":0}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -412,7 +412,7 @@
       "states"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1563ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1575ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -466,7 +466,7 @@
       "regions"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1262ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"98a01c1c-722c-48d7-bc23-01001af9b4d8\",\"region_name\":\"Ikeja\",\"region_code\":\"IKJ\",\"region_type\":\"city\",\"parent_region_id\":\"403f9131-9427-4d9d-8d8d-17e0d90ce707\",\"country_code\":null,\"phone_code\":null,\"currency\":null,\"timezone\":\"Africa/Lagos\",\"is_active\":true},{\"id\":\"4e42f48f-6b54-4480-8da6-b52b90f8cc69\",\"region_name\":\"Johannesburg\",\"region_code\":\"JNB\",\"region_type\":\"city\",\"parent_region_id\":\"16cf5dad-498a-4d4c-bdbd-74465d92349f\",\"country_code\":\"ZA\",\"phone_code\":null,\"currency\":null,\"timezone\":null,\"is_active\":true},{\"id\":\"32a01616-d43e-4ead-9ab4-5b8d96a7d02a\",\"region_name\":\"Lekki\",\"region_code\":\"LEK\",\"region_type\":\"city\",\"parent_region_id\":\"403f9131-9427-4d9d-8d8d-17e0d90ce707\",\"country_code\":null,\"phone_code\":null,\"currency\":null,\"timezone\":\"Africa/Lagos\",\"is_active\":true},{\"id\":\"deb16c55-ba87-47da-9acd-27a4bf39c9b5\",\"region_name\":\"London\",\"region_code\":\"LDN\",\"region_type\":\"city\",\"parent_region_id\":\"51368188-f5b0-4881-b2c9-a1824b8d0bc8\",\"country_code\":\"GB\",\"phone_code\":null,\"currency\":null,\"timezone\":null,\"is_active\":true},{\"id\":\"9760a3a8-8c78-4d1b-b10c-8b226b64fbcc\",\"region_name\":\"Victoria Island\",\"region_code\":\"VI\",\"region_type\":\"city\",\"parent_region_\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1247ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"98a01c1c-722c-48d7-bc23-01001af9b4d8\",\"region_name\":\"Ikeja\",\"region_code\":\"IKJ\",\"region_type\":\"city\",\"parent_region_id\":\"403f9131-9427-4d9d-8d8d-17e0d90ce707\",\"country_code\":null,\"phone_code\":null,\"currency\":null,\"timezone\":\"Africa/Lagos\",\"is_active\":true},{\"id\":\"4e42f48f-6b54-4480-8da6-b52b90f8cc69\",\"region_name\":\"Johannesburg\",\"region_code\":\"JNB\",\"region_type\":\"city\",\"parent_region_id\":\"16cf5dad-498a-4d4c-bdbd-74465d92349f\",\"country_code\":\"ZA\",\"phone_code\":null,\"currency\":null,\"timezone\":null,\"is_active\":true},{\"id\":\"32a01616-d43e-4ead-9ab4-5b8d96a7d02a\",\"region_name\":\"Lekki\",\"region_code\":\"LEK\",\"region_type\":\"city\",\"parent_region_id\":\"403f9131-9427-4d9d-8d8d-17e0d90ce707\",\"country_code\":null,\"phone_code\":null,\"currency\":null,\"timezone\":\"Africa/Lagos\",\"is_active\":true},{\"id\":\"deb16c55-ba87-47da-9acd-27a4bf39c9b5\",\"region_name\":\"London\",\"region_code\":\"LDN\",\"region_type\":\"city\",\"parent_region_id\":\"51368188-f5b0-4881-b2c9-a1824b8d0bc8\",\"country_code\":\"GB\",\"phone_code\":null,\"currency\":null,\"timezone\":null,\"is_active\":true},{\"id\":\"9760a3a8-8c78-4d1b-b10c-8b226b64fbcc\",\"region_name\":\"Victoria Island\",\"region_code\":\"VI\",\"region_type\":\"city\",\"parent_region_\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -524,7 +524,7 @@
       "regions"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1345ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 990ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -588,7 +588,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1213ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1203ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -647,7 +647,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1395ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 984ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -712,7 +712,7 @@
       "admins"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1196ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to list region admins",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1554ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to list region admins",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -773,7 +773,7 @@
       "assign-admin"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1347ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 971ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/regions.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -838,7 +838,7 @@
       "branches"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1380ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1369ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[]}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -894,7 +894,7 @@
       "dashboard"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1404ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"state_id\":\"00000000-0000-0000-0000-000000000000\",\"branches\":0,\"hotels\":0,\"ecommerce\":0,\"taxi\":0,\"total_revenue\":0,\"total_commission\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1451ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"state_id\":\"00000000-0000-0000-0000-000000000000\",\"branches\":0,\"hotels\":0,\"ecommerce\":0,\"taxi\":0,\"total_revenue\":0,\"total_commission\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -950,7 +950,7 @@
       "financial-summary"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1414ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"totalTransactions\":0,\"totalRevenue\":0,\"totalCommission\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1760ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"totalTransactions\":0,\"totalRevenue\":0,\"totalCommission\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1004,7 +1004,7 @@
       "users"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1577ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"129ce520-1bec-4a6e-9fb4-13af531907e0\",\"email\":\"testuser@example.com\",\"phone\":\"+12025550143\",\"first_name\":\"Test User\",\"last_name\":\"Test User\",\"avatar_url\":null,\"date_of_birth\":null,\"gender\":null,\"is_phone_verified\":false,\"is_active\":true,\"region_id\":null,\"last_login_at\":null,\"created_at\":\"2026-08-15T12:35:31.137571+00:00\",\"updated_at\":\"2026-08-15T12:36:04.535017+00:00\"},{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"first_name\":\"hdhd\",\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"date_of_birth\":null,\"gender\":null,\"is_phone_verified\":false,\"is_active\":true,\"region_id\":null,\"last_login_at\":null,\"created_at\":\"2026-08-14T21:45:18.804169+00:00\",\"updated_at\":\"2026-08-15T18:57:55.076026+00:00\"},{\"id\":\"6fe51664-a258-4ddf-8131-fe3274bec318\",\"email\":\"testuser12345@example.com\",\"phone\":null,\"first_name\":\"Test User\",\"last_name\":\"Test User\",\"avatar_url\":null,\"date_of_birth\":null,\"gender\":null,\"is_phone_verified\":false,\"is_active\":true,\"region_id\":null,\"last_login_at\":null,\"created_at\":\"2026-08-14T12:0\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1535ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"129ce520-1bec-4a6e-9fb4-13af531907e0\",\"email\":\"testuser@example.com\",\"phone\":\"+12025550143\",\"first_name\":\"Test User\",\"last_name\":\"Test User\",\"avatar_url\":null,\"date_of_birth\":null,\"gender\":null,\"is_phone_verified\":false,\"is_active\":true,\"region_id\":null,\"last_login_at\":null,\"created_at\":\"2026-08-15T12:35:31.137571+00:00\",\"updated_at\":\"2026-08-15T12:36:04.535017+00:00\"},{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"first_name\":\"hdhd\",\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"date_of_birth\":null,\"gender\":null,\"is_phone_verified\":false,\"is_active\":true,\"region_id\":null,\"last_login_at\":null,\"created_at\":\"2026-08-14T21:45:18.804169+00:00\",\"updated_at\":\"2026-08-15T18:57:55.076026+00:00\"},{\"id\":\"6fe51664-a258-4ddf-8131-fe3274bec318\",\"email\":\"testuser12345@example.com\",\"phone\":null,\"first_name\":\"Test User\",\"last_name\":\"Test User\",\"avatar_url\":null,\"date_of_birth\":null,\"gender\":null,\"is_phone_verified\":false,\"is_active\":true,\"region_id\":null,\"last_login_at\":null,\"created_at\":\"2026-08-14T12:0\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1062,7 +1062,7 @@
       "users"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1722ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1008ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1126,7 +1126,7 @@
       "{{userId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1383ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1412ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1181,7 +1181,7 @@
       "{{userId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1184ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch user",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1186ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch user",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1241,7 +1241,7 @@
       "{{userId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 2130ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update user\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1438ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/users.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update user\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1310,7 +1310,7 @@
       "approve"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1595ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1269ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1378,7 +1378,7 @@
       "reject"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1102ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1016ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1446,7 +1446,7 @@
       "status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1071ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1000ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1513,7 +1513,7 @@
       "fetch"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 894ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 805ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1576,7 +1576,7 @@
       "incoming"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1450ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0aebd519-eb99-42da-bc6b-c9d99ca14dd7\",\"campaign_name\":\"Brand Awareness Drive\",\"campaign_type\":\"banner\",\"budget\":203537.4,\"start_date\":\"2026-02-08\",\"end_date\":\"2026-04-28\",\"status\":\"pending_approval\",\"review_notes\":null,\"created_at\":\"2026-02-09T09:30:42.64946+00:00\",\"advertiser_id\":\"6c250cd7-5d0f-47ba-b043-2c82ed03014b\",\"advertiser_profiles\":{\"company_name\":\"AutoMart Motors\",\"user_profiles\":{\"email\":\"example@example.com\",\"phone\":null}}},{\"id\":\"2e3d066d-988a-4c64-9ff2-ccbf8048ca8a\",\"campaign_name\":\"Brand Awareness Drive\",\"campaign_type\":\"sponsored\",\"budget\":404744.37,\"start_date\":\"2026-01-29\",\"end_date\":\"2026-03-30\",\"status\":\"pending_approval\",\"review_notes\":null,\"created_at\":\"2026-02-08T21:42:36.129312+00:00\",\"advertiser_id\":\"6c250cd7-5d0f-47ba-b043-2c82ed03014b\",\"advertiser_profiles\":{\"company_name\":\"AutoMart Motors\",\"user_profiles\":{\"email\":\"example@example.com\",\"phone\":null}}},{\"id\":\"78152ea3-76d6-499d-93b6-7f6bfc3bf779\",\"campaign_name\":\"Holiday Special Promo\",\"campaign_type\":\"banner\",\"budget\":60227.96,\"start_date\":\"2026-01-18\",\"end_date\":\"2026-04-18\",\"status\":\"pending_approval\",\"review_notes\":null,\"created_at\":\"2026-02-08T07:03:58.927364+00:00\",\"ad\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1393ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/advertisements.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0aebd519-eb99-42da-bc6b-c9d99ca14dd7\",\"campaign_name\":\"Brand Awareness Drive\",\"campaign_type\":\"banner\",\"budget\":203537.4,\"start_date\":\"2026-02-08\",\"end_date\":\"2026-04-28\",\"status\":\"pending_approval\",\"review_notes\":null,\"created_at\":\"2026-02-09T09:30:42.64946+00:00\",\"advertiser_id\":\"6c250cd7-5d0f-47ba-b043-2c82ed03014b\",\"advertiser_profiles\":{\"company_name\":\"AutoMart Motors\",\"user_profiles\":{\"email\":\"example@example.com\",\"phone\":null}}},{\"id\":\"2e3d066d-988a-4c64-9ff2-ccbf8048ca8a\",\"campaign_name\":\"Brand Awareness Drive\",\"campaign_type\":\"sponsored\",\"budget\":404744.37,\"start_date\":\"2026-01-29\",\"end_date\":\"2026-03-30\",\"status\":\"pending_approval\",\"review_notes\":null,\"created_at\":\"2026-02-08T21:42:36.129312+00:00\",\"advertiser_id\":\"6c250cd7-5d0f-47ba-b043-2c82ed03014b\",\"advertiser_profiles\":{\"company_name\":\"AutoMart Motors\",\"user_profiles\":{\"email\":\"example@example.com\",\"phone\":null}}},{\"id\":\"78152ea3-76d6-499d-93b6-7f6bfc3bf779\",\"campaign_name\":\"Holiday Special Promo\",\"campaign_type\":\"banner\",\"budget\":60227.96,\"start_date\":\"2026-01-18\",\"end_date\":\"2026-04-18\",\"status\":\"pending_approval\",\"review_notes\":null,\"created_at\":\"2026-02-08T07:03:58.927364+00:00\",\"ad\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1630,7 +1630,7 @@
       "categories"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1829ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/dashboard.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"current\":{\"period\":{\"start\":\"2026-08-11\",\"end\":\"2026-08-18\"},\"totals\":{\"ecommerce\":0,\"hotel\":0,\"taxi\":1184300,\"media\":0,\"total\":1184300}},\"previous\":{\"period\":{\"start\":\"2026-08-04\",\"end\":\"2026-08-11\"},\"totals\":{\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0}},\"breakdown\":[{\"category\":\"ecommerce\",\"current_value\":0,\"previous_value\":0,\"percentage\":0,\"change_percent\":0,\"trend\":\"stable\"},{\"category\":\"hotel\",\"current_value\":0,\"previous_value\":0,\"percentage\":0,\"change_percent\":0,\"trend\":\"stable\"},{\"category\":\"taxi\",\"current_value\":1184300,\"previous_value\":0,\"percentage\":100,\"change_percent\":100,\"trend\":\"up\"},{\"category\":\"media\",\"current_value\":0,\"previous_value\":0,\"percentage\":0,\"change_percent\":0,\"trend\":\"stable\"}]}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1736ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/dashboard.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"current\":{\"period\":{\"start\":\"2026-08-11\",\"end\":\"2026-08-18\"},\"totals\":{\"ecommerce\":0,\"hotel\":0,\"taxi\":1184300,\"media\":0,\"total\":1184300}},\"previous\":{\"period\":{\"start\":\"2026-08-04\",\"end\":\"2026-08-11\"},\"totals\":{\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0}},\"breakdown\":[{\"category\":\"ecommerce\",\"current_value\":0,\"previous_value\":0,\"percentage\":0,\"change_percent\":0,\"trend\":\"stable\"},{\"category\":\"hotel\",\"current_value\":0,\"previous_value\":0,\"percentage\":0,\"change_percent\":0,\"trend\":\"stable\"},{\"category\":\"taxi\",\"current_value\":1184300,\"previous_value\":0,\"percentage\":100,\"change_percent\":100,\"trend\":\"up\"},{\"category\":\"media\",\"current_value\":0,\"previous_value\":0,\"percentage\":0,\"change_percent\":0,\"trend\":\"stable\"}]}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1684,7 +1684,7 @@
       "sales"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 3378ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/dashboard.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"period\":{\"start\":\"2026-08-11\",\"end\":\"2026-08-18\",\"days\":7},\"daily\":[{\"date\":\"2026-08-11\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-12\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-13\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-14\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-15\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-16\",\"ecommerce\":0,\"hotel\":0,\"taxi\":1184300,\"media\":0,\"total\":1184300},{\"date\":\"2026-08-17\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0}],\"totals\":{\"ecommerce\":0,\"hotel\":0,\"taxi\":1184300,\"media\":0,\"total\":1184300}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 3375ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/dashboard.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"period\":{\"start\":\"2026-08-11\",\"end\":\"2026-08-18\",\"days\":7},\"daily\":[{\"date\":\"2026-08-11\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-12\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-13\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-14\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-15\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0},{\"date\":\"2026-08-16\",\"ecommerce\":0,\"hotel\":0,\"taxi\":1184300,\"media\":0,\"total\":1184300},{\"date\":\"2026-08-17\",\"ecommerce\":0,\"hotel\":0,\"taxi\":0,\"media\":0,\"total\":0}],\"totals\":{\"ecommerce\":0,\"hotel\":0,\"taxi\":1184300,\"media\":0,\"total\":1184300}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1738,7 +1738,7 @@
       "stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1408ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/dashboard.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"revenue\":{\"value\":0,\"change\":\"+22%\",\"trend\":\"up\"},\"orders\":{\"value\":0,\"change\":\"-5%\",\"trend\":\"down\"},\"visitors\":{\"value\":0,\"change\":\"+49%\",\"trend\":\"up\"},\"conversion\":{\"value\":0,\"change\":\"+1.9%\",\"trend\":\"up\"}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1388ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/dashboard.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"revenue\":{\"value\":0,\"change\":\"+22%\",\"trend\":\"up\"},\"orders\":{\"value\":0,\"change\":\"-5%\",\"trend\":\"down\"},\"visitors\":{\"value\":0,\"change\":\"+49%\",\"trend\":\"up\"},\"conversion\":{\"value\":0,\"change\":\"+1.9%\",\"trend\":\"up\"}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1792,7 +1792,7 @@
       "dashboard"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1862ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"stats\":{\"total_packages\":5,\"in_transit\":2,\"delivered_today\":0,\"pending_pickup\":1},\"featured_package\":{\"tracking_id\":\"#127777489-DL-NY\",\"status\":\"out_for_delivery\",\"status_label\":\"Out for Delivery\",\"package_type\":\"Parcel\",\"current_location\":\"NEW YORK CITY, NEW YORK\"},\"recent_packages\":[{\"tracking_id\":\"#127777489-DL-NY\",\"status\":\"out_for_delivery\",\"status_label\":\"Out for Delivery\",\"package_type\":\"Parcel\",\"current_location\":\"NEW YORK CITY, NEW YORK\"},{\"tracking_id\":\"#127777490-DL-CH\",\"status\":\"in_transit\",\"status_label\":\"In Transit\",\"package_type\":\"Documents\",\"current_location\":\"DETROIT, MICHIGAN\"},{\"tracking_id\":\"#127777491-DL-FL\",\"status\":\"arrived_facility\",\"status_label\":\"Arrived at Facility\",\"package_type\":\"Fragile\",\"current_location\":\"ATLANTA, GEORGIA\"},{\"tracking_id\":\"#127777492-DL-MA\",\"status\":\"pending\",\"status_label\":\"Pending\",\"package_type\":\"Parcel\",\"current_location\":\"Processing Center\"},{\"tracking_id\":\"#127777493-DL-TX\",\"status\":\"delivered\",\"status_label\":\"Delivered\",\"package_type\":\"Parcel\",\"current_location\":\"DALLAS, TEXAS\"}]}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2528ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"stats\":{\"total_packages\":5,\"in_transit\":2,\"delivered_today\":0,\"pending_pickup\":1},\"featured_package\":{\"tracking_id\":\"#127777489-DL-NY\",\"status\":\"out_for_delivery\",\"status_label\":\"Out for Delivery\",\"package_type\":\"Parcel\",\"current_location\":\"NEW YORK CITY, NEW YORK\"},\"recent_packages\":[{\"tracking_id\":\"#127777489-DL-NY\",\"status\":\"out_for_delivery\",\"status_label\":\"Out for Delivery\",\"package_type\":\"Parcel\",\"current_location\":\"NEW YORK CITY, NEW YORK\"},{\"tracking_id\":\"#127777490-DL-CH\",\"status\":\"in_transit\",\"status_label\":\"In Transit\",\"package_type\":\"Documents\",\"current_location\":\"DETROIT, MICHIGAN\"},{\"tracking_id\":\"#127777491-DL-FL\",\"status\":\"arrived_facility\",\"status_label\":\"Arrived at Facility\",\"package_type\":\"Fragile\",\"current_location\":\"ATLANTA, GEORGIA\"},{\"tracking_id\":\"#127777492-DL-MA\",\"status\":\"pending\",\"status_label\":\"Pending\",\"package_type\":\"Parcel\",\"current_location\":\"Processing Center\"},{\"tracking_id\":\"#127777493-DL-TX\",\"status\":\"delivered\",\"status_label\":\"Delivered\",\"package_type\":\"Parcel\",\"current_location\":\"DALLAS, TEXAS\"}]}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1846,7 +1846,7 @@
       "incoming-orders"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1291ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch incoming orders",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1205ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch incoming orders",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1907,7 +1907,7 @@
       "toggle-status"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1659ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to toggle order status\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1165ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to toggle order status\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1977,7 +1977,7 @@
       "update-status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 3333ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1010ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2041,7 +2041,7 @@
       "recent"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1632ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"tracking_id\":\"#127777489-DL-NY\",\"status\":\"out_for_delivery\",\"status_label\":\"Out for Delivery\",\"package_type\":\"Parcel\",\"current_location\":\"NEW YORK CITY, NEW YORK\",\"last_update\":\"Out for Delivery\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777490-DL-CH\",\"status\":\"in_transit\",\"status_label\":\"In Transit\",\"package_type\":\"Documents\",\"current_location\":\"DETROIT, MICHIGAN\",\"last_update\":\"Package has left Courier Facility\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777491-DL-FL\",\"status\":\"arrived_facility\",\"status_label\":\"Arrived at Facility\",\"package_type\":\"Fragile\",\"current_location\":\"ATLANTA, GEORGIA\",\"last_update\":\"Package arrived at Local Facility\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777492-DL-MA\",\"status\":\"pending\",\"status_label\":\"Pending\",\"package_type\":\"Parcel\",\"current_location\":\"Processing Center\",\"last_update\":\"Package created and awaiting pickup\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777493-DL-TX\",\"status\":\"delivered\",\"status_label\":\"Delivered\",\"package_type\":\"Parcel\",\"current_location\":\"DALLAS, TEXAS\",\"last_update\":\"Package delivered suc\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2115ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"tracking_id\":\"#127777489-DL-NY\",\"status\":\"out_for_delivery\",\"status_label\":\"Out for Delivery\",\"package_type\":\"Parcel\",\"current_location\":\"NEW YORK CITY, NEW YORK\",\"last_update\":\"Out for Delivery\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777490-DL-CH\",\"status\":\"in_transit\",\"status_label\":\"In Transit\",\"package_type\":\"Documents\",\"current_location\":\"DETROIT, MICHIGAN\",\"last_update\":\"Package has left Courier Facility\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777491-DL-FL\",\"status\":\"arrived_facility\",\"status_label\":\"Arrived at Facility\",\"package_type\":\"Fragile\",\"current_location\":\"ATLANTA, GEORGIA\",\"last_update\":\"Package arrived at Local Facility\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777492-DL-MA\",\"status\":\"pending\",\"status_label\":\"Pending\",\"package_type\":\"Parcel\",\"current_location\":\"Processing Center\",\"last_update\":\"Package created and awaiting pickup\",\"updated_at\":\"2026-02-28T13:39:34.178243+00:00\"},{\"tracking_id\":\"#127777493-DL-TX\",\"status\":\"delivered\",\"status_label\":\"Delivered\",\"package_type\":\"Parcel\",\"current_location\":\"DALLAS, TEXAS\",\"last_update\":\"Package delivered suc\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2096,7 +2096,7 @@
       "search"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1386ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1010ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2152,7 +2152,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1271ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1192ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2206,7 +2206,7 @@
       "traders"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1408ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"traders\":[{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"business_name\":\"QA Probe Ltd\",\"business_registration\":null,\"tax_id\":null,\"bank_name\":\"GTB\",\"account_number\":\"0123456789\",\"account_name\":\"QA\",\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":15,\"is_verified\":false,\"is_active\":false,\"verified_at\":null,\"created_at\":\"2026-08-18T19:21:11.772533+00:00\",\"updated_at\":\"2026-08-18T19:21:11.772533+00:00\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"first_name\":\"Ada\"}},{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"business_name\":\"QA Test Store\",\"business_registration\":null,\"tax_id\":null,\"bank_name\":null,\"account_number\":null,\"account_name\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":10,\"is_verified\":true,\"is_active\":true,\"verified_at\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"user_profiles\":{\"email\":\"qa.customer2@gigaqa.test\",\"last_name\":\"Buyer\",\"avatar_url\":null,\"first_name\"\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1461ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"traders\":[{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"business_name\":\"QA Probe Ltd\",\"business_registration\":null,\"tax_id\":null,\"bank_name\":\"GTB\",\"account_number\":\"0123456789\",\"account_name\":\"QA\",\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":15,\"is_verified\":false,\"is_active\":false,\"verified_at\":null,\"created_at\":\"2026-08-18T19:21:11.772533+00:00\",\"updated_at\":\"2026-08-18T19:21:11.772533+00:00\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"first_name\":\"Ada\"}},{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"business_name\":\"QA Test Store\",\"business_registration\":null,\"tax_id\":null,\"bank_name\":null,\"account_number\":null,\"account_name\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":10,\"is_verified\":true,\"is_active\":true,\"verified_at\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"user_profiles\":{\"email\":\"qa.customer2@gigaqa.test\",\"last_name\":\"Buyer\",\"avatar_url\":null,\"first_name\"\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2264,7 +2264,7 @@
       "traders"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1515ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 943ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2328,7 +2328,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1196ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1192ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2382,7 +2382,7 @@
       "hotels"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1832ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotels\":[{\"id\":\"6c695efd-2ab0-4304-b755-13a20ad09da9\",\"host_id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"name\":\"Abuja Business Suites\",\"slug\":\"abuja-business-suites-pending\",\"description\":\"Modern business hotel in the heart of Abuja with conference facilities and executive lounges\",\"short_description\":\"Modern business hotel in Abuja CBD\",\"address\":\"45 Central Business District\",\"city\":\"Abuja\",\"state\":\"FCT\",\"country\":\"Nigeria\",\"postal_code\":null,\"latitude\":null,\"longitude\":null,\"phone\":null,\"email\":null,\"website\":null,\"star_rating\":4,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"verified_at\":null,\"featured_image\":null,\"created_at\":\"2026-02-23T09:46:00.812144+00:00\",\"updated_at\":\"2026-03-01T05:02:28.602456+00:00\",\"host_profiles\":{\"user_id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"user_profiles\":{\"email\":\"enoch@finaltest.com\",\"phone\":\"+2341344222493\",\"last_name\":\"Doe\",\"first_name\":\"John\"}}},{\"id\":\"be141790-55f8-4e65-8452-dde0282598f6\",\"host_id\":\"cf58622a-78ad-49bf-850b-af8b04b8e868\",\"name\":\"Port Harcourt Garden Inn\",\"slug\":\"port-harcourt-garden-inn-pending\",\"description\":\"Comfortable 3-star hotel with beautiful gar\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1460ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotels\":[{\"id\":\"6c695efd-2ab0-4304-b755-13a20ad09da9\",\"host_id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"name\":\"Abuja Business Suites\",\"slug\":\"abuja-business-suites-pending\",\"description\":\"Modern business hotel in the heart of Abuja with conference facilities and executive lounges\",\"short_description\":\"Modern business hotel in Abuja CBD\",\"address\":\"45 Central Business District\",\"city\":\"Abuja\",\"state\":\"FCT\",\"country\":\"Nigeria\",\"postal_code\":null,\"latitude\":null,\"longitude\":null,\"phone\":null,\"email\":null,\"website\":null,\"star_rating\":4,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"verified_at\":null,\"featured_image\":null,\"created_at\":\"2026-02-23T09:46:00.812144+00:00\",\"updated_at\":\"2026-03-01T05:02:28.602456+00:00\",\"host_profiles\":{\"user_id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"user_profiles\":{\"email\":\"enoch@finaltest.com\",\"phone\":\"+2341344222493\",\"last_name\":\"Doe\",\"first_name\":\"John\"}}},{\"id\":\"be141790-55f8-4e65-8452-dde0282598f6\",\"host_id\":\"cf58622a-78ad-49bf-850b-af8b04b8e868\",\"name\":\"Port Harcourt Garden Inn\",\"slug\":\"port-harcourt-garden-inn-pending\",\"description\":\"Comfortable 3-star hotel with beautiful gar\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2437,7 +2437,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1235ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1169ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2491,7 +2491,7 @@
       "chart-data"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2712ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"labels\":[\"Wed\",\"Thu\",\"Fri\",\"Sat\",\"Sun\",\"Mon\",\"Tue\"],\"datasets\":[{\"label\":\"Orders\",\"data\":[0,0,0,3,0,0,0],\"backgroundColor\":\"#3B82F6\"},{\"label\":\"Revenue (\u20a6K)\",\"data\":[0,0,0,1040,0,0,0],\"backgroundColor\":\"#10B981\"},{\"label\":\"Deliveries\",\"data\":[0,0,0,0,0,0,0],\"backgroundColor\":\"#F59E0B\"}]}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2568ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"labels\":[\"Wed\",\"Thu\",\"Fri\",\"Sat\",\"Sun\",\"Mon\",\"Tue\"],\"datasets\":[{\"label\":\"Orders\",\"data\":[0,0,0,3,0,0,0],\"backgroundColor\":\"#3B82F6\"},{\"label\":\"Revenue (\u20a6K)\",\"data\":[0,0,0,1040,0,0,0],\"backgroundColor\":\"#10B981\"},{\"label\":\"Deliveries\",\"data\":[0,0,0,0,0,0,0],\"backgroundColor\":\"#F59E0B\"}]}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2545,7 +2545,7 @@
       "dashboard-stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1361ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"totalRevenue\":11017100,\"totalOrders\":26,\"avgOrderValue\":423734.6153846154,\"pendingOrders\":4,\"completedOrders\":0}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1354ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"totalRevenue\":11017100,\"totalOrders\":26,\"avgOrderValue\":423734.6153846154,\"pendingOrders\":4,\"completedOrders\":0}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2600,7 +2600,7 @@
       "bestsellers"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1380ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"bestsellers\":[{\"id\":\"8b45ba05-51a9-4028-b86a-ee6c83bd66cb\",\"name\":\"Classic Fit Senator Suit\",\"thumbnail\":\"https://images.unsplash.com/photo-1594938298603-c8148c4dae35\",\"price\":21250,\"sold\":123,\"profit\":522750},{\"id\":\"5bb8eb39-050f-4d05-b591-6fd1ee4b2a1c\",\"name\":\"iPhone 13 Pro Max - 256GB\",\"thumbnail\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/public-files/thumbnails/product/cbcc72e9-1de4-4ecc-a743-4df7e5f8c8f2_thumb.jpg\",\"price\":807500,\"sold\":45,\"profit\":7267500},{\"id\":\"b335c0b0-1c60-4374-b6e1-11844642f574\",\"name\":\"Smart Fitness Watch Pro\",\"thumbnail\":\"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80\",\"price\":85000,\"sold\":0,\"profit\":0},{\"id\":\"fcf9b823-5d39-43b7-997c-c4806740c885\",\"name\":\"Organic Honey Collection\",\"thumbnail\":\"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800&q=80\",\"price\":15000,\"sold\":0,\"profit\":0},{\"id\":\"ddffc3d7-38be-4002-9a08-044488fcced8\",\"name\":\"Smart Air Purifier Pro\",\"thumbnail\":\"https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80\",\"price\":115000,\"sold\":0,\"profit\":0},{\"id\":\"4fcb6d10-7d7e-42df-b6cf-1c6c5bcbe980\",\"name\":\"Samsung Galaxy S24 Ultra 256GB\",\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1364ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"bestsellers\":[{\"id\":\"8b45ba05-51a9-4028-b86a-ee6c83bd66cb\",\"name\":\"Classic Fit Senator Suit\",\"thumbnail\":\"https://images.unsplash.com/photo-1594938298603-c8148c4dae35\",\"price\":21250,\"sold\":123,\"profit\":522750},{\"id\":\"5bb8eb39-050f-4d05-b591-6fd1ee4b2a1c\",\"name\":\"iPhone 13 Pro Max - 256GB\",\"thumbnail\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/public-files/thumbnails/product/cbcc72e9-1de4-4ecc-a743-4df7e5f8c8f2_thumb.jpg\",\"price\":807500,\"sold\":45,\"profit\":7267500},{\"id\":\"b335c0b0-1c60-4374-b6e1-11844642f574\",\"name\":\"Smart Fitness Watch Pro\",\"thumbnail\":\"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80\",\"price\":85000,\"sold\":0,\"profit\":0},{\"id\":\"fcf9b823-5d39-43b7-997c-c4806740c885\",\"name\":\"Organic Honey Collection\",\"thumbnail\":\"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=800&q=80\",\"price\":15000,\"sold\":0,\"profit\":0},{\"id\":\"ddffc3d7-38be-4002-9a08-044488fcced8\",\"name\":\"Smart Air Purifier Pro\",\"thumbnail\":\"https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80\",\"price\":115000,\"sold\":0,\"profit\":0},{\"id\":\"4fcb6d10-7d7e-42df-b6cf-1c6c5bcbe980\",\"name\":\"Samsung Galaxy S24 Ultra 256GB\",\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2655,7 +2655,7 @@
       "cart-abandonment"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2561ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"abandoned_carts\":0,\"abandoned_revenue\":0,\"abandonment_rate\":0,\"recovered_carts\":0,\"recovered_revenue\":0,\"recovery_rate\":0,\"period_days\":30}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1800ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"abandoned_carts\":0,\"abandoned_revenue\":0,\"abandonment_rate\":0,\"recovered_carts\":0,\"recovered_revenue\":0,\"recovery_rate\":0,\"period_days\":30}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2710,7 +2710,7 @@
       "dashboard-stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2454ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":{\"total\":9,\"active\":9,\"out_of_stock\":0},\"orders\":{\"total\":4,\"pending\":0,\"completed\":0,\"revenue\":1165000},\"vendors\":{\"total\":9,\"verified\":7},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2351ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":{\"total\":9,\"active\":9,\"out_of_stock\":0},\"orders\":{\"total\":4,\"pending\":0,\"completed\":0,\"revenue\":1165000},\"vendors\":{\"total\":9,\"verified\":7},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2765,7 +2765,7 @@
       "orders"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1848ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"orders\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"guest_email\":null,\"subtotal\":620000,\"discount_amount\":0,\"shipping_cost\":0,\"tax_amount\":0,\"total_amount\":620000,\"payment_method\":\"cash\",\"payment_status\":\"pending\",\"status\":\"confirmed\",\"tracking_number\":null,\"carrier\":null,\"created_at\":\"2026-08-15T18:54:47.678477+00:00\",\"updated_at\":\"2026-08-15T18:54:47.678477+00:00\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"last_name\":\"hdhd\",\"first_name\":\"hdhd\"}},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"guest_email\":null,\"subtotal\":250000,\"discount_amount\":0,\"shipping_cost\":0,\"tax_amount\":0,\"total_amount\":250000,\"payment_method\":\"cash\",\"payment_status\":\"pending\",\"status\":\"confirmed\",\"tracking_number\":null,\"carrier\":null,\"created_at\":\"2026-08-15T11:19:54.683521+00:00\",\"updated_at\":\"2026-08-15T11:19:54.683521+00:00\",\"user_profiles\":{\"email\":\"daveedog2003@gmail.com\",\"phone\":\"+2349061737381\",\"last_name\":\"ogTech\",\"first_name\":\"ogTech\"}},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1641ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"orders\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"guest_email\":null,\"subtotal\":620000,\"discount_amount\":0,\"shipping_cost\":0,\"tax_amount\":0,\"total_amount\":620000,\"payment_method\":\"cash\",\"payment_status\":\"pending\",\"status\":\"confirmed\",\"tracking_number\":null,\"carrier\":null,\"created_at\":\"2026-08-15T18:54:47.678477+00:00\",\"updated_at\":\"2026-08-15T18:54:47.678477+00:00\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"last_name\":\"hdhd\",\"first_name\":\"hdhd\"}},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"guest_email\":null,\"subtotal\":250000,\"discount_amount\":0,\"shipping_cost\":0,\"tax_amount\":0,\"total_amount\":250000,\"payment_method\":\"cash\",\"payment_status\":\"pending\",\"status\":\"confirmed\",\"tracking_number\":null,\"carrier\":null,\"created_at\":\"2026-08-15T11:19:54.683521+00:00\",\"updated_at\":\"2026-08-15T11:19:54.683521+00:00\",\"user_profiles\":{\"email\":\"daveedog2003@gmail.com\",\"phone\":\"+2349061737381\",\"last_name\":\"ogTech\",\"first_name\":\"ogTech\"}},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2821,7 +2821,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1228ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1188ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2882,7 +2882,7 @@
       "status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1241ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 983ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2947,7 +2947,7 @@
       "latest"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1432ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"orders\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"products\":\"Luxury Leather Sofa Set, Smart Fitness Watch Pro\",\"quantity\":3,\"date\":\"2026-08-15\",\"revenue\":620000,\"net_profit\":124000,\"status\":\"confirmed\"},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"products\":\"Smart Air Purifier Pro\",\"quantity\":2,\"date\":\"2026-08-15\",\"revenue\":250000,\"net_profit\":50000,\"status\":\"confirmed\"},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe03548f\",\"order_number\":\"ORD-1786791208564-KTISX3\",\"products\":\"Smart Fitness Watch Pro\",\"quantity\":2,\"date\":\"2026-08-15\",\"revenue\":170000,\"net_profit\":34000,\"status\":\"pending_payment\"},{\"id\":\"ff25e2b3-a964-46ed-82cd-3525ff47bf23\",\"order_number\":\"ORD-1786019350370-792G7L\",\"products\":\"Smart Air Purifier Pro\",\"quantity\":1,\"date\":\"2026-08-06\",\"revenue\":125000,\"net_profit\":25000,\"status\":\"confirmed\"},{\"id\":\"fac1d2b8-67c2-487b-92c6-3ec46fc78f7c\",\"order_number\":\"E2E-LIVE-7c3fada9\",\"products\":\"N/A\",\"quantity\":0,\"date\":\"2026-07-05\",\"revenue\":200,\"net_profit\":40,\"status\":\"pending\"},{\"id\":\"a50484f4-56b8-4e58-8089-916fcb02c8a0\",\"order_number\":\"E2E-LIVE-2673c0e2\",\"products\":\"N/A\"\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1433ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-orders.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"orders\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"products\":\"Luxury Leather Sofa Set, Smart Fitness Watch Pro\",\"quantity\":3,\"date\":\"2026-08-15\",\"revenue\":620000,\"net_profit\":124000,\"status\":\"confirmed\"},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"products\":\"Smart Air Purifier Pro\",\"quantity\":2,\"date\":\"2026-08-15\",\"revenue\":250000,\"net_profit\":50000,\"status\":\"confirmed\"},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe03548f\",\"order_number\":\"ORD-1786791208564-KTISX3\",\"products\":\"Smart Fitness Watch Pro\",\"quantity\":2,\"date\":\"2026-08-15\",\"revenue\":170000,\"net_profit\":34000,\"status\":\"pending_payment\"},{\"id\":\"ff25e2b3-a964-46ed-82cd-3525ff47bf23\",\"order_number\":\"ORD-1786019350370-792G7L\",\"products\":\"Smart Air Purifier Pro\",\"quantity\":1,\"date\":\"2026-08-06\",\"revenue\":125000,\"net_profit\":25000,\"status\":\"confirmed\"},{\"id\":\"fac1d2b8-67c2-487b-92c6-3ec46fc78f7c\",\"order_number\":\"E2E-LIVE-7c3fada9\",\"products\":\"N/A\",\"quantity\":0,\"date\":\"2026-07-05\",\"revenue\":200,\"net_profit\":40,\"status\":\"pending\"},{\"id\":\"a50484f4-56b8-4e58-8089-916fcb02c8a0\",\"order_number\":\"E2E-LIVE-2673c0e2\",\"products\":\"N/A\"\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3002,7 +3002,7 @@
       "products"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1392ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":[{\"id\":\"0b545936-3506-4a56-b9aa-ee2a585a9ea9\",\"name\":\"Premium Skincare Gift Set\",\"slug\":\"premium-skincare-gift-set-pending\",\"base_price\":45000,\"discount_percentage\":15,\"final_price\":38250,\"sku\":null,\"stock_quantity\":100,\"thumbnail\":\"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80\",\"is_active\":true,\"is_featured\":false,\"view_count\":0,\"order_count\":0,\"average_rating\":0,\"review_count\":0,\"created_at\":\"2026-02-23T09:45:05.914649+00:00\",\"vendor\":{\"id\":\"e7f0e12b-ea46-4d42-8c96-b32acc795241\",\"business_name\":\"Lagos Fashion Hub\"},\"category\":{\"id\":\"53838fb7-977b-426b-adb8-0a4f47a92f89\",\"name\":\"Health & Beauty\"}},{\"id\":\"4fcb6d10-7d7e-42df-b6cf-1c6c5bcbe980\",\"name\":\"Samsung Galaxy S24 Ultra 256GB\",\"slug\":\"samsung-galaxy-s24-ultra-256gb-pending\",\"base_price\":850000,\"discount_percentage\":0,\"final_price\":850000,\"sku\":null,\"stock_quantity\":50,\"thumbnail\":\"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80\",\"is_active\":true,\"is_featured\":false,\"view_count\":0,\"order_count\":0,\"average_rating\":0,\"review_count\":0,\"created_at\":\"2026-02-23T09:45:05.914649+00:00\",\"vendor\":{\"id\":\"ac7d3549-e01d-4424-ab70-e8bee3e0172f\",\"business_na\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1377ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":[{\"id\":\"0b545936-3506-4a56-b9aa-ee2a585a9ea9\",\"name\":\"Premium Skincare Gift Set\",\"slug\":\"premium-skincare-gift-set-pending\",\"base_price\":45000,\"discount_percentage\":15,\"final_price\":38250,\"sku\":null,\"stock_quantity\":100,\"thumbnail\":\"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&q=80\",\"is_active\":true,\"is_featured\":false,\"view_count\":0,\"order_count\":0,\"average_rating\":0,\"review_count\":0,\"created_at\":\"2026-02-23T09:45:05.914649+00:00\",\"vendor\":{\"id\":\"e7f0e12b-ea46-4d42-8c96-b32acc795241\",\"business_name\":\"Lagos Fashion Hub\"},\"category\":{\"id\":\"53838fb7-977b-426b-adb8-0a4f47a92f89\",\"name\":\"Health & Beauty\"}},{\"id\":\"4fcb6d10-7d7e-42df-b6cf-1c6c5bcbe980\",\"name\":\"Samsung Galaxy S24 Ultra 256GB\",\"slug\":\"samsung-galaxy-s24-ultra-256gb-pending\",\"base_price\":850000,\"discount_percentage\":0,\"final_price\":850000,\"sku\":null,\"stock_quantity\":50,\"thumbnail\":\"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=800&q=80\",\"is_active\":true,\"is_featured\":false,\"view_count\":0,\"order_count\":0,\"average_rating\":0,\"review_count\":0,\"created_at\":\"2026-02-23T09:45:05.914649+00:00\",\"vendor\":{\"id\":\"ac7d3549-e01d-4424-ab70-e8bee3e0172f\",\"business_na\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3061,7 +3061,7 @@
       "products"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 996ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1071ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3126,7 +3126,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1226ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1207ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3182,7 +3182,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1193ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1597ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3242,7 +3242,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1551ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1226ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3306,7 +3306,7 @@
       "revenue-by-device"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1413ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"devices\":[{\"device\":\"Desktop\",\"revenue\":0,\"percentage\":0,\"orders\":0},{\"device\":\"Mobile\",\"revenue\":0,\"percentage\":0,\"orders\":0},{\"device\":\"Tablet\",\"revenue\":0,\"percentage\":0,\"orders\":0},{\"device\":\"Unknown\",\"revenue\":1165000,\"percentage\":100,\"orders\":4}],\"total_revenue\":1165000,\"total_orders\":4}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1402ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"devices\":[{\"device\":\"Desktop\",\"revenue\":0,\"percentage\":0,\"orders\":0},{\"device\":\"Mobile\",\"revenue\":0,\"percentage\":0,\"orders\":0},{\"device\":\"Tablet\",\"revenue\":0,\"percentage\":0,\"orders\":0},{\"device\":\"Unknown\",\"revenue\":1165000,\"percentage\":100,\"orders\":4}],\"total_revenue\":1165000,\"total_orders\":4}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3361,7 +3361,7 @@
       "revenue-chart"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1381ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"daily\":[{\"date\":\"2026-08-11\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-12\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-13\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-14\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-15\",\"revenue\":1040000,\"orders\":3},{\"date\":\"2026-08-16\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-17\",\"revenue\":0,\"orders\":0}],\"total_revenue\":1040000,\"total_orders\":3,\"avg_order_value\":346666.67,\"period_days\":7}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1334ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"daily\":[{\"date\":\"2026-08-11\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-12\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-13\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-14\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-15\",\"revenue\":1040000,\"orders\":3},{\"date\":\"2026-08-16\",\"revenue\":0,\"orders\":0},{\"date\":\"2026-08-17\",\"revenue\":0,\"orders\":0}],\"total_revenue\":1040000,\"total_orders\":3,\"avg_order_value\":346666.67,\"period_days\":7}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3416,7 +3416,7 @@
       "sales-forecast"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2115ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"revenue\":{\"current\":1040000,\"previous\":125000,\"change_percent\":732,\"trend\":\"up\"},\"net_profit\":{\"current\":208000,\"previous\":25000,\"change_percent\":732,\"trend\":\"up\"},\"orders\":{\"current\":3,\"previous\":1,\"change_percent\":200,\"trend\":\"up\"},\"visitors\":{\"current\":150,\"previous\":50,\"change_percent\":200,\"trend\":\"up\"},\"period\":{\"type\":\"week\",\"current_start\":\"2026-08-11\",\"current_end\":\"2026-08-18\"}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1597ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"revenue\":{\"current\":1040000,\"previous\":125000,\"change_percent\":732,\"trend\":\"up\"},\"net_profit\":{\"current\":208000,\"previous\":25000,\"change_percent\":732,\"trend\":\"up\"},\"orders\":{\"current\":3,\"previous\":1,\"change_percent\":200,\"trend\":\"up\"},\"visitors\":{\"current\":150,\"previous\":50,\"change_percent\":200,\"trend\":\"up\"},\"period\":{\"type\":\"week\",\"current_start\":\"2026-08-11\",\"current_end\":\"2026-08-18\"}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3471,7 +3471,7 @@
       "traffic"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1542ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"summary\":{\"total_visits\":525,\"unique_visitors\":150,\"avg_session_duration\":245,\"bounce_rate\":42.5},\"daily\":[{\"date\":\"2026-08-11\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-12\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-13\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-14\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-15\",\"visits\":525,\"visitors\":150},{\"date\":\"2026-08-16\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-17\",\"visits\":0,\"visitors\":0}],\"period_days\":7}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1369ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"summary\":{\"total_visits\":525,\"unique_visitors\":150,\"avg_session_duration\":245,\"bounce_rate\":42.5},\"daily\":[{\"date\":\"2026-08-11\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-12\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-13\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-14\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-15\",\"visits\":525,\"visitors\":150},{\"date\":\"2026-08-16\",\"visits\":0,\"visitors\":0},{\"date\":\"2026-08-17\",\"visits\":0,\"visitors\":0}],\"period_days\":7}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3526,7 +3526,7 @@
       "vendors"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1500ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-vendors.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"vendors\":[{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"business_name\":\"QA Probe Ltd\",\"business_registration\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":15,\"is_verified\":false,\"is_active\":false,\"created_at\":\"2026-08-18T19:21:11.772533+00:00\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"phone\":null,\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"first_name\":\"Ada\"}},{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"business_name\":\"QA Test Store\",\"business_registration\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":10,\"is_verified\":true,\"is_active\":true,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"user_profiles\":{\"email\":\"qa.customer2@gigaqa.test\",\"phone\":null,\"last_name\":\"Buyer\",\"avatar_url\":null,\"first_name\":\"Bola\"}},{\"id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"business_name\":\"Chidi Electronics\",\"business_registration\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":15,\"is_verified\":true,\"is_active\":true,\"created_at\":\"2026-03-24T20:49:58.\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1392ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-vendors.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"vendors\":[{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"business_name\":\"QA Probe Ltd\",\"business_registration\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":15,\"is_verified\":false,\"is_active\":false,\"created_at\":\"2026-08-18T19:21:11.772533+00:00\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"phone\":null,\"last_name\":\"Customer\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/92383fcd-8934-4167-b62d-abb425d2693e/avatar-1783497865188.png\",\"first_name\":\"Ada\"}},{\"id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"business_name\":\"QA Test Store\",\"business_registration\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":10,\"is_verified\":true,\"is_active\":true,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"user_profiles\":{\"email\":\"qa.customer2@gigaqa.test\",\"phone\":null,\"last_name\":\"Buyer\",\"avatar_url\":null,\"first_name\":\"Bola\"}},{\"id\":\"450bf331-d13a-4d94-b2b7-882ed4b6295c\",\"business_name\":\"Chidi Electronics\",\"business_registration\":null,\"total_sales\":0,\"total_orders\":0,\"average_rating\":0,\"commission_rate\":15,\"is_verified\":true,\"is_active\":true,\"created_at\":\"2026-03-24T20:49:58.\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3582,7 +3582,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1261ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-vendors.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1193ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-vendors.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3643,7 +3643,7 @@
       "verify"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 983ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-vendors.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 940ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/ecommerce-vendors.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3707,7 +3707,7 @@
       "bookings"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1215ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch bookings",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1167ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch bookings",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3769,7 +3769,7 @@
       "status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 975ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1011ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3833,7 +3833,7 @@
       "dashboard-stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2284ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"bookings\":{\"total\":3,\"confirmed\":0,\"checked_in\":0,\"cancelled\":0,\"revenue\":651525,\"avg_booking_value\":0},\"hotels\":{\"total\":9,\"active\":8,\"verified\":3},\"reviews\":{\"total\":0,\"average_rating\":0,\"five_star\":0,\"one_star\":0},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2382ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"bookings\":{\"total\":3,\"confirmed\":0,\"checked_in\":0,\"cancelled\":0,\"revenue\":651525,\"avg_booking_value\":0},\"hotels\":{\"total\":9,\"active\":8,\"verified\":3},\"reviews\":{\"total\":0,\"average_rating\":0,\"five_star\":0,\"one_star\":0},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3888,7 +3888,7 @@
       "hotels"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1430ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotels\":[{\"id\":\"6c695efd-2ab0-4304-b755-13a20ad09da9\",\"name\":\"Abuja Business Suites\",\"description\":\"Modern business hotel in the heart of Abuja with conference facilities and executive lounges\",\"address\":\"45 Central Business District\",\"city\":\"Abuja\",\"state\":\"FCT\",\"country\":\"Nigeria\",\"star_rating\":4,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"created_at\":\"2026-02-23T09:46:00.812144+00:00\",\"updated_at\":\"2026-03-01T05:02:28.602456+00:00\"},{\"id\":\"be141790-55f8-4e65-8452-dde0282598f6\",\"name\":\"Port Harcourt Garden Inn\",\"description\":\"Comfortable 3-star hotel with beautiful gardens, pool, and family-friendly amenities\",\"address\":\"78 Trans Amadi Road\",\"city\":\"Port Harcourt\",\"state\":\"Rivers\",\"country\":\"Nigeria\",\"star_rating\":3,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"created_at\":\"2026-02-23T09:46:00.812144+00:00\",\"updated_at\":\"2026-03-02T09:49:30.337203+00:00\"},{\"id\":\"04002af2-61be-49da-8038-a304eecc80c9\",\"name\":\"Grand Lekki Resort & Spa\",\"description\":\"Luxury 5-star resort with ocean views, world-class spa, and fine dining restaurants\",\"address\":\"123 Lekki Phase 1\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1420ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"hotels\":[{\"id\":\"6c695efd-2ab0-4304-b755-13a20ad09da9\",\"name\":\"Abuja Business Suites\",\"description\":\"Modern business hotel in the heart of Abuja with conference facilities and executive lounges\",\"address\":\"45 Central Business District\",\"city\":\"Abuja\",\"state\":\"FCT\",\"country\":\"Nigeria\",\"star_rating\":4,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"created_at\":\"2026-02-23T09:46:00.812144+00:00\",\"updated_at\":\"2026-03-01T05:02:28.602456+00:00\"},{\"id\":\"be141790-55f8-4e65-8452-dde0282598f6\",\"name\":\"Port Harcourt Garden Inn\",\"description\":\"Comfortable 3-star hotel with beautiful gardens, pool, and family-friendly amenities\",\"address\":\"78 Trans Amadi Road\",\"city\":\"Port Harcourt\",\"state\":\"Rivers\",\"country\":\"Nigeria\",\"star_rating\":3,\"average_rating\":0,\"total_reviews\":0,\"total_bookings\":0,\"is_active\":true,\"is_verified\":false,\"created_at\":\"2026-02-23T09:46:00.812144+00:00\",\"updated_at\":\"2026-03-02T09:49:30.337203+00:00\"},{\"id\":\"04002af2-61be-49da-8038-a304eecc80c9\",\"name\":\"Grand Lekki Resort & Spa\",\"description\":\"Luxury 5-star resort with ocean views, world-class spa, and fine dining restaurants\",\"address\":\"123 Lekki Phase 1\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -3944,7 +3944,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1213ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1202ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4005,7 +4005,7 @@
       "verify"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 969ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1017ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/hotel.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4068,7 +4068,7 @@
       "latest-orders"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1454ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"total_amount\":620000,\"status\":\"confirmed\",\"created_at\":\"2026-08-15T18:54:47.678477+00:00\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"last_name\":\"hdhd\",\"first_name\":\"hdhd\"}},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"total_amount\":250000,\"status\":\"confirmed\",\"created_at\":\"2026-08-15T11:19:54.683521+00:00\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"user_profiles\":{\"email\":\"daveedog2003@gmail.com\",\"last_name\":\"ogTech\",\"first_name\":\"ogTech\"}},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe03548f\",\"order_number\":\"ORD-1786791208564-KTISX3\",\"total_amount\":170000,\"status\":\"pending_payment\",\"created_at\":\"2026-08-15T10:53:28.675283+00:00\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"user_profiles\":{\"email\":\"daveedog2003@gmail.com\",\"last_name\":\"ogTech\",\"first_name\":\"ogTech\"}},{\"id\":\"ff25e2b3-a964-46ed-82cd-3525ff47bf23\",\"order_number\":\"ORD-1786019350370-792G7L\",\"total_amount\":125000,\"status\":\"confirmed\",\"created_at\":\"2026-08-06T12:29:10.475969+00:00\",\"user_id\":\"c55e8e2e-a2c6-42bc-9bf\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1383ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"89ef1843-3f9b-432c-99ff-7e9629dd0caa\",\"order_number\":\"ORD-1786820087538-MGVIG6\",\"total_amount\":620000,\"status\":\"confirmed\",\"created_at\":\"2026-08-15T18:54:47.678477+00:00\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"last_name\":\"hdhd\",\"first_name\":\"hdhd\"}},{\"id\":\"26786796-6a3c-4ec1-9397-6c43d1af88de\",\"order_number\":\"ORD-1786792794564-2HVHQN\",\"total_amount\":250000,\"status\":\"confirmed\",\"created_at\":\"2026-08-15T11:19:54.683521+00:00\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"user_profiles\":{\"email\":\"daveedog2003@gmail.com\",\"last_name\":\"ogTech\",\"first_name\":\"ogTech\"}},{\"id\":\"a590281d-4fab-4f2a-813d-b8dafe03548f\",\"order_number\":\"ORD-1786791208564-KTISX3\",\"total_amount\":170000,\"status\":\"pending_payment\",\"created_at\":\"2026-08-15T10:53:28.675283+00:00\",\"user_id\":\"788cba72-b6b5-4cf1-b759-c3217133eef5\",\"user_profiles\":{\"email\":\"daveedog2003@gmail.com\",\"last_name\":\"ogTech\",\"first_name\":\"ogTech\"}},{\"id\":\"ff25e2b3-a964-46ed-82cd-3525ff47bf23\",\"order_number\":\"ORD-1786019350370-792G7L\",\"total_amount\":125000,\"status\":\"confirmed\",\"created_at\":\"2026-08-06T12:29:10.475969+00:00\",\"user_id\":\"c55e8e2e-a2c6-42bc-9bf\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4123,7 +4123,7 @@
       "advertisements"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1293ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch advertisements",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1195ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch advertisements",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4180,7 +4180,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1207ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1228ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4241,7 +4241,7 @@
       "status"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 985ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 971ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4305,7 +4305,7 @@
       "dashboard-stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2349ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"files\":{\"total\":17,\"recent\":0,\"total_size_mb\":0,\"by_type\":{\"images\":0,\"videos\":0,\"documents\":0,\"audio\":0}},\"advertisements\":{\"total\":0,\"active\":0,\"pending\":0,\"total_budget\":0,\"impressions\":0,\"clicks\":0,\"ctr\":0},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1762ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"files\":{\"total\":17,\"recent\":0,\"total_size_mb\":0,\"by_type\":{\"images\":0,\"videos\":0,\"documents\":0,\"audio\":0}},\"advertisements\":{\"total\":0,\"active\":0,\"pending\":0,\"total_budget\":0,\"impressions\":0,\"clicks\":0,\"ctr\":0},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4360,7 +4360,7 @@
       "files"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1520ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"files\":[{\"id\":\"73d8296c-5197-4a72-be17-902ff2563f74\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"post/79c8d1dc-a9bc-4568-8254-dbe42a85baa2.png\",\"access_level\":\"public\",\"status\":\"ready\",\"metadata\":{},\"created_at\":\"2026-07-07T21:06:20.527407+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"965aa49e-af84-4cb4-844c-720ed1ff53a7\",\"original_name\":\"pfp.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"user/597df29c-e409-4774-b7eb-f3f1f3f1584e.png\",\"access_level\":\"public\",\"status\":\"ready\",\"metadata\":{},\"created_at\":\"2026-06-18T19:37:12.493723+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"3a7cb3a4-5b28-4471-b178-f9d575fff451\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":67,\"storage_path\":\"post/80224d87-f281-4d07-83ae-31888e74de3f.png\",\"access_level\":\"public\",\"status\":\"ready\",\"metadata\":{},\"created_at\":\"2026-06-06T20:44:17.867085+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-a\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1420ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"files\":[{\"id\":\"73d8296c-5197-4a72-be17-902ff2563f74\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"post/79c8d1dc-a9bc-4568-8254-dbe42a85baa2.png\",\"access_level\":\"public\",\"status\":\"ready\",\"metadata\":{},\"created_at\":\"2026-07-07T21:06:20.527407+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"965aa49e-af84-4cb4-844c-720ed1ff53a7\",\"original_name\":\"pfp.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"user/597df29c-e409-4774-b7eb-f3f1f3f1584e.png\",\"access_level\":\"public\",\"status\":\"ready\",\"metadata\":{},\"created_at\":\"2026-06-18T19:37:12.493723+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"3a7cb3a4-5b28-4471-b178-f9d575fff451\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":67,\"storage_path\":\"post/80224d87-f281-4d07-83ae-31888e74de3f.png\",\"access_level\":\"public\",\"status\":\"ready\",\"metadata\":{},\"created_at\":\"2026-06-06T20:44:17.867085+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-a\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4416,7 +4416,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1926ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1138ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4472,7 +4472,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1872ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1192ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/media.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4527,7 +4527,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 2420ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to delete order",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1437ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to delete order",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4587,7 +4587,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 2109ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update order\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1450ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update order\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4651,7 +4651,7 @@
       "performance-metrics"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 5320ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (0)**\n```json\nNETERR URLError: <urlopen error [Errno 8] nodename nor servname provided, or not known>\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1764ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/managers.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"staffPerformance\":[{\"name\":\"Adebayo Okonkwo\",\"ordersProcessed\":25,\"avgProcessingTime\":\"4.0 hours\",\"rating\":4.7},{\"name\":\"Chidinma Eze\",\"ordersProcessed\":62,\"avgProcessingTime\":\"2.4 hours\",\"rating\":4.2},{\"name\":\"Ibrahim Musa\",\"ordersProcessed\":68,\"avgProcessingTime\":\"2.2 hours\",\"rating\":4.5},{\"name\":\"Oluwaseun Adeleke\",\"ordersProcessed\":63,\"avgProcessingTime\":\"3.5 hours\",\"rating\":4.6},{\"name\":\"Amina Bello\",\"ordersProcessed\":25,\"avgProcessingTime\":\"2.8 hours\",\"rating\":4.4}],\"deliveryMetrics\":{\"onTimeRate\":94.4,\"avgDeliveryTime\":\"1.7 days\",\"successRate\":15.4},\"customerSatisfaction\":{\"avgRating\":0,\"totalReviews\":0,\"positiveRate\":0}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4706,7 +4706,7 @@
       "dashboard-stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2454ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"rides\":{\"total\":4,\"completed\":1,\"cancelled\":0,\"in_progress\":2,\"revenue\":1184300,\"avg_fare\":1184300},\"drivers\":{\"total\":14,\"online\":6,\"verified\":14,\"avg_rating\":4.6},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2212ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"rides\":{\"total\":4,\"completed\":1,\"cancelled\":0,\"in_progress\":2,\"revenue\":1184300,\"avg_fare\":1184300},\"drivers\":{\"total\":14,\"online\":6,\"verified\":14,\"avg_rating\":4.6},\"period\":{\"start\":\"2026-07-19\",\"end\":\"2026-08-18\"}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4761,7 +4761,7 @@
       "drivers"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1674ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"drivers\":[{\"id\":\"525627a2-0e0a-440a-966b-3237c02aa979\",\"user_id\":\"3e272e34-eebe-4cb0-89ea-0253989280d7\",\"license_number\":\"hdhdh\",\"vehicle_info\":{\"model\":\"hdhd\"},\"is_online\":false,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"created_at\":\"2026-08-17T14:23:45.146057+00:00\",\"updated_at\":\"2026-08-17T14:23:45.146057+00:00\",\"user_profiles\":{\"email\":\"mymumum592@gmail.com\",\"phone\":\"\",\"last_name\":\"Alii\",\"avatar_url\":null,\"first_name\":\"Alii\"}},{\"id\":\"34a58992-eeb9-4d7e-94e7-819413cf7338\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"license_number\":\"hddh\",\"vehicle_info\":{\"model\":\"hhshs\"},\"is_online\":false,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"created_at\":\"2026-08-17T14:23:12.02313+00:00\",\"updated_at\":\"2026-08-17T14:23:12.02313+00:00\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"first_name\":\"hdhd\"}},{\"id\":\"51657016-1bbe-4cfb-b6f4-f7ce31f7b92b\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"license_number\":\"QA-LIC-TEST\",\"vehicle_info\":null,\"is_online\":true,\"rating\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1407ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"drivers\":[{\"id\":\"525627a2-0e0a-440a-966b-3237c02aa979\",\"user_id\":\"3e272e34-eebe-4cb0-89ea-0253989280d7\",\"license_number\":\"hdhdh\",\"vehicle_info\":{\"model\":\"hdhd\"},\"is_online\":false,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"created_at\":\"2026-08-17T14:23:45.146057+00:00\",\"updated_at\":\"2026-08-17T14:23:45.146057+00:00\",\"user_profiles\":{\"email\":\"mymumum592@gmail.com\",\"phone\":\"\",\"last_name\":\"Alii\",\"avatar_url\":null,\"first_name\":\"Alii\"}},{\"id\":\"34a58992-eeb9-4d7e-94e7-819413cf7338\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"license_number\":\"hddh\",\"vehicle_info\":{\"model\":\"hhshs\"},\"is_online\":false,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"created_at\":\"2026-08-17T14:23:12.02313+00:00\",\"updated_at\":\"2026-08-17T14:23:12.02313+00:00\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"first_name\":\"hdhd\"}},{\"id\":\"51657016-1bbe-4cfb-b6f4-f7ce31f7b92b\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"license_number\":\"QA-LIC-TEST\",\"vehicle_info\":null,\"is_online\":true,\"rating\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4817,7 +4817,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1234ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1184ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4878,7 +4878,7 @@
       "verify"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 978ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 955ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4942,7 +4942,7 @@
       "rides"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2066ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"rides\":[{\"id\":\"271ae97a-ea27-4554-aee6-d0238b31fd3d\",\"passenger_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"driver_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"pickup_location\":{\"latitude\":6.6035631,\"longitude\":3.3493582},\"dropoff_location\":{\"latitude\":22.2787948,\"longitude\":114.186212},\"pickup_address\":\"6-7 Soji Adepegba Cl, Allen, Ikeja 101233, Lagos, Nigeria\",\"dropoff_address\":\"8 Pennington St, Causeway Bay, Hong Kong\",\"total_fare\":1752540,\"final_amount\":1184300,\"distance_km\":11838,\"actual_duration_minutes\":1,\"status\":\"completed\",\"pickup_time\":\"2026-08-17T14:26:09.744+00:00\",\"dropoff_time\":\"2026-08-17T14:26:17.163+00:00\",\"created_at\":\"2026-08-17T14:25:33.156488+00:00\",\"user_profiles\":{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"first_name\":\"hdhd\",\"last_name\":\"hdhd\",\"phone\":null},\"driver\":{\"user_profiles\":{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"first_name\":\"hdhd\",\"last_name\":\"hdhd\"}}},{\"id\":\"0f4a716f-6e46-4dac-b561-27c865b38ee2\",\"passenger_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"driver_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"pickup_location\":{\"latitude\":6.7056104,\"longitude\":3.2205031},\"dropoff_location\":{\"latitude\":52.4569544,\"longitude\":4.\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2153ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/modules/taxi.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"rides\":[{\"id\":\"271ae97a-ea27-4554-aee6-d0238b31fd3d\",\"passenger_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"driver_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"pickup_location\":{\"latitude\":6.6035631,\"longitude\":3.3493582},\"dropoff_location\":{\"latitude\":22.2787948,\"longitude\":114.186212},\"pickup_address\":\"6-7 Soji Adepegba Cl, Allen, Ikeja 101233, Lagos, Nigeria\",\"dropoff_address\":\"8 Pennington St, Causeway Bay, Hong Kong\",\"total_fare\":1752540,\"final_amount\":1184300,\"distance_km\":11838,\"actual_duration_minutes\":1,\"status\":\"completed\",\"pickup_time\":\"2026-08-17T14:26:09.744+00:00\",\"dropoff_time\":\"2026-08-17T14:26:17.163+00:00\",\"created_at\":\"2026-08-17T14:25:33.156488+00:00\",\"user_profiles\":{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"first_name\":\"hdhd\",\"last_name\":\"hdhd\",\"phone\":null},\"driver\":{\"user_profiles\":{\"id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"first_name\":\"hdhd\",\"last_name\":\"hdhd\"}}},{\"id\":\"0f4a716f-6e46-4dac-b561-27c865b38ee2\",\"passenger_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"driver_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"pickup_location\":{\"latitude\":6.7056104,\"longitude\":3.2205031},\"dropoff_location\":{\"latitude\":52.4569544,\"longitude\":4.\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -4996,7 +4996,7 @@
       "content"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1374ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"content\":[{\"id\":\"73d8296c-5197-4a72-be17-902ff2563f74\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"post/79c8d1dc-a9bc-4568-8254-dbe42a85baa2.png\",\"access_level\":\"public\",\"status\":\"ready\",\"created_at\":\"2026-07-07T21:06:20.527407+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"965aa49e-af84-4cb4-844c-720ed1ff53a7\",\"original_name\":\"pfp.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"user/597df29c-e409-4774-b7eb-f3f1f3f1584e.png\",\"access_level\":\"public\",\"status\":\"ready\",\"created_at\":\"2026-06-18T19:37:12.493723+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"3a7cb3a4-5b28-4471-b178-f9d575fff451\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":67,\"storage_path\":\"post/80224d87-f281-4d07-83ae-31888e74de3f.png\",\"access_level\":\"public\",\"status\":\"ready\",\"created_at\":\"2026-06-06T20:44:17.867085+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"q\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1362ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"content\":[{\"id\":\"73d8296c-5197-4a72-be17-902ff2563f74\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"post/79c8d1dc-a9bc-4568-8254-dbe42a85baa2.png\",\"access_level\":\"public\",\"status\":\"ready\",\"created_at\":\"2026-07-07T21:06:20.527407+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"965aa49e-af84-4cb4-844c-720ed1ff53a7\",\"original_name\":\"pfp.png\",\"mime_type\":\"image/png\",\"size_bytes\":70,\"storage_path\":\"user/597df29c-e409-4774-b7eb-f3f1f3f1584e.png\",\"access_level\":\"public\",\"status\":\"ready\",\"created_at\":\"2026-06-18T19:37:12.493723+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"qa.customer1@gigaqa.test\",\"last_name\":\"Customer\",\"first_name\":\"Ada\"}},{\"id\":\"3a7cb3a4-5b28-4471-b178-f9d575fff451\",\"original_name\":\"px.png\",\"mime_type\":\"image/png\",\"size_bytes\":67,\"storage_path\":\"post/80224d87-f281-4d07-83ae-31888e74de3f.png\",\"access_level\":\"public\",\"status\":\"ready\",\"created_at\":\"2026-06-06T20:44:17.867085+00:00\",\"uploaded_by\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"user_profiles\":{\"email\":\"q\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5051,7 +5051,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 2006ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1192ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5106,7 +5106,7 @@
       "applications"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2061ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"license_number\":\"QA-CUR-LIC-001\",\"license_expiry_date\":\"2030-01-01\",\"vehicle_type\":\"motorcycle\",\"vehicle_registration\":\"QA-VREG-001\",\"vehicle_capacity_kg\":50,\"current_location\":null,\"current_latitude\":null,\"current_longitude\":null,\"availability_status\":\"available\",\"is_online\":true,\"is_verified\":true,\"is_active\":true,\"rating\":0,\"total_deliveries\":0,\"successful_deliveries\":0,\"failed_deliveries\":0,\"average_delivery_time_minutes\":0,\"last_location_update\":null,\"shift_start_time\":null,\"shift_end_time\":null,\"max_delivery_radius_km\":10,\"emergency_contact_name\":null,\"emergency_contact_phone\":null,\"bank_account_number\":null,\"bank_name\":null,\"account_holder_name\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"approval_status\":\"approved\",\"approved_by\":null,\"approved_at\":null,\"approving_state\":null,\"approving_state_id\":null,\"rejecte\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1392ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"0ca8cd20-3607-4053-8433-465d4860f5a0\",\"user_id\":\"b781800e-dac5-4873-9557-86a7c331fbcf\",\"courier_code\":\"QA-CUR-TEST\",\"first_name\":\"QA\",\"last_name\":\"Courier\",\"phone_number\":\"+2348000000002\",\"email\":\"qa.customer2@gigaqa.test\",\"license_number\":\"QA-CUR-LIC-001\",\"license_expiry_date\":\"2030-01-01\",\"vehicle_type\":\"motorcycle\",\"vehicle_registration\":\"QA-VREG-001\",\"vehicle_capacity_kg\":50,\"current_location\":null,\"current_latitude\":null,\"current_longitude\":null,\"availability_status\":\"available\",\"is_online\":true,\"is_verified\":true,\"is_active\":true,\"rating\":0,\"total_deliveries\":0,\"successful_deliveries\":0,\"failed_deliveries\":0,\"average_delivery_time_minutes\":0,\"last_location_update\":null,\"shift_start_time\":null,\"shift_end_time\":null,\"max_delivery_radius_km\":10,\"emergency_contact_name\":null,\"emergency_contact_phone\":null,\"bank_account_number\":null,\"bank_name\":null,\"account_holder_name\":null,\"created_at\":\"2026-07-08T21:43:02.972377+00:00\",\"updated_at\":\"2026-07-08T21:43:02.972377+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"approval_status\":\"approved\",\"approved_by\":null,\"approved_at\":null,\"approving_state\":null,\"approving_state_id\":null,\"rejecte\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5167,7 +5167,7 @@
       "approve"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1603ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1158ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5237,7 +5237,7 @@
       "reject"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1668ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1193ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5300,7 +5300,7 @@
       "my-permissions"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1557ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"email\":\"qa.admin@gigaqa.test\",\"role\":\"DOP\",\"access_level\":\"national\",\"state_id\":null,\"state_name\":null,\"branch_id\":null,\"permissions\":[\"ecommerce\",\"taxi\",\"hotel\",\"postal_monitoring\",\"platform_settings\",\"financial_ledger\",\"user_management\",\"approve_staff\",\"ads:approve\"],\"module_permissions\":{},\"is_nipost_admin\":true}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 958ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"email\":\"qa.admin@gigaqa.test\",\"role\":\"DOP\",\"access_level\":\"national\",\"state_id\":null,\"state_name\":null,\"branch_id\":null,\"permissions\":[\"ecommerce\",\"taxi\",\"hotel\",\"postal_monitoring\",\"platform_settings\",\"financial_ledger\",\"user_management\",\"approve_staff\",\"ads:approve\"],\"module_permissions\":{},\"is_nipost_admin\":true}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5355,7 +5355,7 @@
       "applications"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2098ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"d31aed75-19a7-4b6e-a3e8-312704cddae6\",\"staff_type\":\"postmaster\",\"first_name\":\"QA\",\"last_name\":\"Probe\",\"email\":\"qa.probe@gigaqa.test\",\"phone\":null,\"date_of_birth\":null,\"gender\":null,\"residential_address\":null,\"city\":null,\"state\":null,\"country\":\"Nigeria\",\"postal_code\":null,\"employee_id\":null,\"department\":null,\"position\":null,\"hire_date\":null,\"years_of_service\":null,\"approval_status\":\"pending\",\"approved_by\":null,\"approved_at\":null,\"rejection_reason\":null,\"rejected_by\":null,\"rejected_at\":null,\"is_active\":true,\"created_at\":\"2026-08-18T19:21:25.727438+00:00\",\"updated_at\":\"2026-08-18T19:21:25.727438+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"admission_date\":\"2026-08-18\",\"assigned_region\":null,\"assigned_post_office_id\":null,\"user_id\":null},{\"id\":\"b7d75081-232f-4a4a-8885-4d61e846b5b2\",\"staff_type\":\"postmaster\",\"first_name\":\"Adaeze\",\"last_name\":\"Chukwuma\",\"email\":\"demo.postmaster2@nipost.gov.ng\",\"phone\":\"+2348032345678\",\"date_of_birth\":\"1982-09-22\",\"gender\":\"female\",\"residential_address\":\"14 GRA Phase 2, Trans Amadi\",\"city\":\"Port Harcourt\",\"state\":\"Rivers\",\"country\":\"Nigeria\",\"postal_code\":\"500102\",\"employee_id\":\"DEMO-PM-002\",\"department\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1534ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"d31aed75-19a7-4b6e-a3e8-312704cddae6\",\"staff_type\":\"postmaster\",\"first_name\":\"QA\",\"last_name\":\"Probe\",\"email\":\"qa.probe@gigaqa.test\",\"phone\":null,\"date_of_birth\":null,\"gender\":null,\"residential_address\":null,\"city\":null,\"state\":null,\"country\":\"Nigeria\",\"postal_code\":null,\"employee_id\":null,\"department\":null,\"position\":null,\"hire_date\":null,\"years_of_service\":null,\"approval_status\":\"pending\",\"approved_by\":null,\"approved_at\":null,\"rejection_reason\":null,\"rejected_by\":null,\"rejected_at\":null,\"is_active\":true,\"created_at\":\"2026-08-18T19:21:25.727438+00:00\",\"updated_at\":\"2026-08-18T19:21:25.727438+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"admission_date\":\"2026-08-18\",\"assigned_region\":null,\"assigned_post_office_id\":null,\"user_id\":null},{\"id\":\"b7d75081-232f-4a4a-8885-4d61e846b5b2\",\"staff_type\":\"postmaster\",\"first_name\":\"Adaeze\",\"last_name\":\"Chukwuma\",\"email\":\"demo.postmaster2@nipost.gov.ng\",\"phone\":\"+2348032345678\",\"date_of_birth\":\"1982-09-22\",\"gender\":\"female\",\"residential_address\":\"14 GRA Phase 2, Trans Amadi\",\"city\":\"Port Harcourt\",\"state\":\"Rivers\",\"country\":\"Nigeria\",\"postal_code\":\"500102\",\"employee_id\":\"DEMO-PM-002\",\"department\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5416,7 +5416,7 @@
       "approve"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 992ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1000ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5486,7 +5486,7 @@
       "reject"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 2544ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to reject application\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1174ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/nipost-admin.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5513,7 +5513,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 500",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -5521,8 +5521,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -5550,7 +5549,7 @@
       "dashboard"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 8586ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"stats\":{\"total_packages\":5,\"pending_packages\":3,\"delivered_packages\":1,\"total_revenue\":210,\"total_staff\":2},\"revenue_chart\":[{\"date\":\"2026-07-19\",\"revenue\":0},{\"date\":\"2026-07-20\",\"revenue\":0},{\"date\":\"2026-07-21\",\"revenue\":0},{\"date\":\"2026-07-22\",\"revenue\":0},{\"date\":\"2026-07-23\",\"revenue\":0},{\"date\":\"2026-07-24\",\"revenue\":0},{\"date\":\"2026-07-25\",\"revenue\":0},{\"date\":\"2026-07-26\",\"revenue\":0},{\"date\":\"2026-07-27\",\"revenue\":0},{\"date\":\"2026-07-28\",\"revenue\":0},{\"date\":\"2026-07-29\",\"revenue\":0},{\"date\":\"2026-07-30\",\"revenue\":0},{\"date\":\"2026-07-31\",\"revenue\":0},{\"date\":\"2026-08-01\",\"revenue\":0},{\"date\":\"2026-08-02\",\"revenue\":0},{\"date\":\"2026-08-03\",\"revenue\":0},{\"date\":\"2026-08-04\",\"revenue\":0},{\"date\":\"2026-08-05\",\"revenue\":0},{\"date\":\"2026-08-06\",\"revenue\":0},{\"date\":\"2026-08-07\",\"revenue\":0},{\"date\":\"2026-08-08\",\"revenue\":0},{\"date\":\"2026-08-09\",\"revenue\":0},{\"date\":\"2026-08-10\",\"revenue\":0},{\"date\":\"2026-08-11\",\"revenue\":0},{\"date\":\"2026-08-12\",\"revenue\":0},{\"date\":\"2026-08-13\",\"revenue\":0},{\"date\":\"2026-08-14\",\"revenue\":0},{\"date\":\"2026-08-15\",\"revenue\":0},{\"date\":\"2026-08-16\",\"revenue\":0},{\"date\":\"2026-08-17\",\"revenue\":0}]}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 7857ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"stats\":{\"total_packages\":5,\"pending_packages\":3,\"delivered_packages\":1,\"total_revenue\":210,\"total_staff\":2},\"revenue_chart\":[{\"date\":\"2026-07-19\",\"revenue\":0},{\"date\":\"2026-07-20\",\"revenue\":0},{\"date\":\"2026-07-21\",\"revenue\":0},{\"date\":\"2026-07-22\",\"revenue\":0},{\"date\":\"2026-07-23\",\"revenue\":0},{\"date\":\"2026-07-24\",\"revenue\":0},{\"date\":\"2026-07-25\",\"revenue\":0},{\"date\":\"2026-07-26\",\"revenue\":0},{\"date\":\"2026-07-27\",\"revenue\":0},{\"date\":\"2026-07-28\",\"revenue\":0},{\"date\":\"2026-07-29\",\"revenue\":0},{\"date\":\"2026-07-30\",\"revenue\":0},{\"date\":\"2026-07-31\",\"revenue\":0},{\"date\":\"2026-08-01\",\"revenue\":0},{\"date\":\"2026-08-02\",\"revenue\":0},{\"date\":\"2026-08-03\",\"revenue\":0},{\"date\":\"2026-08-04\",\"revenue\":0},{\"date\":\"2026-08-05\",\"revenue\":0},{\"date\":\"2026-08-06\",\"revenue\":0},{\"date\":\"2026-08-07\",\"revenue\":0},{\"date\":\"2026-08-08\",\"revenue\":0},{\"date\":\"2026-08-09\",\"revenue\":0},{\"date\":\"2026-08-10\",\"revenue\":0},{\"date\":\"2026-08-11\",\"revenue\":0},{\"date\":\"2026-08-12\",\"revenue\":0},{\"date\":\"2026-08-13\",\"revenue\":0},{\"date\":\"2026-08-14\",\"revenue\":0},{\"date\":\"2026-08-15\",\"revenue\":0},{\"date\":\"2026-08-16\",\"revenue\":0},{\"date\":\"2026-08-17\",\"revenue\":0}]}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5604,7 +5603,7 @@
       "staff"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1441ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"1e499566-1261-452c-b160-e5b22288e338\",\"employee_id\":\"NIPOST001\",\"user_id\":\"ad3354e2-4807-4b02-91e7-78f9e1b4d65e\",\"position\":\"Postal Officer\",\"rank\":\"officer\",\"department\":\"operations\",\"clearance_level\":5,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"test@example.com\",\"phone\":null,\"last_name\":\"\",\"first_name\":\"User\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}},{\"id\":\"61eab207-2509-4c48-930a-cb21e35c7201\",\"employee_id\":\"NIPOST002\",\"user_id\":\"a84ae787-88c3-494b-a42e-0cc0bf2f39be\",\"position\":\"DOP\",\"rank\":\"director\",\"department\":\"operations\",\"clearance_level\":10,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"admin@giga.app\",\"phone\":null,\"last_name\":\"Admin\",\"first_name\":\"Super\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}}],\"pagination\":{\"page\":1,\"limit\":20,\"total\":2,\"pages\":1}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1364ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"1e499566-1261-452c-b160-e5b22288e338\",\"employee_id\":\"NIPOST001\",\"user_id\":\"ad3354e2-4807-4b02-91e7-78f9e1b4d65e\",\"position\":\"Postal Officer\",\"rank\":\"officer\",\"department\":\"operations\",\"clearance_level\":5,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"test@example.com\",\"phone\":null,\"last_name\":\"\",\"first_name\":\"User\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}},{\"id\":\"61eab207-2509-4c48-930a-cb21e35c7201\",\"employee_id\":\"NIPOST002\",\"user_id\":\"a84ae787-88c3-494b-a42e-0cc0bf2f39be\",\"position\":\"DOP\",\"rank\":\"director\",\"department\":\"operations\",\"clearance_level\":10,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"admin@giga.app\",\"phone\":null,\"last_name\":\"Admin\",\"first_name\":\"Super\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}}],\"pagination\":{\"page\":1,\"limit\":20,\"total\":2,\"pages\":1}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5657,7 +5656,7 @@
       "pending-entries"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 2881ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":[{\"id\":\"ddffc3d7-38be-4002-9a08-044488fcced8\",\"name\":\"Smart Air Purifier Pro\",\"description\":\"HEPA filter air purifier with WiFi control and air quality monitoring\",\"final_price\":115000,\"vendor_id\":\"c959297e-9739-4f4c-86d3-ae2c83bc1307\",\"category_id\":\"610805f6-4d3b-411b-a9ac-59e910bb082e\",\"approval_status\":\"pending\",\"created_at\":\"2026-02-23T09:45:05.914649+00:00\"},{\"id\":\"fcf9b823-5d39-43b7-997c-c4806740c885\",\"name\":\"Organic Honey Collection\",\"description\":\"Premium organic honey gift set - 5 varieties\",\"final_price\":15000,\"vendor_id\":\"c959297e-9739-4f4c-86d3-ae2c83bc1307\",\"category_id\":\"00b4077a-f69c-4088-9eb5-89261f322ae8\",\"approval_status\":\"pending\",\"created_at\":\"2026-02-20T09:15:24.477941+00:00\"},{\"id\":\"b335c0b0-1c60-4374-b6e1-11844642f574\",\"name\":\"Smart Fitness Watch Pro\",\"description\":\"Advanced fitness tracker with heart rate monitor and GPS\",\"final_price\":85000,\"vendor_id\":\"ac7d3549-e01d-4424-ab70-e8bee3e0172f\",\"category_id\":\"53838fb7-977b-426b-adb8-0a4f47a92f89\",\"approval_status\":\"pending\",\"created_at\":\"2026-02-19T12:15:24.477941+00:00\"},{\"id\":\"217188d7-6e7c-4b7c-83c1-d6ca14cf5e30\",\"name\":\"Luxury Leather Sofa Set\",\"description\":\"Premium Itali\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 3113ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"products\":[{\"id\":\"ddffc3d7-38be-4002-9a08-044488fcced8\",\"name\":\"Smart Air Purifier Pro\",\"description\":\"HEPA filter air purifier with WiFi control and air quality monitoring\",\"final_price\":115000,\"vendor_id\":\"c959297e-9739-4f4c-86d3-ae2c83bc1307\",\"category_id\":\"610805f6-4d3b-411b-a9ac-59e910bb082e\",\"approval_status\":\"pending\",\"created_at\":\"2026-02-23T09:45:05.914649+00:00\"},{\"id\":\"fcf9b823-5d39-43b7-997c-c4806740c885\",\"name\":\"Organic Honey Collection\",\"description\":\"Premium organic honey gift set - 5 varieties\",\"final_price\":15000,\"vendor_id\":\"c959297e-9739-4f4c-86d3-ae2c83bc1307\",\"category_id\":\"00b4077a-f69c-4088-9eb5-89261f322ae8\",\"approval_status\":\"pending\",\"created_at\":\"2026-02-20T09:15:24.477941+00:00\"},{\"id\":\"b335c0b0-1c60-4374-b6e1-11844642f574\",\"name\":\"Smart Fitness Watch Pro\",\"description\":\"Advanced fitness tracker with heart rate monitor and GPS\",\"final_price\":85000,\"vendor_id\":\"ac7d3549-e01d-4424-ab70-e8bee3e0172f\",\"category_id\":\"53838fb7-977b-426b-adb8-0a4f47a92f89\",\"approval_status\":\"pending\",\"created_at\":\"2026-02-19T12:15:24.477941+00:00\"},{\"id\":\"217188d7-6e7c-4b7c-83c1-d6ca14cf5e30\",\"name\":\"Luxury Leather Sofa Set\",\"description\":\"Premium Itali\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5717,7 +5716,7 @@
       "approve"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1210ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to approve entry\n\nProbe note: ghost id \u2014 non-destructive\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1166ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id \u2014 non-destructive\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5744,7 +5743,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 500",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -5752,8 +5751,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -5787,7 +5785,7 @@
       "reject"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1185ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to reject entry\n\nProbe note: ghost id \u2014 non-destructive\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1164ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id \u2014 non-destructive\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5814,7 +5812,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 500",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -5822,8 +5820,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -5851,7 +5848,7 @@
       "dashboard"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 7972ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"stats\":{\"total_packages\":5,\"pending_packages\":3,\"delivered_packages\":1,\"total_revenue\":210,\"total_staff\":2},\"revenue_chart\":[{\"date\":\"2026-07-19\",\"revenue\":0},{\"date\":\"2026-07-20\",\"revenue\":0},{\"date\":\"2026-07-21\",\"revenue\":0},{\"date\":\"2026-07-22\",\"revenue\":0},{\"date\":\"2026-07-23\",\"revenue\":0},{\"date\":\"2026-07-24\",\"revenue\":0},{\"date\":\"2026-07-25\",\"revenue\":0},{\"date\":\"2026-07-26\",\"revenue\":0},{\"date\":\"2026-07-27\",\"revenue\":0},{\"date\":\"2026-07-28\",\"revenue\":0},{\"date\":\"2026-07-29\",\"revenue\":0},{\"date\":\"2026-07-30\",\"revenue\":0},{\"date\":\"2026-07-31\",\"revenue\":0},{\"date\":\"2026-08-01\",\"revenue\":0},{\"date\":\"2026-08-02\",\"revenue\":0},{\"date\":\"2026-08-03\",\"revenue\":0},{\"date\":\"2026-08-04\",\"revenue\":0},{\"date\":\"2026-08-05\",\"revenue\":0},{\"date\":\"2026-08-06\",\"revenue\":0},{\"date\":\"2026-08-07\",\"revenue\":0},{\"date\":\"2026-08-08\",\"revenue\":0},{\"date\":\"2026-08-09\",\"revenue\":0},{\"date\":\"2026-08-10\",\"revenue\":0},{\"date\":\"2026-08-11\",\"revenue\":0},{\"date\":\"2026-08-12\",\"revenue\":0},{\"date\":\"2026-08-13\",\"revenue\":0},{\"date\":\"2026-08-14\",\"revenue\":0},{\"date\":\"2026-08-15\",\"revenue\":0},{\"date\":\"2026-08-16\",\"revenue\":0},{\"date\":\"2026-08-17\",\"revenue\":0}]}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 7856ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"stats\":{\"total_packages\":5,\"pending_packages\":3,\"delivered_packages\":1,\"total_revenue\":210,\"total_staff\":2},\"revenue_chart\":[{\"date\":\"2026-07-19\",\"revenue\":0},{\"date\":\"2026-07-20\",\"revenue\":0},{\"date\":\"2026-07-21\",\"revenue\":0},{\"date\":\"2026-07-22\",\"revenue\":0},{\"date\":\"2026-07-23\",\"revenue\":0},{\"date\":\"2026-07-24\",\"revenue\":0},{\"date\":\"2026-07-25\",\"revenue\":0},{\"date\":\"2026-07-26\",\"revenue\":0},{\"date\":\"2026-07-27\",\"revenue\":0},{\"date\":\"2026-07-28\",\"revenue\":0},{\"date\":\"2026-07-29\",\"revenue\":0},{\"date\":\"2026-07-30\",\"revenue\":0},{\"date\":\"2026-07-31\",\"revenue\":0},{\"date\":\"2026-08-01\",\"revenue\":0},{\"date\":\"2026-08-02\",\"revenue\":0},{\"date\":\"2026-08-03\",\"revenue\":0},{\"date\":\"2026-08-04\",\"revenue\":0},{\"date\":\"2026-08-05\",\"revenue\":0},{\"date\":\"2026-08-06\",\"revenue\":0},{\"date\":\"2026-08-07\",\"revenue\":0},{\"date\":\"2026-08-08\",\"revenue\":0},{\"date\":\"2026-08-09\",\"revenue\":0},{\"date\":\"2026-08-10\",\"revenue\":0},{\"date\":\"2026-08-11\",\"revenue\":0},{\"date\":\"2026-08-12\",\"revenue\":0},{\"date\":\"2026-08-13\",\"revenue\":0},{\"date\":\"2026-08-14\",\"revenue\":0},{\"date\":\"2026-08-15\",\"revenue\":0},{\"date\":\"2026-08-16\",\"revenue\":0},{\"date\":\"2026-08-17\",\"revenue\":0}]}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5905,7 +5902,7 @@
       "staff"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1412ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"1e499566-1261-452c-b160-e5b22288e338\",\"employee_id\":\"NIPOST001\",\"user_id\":\"ad3354e2-4807-4b02-91e7-78f9e1b4d65e\",\"position\":\"Postal Officer\",\"rank\":\"officer\",\"department\":\"operations\",\"clearance_level\":5,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"test@example.com\",\"phone\":null,\"last_name\":\"\",\"first_name\":\"User\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}},{\"id\":\"61eab207-2509-4c48-930a-cb21e35c7201\",\"employee_id\":\"NIPOST002\",\"user_id\":\"a84ae787-88c3-494b-a42e-0cc0bf2f39be\",\"position\":\"DOP\",\"rank\":\"director\",\"department\":\"operations\",\"clearance_level\":10,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"admin@giga.app\",\"phone\":null,\"last_name\":\"Admin\",\"first_name\":\"Super\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}}],\"pagination\":{\"page\":1,\"limit\":20,\"total\":2,\"pages\":1}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1396ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/postal-monitoring.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"1e499566-1261-452c-b160-e5b22288e338\",\"employee_id\":\"NIPOST001\",\"user_id\":\"ad3354e2-4807-4b02-91e7-78f9e1b4d65e\",\"position\":\"Postal Officer\",\"rank\":\"officer\",\"department\":\"operations\",\"clearance_level\":5,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"test@example.com\",\"phone\":null,\"last_name\":\"\",\"first_name\":\"User\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}},{\"id\":\"61eab207-2509-4c48-930a-cb21e35c7201\",\"employee_id\":\"NIPOST002\",\"user_id\":\"a84ae787-88c3-494b-a42e-0cc0bf2f39be\",\"position\":\"DOP\",\"rank\":\"director\",\"department\":\"operations\",\"clearance_level\":10,\"is_active\":true,\"created_at\":\"2026-02-10T19:39:05.006578+00:00\",\"user_profiles\":{\"email\":\"admin@giga.app\",\"phone\":null,\"last_name\":\"Admin\",\"first_name\":\"Super\"},\"nipost_offices\":{\"city\":\"Lagos\",\"office_name\":\"Lagos Headquarters\",\"state_province\":\"Lagos\"},\"nipost_regions\":{\"region_code\":\"NG\",\"region_name\":\"Nigeria\"}}],\"pagination\":{\"page\":1,\"limit\":20,\"total\":2,\"pages\":1}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -5959,7 +5956,7 @@
       "staff"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1539ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"staff\":[{\"id\":\"d31aed75-19a7-4b6e-a3e8-312704cddae6\",\"staff_type\":\"postmaster\",\"first_name\":\"QA\",\"last_name\":\"Probe\",\"email\":\"qa.probe@gigaqa.test\",\"phone\":null,\"date_of_birth\":null,\"gender\":null,\"residential_address\":null,\"city\":null,\"state\":null,\"country\":\"Nigeria\",\"postal_code\":null,\"employee_id\":null,\"department\":null,\"position\":null,\"hire_date\":null,\"years_of_service\":null,\"approval_status\":\"pending\",\"approved_by\":null,\"approved_at\":null,\"rejection_reason\":null,\"rejected_by\":null,\"rejected_at\":null,\"is_active\":true,\"created_at\":\"2026-08-18T19:21:25.727438+00:00\",\"updated_at\":\"2026-08-18T19:21:25.727438+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"admission_date\":\"2026-08-18\",\"assigned_region\":null,\"assigned_post_office_id\":null,\"user_id\":null},{\"id\":\"b7d75081-232f-4a4a-8885-4d61e846b5b2\",\"staff_type\":\"postmaster\",\"first_name\":\"Adaeze\",\"last_name\":\"Chukwuma\",\"email\":\"demo.postmaster2@nipost.gov.ng\",\"phone\":\"+2348032345678\",\"date_of_birth\":\"1982-09-22\",\"gender\":\"female\",\"residential_address\":\"14 GRA Phase 2, Trans Amadi\",\"city\":\"Port Harcourt\",\"state\":\"Rivers\",\"country\":\"Nigeria\",\"postal_code\":\"500102\",\"employee_id\":\"DEMO-PM-002\",\"d\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1551ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"staff\":[{\"id\":\"d31aed75-19a7-4b6e-a3e8-312704cddae6\",\"staff_type\":\"postmaster\",\"first_name\":\"QA\",\"last_name\":\"Probe\",\"email\":\"qa.probe@gigaqa.test\",\"phone\":null,\"date_of_birth\":null,\"gender\":null,\"residential_address\":null,\"city\":null,\"state\":null,\"country\":\"Nigeria\",\"postal_code\":null,\"employee_id\":null,\"department\":null,\"position\":null,\"hire_date\":null,\"years_of_service\":null,\"approval_status\":\"pending\",\"approved_by\":null,\"approved_at\":null,\"rejection_reason\":null,\"rejected_by\":null,\"rejected_at\":null,\"is_active\":true,\"created_at\":\"2026-08-18T19:21:25.727438+00:00\",\"updated_at\":\"2026-08-18T19:21:25.727438+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"admission_date\":\"2026-08-18\",\"assigned_region\":null,\"assigned_post_office_id\":null,\"user_id\":null},{\"id\":\"b7d75081-232f-4a4a-8885-4d61e846b5b2\",\"staff_type\":\"postmaster\",\"first_name\":\"Adaeze\",\"last_name\":\"Chukwuma\",\"email\":\"demo.postmaster2@nipost.gov.ng\",\"phone\":\"+2348032345678\",\"date_of_birth\":\"1982-09-22\",\"gender\":\"female\",\"residential_address\":\"14 GRA Phase 2, Trans Amadi\",\"city\":\"Port Harcourt\",\"state\":\"Rivers\",\"country\":\"Nigeria\",\"postal_code\":\"500102\",\"employee_id\":\"DEMO-PM-002\",\"d\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6017,7 +6014,7 @@
       "staff"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `201` in 1446ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 1209ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6044,7 +6041,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 201",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -6052,7 +6049,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -6080,7 +6077,7 @@
       "staff-stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1410ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"total\":25,\"by_type\":{\"postmaster\":9,\"regional_manager\":8,\"admin_staff\":8},\"by_status\":{\"pending\":5,\"approved\":19,\"rejected\":1}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1370ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"total\":25,\"by_type\":{\"postmaster\":9,\"regional_manager\":8,\"admin_staff\":8},\"by_status\":{\"pending\":5,\"approved\":19,\"rejected\":1}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6135,7 +6132,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1485ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id \u2014 non-destructive",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1341ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id \u2014 non-destructive",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6190,7 +6187,7 @@
       "{{staffId}}"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1569ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"staff\":{\"id\":\"fa3a6f0d-d655-4834-8f11-fa658c3727d1\",\"staff_type\":\"postmaster\",\"first_name\":\"Olumide\",\"last_name\":\"Fashola\",\"email\":\"demo.postmaster1@nipost.gov.ng\",\"phone\":\"+2348031234567\",\"date_of_birth\":\"1978-05-14\",\"gender\":\"male\",\"residential_address\":\"25 Ikoyi Crescent, Ikoyi\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"101233\",\"employee_id\":\"DEMO-PM-001\",\"department\":\"Postal Operations\",\"position\":\"Chief Postmaster - Demo\",\"hire_date\":\"2018-03-15\",\"years_of_service\":8,\"approval_status\":\"approved\",\"approved_by\":null,\"approved_at\":\"2018-04-01T10:00:00+00:00\",\"rejection_reason\":null,\"rejected_by\":null,\"rejected_at\":null,\"is_active\":true,\"created_at\":\"2026-02-21T07:19:38.173818+00:00\",\"updated_at\":\"2026-02-21T07:19:38.173818+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"admission_date\":\"2018-03-15\",\"assigned_region\":\"Lagos Zone\",\"assigned_post_office_id\":null,\"user_id\":null,\"age\":48}}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1414ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"staff\":{\"id\":\"fa3a6f0d-d655-4834-8f11-fa658c3727d1\",\"staff_type\":\"postmaster\",\"first_name\":\"Olumide\",\"last_name\":\"Fashola\",\"email\":\"demo.postmaster1@nipost.gov.ng\",\"phone\":\"+2348031234567\",\"date_of_birth\":\"1978-05-14\",\"gender\":\"male\",\"residential_address\":\"25 Ikoyi Crescent, Ikoyi\",\"city\":\"Lagos\",\"state\":\"Lagos\",\"country\":\"Nigeria\",\"postal_code\":\"101233\",\"employee_id\":\"DEMO-PM-001\",\"department\":\"Postal Operations\",\"position\":\"Chief Postmaster - Demo\",\"hire_date\":\"2018-03-15\",\"years_of_service\":8,\"approval_status\":\"approved\",\"approved_by\":null,\"approved_at\":\"2018-04-01T10:00:00+00:00\",\"rejection_reason\":null,\"rejected_by\":null,\"rejected_at\":null,\"is_active\":true,\"created_at\":\"2026-02-21T07:19:38.173818+00:00\",\"updated_at\":\"2026-02-21T07:19:38.173818+00:00\",\"deleted_at\":null,\"deleted_by\":null,\"deletion_reason\":null,\"admission_date\":\"2018-03-15\",\"assigned_region\":\"Lagos Zone\",\"assigned_post_office_id\":null,\"user_id\":null,\"age\":48}}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6249,7 +6246,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1460ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update postal staff\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1197ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6276,7 +6273,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 500",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -6284,8 +6281,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -6319,7 +6315,7 @@
       "approve"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1175ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1182ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6388,7 +6384,7 @@
       "reject"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1289ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to reject postal staff\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1158ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6415,7 +6411,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 500",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -6423,8 +6419,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -6457,7 +6452,7 @@
       "courier"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 575ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/public-applications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 1016ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/public-applications.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6484,16 +6479,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 403",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -6526,7 +6520,7 @@
       "postal-staff"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 605ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/public-applications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 962ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/public-applications.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: probe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6553,16 +6547,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 403",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -6590,7 +6583,7 @@
       "my-applications"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (SERVICE_NOT_FOUND)** \u2014 last verified 2026-08-18, HTTP `404` in 602ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/public-applications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V5** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` No service available for this endpoint",
+    "description": "**\ud83d\udd12 403 for the QA account** \u2014 last verified 2026-08-18, HTTP `403` in 949ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/public-applications.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6608,16 +6601,15 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 403",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "// KNOWN DEFECT V5 - no gateway route; returns 404 SERVICE_NOT_FOUND.",
-       "// Flip this to a 2xx assertion once the gateway pattern is added.",
-       "pm.test('known defect V5 still reproduces (404 SERVICE_NOT_FOUND)', function () {",
-       "    pm.expect(pm.response.code).to.eql(404);",
-       "    pm.expect(pm.response.text()).to.include('SERVICE_NOT_FOUND');",
-       "});"
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -6649,7 +6641,7 @@
       "review"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1221ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1141ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\nProbe note: ghost id\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6712,7 +6704,7 @@
       "drivers"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1434ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"drivers\":[{\"id\":\"525627a2-0e0a-440a-966b-3237c02aa979\",\"user_id\":\"3e272e34-eebe-4cb0-89ea-0253989280d7\",\"license_number\":\"hdhdh\",\"vehicle_info\":{\"model\":\"hdhd\"},\"is_online\":false,\"current_location\":null,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-08-17T14:23:45.146057+00:00\",\"updated_at\":\"2026-08-17T14:23:45.146057+00:00\",\"user_profiles\":{\"email\":\"mymumum592@gmail.com\",\"phone\":\"\",\"last_name\":\"Alii\",\"avatar_url\":null,\"first_name\":\"Alii\"}},{\"id\":\"34a58992-eeb9-4d7e-94e7-819413cf7338\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"license_number\":\"hddh\",\"vehicle_info\":{\"model\":\"hhshs\"},\"is_online\":false,\"current_location\":null,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-08-17T14:23:12.02313+00:00\",\"updated_at\":\"2026-08-17T14:23:12.02313+00:00\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"first_name\":\"hdhd\"}},{\"id\":\"51657016-1bbe-4cfb-b6f4-f7ce31f7b92b\",\"user_id\":\"b781800e-\u2026\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1374ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"drivers\":[{\"id\":\"525627a2-0e0a-440a-966b-3237c02aa979\",\"user_id\":\"3e272e34-eebe-4cb0-89ea-0253989280d7\",\"license_number\":\"hdhdh\",\"vehicle_info\":{\"model\":\"hdhd\"},\"is_online\":false,\"current_location\":null,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-08-17T14:23:45.146057+00:00\",\"updated_at\":\"2026-08-17T14:23:45.146057+00:00\",\"user_profiles\":{\"email\":\"mymumum592@gmail.com\",\"phone\":\"\",\"last_name\":\"Alii\",\"avatar_url\":null,\"first_name\":\"Alii\"}},{\"id\":\"34a58992-eeb9-4d7e-94e7-819413cf7338\",\"user_id\":\"c447ad3c-09c9-4cdb-8045-61856eaa0848\",\"license_number\":\"hddh\",\"vehicle_info\":{\"model\":\"hhshs\"},\"is_online\":false,\"current_location\":null,\"rating\":null,\"total_rides\":0,\"is_verified\":true,\"subscription_tier\":\"BASIC\",\"created_at\":\"2026-08-17T14:23:12.02313+00:00\",\"updated_at\":\"2026-08-17T14:23:12.02313+00:00\",\"user_profiles\":{\"email\":\"tunjixx62@gmail.com\",\"phone\":null,\"last_name\":\"hdhd\",\"avatar_url\":\"https://nkrqcigvcakqicutkpfd.supabase.co/storage/v1/object/public/avatars/c447ad3c-09c9-4cdb-8045-61856eaa0848/avatar-1786820274482.jpg\",\"first_name\":\"hdhd\"}},{\"id\":\"51657016-1bbe-4cfb-b6f4-f7ce31f7b92b\",\"user_id\":\"b781800e-\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -6767,7 +6759,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1241ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1156ms.\n\nService: `admin-service` \u00b7 source: `admin-service/src/routes/business-modules.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [

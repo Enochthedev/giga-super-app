@@ -223,6 +223,12 @@ export const routingMiddleware = (
             if (path === '/api/v1/admin/create-user' || path === '/api/v1/admin/manage-users') {
               return '/api/admin/users';
             }
+            // V6: payment-queue-service mounts these at /api/v1/admin/payments, so the
+            // generic '/api/v1/admin' -> '/api' rewrite below must not rewrite them
+            // (it produced /api/payments/... and the service answered 404 Route not found).
+            if (path.startsWith('/api/v1/admin/payments')) {
+              return path;
+            }
             // Admin service: /api/v1/admin/postal-monitoring -> /api/postal-monitoring
             if (path.startsWith('/api/v1/admin/')) {
               return path.replace('/api/v1/admin', '/api');

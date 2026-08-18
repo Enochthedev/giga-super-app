@@ -27,7 +27,7 @@
       "delivery-rates"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 689ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch delivery rates",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1165ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch delivery rates",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -83,7 +83,7 @@
       "engagement"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 583ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch engagement metrics",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 1058ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch engagement metrics",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -139,7 +139,7 @@
       "templates"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 597ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch template analytics",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 955ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch template analytics",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -195,7 +195,7 @@
       "users"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 917ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch user analytics",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 893ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch user analytics",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -251,7 +251,7 @@
       "volume"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 766ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch volume statistics",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 827ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/analytics.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to fetch volume statistics",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -306,7 +306,7 @@
       "campaigns"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 565ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 781ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:16.853Z\",\"requestId\":\"9ccbd856-42ff-47b6-b8e1-cabb964676ba\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -324,7 +324,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 200",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -332,8 +332,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
       ]
      }
     }
@@ -365,7 +364,7 @@
       "campaigns"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 565ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 758ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -392,7 +391,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -400,8 +399,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -430,7 +428,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 569ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 793ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -448,7 +446,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -456,8 +454,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -490,7 +487,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 563ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 818ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -517,7 +514,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -525,8 +522,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -560,7 +556,7 @@
       "cancel"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 578ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 800ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -587,7 +583,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -595,8 +591,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -630,7 +625,7 @@
       "send"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 557ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 777ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -657,7 +652,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -665,8 +660,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -696,7 +690,7 @@
       "stats"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 backend 503** \u2014 last verified 2026-08-18, HTTP `503` in 550ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V1** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `503` Ads Service is currently unavailable",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 777ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/campaigns.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -714,7 +708,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 503",
+       "// Verified 2026-08-18: HTTP 404",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -722,8 +716,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V1 - currently returns 503. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V1 still reproduces (expects 503)', function () { pm.expect(pm.response.code).to.eql(503); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -756,7 +749,7 @@
       "bulk"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 579ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: single recipient\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 612ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: single recipient\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -820,7 +813,7 @@
       "history"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1034ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:07.895Z\",\"requestId\":\"a0c4d363-5897-4355-9e8f-bdf90b46c5e5\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 797ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:16.912Z\",\"requestId\":\"51f98519-3156-4021-90c7-bb15342b5133\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -880,7 +873,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 579ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 783ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -948,7 +941,7 @@
       "send"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 658ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 606ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1012,7 +1005,7 @@
       "stats"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 920ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"total\":0,\"sent\":0,\"delivered\":0,\"opened\":0,\"clicked\":0,\"failed\":0,\"by_type\":{}},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:07.524Z\",\"requestId\":\"b16ca14b-e3cb-4f65-919e-a39dafe3a21c\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 800ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"total\":0,\"sent\":0,\"delivered\":0,\"opened\":0,\"clicked\":0,\"failed\":0,\"by_type\":{}},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:17.021Z\",\"requestId\":\"bfe03f16-dfa6-4419-a1e2-3f631f9fdaf1\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1068,7 +1061,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 1027ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 845ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/notifications.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1122,7 +1115,7 @@
       "preferences"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1597ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"email_enabled\":true,\"sms_enabled\":true,\"push_enabled\":true,\"marketing_emails\":false,\"booking_notifications\":true,\"payment_notifications\":true,\"delivery_notifications\":true,\"social_notifications\":true,\"security_notifications\":true,\"email_frequency\":\"immediate\",\"quiet_hours_start\":\"22:00\",\"quiet_hours_end\":\"08:00\",\"timezone\":\"UTC\",\"unsubscribe_status\":{\"email\":null,\"sms\":null,\"all\":null}},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:08.397Z\",\"requestId\":\"b231f6b3-c086-4371-9a0c-2958eae72b8a\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 1432ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"id\":\"f8fa078a-af5e-4fb8-814d-8fc3446f23c9\",\"user_id\":\"61ed32f6-e219-4b74-82d7-4500a2d3c86d\",\"email_enabled\":true,\"sms_enabled\":false,\"push_enabled\":true,\"in_app_enabled\":true,\"category_preferences\":{\"auth\":{\"sms\":false,\"push\":true,\"email\":true},\"ride\":{\"sms\":true,\"push\":true,\"email\":true},\"order\":{\"sms\":true,\"push\":true,\"email\":true},\"system\":{\"sms\":false,\"push\":true,\"email\":true},\"booking\":{\"sms\":true,\"push\":true,\"email\":true},\"marketing\":{\"sms\":false,\"push\":false,\"email\":false}},\"quiet_hours_enabled\":false,\"quiet_hours_start\":null,\"quiet_hours_end\":null,\"timezone\":\"UTC\",\"language\":\"en\",\"global_opt_out\":false,\"created_at\":\"2026-08-18T19:44:20.93313+00:00\",\"updated_at\":\"2026-08-18T19:44:20.819+00:00\",\"marketing_emails\":false,\"booking_notifications\":true,\"payment_notifications\":true,\"delivery_notifications\":true,\"social_notifications\":true,\"security_notifications\":true,\"email_frequency\":\"immediate\",\"unsubscribe_status\":{\"email\":false,\"sms\":null,\"all\":null}},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:17.490Z\",\"requestId\":\"92e619b2-156f-4839-9bb4-65df681dbce8\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1180,7 +1173,7 @@
       "preferences"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 825ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update preferences\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 823ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to update preferences\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1246,7 +1239,7 @@
       "push"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 623ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"type\":\"push\",\"category\":\"general\",\"allowed\":true},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:07.855Z\",\"requestId\":\"bf252f34-40b6-45f5-826e-78304fc7978f\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 830ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"type\":\"push\",\"category\":\"general\",\"allowed\":true},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:17.409Z\",\"requestId\":\"918478e0-b85a-4858-987b-0a14a5338f65\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1301,7 +1294,7 @@
       "quiet-hours"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 702ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"is_quiet_hours\":false,\"quiet_hours_start\":\"22:00\",\"quiet_hours_end\":\"08:00\",\"timezone\":\"UTC\",\"delay_until_active_ms\":0,\"delay_until_active_hours\":0},\"metadata\":{\"timestamp\":\"2026-08-18T19:35:08.128Z\",\"requestId\":\"e2837c63-5291-4904-9151-646ab5d9cc83\"}}\n```",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 839ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":{\"is_quiet_hours\":false,\"quiet_hours_start\":null,\"quiet_hours_end\":null,\"timezone\":\"UTC\",\"delay_until_active_ms\":0,\"delay_until_active_hours\":0},\"metadata\":{\"timestamp\":\"2026-08-18T21:02:17.398Z\",\"requestId\":\"0c423913-93cb-4ef5-9535-d35ae2ac5c07\"}}\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1360,7 +1353,7 @@
       "resubscribe"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 576ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to resubscribe\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.\n\n> \u2139\ufe0f **State-dependent.** Returns 200 when the toggle applies and 400 when the account is already in that state, so the test asserts reachability rather than a fixed code.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 576ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.\n\n> \u2139\ufe0f **State-dependent.** Returns 200 when the toggle applies and 400 when the account is already in that state, so the test asserts reachability rather than a fixed code.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1426,7 +1419,7 @@
       "unsubscribe"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 663ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: reverted by resubscribe next\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.\n\n> \u2139\ufe0f **State-dependent.** Returns 200 when the toggle applies and 400 when the account is already in that state, so the test asserts reachability rather than a fixed code.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 685ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.\n\nProbe note: reverted by resubscribe next\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.\n\n> \u2139\ufe0f **State-dependent.** Returns 200 when the toggle applies and 400 when the account is already in that state, so the test asserts reachability rather than a fixed code.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1489,7 +1482,7 @@
       "qa-test-token"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 842ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 800ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/preferences.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1543,7 +1536,7 @@
       "templates"
      ]
     },
-    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 723ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 983ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"data\":[{\"id\":\"9f950237-fd37-4311-8acd-9080e443b1d3\",\"name\":\"payment_receipt_email\",\"description\":null,\"category\":\"payment\",\"channels\":[\"email\"],\"subject\":\"Payment Receipt - {{transactionId}}\",\"email_body\":\"<h2>Payment Received</h2><p>Hi {{userName}},</p><p>We have received your payment:</p><ul><li>Transaction ID: {{transactionId}}</li><li>Amount: {{amount}}</li><li>Date: {{paymentDate}}</li></ul><p>Thank you for your payment!</p>\",\"sms_body\":null,\"push_title\":null,\"push_body\":null,\"version\":1,\"is_active\":true,\"required_variables\":[\"userName\",\"transactionId\",\"amount\",\"paymentDate\"],\"optional_variables\":[],\"created_by\":\"ad3354e2-4807-4b02-91e7-78f9e1b4d65e\",\"created_at\":\"2026-01-10T21:44:47.200766+00:00\",\"updated_at\":\"2026-01-10T21:44:47.200766+00:00\",\"type\":\"email\",\"body\":\"<h2>Payment Received</h2><p>Hi {{userName}},</p><p>We have received your payment:</p><ul><li>Transaction ID: {{transactionId}}</li><li>Amount: {{amount}}</li><li>Date: {{paymentDate}}</li></ul><p>Thank you for your payment!</p>\",\"variables\":[]},{\"id\":\"9cd07ae5-312a-47de-892c-6b65b78c47e6\",\"name\":\"booking_confirmation_sms\",\"description\":null,\"category\":\"booking\",\"channels\":[\"sms\"],\"subject\":null,\"e\u2026\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1601,7 +1594,7 @@
       "templates"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 673ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\ud83d\udd34 BROKEN \u2014 500** \u2014 last verified 2026-08-18, HTTP `500` in 965ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f Known defect **V8** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `500` Failed to create template\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1628,7 +1621,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 400",
+       "// Verified 2026-08-18: HTTP 500",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -1636,7 +1629,8 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
+       "// KNOWN DEFECT V8 - currently returns 500. Flip to a 2xx assertion once fixed.",
+       "pm.test('known defect V8 still reproduces (expects 500)', function () { pm.expect(pm.response.code).to.eql(500); });"
       ]
      }
     }
@@ -1665,7 +1659,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 708ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 794ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1720,7 +1714,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 648ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 803ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1779,7 +1773,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 561ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 805ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1848,7 +1842,7 @@
       "preview"
      ]
     },
-    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 668ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (ghost id correctly 404s)** \u2014 last verified 2026-08-18, HTTP `404` in 776ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1916,7 +1910,7 @@
       "validate"
      ]
     },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 667ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 671ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/templates.ts`\n\nAuth: `admin (DOP)` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -1981,63 +1975,7 @@
       "{{ghostId}}"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 616ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found",
-    "auth": {
-     "type": "bearer",
-     "bearer": [
-      {
-       "key": "token",
-       "value": "{{token}}",
-       "type": "string"
-      }
-     ]
-    }
-   },
-   "event": [
-    {
-     "listen": "test",
-     "script": {
-      "type": "text/javascript",
-      "exec": [
-       "// Verified 2026-08-18: HTTP 404",
-       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
-       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
-       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
-       "pm.test('reached the backend (not a gateway routing miss)', function () {",
-       "    pm.expect(pm.response.code).to.not.eql(0);",
-       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
-       "});",
-       "// KNOWN DEFECT V6 - currently returns 404. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V6 still reproduces (expects 404)', function () { pm.expect(pm.response.code).to.eql(404); });"
-      ]
-     }
-    }
-   ],
-   "response": []
-  },
-  {
-   "name": "GET /api/v1/tracking/health",
-   "request": {
-    "method": "GET",
-    "header": [
-     {
-      "key": "Accept",
-      "value": "application/json"
-     }
-    ],
-    "url": {
-     "raw": "{{baseUrl}}/api/v1/tracking/health",
-     "host": [
-      "{{baseUrl}}"
-     ],
-     "path": [
-      "api",
-      "v1",
-      "tracking",
-      "health"
-     ]
-    },
-    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 825ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 657ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2071,6 +2009,61 @@
    "response": []
   },
   {
+   "name": "GET /api/v1/tracking/health",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/tracking/health",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "tracking",
+      "health"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 605ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n{\"success\":true,\"service\":\"notification-tracking\",\"timestamp\":\"2026-08-18T21:02:17.511Z\",\"endpoints\":{\"email_open\":\"/api/v1/tracking/open/:notificationId.png\",\"email_click\":\"/api/v1/tracking/click/:notificationId?url=<encoded_url>\",\"twilio_webhook\":\"/api/v1/tracking/webhook/twilio\",\"sendgrid_webhook\":\"/api/v1/tracking/webhook/sendgrid\",\"firebase_webhook\":\"/api/v1/tracking/webhook/firebase\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// Verified 2026-08-18: HTTP 200",
+       "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
+       "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
+       "pm.test('reached the backend (not a gateway routing miss)', function () {",
+       "    pm.expect(pm.response.code).to.not.eql(0);",
+       "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
+       "});",
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
    "name": "GET /api/v1/tracking/open/:notificationId.png",
    "request": {
     "method": "GET",
@@ -2093,7 +2086,7 @@
       "{{ghostId}}.png"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 568ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 613ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n**Live response (200)**\n```json\n\ufffdPNG\r\n\u001a\n\u0000\u0000\u0000\rIHDR\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0001\b\u0006\u0000\u0000\u0000\u001f\u0015\u0109\u0000\u0000\u0000\rIDATx\ufffdcd`\ufffd_\u000f\u0000\u0002\ufffd\u0001\ufffd\ufffdG\ufffd\ufffd\u0000\u0000\u0000\u0000IEND\ufffdB`\ufffd\n```",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2111,7 +2104,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 200",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -2119,8 +2112,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V6 - currently returns 404. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V6 still reproduces (expects 404)', function () { pm.expect(pm.response.code).to.eql(404); });"
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
       ]
      }
     }
@@ -2154,7 +2146,7 @@
       "firebase"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 646ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 665ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2181,7 +2173,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 200",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -2189,8 +2181,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V6 - currently returns 404. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V6 still reproduces (expects 404)', function () { pm.expect(pm.response.code).to.eql(404); });"
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
       ]
      }
     }
@@ -2224,7 +2215,7 @@
       "sendgrid"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 645ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 REACHABLE (probe payload rejected \u2014 400)** \u2014 last verified 2026-08-18, HTTP `400` in 652ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2251,7 +2242,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 400",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -2259,8 +2250,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V6 - currently returns 404. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V6 still reproduces (expects 404)', function () { pm.expect(pm.response.code).to.eql(404); });"
+       "pm.test('no server error', function () { pm.expect(pm.response.code).to.be.below(500); });"
       ]
      }
     }
@@ -2294,7 +2284,7 @@
       "twilio"
      ]
     },
-    "description": "**\ud83d\udd34 BROKEN \u2014 gateway routes to wrong service** \u2014 last verified 2026-08-18, HTTP `404` in 564ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f Known defect **V6** \u2014 see `docs/API_VERIFICATION_2026-08-18.md`.\n> Observed: `404` Route not found\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
+    "description": "**\u2705 VERIFIED 2xx** \u2014 last verified 2026-08-18, HTTP `200` in 635ms.\n\nService: `notifications-service` \u00b7 source: `notifications-service/src/routes/tracking.ts`\n\nAuth: `customer` bearer token.\n\n> \u26a0\ufe0f **V3:** never send a literal `{}` body \u2014 an empty JSON object hangs the gateway forever. Send real fields or no body.",
     "auth": {
      "type": "bearer",
      "bearer": [
@@ -2321,7 +2311,7 @@
      "script": {
       "type": "text/javascript",
       "exec": [
-       "// Verified 2026-08-18: HTTP 404",
+       "// Verified 2026-08-18: HTTP 200",
        "// 429 = rate limited, not a result. admin-service allows only 100 req / 15 min PER IP,",
        "// so a full Admin run will trip it. Re-run after the window, or use --delay-request.",
        "if (pm.response.code === 429) { pm.test.skip('rate limited (429) - inconclusive'); return; }",
@@ -2329,8 +2319,7 @@
        "    pm.expect(pm.response.code).to.not.eql(0);",
        "    pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND');",
        "});",
-       "// KNOWN DEFECT V6 - currently returns 404. Flip to a 2xx assertion once fixed.",
-       "pm.test('known defect V6 still reproduces (expects 404)', function () { pm.expect(pm.response.code).to.eql(404); });"
+       "pm.test('2xx', function () { pm.expect(pm.response.code).to.be.within(200,299); });"
       ]
      }
     }

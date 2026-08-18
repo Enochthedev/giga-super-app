@@ -21,17 +21,16 @@ body:json {
 }
 
 tests {
-  // KNOWN DEFECT: verified 404 on 2026-08-18. Flip to a 2xx assertion once fixed.
-  test("known defect still reproduces (404)", function(){ expect(res.status).to.equal(404); });
+  test("reached backend (verified 400 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
 }
 
 docs {
   `POST /api/v1/tracking/webhook/sendgrid`
   
-  **🔴 BROKEN — routed to wrong service (defect V6)** — last verified 2026-08-18, HTTP `404`.
+  **✅ reachable (probe payload → 400)** — last verified 2026-08-18, HTTP `400`.
   
   Service: **notifications-service** · file: `notifications-service/src/routes/tracking.ts`
   Auth: customer bearer (`{{token}}`).
-  
-  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `404` Route not found
 }

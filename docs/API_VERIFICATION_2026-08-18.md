@@ -11,9 +11,81 @@ customer (`qa.customer1@gigaqa.test`) and QA admin (`qa.admin@gigaqa.test`) logi
   (`00000000-0000-0000-0000-000000000000`) so routing, auth and error handling were verified
   **without mutating production data**.
 
-**This report documents defects. No service bug was fixed.** The only code touched was
-`notifications-service/src/routes/*.ts`, which gained Swagger JSDoc comments (V10) — comments only,
-zero runtime effect.
+> ## ✅ FIX LOG — deployed and verified live, 2026-08-18 21:00 UTC
+>
+> The findings below were written **before** any fix. Most are now fixed, deployed to Railway and
+> re-verified against production. **15 of 16 post-deploy checks pass.** Each fixed item is marked
+> inline. Commits: `77bdaa4`, `23819f1`.
+>
+> | # | Status | Verified by |
+> |---|---|---|
+> | **V1** payment service down | ✅ **FIXED** | `railway-payment healthy=true`; `/payments/:id/status` → clean 404 instead of 503. Root cause was a bad import crashing `/health` (below) |
+> | **V1b** notifications rate-limit outage | ✅ **FIXED** | `trust proxy` + health exempted; service reachable |
+> | **V3** empty `{}` body hangs forever | ✅ **FIXED** | `POST /api/admin/users` with `{}` → 400 in **1.1s** (was: never returned). Auth proxy → 401 in 0.8s |
+> | **V4** reject/approve 500 on missing id | ✅ **FIXED** | all 4 endpoints → clean `404` with a real message |
+> | **V5** 19 unroutable endpoints | ✅ **FIXED** | `/api/public/*`, `/api/v1/tenant/*`, `/scheduler/*`, `/websocket/*`, `/webhooks/*` all reach their service |
+> | **V6** pattern collisions | ✅ **FIXED** | `/tracking/health` → notifications (200), `/campaigns` → notifications, `/admin/payments/*` → payment service |
+> | **V7** notification admin 403s | ⏳ second fix deploying | see below |
+> | **V9** `/docs/{service}/` redirect loop | ✅ **FIXED** | `/docs/admin/` → **200** |
+> | **V10** empty notifications spec | ✅ **FIXED** | `/docs/notifications/json` → **32 paths / 38 operations** (was 0) |
+> | **V2** legacy anon key | ❌ **NOT FIXED** — env change on Railway, see below |
+> | **V8** assorted 500s | ❌ not addressed (data-layer/schema work) |
+> | **V11** hotels has no spec | ❌ not addressed (needs new deps + gateway change) |
+>
+> ### Measured effect — full 335-route re-sweep after deploy
+>
+> | Verdict | Before | After | Δ |
+> |---|---:|---:|---:|
+> | **HANG** (no response, ever) | **74** | **0** | **−74** |
+> | `ROUTING_GAP` (unreachable) | 19 | 1 | −18 |
+> | `SERVICE_DOWN` (503) | 13 | 2 | −11 |
+> | `NOT_ROUTED_IN_SERVICE` | 8 | 3 | −5 |
+> | `SERVER_ERROR` (500) | 23 | 19 | −4 |
+> | `OK` / `OK_VALIDATION` / `OK_NOTFOUND` | 245 | **278** | **+33** |
+>
+> **Healthy endpoints: 245/335 (73%) → 278/335 (82%).**
+> *(The 74 "hangs" in the before column are the V3 empty-body bug; the first sweep had to kill each
+> one after 45s.)*
+>
+> **One behaviour change worth knowing:** `POST /api/v1/templates` moved from 400 to 500. It was
+> previously rejected before reaching the handler; now that authorization passes (V7), the handler
+> runs and fails on a junk payload. Newly-reachable code, not a regression in the old path — but it
+> should return 400 for an invalid body, so it joins the V8 list.
+>
+> ### Still broken after this pass
+>
+> ```
+> GET  /api/v1/wallet/balance, transactions, topup/verify/:ref   401/503  — V2, needs the key rotation
+> POST /api/v1/wallet/topup                                      401      — V2
+> GET  /api/v1/analytics/*  (5 routes)                           500      — reachable now, handler fails
+> POST /api/v1/payments/initialize                               500      — likely unset PAYSTACK_SECRET_KEY
+> GET/PATCH /api/admin/users/:userId                             500      — E29-class schema drift
+> GET  /api/admin/regions/:id/admins                             500
+> GET  /api/delivery/incoming-orders                             500
+> PUT  /api/delivery/orders/:orderId/toggle-status               500
+> GET  /api/managers/hotel/bookings                              500
+> GET  /api/managers/media/advertisements                        500      — `advertisements` vs `ad_campaigns`
+> PUT/DELETE /api/managers/orders/:orderId                       500
+> PUT  /api/v1/couriers/:courierId                               500
+> PUT  /api/v1/preferences                                       500
+> POST /api/v1/search/analytics                                  500
+> POST /api/v1/templates                                         500
+> ```
+>
+> **Root cause found for V1:** `payment-queue-service/src/routes/health.ts` and `metrics.ts`
+> imported `getQueueMetrics` from `queues/payment.queue`, which only exports
+> `getPaymentQueueMetrics`. The Dockerfile runs `npx tsx src/index.ts` — **no typecheck** — so the
+> import silently resolved to `undefined` and `/health` threw on every probe. The gateway marked
+> the service unhealthy and 503'd every payment route. A `tsc` run catches it immediately.
+>
+> **Still open after the fixes:**
+> - **V2** requires rotating `SUPABASE_ANON_KEY` to the new publishable key in Railway — an env
+>   change nobody should make from a code commit. Until then the 13 edge functions in V2 stay 401.
+> - **`POST /api/v1/payments/initialize` returns 500.** The service is healthy now and other payment
+>   routes behave correctly, so this is a real endpoint defect — most likely the unset
+>   `PAYSTACK_SECRET_KEY` (`config.paystackSecretKey` defaults to `''`). Needs Railway logs to confirm.
+
+**Everything below this line describes the state at discovery time, before the fixes above.**
 
 ## Result summary
 
