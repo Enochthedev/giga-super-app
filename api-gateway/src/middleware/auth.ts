@@ -189,15 +189,28 @@ export const authMiddleware = async (
         });
       }
 
-      // Get roles from JWT claims
+      // Get roles from JWT claims.
+      // V7: prefer app_metadata from the *token claims*. The user object returned by
+      // auth.getUser() came back without app_metadata.role for admin accounts, so the
+      // role silently degraded to 'user' and every downstream service that trusts the
+      // forwarded X-User-Role header saw a non-admin (notifications-service returned
+      // 403 "Admin privileges required" for real DOP admins). The signed token does
+      // carry it — qa.admin's claims contain app_metadata.role = "ADMIN".
       const userMetadata = tokenClaims.user_metadata as Record<string, unknown> | undefined;
-      const appMetadata = supabaseUser.app_metadata as Record<string, unknown> | undefined;
-      const userRoles = (userMetadata?.roles ?? appMetadata?.roles ?? []) as string[];
+      const claimsAppMetadata = tokenClaims.app_metadata as Record<string, unknown> | undefined;
+      const appMetadata = (supabaseUser.app_metadata ?? {}) as Record<string, unknown>;
+      const userRoles = (userMetadata?.roles ??
+        claimsAppMetadata?.roles ??
+        appMetadata?.roles ??
+        []) as string[];
 
       user = {
         id: supabaseUser.id,
         email: supabaseUser.email ?? '',
-        role: (appMetadata?.role ?? userMetadata?.role ?? 'user') as string,
+        role: (claimsAppMetadata?.role ??
+          appMetadata?.role ??
+          userMetadata?.role ??
+          'user') as string,
         roles: Array.isArray(userRoles) ? userRoles : [],
         claims: tokenClaims,
         raw: supabaseUser,
