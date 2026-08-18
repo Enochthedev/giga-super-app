@@ -298,7 +298,7 @@ router.get(
           `id, title:campaign_name, description, placement:campaign_type,
          creative_assets, landing_url, target_audience,
          budget, impressions, clicks, start_date, end_date, status, created_at,
-         advertiser_profiles!inner(id, business_name, contact_email)`,
+         advertiser_profiles!inner(id, business_name:company_name, website)`,
           { count: 'exact' }
         )
         .is('deleted_at', null)
@@ -374,7 +374,7 @@ router.get(
       // E29/V8: `advertisements` does not exist; the data is in `ad_campaigns`.
       const { data: ad, error } = await supabase
         .from('ad_campaigns')
-        .select(`*, advertiser_profiles!inner(id, business_name, contact_email)`)
+        .select(`*, advertiser_profiles!inner(id, business_name:company_name, website)`)
         .eq('id', id)
         .is('deleted_at', null)
         .maybeSingle();
