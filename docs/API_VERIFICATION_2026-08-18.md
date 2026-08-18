@@ -32,63 +32,47 @@ customer (`qa.customer1@gigaqa.test`) and QA admin (`qa.admin@gigaqa.test`) logi
 > | **V8** assorted 500s | ❌ not addressed (data-layer/schema work) |
 > | **V11** hotels has no spec | ❌ not addressed (needs new deps + gateway change) |
 >
-> ### Measured effect — full 335-route re-sweep after deploy
+> ### Measured effect — full 335-route re-sweeps after each deploy
 >
-> | Verdict | Before | After | Δ |
-> |---|---:|---:|---:|
-> | **HANG** (no response, ever) | **74** | **0** | **−74** |
-> | `ROUTING_GAP` (unreachable) | 19 | 1 | −18 |
-> | `SERVICE_DOWN` (503) | 13 | 2 | −11 |
-> | `NOT_ROUTED_IN_SERVICE` | 8 | 3 | −5 |
-> | `SERVER_ERROR` (500) | 23 | 19 | −4 |
-> | `OK` / `OK_VALIDATION` / `OK_NOTFOUND` | 245 | **278** | **+33** |
+> | Verdict | At discovery | After fixes |
+> |---|---:|---:|
+> | **HANG** (no response, ever) | **74** | **0** |
+> | `SERVER_ERROR` (500) | 23 | **3** |
+> | `ROUTING_GAP` (unreachable) | 19 | 1 |
+> | `SERVICE_DOWN` (503) | 13 | 2 |
+> | `NOT_ROUTED_IN_SERVICE` | 8 | **0** |
+> | `AUTH_REJECTED` (401) | 2 | **0** |
+> | `OK` / `OK_VALIDATION` / `OK_NOTFOUND` | 245 | **296** |
 >
-> **Healthy endpoints: 245/335 (73%) → 278/335 (82%).**
-> *(The 74 "hangs" in the before column are the V3 empty-body bug; the first sweep had to kill each
-> one after 45s.)*
+> **Healthy endpoints: 245/335 (73%) → 296/335 (88%).**
 >
-> **One behaviour change worth knowing:** `POST /api/v1/templates` moved from 400 to 500. It was
-> previously rejected before reaching the handler; now that authorization passes (V7), the handler
-> runs and fails on a junk payload. Newly-reachable code, not a regression in the old path — but it
-> should return 400 for an invalid body, so it joins the V8 list.
+> The V2 edge-function block was cleared by the JWT signing-key rotation: the project was
+> still signing with the legacy HS256 secret, which the Edge Runtime rejects for the 43
+> functions that have `verify_jwt = true`. After rotating to the asymmetric key, tokens are
+> ES256 and **every `UNAUTHORIZED_LEGACY_JWT` error is gone** — profile, addresses,
+> switch-role, cart checkout, calls and user search all reach their handlers again.
 >
+> Every schema fix in this pass was verified by replaying the query against PostgREST
+> directly before shipping — which caught one wrong guess (`advertiser_profiles` has
+> `company_name`/`website`, not `business_name`/`contact_email`).
+
 > ### Still broken after this pass
 >
 > ```
-> GET  /api/v1/wallet/balance, transactions, topup/verify/:ref   401/503  — V2, needs the key rotation
-> POST /api/v1/wallet/topup                                      401      — V2
-> GET  /api/v1/analytics/*  (5 routes)                           500      — reachable now, handler fails
-> POST /api/v1/payments/initialize                               500      — likely unset PAYSTACK_SECRET_KEY
-> GET/PATCH /api/admin/users/:userId                             500      — E29-class schema drift
-> GET  /api/admin/regions/:id/admins                             500
-> GET  /api/delivery/incoming-orders                             500
-> PUT  /api/delivery/orders/:orderId/toggle-status               500
-> GET  /api/managers/hotel/bookings                              500
-> GET  /api/managers/media/advertisements                        500      — `advertisements` vs `ad_campaigns`
-> PUT/DELETE /api/managers/orders/:orderId                       500
-> PUT  /api/v1/couriers/:courierId                               500
-> PUT  /api/v1/preferences                                       500
-> POST /api/v1/search/analytics                                  500
-> POST /api/v1/templates                                         500
+> POST /api/v1/payments/initialize     500  — needs PAYSTACK_SECRET_KEY (unset; config defaults to '')
+> GET  /api/v1/wallet/balance          400  — Get-vendor-balance's DEPLOYED bundle is stale; its
+>                                             source is byte-identical to Topup-wallet, which now
+>                                             works. Needs `supabase functions deploy`.
+> GET  /api                            404  — bare index route, not a real endpoint
 > ```
 >
-> **Root cause found for V1:** `payment-queue-service/src/routes/health.ts` and `metrics.ts`
-> imported `getQueueMetrics` from `queues/payment.queue`, which only exports
-> `getPaymentQueueMetrics`. The Dockerfile runs `npx tsx src/index.ts` — **no typecheck** — so the
-> import silently resolved to `undefined` and `/health` threw on every probe. The gateway marked
-> the service unhealthy and 503'd every payment route. A `tsc` run catches it immediately.
+> Awaiting deploy at time of writing (code validated, commit `10e2268` queued on Railway):
+> `POST /api/v1/templates` (category/channels are NOT NULL and were never supplied) and
+> `/api/v1/wallet/{transactions,topup/verify}` (pinned to payment-queue-service, which is the
+> only service that implements them).
 >
-> `/api/v1/admin/payments/{national,state,branch}` also needed the generic
-> `/api/v1/admin` → `/api` rewrite guarded (it rewrote them to `/api/payments/...`). They now reach
-> payment-queue-service and return a correct `403 "Admin level national required"` — proper
-> authorization, not a routing failure.
->
-> **Still open after the fixes:**
-> - **V2** requires rotating `SUPABASE_ANON_KEY` to the new publishable key in Railway — an env
->   change nobody should make from a code commit. Until then the 13 edge functions in V2 stay 401.
-> - **`POST /api/v1/payments/initialize` returns 500.** The service is healthy now and other payment
->   routes behave correctly, so this is a real endpoint defect — most likely the unset
->   `PAYSTACK_SECRET_KEY` (`config.paystackSecretKey` defaults to `''`). Needs Railway logs to confirm.
+> Also still undeployed edge functions, unchanged from the July log: the `/api/v1/ads/*`
+> family and `create-support-ticket` return 404 "Requested function was not found".
 
 **Everything below this line describes the state at discovery time, before the fixes above.**
 
