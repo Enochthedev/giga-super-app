@@ -225,6 +225,12 @@ class ServiceRegistry {
           '/api/v1/payment-queue*',
           '/api/v1/webhooks*', // V5: Paystack/Stripe callbacks were unreachable
           '/api/v1/admin/payments*', // V6: was swallowed by admin-service's '/api/v1/admin*'
+          // V8: these two wallet routes exist ONLY in payment-queue-service. The broad
+          // '/api/v1/wallet*' pattern on supabase-payments was claiming them and they
+          // 503'd. topup/pay stay on the edge functions, which do work; these are more
+          // specific so the specificity match sends just them here.
+          '/api/v1/wallet/transactions*',
+          '/api/v1/wallet/topup/verify*',
         ],
       });
     }
