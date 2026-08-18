@@ -15,6 +15,26 @@ const TRACKING_PIXEL = Buffer.from(
   'base64'
 );
 
+/**
+ * @swagger
+ * /tracking/open/{notificationId}.png:
+ *   get:
+ *     tags: [Tracking]
+ *     summary: Track email opens
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404. ⚠️ NOT REACHABLE through the gateway: `/api/v1/tracking*` is claimed by delivery-service, so this returns 404. See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     parameters:
+ *       - in: path
+ *         name: notificationId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/tracking/open/:notificationId.png - Track email opens
 router.get('/open/:notificationId.png', async (req: Request, res: Response) => {
   try {
@@ -69,6 +89,26 @@ router.get('/open/:notificationId.png', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /tracking/click/{notificationId}:
+ *   get:
+ *     tags: [Tracking]
+ *     summary: Track email clicks and redirect
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404. ⚠️ NOT REACHABLE through the gateway: `/api/v1/tracking*` is claimed by delivery-service, so this returns 404. See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     parameters:
+ *       - in: path
+ *         name: notificationId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/tracking/click/:notificationId - Track email clicks and redirect
 router.get('/click/:notificationId', async (req: Request, res: Response) => {
   try {
@@ -147,6 +187,29 @@ router.get('/click/:notificationId', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /tracking/webhook/twilio:
+ *   post:
+ *     tags: [Tracking]
+ *     summary: Twilio SMS status webhook
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404. ⚠️ NOT REACHABLE through the gateway: `/api/v1/tracking*` is claimed by delivery-service, so this returns 404. See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/tracking/webhook/twilio - Twilio SMS status webhook
 router.post('/webhook/twilio', async (req: Request, res: Response) => {
   try {
@@ -177,6 +240,29 @@ router.post('/webhook/twilio', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /tracking/webhook/sendgrid:
+ *   post:
+ *     tags: [Tracking]
+ *     summary: SendGrid email event webhook
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404. ⚠️ NOT REACHABLE through the gateway: `/api/v1/tracking*` is claimed by delivery-service, so this returns 404. See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/tracking/webhook/sendgrid - SendGrid email event webhook
 router.post('/webhook/sendgrid', async (req: Request, res: Response) => {
   try {
@@ -213,6 +299,29 @@ router.post('/webhook/sendgrid', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /tracking/webhook/firebase:
+ *   post:
+ *     tags: [Tracking]
+ *     summary: Firebase push notification webhook
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404. ⚠️ NOT REACHABLE through the gateway: `/api/v1/tracking*` is claimed by delivery-service, so this returns 404. See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/tracking/webhook/firebase - Firebase push notification webhook
 router.post('/webhook/firebase', async (req: Request, res: Response) => {
   try {
@@ -242,6 +351,20 @@ router.post('/webhook/firebase', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /tracking/health:
+ *   get:
+ *     tags: [Tracking]
+ *     summary: Health check for tracking endpoints
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 400.
+ *     responses:
+ *       400:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/tracking/health - Health check for tracking endpoints
 router.get('/health', (req: Request, res: Response) => {
   res.json({

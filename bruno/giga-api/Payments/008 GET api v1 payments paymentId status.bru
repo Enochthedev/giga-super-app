@@ -1,0 +1,35 @@
+meta {
+  name: GET api v1 payments paymentId status
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/api/v1/payments/:paymentId/status
+  body: none
+  auth: bearer
+}
+
+params:path {
+  paymentId: 00000000-0000-0000-0000-000000000000
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  // KNOWN DEFECT: verified 503 on 2026-08-18. Flip to a 2xx assertion once fixed.
+  test("known defect still reproduces (503)", function(){ expect(res.status).to.equal(503); });
+}
+
+docs {
+  `GET /api/v1/payments/:paymentId/status`
+  
+  **🔴 BROKEN — backend 503 (defect V1)** — last verified 2026-08-18, HTTP `503`.
+  
+  Service: **payment-queue-service** · file: `payment-queue-service/src/routes/v1/payments.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `503` Payment Queue Service is currently unavailable
+}

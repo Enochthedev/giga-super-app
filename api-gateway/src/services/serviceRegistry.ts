@@ -110,7 +110,9 @@ class ServiceRegistry {
       baseUrl: config.supabaseUrl,
       healthEndpoint: '/rest/v1/',
       platform: 'supabase',
-      patterns: ['/api/v1/ads*', '/api/v1/campaigns*', '/api/v1/advertiser*'],
+      // V6: '/api/v1/campaigns*' removed — that prefix belongs to notifications-service
+      // campaigns; ad campaigns live under '/api/v1/ads/campaigns'.
+      patterns: ['/api/v1/ads*', '/api/v1/advertiser*'],
       headers: {
         apikey: config.supabaseAnonKey,
         Authorization: `Bearer ${config.supabaseAnonKey}`,
@@ -134,6 +136,7 @@ class ServiceRegistry {
           '/api/v1/stor*',
           '/api/v1/share*',
           '/api/v1/connection*', // E6: connections router was unreachable (SERVICE_NOT_FOUND)
+          '/api/v1/tenant*', // V5: tenant-posts router was unreachable (SERVICE_NOT_FOUND)
         ],
       });
     }
@@ -167,6 +170,7 @@ class ServiceRegistry {
           '/api/managers*',
           '/api/ads*', // Admin ads management (approve/reject/incoming)
           '/api/pending-entries*',
+          '/api/public*', // V5: citizen-facing apply/my-applications endpoints were unreachable
           '/api/roles*', // Role application review (approve/reject)
           '/api/v1/roles/review*', // Legacy path for role application review
         ],
@@ -216,7 +220,12 @@ class ServiceRegistry {
         healthEndpoint: '/health',
         platform: 'railway',
         // Wallet stays on edge (supabase-payments) for now; payments migrated here.
-        patterns: ['/api/v1/payments*', '/api/v1/payment-queue*'],
+        patterns: [
+          '/api/v1/payments*',
+          '/api/v1/payment-queue*',
+          '/api/v1/webhooks*', // V5: Paystack/Stripe callbacks were unreachable
+          '/api/v1/admin/payments*', // V6: was swallowed by admin-service's '/api/v1/admin*'
+        ],
       });
     }
 
@@ -267,6 +276,9 @@ class ServiceRegistry {
           '/api/v1/package*',
           '/api/v1/assignment*',
           '/api/v1/tracking*',
+          '/api/v1/track-delivery*', // V5: was unreachable
+          '/api/v1/scheduler*', // V5: was unreachable
+          '/api/v1/websocket*', // V5: was unreachable
         ],
       });
     }
@@ -286,6 +298,13 @@ class ServiceRegistry {
           '/api/v1/preferences*',
           '/api/v1/templates*',
           '/api/v1/analytics*', // E20: notification analytics router was unreachable (SERVICE_NOT_FOUND)
+          // V6: these are notification tracking routes; delivery owns the broader
+          // '/api/v1/tracking*' for assignment tracking, so claim these explicitly.
+          '/api/v1/tracking/open*',
+          '/api/v1/tracking/click*',
+          '/api/v1/tracking/webhook*',
+          '/api/v1/tracking/health*',
+          '/api/v1/campaigns*', // V6: was swallowed by supabase-ads (503)
         ],
       });
     }
@@ -334,10 +353,27 @@ class ServiceRegistry {
   }
 
   findServiceForPath(path: string): RegisteredService | null {
+    // V6: pick the MOST SPECIFIC matching pattern, not simply the first-registered one.
+    //
+    // With first-match-wins, a broad prefix registered early silently swallowed routes
+    // belonging to a service registered later — e.g. delivery's '/api/v1/tracking*' took
+    // notifications' '/api/v1/tracking/open|click|webhook' (404), and admin's
+    // '/api/v1/admin*' took payment-queue's '/api/v1/admin/payments/*' (404).
+    // Specificity = length of the pattern's literal prefix before the first wildcard,
+    // so '/api/v1/tracking/open*' (21) beats '/api/v1/tracking*' (16).
+    let best: RegisteredService | null = null;
+    let bestScore = -1;
+
     for (const service of this.services.values()) {
       for (const pattern of service.patterns) {
-        if (this.matchPattern(path, pattern)) {
-          return {
+        if (!this.matchPattern(path, pattern)) continue;
+
+        const wildcardAt = pattern.indexOf('*');
+        const score = wildcardAt === -1 ? pattern.length + 1000 : wildcardAt;
+
+        if (score > bestScore) {
+          bestScore = score;
+          best = {
             ...service,
             matchedPattern: pattern,
             pathParams: {},
@@ -345,7 +381,8 @@ class ServiceRegistry {
         }
       }
     }
-    return null;
+
+    return best;
   }
 
   private matchPattern(path: string, pattern: string): boolean {

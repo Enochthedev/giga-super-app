@@ -1,0 +1,33 @@
+meta {
+  name: GET health
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/health
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /health`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/health.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"status":"healthy","service":"api-gateway","timestamp":"2026-08-18T19:35:04.208Z","uptime":2321295.379051336,"version":"1.0.0"}}
+  ```
+}

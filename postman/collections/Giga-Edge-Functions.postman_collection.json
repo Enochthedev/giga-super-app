@@ -1,0 +1,1847 @@
+{
+ "info": {
+  "name": "Giga API \u2014 Edge Functions",
+  "description": "# Giga API \u2014 Edge Functions (Supabase)\n\nGenerated **2026-08-18** from the live production gateway. Every request here was actually sent to\n`https://giga-giga-production.up.railway.app` with the QA logins; the description on each request\nrecords the HTTP status it really returned.\n\n**Setup:** run `Auth & User \u2192 Login (Customer)` and `Login (Admin)` first \u2014 they populate\n`{{token}}` and `{{adminToken}}`.\n\nRequests marked \ud83d\udd34 are known defects, cross-referenced to `docs/API_VERIFICATION_2026-08-18.md`.\nTheir tests assert the *current broken* status so the suite stays green until someone fixes them \u2014\nflip the assertion when you do.\n\n\u26a0\ufe0f **Never send a literal `{}` JSON body** \u2014 it hangs the gateway forever (defect V3).\n",
+  "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+ },
+ "item": [
+  {
+   "name": "GET /api/v1/users/search",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/users/search?query=qa",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "users",
+      "search"
+     ],
+     "query": [
+      {
+       "key": "query",
+       "value": "qa"
+      }
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/users/profile",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/users/profile",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "users",
+      "profile"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/user/profile",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/user/profile",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "user",
+      "profile"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/user/addresses",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/user/addresses",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "user",
+      "addresses"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/user/addresses",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/user/addresses",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "user",
+      "addresses"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/user/switch-role",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/user/switch-role",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "user",
+      "switch-role"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/cart",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/cart",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "cart"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"cart\":{\"id\":\"1ed8a69b-23ab-4a2c-a002-7cbea47511b6\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"subtotal\":0,\"total_amount\":0,\"promo_code_id\":null,\"discount\":0,\"promo_code\":null,\"item_count\":0,\"total_items\":0},\"items\":[]}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/cart/add",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/cart/add",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "cart",
+      "add"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"error\":\"product not found: 00000000-0000-0000-0000-000000000000\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/cart/checkout",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/cart/checkout",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "cart",
+      "checkout"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/payments/verify",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/payments/verify",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "payments",
+      "verify"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/payments/intent",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/payments/intent",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "payments",
+      "intent"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/wallet/balance",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/wallet/balance",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "wallet",
+      "balance"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/wallet/topup",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/wallet/topup",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "wallet",
+      "topup"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/wallet/pay",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/wallet/pay",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "wallet",
+      "pay"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/notifications/history",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/notifications/history",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "notifications",
+      "history"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":true,\"data\":[],\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"total_pages\":0,\"has_previous\":false,\"has_next\":false},\"metadata\":{\"timestamp\":\"2026-08-18T19:21:07.290Z\",\"requestId\":\"d28c5a5a-f825-4c35-9b3b-105901ca3299\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/notifications/preferences",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/notifications/preferences",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "notifications",
+      "preferences"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /api/v1/notifications/preferences</pre>\n</body>\n</html>\n\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/ads/campaigns",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/ads/campaigns",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "ads",
+      "campaigns"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/ads/fetch",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/ads/fetch",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "ads",
+      "fetch"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/ads/my-campaigns",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/ads/my-campaigns",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "ads",
+      "my-campaigns"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/ads/analytics",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/ads/analytics",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "ads",
+      "analytics"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/ads/track",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/ads/track",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "ads",
+      "track"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/advertiser/profile",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/advertiser/profile",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "advertiser",
+      "profile"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/social/feed",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/social/feed",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "social",
+      "feed"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":true,\"data\":[{\"id\":\"8e067652-959e-482a-8979-e6cf8a681b1b\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa e2e post\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":nul\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/social/posts",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/social/posts",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "social",
+      "posts"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":true,\"data\":[{\"id\":\"8e067652-959e-482a-8979-e6cf8a681b1b\",\"user_id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"content\":\"qa e2e post\",\"media_urls\":[],\"post_type\":\"post\",\"visibility\":\"public\",\"allowed_viewers\":null,\"location\":null,\"feeling_activity\":nul\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/social/stories",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/social/stories",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "social",
+      "stories"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:21:09.614Z\",\"service\":\"social-service\",\"requestId\":\"c4f8c376-c64d-4cef-b82f-5633ebc50696\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/social/friends",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/social/friends",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "social",
+      "friends"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":true,\"data\":[],\"metadata\":{\"timestamp\":\"2026-08-18T19:21:09.574Z\",\"service\":\"social-service\",\"requestId\":\"a89f5dd2-6009-4ef8-8880-ebdde38b3846\"},\"pagination\":{\"page\":1,\"limit\":20,\"total\":0,\"totalPages\":0,\"hasMore\":false}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/support/tickets",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/support/tickets",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "support",
+      "tickets"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"tickets\":[]}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/support/tickets/create",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/support/tickets/create",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "support",
+      "tickets",
+      "create"
+     ]
+    },
+    "description": "**\u26a0\ufe0f HTTP 404** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"NOT_FOUND\",\"message\":\"Requested function was not found\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 404",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/media/content",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/media/content",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "media",
+      "content"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (defect V5)** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":false,\"error\":{\"code\":\"SERVICE_NOT_FOUND\",\"message\":\"No service available for this endpoint\"},\"metadata\":{\"timestamp\":\"2026-08-18T19:21:10.380Z\",\"request_id\":\"da3b23a9-cb36-464f-9bdc-3c9e3756f32a\",\"version\":\"1.0.0\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V5 - no gateway route; verified 404 SERVICE_NOT_FOUND on 2026-08-18.",
+       "// Flip to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404)', function(){ pm.expect(pm.response.code).to.eql(404); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/calls/initiate",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/calls/initiate",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "calls",
+      "initiate"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/vendors/apply",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/vendors/apply",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "vendors",
+      "apply"
+     ]
+    },
+    "description": "**\u2705 VERIFIED 2xx** \u2014 verified 2026-08-18, HTTP `200`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":true,\"message\":\"Vendor application submitted\",\"data\":{\"vendor\":{\"id\":\"92383fcd-8934-4167-b62d-abb425d2693e\",\"business_name\":\"QA Probe Ltd\",\"business_registration\":null,\"tax_id\":null,\"bank_name\":\"GTB\",\"account_number\":\"0123456789\",\"account_name\":\"QA\"\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// verified 2026-08-18 -> 200",
+       "if (pm.response.code === 429) { pm.test.skip('rate limited'); return; }",
+       "pm.test('reached a backend', function(){ pm.expect(pm.response.text()).to.not.include('SERVICE_NOT_FOUND'); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "GET /api/v1/roles/applications",
+   "request": {
+    "method": "GET",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/roles/applications",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "roles",
+      "applications"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 no gateway route (defect V5)** \u2014 verified 2026-08-18, HTTP `404`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"success\":false,\"error\":{\"code\":\"SERVICE_NOT_FOUND\",\"message\":\"No service available for this endpoint\"},\"metadata\":{\"timestamp\":\"2026-08-18T19:21:10.718Z\",\"request_id\":\"4a19ecb0-f2ec-4e27-9325-2cab24d26daa\",\"version\":\"1.0.0\"}}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V5 - no gateway route; verified 404 SERVICE_NOT_FOUND on 2026-08-18.",
+       "// Flip to a 2xx assertion once the gateway pattern is added.",
+       "pm.test('known defect V5 still reproduces (404)', function(){ pm.expect(pm.response.code).to.eql(404); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  },
+  {
+   "name": "POST /api/v1/roles/apply",
+   "request": {
+    "method": "POST",
+    "header": [
+     {
+      "key": "Accept",
+      "value": "application/json"
+     },
+     {
+      "key": "Content-Type",
+      "value": "application/json"
+     }
+    ],
+    "url": {
+     "raw": "{{baseUrl}}/api/v1/roles/apply",
+     "host": [
+      "{{baseUrl}}"
+     ],
+     "path": [
+      "api",
+      "v1",
+      "roles",
+      "apply"
+     ]
+    },
+    "description": "**\ud83d\udd34 BROKEN \u2014 401 UNAUTHORIZED_LEGACY_JWT (defect V2)** \u2014 verified 2026-08-18, HTTP `401`.\n\nBacked by a **Supabase edge function** (see the gateway map in `api-gateway/src/middleware/routing.ts`).\n\n**Live response**\n```json\n{\"code\":\"UNAUTHORIZED_LEGACY_JWT\",\"message\":\"Invalid JWT\"}\n```",
+    "auth": {
+     "type": "bearer",
+     "bearer": [
+      {
+       "key": "token",
+       "value": "{{token}}",
+       "type": "string"
+      }
+     ]
+    },
+    "body": {
+     "mode": "raw",
+     "raw": "{\n  \"_replace\": \"real fields required\"\n}",
+     "options": {
+      "raw": {
+       "language": "json"
+      }
+     }
+    }
+   },
+   "event": [
+    {
+     "listen": "test",
+     "script": {
+      "type": "text/javascript",
+      "exec": [
+       "// KNOWN DEFECT V2 - legacy anon key rejected; verified 401 on 2026-08-18.",
+       "pm.test('known defect V2 still reproduces (401)', function(){ pm.expect(pm.response.code).to.eql(401); });"
+      ]
+     }
+    }
+   ],
+   "response": []
+  }
+ ],
+ "auth": {
+  "type": "bearer",
+  "bearer": [
+   {
+    "key": "token",
+    "value": "{{token}}",
+    "type": "string"
+   }
+  ]
+ },
+ "variable": [
+  {
+   "key": "baseUrl",
+   "value": "https://giga-giga-production.up.railway.app"
+  }
+ ],
+ "event": [
+  {
+   "listen": "prerequest",
+   "script": {
+    "type": "text/javascript",
+    "exec": [
+     "// Auto-login: fetches customer + admin tokens once per run if missing.",
+     "const need = [];",
+     "if (!pm.environment.get('token'))      need.push(['token', pm.environment.get('customerEmail')]);",
+     "if (!pm.environment.get('adminToken')) need.push(['adminToken', pm.environment.get('adminEmail')]);",
+     "if (need.length === 0) { return; }",
+     "const base = pm.environment.get('baseUrl') || pm.collectionVariables.get('baseUrl');",
+     "const pwd  = pm.environment.get('password');",
+     "need.forEach(function (pair) {",
+     "  pm.sendRequest({",
+     "    url: base + '/auth/login',",
+     "    method: 'POST',",
+     "    header: { 'Content-Type': 'application/json' },",
+     "    body: { mode: 'raw', raw: JSON.stringify({ email: pair[1], password: pwd }) }",
+     "  }, function (err, res) {",
+     "    if (!err && res && res.code === 200 && res.json().access_token) {",
+     "      pm.environment.set(pair[0], res.json().access_token);",
+     "    } else {",
+     "      console.log('auto-login failed for ' + pair[0], err || res.code);",
+     "    }",
+     "  });",
+     "});"
+    ]
+   }
+  }
+ ]
+}

@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
 import { PreferencesService } from '../utils/preferences.js';
 import { DeliveryTracking } from '../utils/tracking.js';
+import { isPlatformAdmin } from '../utils/adminRoles.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -71,12 +72,10 @@ const requireAuth = (req: AuthenticatedRequest, res: Response, next: Function) =
 
 // Middleware to check admin permissions
 // Performs case-insensitive role comparison
-// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+// Accepts admin/super_admin plus NIPOST DOP-tier roles, across both the `role`
+// claim and the `roles` array (see utils/adminRoles.ts).
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
-  const userRole = (req.user?.role || '').toLowerCase();
-  const allowedRoles = ['admin', 'super_admin'];
-
-  if (!req.user || !allowedRoles.includes(userRole)) {
+  if (!isPlatformAdmin(req.user)) {
     return res.status(403).json({
       success: false,
       error: 'Admin privileges required',
@@ -86,6 +85,31 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
   next();
 };
 
+/**
+ * @swagger
+ * /notifications/send:
+ *   post:
+ *     tags: [Notifications]
+ *     summary: Enhanced send with templates
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 400.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       400:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/notifications/send - Enhanced send with templates
 router.post('/send', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -326,6 +350,31 @@ router.post('/send', requireAuth, async (req: AuthenticatedRequest, res: Respons
   }
 });
 
+/**
+ * @swagger
+ * /notifications/bulk:
+ *   post:
+ *     tags: [Notifications]
+ *     summary: Send bulk notifications
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/notifications/bulk - Send bulk notifications
 router.post('/bulk', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -509,6 +558,20 @@ router.post('/bulk', requireAdmin, async (req: AuthenticatedRequest, res: Respon
   }
 });
 
+/**
+ * @swagger
+ * /notifications/history:
+ *   get:
+ *     tags: [Notifications]
+ *     summary: Get notification history
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 200.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 // GET /api/v1/notifications/history - Get notification history
 router.get('/history', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -602,6 +665,28 @@ router.get('/history', requireAuth, async (req: AuthenticatedRequest, res: Respo
   }
 });
 
+/**
+ * @swagger
+ * /notifications/status/{id}:
+ *   get:
+ *     tags: [Notifications]
+ *     summary: Get notification status
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 404.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       404:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/notifications/status/:id - Get notification status
 router.get('/status/:id', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -620,7 +705,8 @@ router.get('/status/:id', requireAuth, async (req: AuthenticatedRequest, res: Re
 
     // Check if user owns this notification (or is admin)
     // Case-insensitive role comparison
-    // TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+    // Accepts admin/super_admin plus NIPOST DOP-tier roles, across both the `role`
+// claim and the `roles` array (see utils/adminRoles.ts).
     const { data: notification } = await supabase
       .from('notification_logs')
       .select('user_id')
@@ -658,6 +744,37 @@ router.get('/status/:id', requireAuth, async (req: AuthenticatedRequest, res: Re
   }
 });
 
+/**
+ * @swagger
+ * /notifications/retry/{id}:
+ *   post:
+ *     tags: [Notifications]
+ *     summary: Retry failed notification
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/notifications/retry/:id - Retry failed notification
 router.post('/retry/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -768,6 +885,20 @@ router.post('/retry/:id', requireAdmin, async (req: AuthenticatedRequest, res: R
   }
 });
 
+/**
+ * @swagger
+ * /notifications/stats:
+ *   get:
+ *     tags: [Notifications]
+ *     summary: Get user notification statistics
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 200.
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Success
+ */
 // GET /api/v1/notifications/stats - Get user notification statistics
 router.get('/stats', requireAuth, async (req: AuthenticatedRequest, res: Response) => {
   try {

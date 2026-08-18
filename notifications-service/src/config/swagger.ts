@@ -41,6 +41,7 @@ Multi-channel notification service supporting Email, SMS, and Push notifications
       { name: 'Preferences', description: 'User preferences' },
       { name: 'Campaigns', description: 'Bulk campaigns' },
       { name: 'Analytics', description: 'Delivery analytics' },
+      { name: 'Tracking', description: 'Open/click tracking pixels and provider delivery webhooks' },
     ],
     components: {
       securitySchemes: {

@@ -1,0 +1,31 @@
+meta {
+  name: GET api v1 wallet transactions
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/api/v1/wallet/transactions
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  // KNOWN DEFECT: verified 503 on 2026-08-18. Flip to a 2xx assertion once fixed.
+  test("known defect still reproduces (503)", function(){ expect(res.status).to.equal(503); });
+}
+
+docs {
+  `GET /api/v1/wallet/transactions`
+  
+  **🔴 BROKEN — backend 503 (defect V1)** — last verified 2026-08-18, HTTP `503`.
+  
+  Service: **payment-queue-service** · file: `payment-queue-service/src/routes/v1/wallet.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `503` Wallet Core Service is currently unavailable
+}

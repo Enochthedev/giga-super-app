@@ -1,0 +1,22 @@
+script:pre-request {
+  // Auto-login so any folder can be run on its own (e.g. `bru run Hotels --env Production`)
+  // without running the Auth folder first. Returns immediately once the tokens are cached.
+  const axios = require('axios');
+  const base = bru.getEnvVar('baseUrl');
+  const pwd = bru.getEnvVar('password');
+
+  async function login(varName, email) {
+    if (bru.getEnvVar(varName)) return;
+    try {
+      const res = await axios.post(base + '/auth/login', { email: email, password: pwd });
+      if (res.data && res.data.access_token) {
+        bru.setEnvVar(varName, res.data.access_token);
+      }
+    } catch (e) {
+      console.log('auto-login failed for ' + varName);
+    }
+  }
+
+  await login('token', bru.getEnvVar('customerEmail'));
+  await login('adminToken', bru.getEnvVar('adminEmail'));
+}

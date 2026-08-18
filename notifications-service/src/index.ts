@@ -746,6 +746,11 @@ if (useRedis && connection) {
 // Express app setup
 const app = express();
 
+// Every request reaches this service through the API gateway, so without this the
+// rate limiter below keys on the GATEWAY's IP and the whole platform shares a single
+// bucket. Trusting the proxy hop restores per-client limiting via X-Forwarded-For.
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 app.use(
@@ -757,9 +762,15 @@ app.use(
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS ?? String(15 * 60 * 1000), 10),
+  max: parseInt(process.env.RATE_LIMIT_MAX ?? '1000', 10),
   message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Health endpoints must never be rate limited. The gateway polls /health, and a 429
+  // there made serviceRegistry mark the service unhealthy, which 503'd EVERY route
+  // until the window rolled over — a self-amplifying outage.
+  skip: req => req.path === '/health' || req.path === '/health/ready' || req.path === '/health/live',
 });
 app.use(limiter);
 
@@ -840,6 +851,10 @@ app.use((req, res, next) => {
       id: userId,
       email: (req.headers['x-user-email'] as string) || '',
       role: (req.headers['x-user-role'] as string) || 'user',
+      roles: String(req.headers['x-user-roles'] ?? '')
+        .split(',')
+        .map(r => r.trim())
+        .filter(Boolean),
     };
   }
   next();

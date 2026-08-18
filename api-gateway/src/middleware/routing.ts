@@ -321,6 +321,12 @@ export const routingMiddleware = (
         proxyReq.setHeader('X-User-ID', authReq.user.id);
         proxyReq.setHeader('X-User-Email', authReq.user.email);
         proxyReq.setHeader('X-User-Role', authReq.user.role);
+        // V7: a user's admin rights often live in the roles array (or in the service's own
+        // permission tables), not in the single `role` claim. Forward both so downstream
+        // services can authorize correctly instead of seeing the default 'user'.
+        if (Array.isArray(authReq.user.roles) && authReq.user.roles.length > 0) {
+          proxyReq.setHeader('X-User-Roles', authReq.user.roles.join(','));
+        }
       }
 
       // Add request ID for tracing
@@ -328,13 +334,24 @@ export const routingMiddleware = (
         proxyReq.setHeader('X-Request-ID', authReq.id);
       }
 
-      // Re-stream the body for POST/PUT/PATCH requests
-      // This is needed because express.json() consumes the body
-      if (
+      // Re-stream the body for POST/PUT/PATCH requests.
+      // This is needed because express.json() has already consumed the stream.
+      //
+      // The condition must NOT test for a non-empty body. A request sent with
+      // `Content-Type: application/json` and a body of `{}` (or `[]`) parses to an
+      // empty object, and skipping the write left the upstream waiting forever for
+      // the bytes the forwarded Content-Length header still promised — the request
+      // hung with no response and no timeout. Only skip when express.json() never
+      // parsed anything (no JSON content-type: multipart, urlencoded, bodyless),
+      // in which case the original stream is still intact and pipes through normally.
+      const contentType = String(authReq.headers['content-type'] ?? '');
+      const parsedJsonBody =
         ['POST', 'PUT', 'PATCH'].includes(authReq.method || '') &&
-        authReq.body &&
-        Object.keys(authReq.body).length > 0
-      ) {
+        contentType.includes('json') &&
+        authReq.body !== undefined &&
+        authReq.body !== null;
+
+      if (parsedJsonBody) {
         const bodyData = JSON.stringify(authReq.body);
         proxyReq.setHeader('Content-Type', 'application/json');
         proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData));

@@ -1,0 +1,37 @@
+meta {
+  name: POST api v1 tracking webhook sendgrid
+  type: http
+  seq: 37
+}
+
+post {
+  url: {{baseUrl}}/api/v1/tracking/webhook/sendgrid
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "_replace": "real fields required - never send an empty {} body (defect V3)"
+  }
+}
+
+tests {
+  // KNOWN DEFECT: verified 404 on 2026-08-18. Flip to a 2xx assertion once fixed.
+  test("known defect still reproduces (404)", function(){ expect(res.status).to.equal(404); });
+}
+
+docs {
+  `POST /api/v1/tracking/webhook/sendgrid`
+  
+  **🔴 BROKEN — routed to wrong service (defect V6)** — last verified 2026-08-18, HTTP `404`.
+  
+  Service: **notifications-service** · file: `notifications-service/src/routes/tracking.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `404` Route not found
+}

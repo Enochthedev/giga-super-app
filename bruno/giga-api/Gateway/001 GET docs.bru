@@ -1,0 +1,33 @@
+meta {
+  name: GET docs
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/docs
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /docs`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/docs.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"title":"Giga Platform API Documentation","description":"Unified API documentation for all Giga platform services","note":"For direct browser access to service documentation, ensure your browser has network access to the internal service URLs.","services":[{"id":"gateway","name":"API Gateway","description":"Main API Gateway - routing, health checks, and service orchestration","docsUrl":"https://giga-giga-production.up.railway.app/api-docs/","jsonUrl":"https://giga-giga-production.up.railway.app/docs/gateway/json","directUrl":"/api-docs","apiPrefix":"/","status":"available"},{"id":"social","name":"Social Service","description":"Social media features - posts, comments, 
+  ```
+}

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import winston from 'winston';
+import { isPlatformAdmin } from '../utils/adminRoles.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -25,12 +26,10 @@ interface AuthenticatedRequest extends Request {
 
 // Middleware to check admin permissions
 // Performs case-insensitive role comparison
-// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+// Accepts admin/super_admin plus NIPOST DOP-tier roles, across both the `role`
+// claim and the `roles` array (see utils/adminRoles.ts).
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
-  const userRole = (req.user?.role || '').toLowerCase();
-  const allowedRoles = ['admin', 'super_admin'];
-
-  if (!req.user || !allowedRoles.includes(userRole)) {
+  if (!isPlatformAdmin(req.user)) {
     return res.status(403).json({
       success: false,
       error: 'Admin privileges required',
@@ -40,6 +39,22 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
   next();
 };
 
+/**
+ * @swagger
+ * /analytics/delivery-rates:
+ *   get:
+ *     tags: [Analytics]
+ *     summary: Delivery success rates
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/analytics/delivery-rates - Delivery success rates
 router.get('/delivery-rates', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -174,6 +189,22 @@ router.get('/delivery-rates', requireAdmin, async (req: AuthenticatedRequest, re
   }
 });
 
+/**
+ * @swagger
+ * /analytics/engagement:
+ *   get:
+ *     tags: [Analytics]
+ *     summary: Notification engagement metrics
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/analytics/engagement - Notification engagement metrics
 router.get('/engagement', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -310,6 +341,22 @@ router.get('/engagement', requireAdmin, async (req: AuthenticatedRequest, res: R
   }
 });
 
+/**
+ * @swagger
+ * /analytics/volume:
+ *   get:
+ *     tags: [Analytics]
+ *     summary: Notification volume statistics
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/analytics/volume - Notification volume statistics
 router.get('/volume', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -449,6 +496,22 @@ router.get('/volume', requireAdmin, async (req: AuthenticatedRequest, res: Respo
   }
 });
 
+/**
+ * @swagger
+ * /analytics/templates:
+ *   get:
+ *     tags: [Analytics]
+ *     summary: Template performance analytics
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/analytics/templates - Template performance analytics
 router.get('/templates', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -548,6 +611,22 @@ router.get('/templates', requireAdmin, async (req: AuthenticatedRequest, res: Re
   }
 });
 
+/**
+ * @swagger
+ * /analytics/users:
+ *   get:
+ *     tags: [Analytics]
+ *     summary: User notification behavior analytics
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/analytics/users - User notification behavior analytics
 router.get('/users', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {

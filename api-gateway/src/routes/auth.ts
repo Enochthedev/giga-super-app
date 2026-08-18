@@ -824,8 +824,14 @@ const proxyOptions: Options = {
       req.body = { refresh_token, grant_type: 'refresh_token' };
     }
 
-    // Re-serialize the body if it exists
-    if (req.body && Object.keys(req.body).length > 0) {
+    // Re-serialize the body that express.json() already consumed.
+    // Must not test for a non-empty body: a `{}` payload parses to an empty object,
+    // and skipping the write left the upstream waiting for the bytes the forwarded
+    // Content-Length still promised, hanging the request forever (e.g. POST /auth/logout
+    // with `{}`). Only skip when express.json() never parsed anything, in which case
+    // the original stream is intact and pipes through untouched.
+    const contentType = String(req.headers['content-type'] ?? '');
+    if (contentType.includes('json') && req.body !== undefined && req.body !== null) {
       const bodyData = JSON.stringify(req.body);
       proxyReq.setHeader('Content-Type', 'application/json');
       proxyReq.setHeader('Content-Length', Buffer.byteLength(bodyData).toString());

@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import winston from 'winston';
 import { TemplateEngine } from '../utils/templates.js';
+import { isPlatformAdmin } from '../utils/adminRoles.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -26,7 +27,8 @@ interface AuthenticatedRequest extends Request {
 
 // Middleware to check admin permissions
 // Performs case-insensitive role comparison
-// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+// Accepts admin/super_admin plus NIPOST DOP-tier roles, across both the `role`
+// claim and the `roles` array (see utils/adminRoles.ts).
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
   if (!req.user) {
     return res.status(401).json({
@@ -36,10 +38,7 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
     });
   }
 
-  const userRole = (req.user.role || '').toLowerCase();
-  const allowedRoles = ['admin', 'super_admin'];
-
-  if (!allowedRoles.includes(userRole)) {
+  if (!isPlatformAdmin(req.user)) {
     return res.status(403).json({
       success: false,
       error: 'Admin privileges required',
@@ -50,6 +49,22 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
   next();
 };
 
+/**
+ * @swagger
+ * /templates:
+ *   get:
+ *     tags: [Templates]
+ *     summary: List all templates
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/templates - List all templates
 router.get('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -104,6 +119,28 @@ router.get('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) =
   }
 });
 
+/**
+ * @swagger
+ * /templates/{id}:
+ *   get:
+ *     tags: [Templates]
+ *     summary: Get specific template
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/templates/:id - Get specific template
 router.get('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -138,6 +175,31 @@ router.get('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response
   }
 });
 
+/**
+ * @swagger
+ * /templates:
+ *   post:
+ *     tags: [Templates]
+ *     summary: Create new template
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/templates - Create new template
 router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -241,6 +303,37 @@ router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) 
   }
 });
 
+/**
+ * @swagger
+ * /templates/{id}:
+ *   put:
+ *     tags: [Templates]
+ *     summary: Update template
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // PUT /api/v1/templates/:id - Update template
 router.put('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -360,6 +453,28 @@ router.put('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response
   }
 });
 
+/**
+ * @swagger
+ * /templates/{id}:
+ *   delete:
+ *     tags: [Templates]
+ *     summary: Delete template
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // DELETE /api/v1/templates/:id - Delete template
 router.delete('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -455,6 +570,37 @@ router.delete('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Respo
   }
 });
 
+/**
+ * @swagger
+ * /templates/{id}/preview:
+ *   post:
+ *     tags: [Templates]
+ *     summary: Preview template with variables
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/templates/:id/preview - Preview template with variables
 router.post('/:id/preview', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -527,6 +673,31 @@ router.post('/:id/preview', requireAdmin, async (req: AuthenticatedRequest, res:
   }
 });
 
+/**
+ * @swagger
+ * /templates/validate:
+ *   post:
+ *     tags: [Templates]
+ *     summary: Validate template syntax
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 403. ⚠️ Authorization is driven by the inbound x-user-role header (index.ts:842), not the JWT, and requireAdmin accepts only admin/super_admin — so this intermittently returns 403 for real admins. See docs/API_VERIFICATION_2026-08-18.md (V7).
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       403:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/templates/validate - Validate template syntax
 router.post('/validate', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {

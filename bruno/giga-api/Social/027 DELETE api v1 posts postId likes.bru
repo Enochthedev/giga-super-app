@@ -1,0 +1,32 @@
+meta {
+  name: DELETE api v1 posts postId likes
+  type: http
+  seq: 27
+}
+
+delete {
+  url: {{baseUrl}}/api/v1/posts/:postId/likes
+  body: none
+  auth: bearer
+}
+
+params:path {
+  postId: 8e067652-959e-482a-8979-e6cf8a681b1b
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `DELETE /api/v1/posts/:postId/likes`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **social-service** · file: `social-service/src/routes/likes.ts`
+  Auth: customer bearer (`{{token}}`).
+}

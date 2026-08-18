@@ -1,0 +1,31 @@
+meta {
+  name: GET api v1 tenant posts
+  type: http
+  seq: 30
+}
+
+get {
+  url: {{baseUrl}}/api/v1/tenant/posts
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  // KNOWN DEFECT: verified 404 on 2026-08-18. Flip to a 2xx assertion once fixed.
+  test("known defect still reproduces (404)", function(){ expect(res.status).to.equal(404); });
+}
+
+docs {
+  `GET /api/v1/tenant/posts`
+  
+  **🔴 BROKEN — no gateway route (defect V5)** — last verified 2026-08-18, HTTP `404`.
+  
+  Service: **social-service** · file: `social-service/src/routes/tenant-posts.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `404` No service available for this endpoint
+}

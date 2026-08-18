@@ -4,6 +4,7 @@ import { Request, Response, Router } from 'express';
 import IORedis from 'ioredis';
 import winston from 'winston';
 import { DeliveryTracking } from '../utils/tracking.js';
+import { isPlatformAdmin } from '../utils/adminRoles.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -36,12 +37,10 @@ interface AuthenticatedRequest extends Request {
 
 // Middleware to check admin permissions
 // Performs case-insensitive role comparison
-// TODO: Standardize role names across the system (currently mixed: SUPER_ADMIN vs super_admin)
+// Accepts admin/super_admin plus NIPOST DOP-tier roles, across both the `role`
+// claim and the `roles` array (see utils/adminRoles.ts).
 const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) => {
-  const userRole = (req.user?.role || '').toLowerCase();
-  const allowedRoles = ['admin', 'super_admin'];
-
-  if (!req.user || !allowedRoles.includes(userRole)) {
+  if (!isPlatformAdmin(req.user)) {
     return res.status(403).json({
       success: false,
       error: 'Admin privileges required',
@@ -51,6 +50,22 @@ const requireAdmin = (req: AuthenticatedRequest, res: Response, next: Function) 
   next();
 };
 
+/**
+ * @swagger
+ * /campaigns:
+ *   get:
+ *     tags: [Campaigns]
+ *     summary: List campaigns
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/campaigns - List campaigns
 router.get('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -124,6 +139,28 @@ router.get('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) =
   }
 });
 
+/**
+ * @swagger
+ * /campaigns/{id}:
+ *   get:
+ *     tags: [Campaigns]
+ *     summary: Get specific campaign
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/campaigns/:id - Get specific campaign
 router.get('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -163,6 +200,31 @@ router.get('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response
   }
 });
 
+/**
+ * @swagger
+ * /campaigns:
+ *   post:
+ *     tags: [Campaigns]
+ *     summary: Create campaign
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/campaigns - Create campaign
 router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -302,6 +364,37 @@ router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) 
   }
 });
 
+/**
+ * @swagger
+ * /campaigns/{id}:
+ *   put:
+ *     tags: [Campaigns]
+ *     summary: Update campaign
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // PUT /api/v1/campaigns/:id - Update campaign
 router.put('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -434,6 +527,37 @@ router.put('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response
   }
 });
 
+/**
+ * @swagger
+ * /campaigns/{id}/send:
+ *   post:
+ *     tags: [Campaigns]
+ *     summary: Send campaign
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/campaigns/:id/send - Send campaign
 router.post('/:id/send', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -541,6 +665,37 @@ router.post('/:id/send', requireAdmin, async (req: AuthenticatedRequest, res: Re
   }
 });
 
+/**
+ * @swagger
+ * /campaigns/{id}/cancel:
+ *   post:
+ *     tags: [Campaigns]
+ *     summary: Cancel campaign
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             description: >-
+ *               Send real fields. Never send a literal empty object `{}` —
+ *               the gateway hangs on an empty JSON body (defect V3).
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // POST /api/v1/campaigns/:id/cancel - Cancel campaign
 router.post('/:id/cancel', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -614,6 +769,28 @@ router.post('/:id/cancel', requireAdmin, async (req: AuthenticatedRequest, res: 
   }
 });
 
+/**
+ * @swagger
+ * /campaigns/{id}/stats:
+ *   get:
+ *     tags: [Campaigns]
+ *     summary: Get campaign statistics
+ *     description: >-
+ *       Verified live 2026-08-18 → HTTP 503. ⚠️ NOT REACHABLE through the gateway: `/api/v1/campaigns*` is claimed by supabase-ads, which is down (503). See docs/API_VERIFICATION_2026-08-18.md (V6).
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       503:
+ *         description: See description — current live behaviour
+ *       200:
+ *         description: Success (expected once the defect above is fixed)
+ */
 // GET /api/v1/campaigns/:id/stats - Get campaign statistics
 router.get('/:id/stats', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {

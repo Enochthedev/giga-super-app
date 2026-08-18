@@ -330,7 +330,13 @@ router.get('/:service/json', (req: Request, res: Response) => {
  *         description: Service not found
  */
 router.get('/:service', (req: Request, res: Response) => {
-  // Redirect to trailing slash for Swagger UI to work properly
+  // V9: this handler also matches the trailing-slash form (Express is non-strict by
+  // default), so redirecting unconditionally sent /docs/{service}/ to itself forever and
+  // the handler below was never reached. Only redirect when the slash is genuinely absent.
+  if (req.originalUrl.split('?')[0]?.endsWith('/')) {
+    proxyServiceDocs(req, res, req.params.service!);
+    return;
+  }
   res.redirect(301, `/docs/${req.params.service}/`);
 });
 

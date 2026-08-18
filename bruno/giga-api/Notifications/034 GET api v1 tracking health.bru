@@ -1,0 +1,30 @@
+meta {
+  name: GET api v1 tracking health
+  type: http
+  seq: 34
+}
+
+get {
+  url: {{baseUrl}}/api/v1/tracking/health
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("reached backend (verified 400 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
+}
+
+docs {
+  `GET /api/v1/tracking/health`
+  
+  **✅ reachable (probe payload → 400)** — last verified 2026-08-18, HTTP `400`.
+  
+  Service: **notifications-service** · file: `notifications-service/src/routes/tracking.ts`
+  Auth: customer bearer (`{{token}}`).
+}

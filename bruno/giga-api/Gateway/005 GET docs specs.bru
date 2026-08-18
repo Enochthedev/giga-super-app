@@ -1,0 +1,33 @@
+meta {
+  name: GET docs specs
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/docs/specs
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("2xx", function(){ expect(res.status).to.be.within(200,299); });
+}
+
+docs {
+  `GET /docs/specs`
+  
+  **✅ verified 2xx** — last verified 2026-08-18, HTTP `200`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/docs.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  **Sample response**
+  ```json
+  {"success":true,"data":{"title":"OpenAPI Specifications","specs":{"gateway":{"name":"API Gateway","jsonUrl":"https://giga-giga-production.up.railway.app/docs/gateway/json","status":"available"},"social":{"name":"Social Service","jsonUrl":"https://giga-giga-production.up.railway.app/docs/social/json","status":"available"},"admin":{"name":"Admin Service","jsonUrl":"https://giga-giga-production.up.railway.app/docs/admin/json","status":"available"},"search":{"name":"Search Service","jsonUrl":"https://giga-giga-production.up.railway.app/docs/search/json","status":"available"},"delivery":{"name":"Delivery Service","jsonUrl":"https://giga-giga-production.up.railway.app/docs/delivery/json","status":
+  ```
+}

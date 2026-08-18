@@ -1,0 +1,41 @@
+meta {
+  name: POST api v1 tenant posts postId comments
+  type: http
+  seq: 34
+}
+
+post {
+  url: {{baseUrl}}/api/v1/tenant/posts/:postId/comments
+  body: json
+  auth: bearer
+}
+
+params:path {
+  postId: 8e067652-959e-482a-8979-e6cf8a681b1b
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "_replace": "real fields required - never send an empty {} body (defect V3)"
+  }
+}
+
+tests {
+  // KNOWN DEFECT: verified 404 on 2026-08-18. Flip to a 2xx assertion once fixed.
+  test("known defect still reproduces (404)", function(){ expect(res.status).to.equal(404); });
+}
+
+docs {
+  `POST /api/v1/tenant/posts/:postId/comments`
+  
+  **🔴 BROKEN — no gateway route (defect V5)** — last verified 2026-08-18, HTTP `404`.
+  
+  Service: **social-service** · file: `social-service/src/routes/tenant-posts.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `404` No service available for this endpoint
+}

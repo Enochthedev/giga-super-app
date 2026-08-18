@@ -2030,9 +2030,14 @@ router.post(
         .update(updatePayload)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      // V4: a non-existent id must be a clean 404, not a 500. `.single()` throws
+      // when no row matches, which surfaced as "Failed to ..." for stale list items.
+      if (!data) {
+        return res.status(404).json({ success: false, error: 'Pending entry not found' });
+      }
 
       // Complete role-specific onboarding (driver profile, vendor record, role grant)
       if (isRoleApplication && data) {
@@ -2137,9 +2142,14 @@ router.post(
         .update(updatePayload)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      // V4: a non-existent id must be a clean 404, not a 500. `.single()` throws
+      // when no row matches, which surfaced as "Failed to ..." for stale list items.
+      if (!data) {
+        return res.status(404).json({ success: false, error: 'Pending entry not found' });
+      }
 
       await createAudit(req, `reject_${module}`, tableName, id);
 
@@ -2498,9 +2508,14 @@ router.put(
         .update(updates)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      // V4: a non-existent id must be a clean 404, not a 500. `.single()` throws
+      // when no row matches, which surfaced as "Failed to ..." for stale list items.
+      if (!staff) {
+        return res.status(404).json({ success: false, error: 'Postal staff not found' });
+      }
 
       await createAudit(req, 'update_postal_staff', 'postal_staff', id);
 
@@ -2639,9 +2654,14 @@ router.post(
         })
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      // V4: a non-existent id must be a clean 404, not a 500. `.single()` throws
+      // when no row matches, which surfaced as "Failed to ..." for stale list items.
+      if (!staff) {
+        return res.status(404).json({ success: false, error: 'Postal staff not found' });
+      }
 
       await createAudit(req, 'reject_postal_staff', 'postal_staff', id);
 

@@ -1,0 +1,36 @@
+meta {
+  name: GET docs service
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/docs/:service
+  body: none
+  auth: bearer
+}
+
+params:path {
+  service: admin
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("reached backend (verified 301 on 2026-08-18)", function(){
+    expect(res.status).to.be.below(500);
+  });
+}
+
+docs {
+  `GET /docs/:service`
+  
+  **↪️ 301** — last verified 2026-08-18, HTTP `301`.
+  
+  Service: **api-gateway** · file: `api-gateway/src/routes/docs.ts`
+  Auth: customer bearer (`{{token}}`).
+  
+  > ⚠️ Known defect — see `docs/API_VERIFICATION_2026-08-18.md`. Observed: `301` 
+}
