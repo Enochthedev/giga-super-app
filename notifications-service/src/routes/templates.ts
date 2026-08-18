@@ -203,7 +203,7 @@ router.get('/:id', requireAdmin, async (req: AuthenticatedRequest, res: Response
 // POST /api/v1/templates - Create new template
 router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { name, type, subject, body, is_active = true } = req.body;
+    const { name, type, subject, body, is_active = true, category, channels } = req.body;
 
     // Validate required fields
     if (!name || !type || !body) {
@@ -267,15 +267,21 @@ router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) 
         variables: uniqueVariables,
         is_active,
         created_by: req.user!.id,
+        // V8: `category` and `channels` are NOT NULL with no default, and were never
+        // supplied — every create failed at the insert and surfaced as a 500. Default
+        // channels to the template's own type; category is free text ('auth', 'order', …).
+        category: category ?? 'general',
+        channels: Array.isArray(channels) && channels.length > 0 ? channels : [type],
       })
       .select()
       .single();
 
     if (error) {
       logger.error('Failed to create template', { error, requestId: req.requestId });
-      return res.status(500).json({
+      const clientError = error.code === '23502' || error.code === '42703' || error.code === 'PGRST204';
+      return res.status(clientError ? 400 : 500).json({
         success: false,
-        error: 'Failed to create template',
+        error: clientError ? `Invalid template payload: ${error.message}` : 'Failed to create template',
         metadata: { timestamp: new Date().toISOString(), requestId: req.requestId },
       });
     }
