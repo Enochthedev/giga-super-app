@@ -196,16 +196,43 @@ export class PackageService {
   async updatePackage(
     packageId: string,
     updates: UpdatePackageRequest,
-    requestId: string
+    requestId: string,
+    actor?: { userId: string; isAdmin: boolean }
   ): Promise<DeliveryPackage> {
     try {
-      // Verify package exists
-      await this.getPackageById(packageId, requestId);
+      // Verify package exists (and load owner for the authorization check).
+      const existing = await this.getPackageById(packageId, requestId);
+
+      // D1: authorize. Without this, requireAuth alone let any logged-in user modify any
+      // package (address, delivery_fee, mark delivered). Only the sender or an admin may.
+      if (actor && !actor.isAdmin && existing.sender_id !== actor.userId) {
+        throw new ServiceError(
+          'You can only modify your own packages',
+          'FORBIDDEN',
+          403
+        );
+      }
+
+      // D2: whitelist updatable columns so an unfiltered body cannot mass-assign
+      // (e.g. courier_id, sender_id). Non-admins additionally cannot set delivery_fee.
+      const ALLOWED: (keyof UpdatePackageRequest)[] = [
+        'sender_name', 'sender_phone', 'sender_address',
+        'recipient_name', 'recipient_phone', 'recipient_address',
+        'package_description', 'package_weight', 'package_dimensions',
+        'priority', 'delivery_instructions', 'status',
+        'delivery_fee',
+      ];
+      const clean: Record<string, unknown> = {};
+      for (const key of ALLOWED) {
+        if (updates[key] === undefined) continue;
+        if (key === 'delivery_fee' && actor && !actor.isAdmin) continue; // price is admin-only
+        clean[key] = updates[key];
+      }
 
       const { data, error } = await this.supabase
         .from('delivery_packages')
         .update({
-          ...updates,
+          ...clean,
           updated_at: new Date().toISOString(),
         })
         .eq('id', packageId)
@@ -233,9 +260,18 @@ export class PackageService {
   /**
    * Cancel a package
    */
-  async cancelPackage(packageId: string, requestId: string): Promise<DeliveryPackage> {
+  async cancelPackage(
+    packageId: string,
+    requestId: string,
+    actor?: { userId: string; isAdmin: boolean }
+  ): Promise<DeliveryPackage> {
     try {
       const pkg = await this.getPackageById(packageId, requestId);
+
+      // D1: only the sender or an admin may cancel.
+      if (actor && !actor.isAdmin && pkg.sender_id !== actor.userId) {
+        throw new ServiceError('You can only cancel your own packages', 'FORBIDDEN', 403);
+      }
 
       // Only allow cancellation if not already delivered or in transit
       if (pkg.status === 'delivered') {
@@ -270,8 +306,20 @@ export class PackageService {
   /**
    * Soft delete a package
    */
-  async deletePackage(packageId: string, requestId: string): Promise<void> {
+  async deletePackage(
+    packageId: string,
+    requestId: string,
+    actor?: { userId: string; isAdmin: boolean }
+  ): Promise<void> {
     try {
+      // D1: only the sender or an admin may delete.
+      if (actor && !actor.isAdmin) {
+        const pkg = await this.getPackageById(packageId, requestId);
+        if (pkg.sender_id !== actor.userId) {
+          throw new ServiceError('You can only delete your own packages', 'FORBIDDEN', 403);
+        }
+      }
+
       const { error } = await this.supabase
         .from('delivery_packages')
         .update({ deleted_at: new Date().toISOString() })

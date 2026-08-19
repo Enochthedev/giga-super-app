@@ -407,10 +407,13 @@ router.put(
   async (req: AuthenticatedRequest, res) => {
     try {
       const { packageId } = req.params;
+      const roles = [req.user?.role, ...(req.user?.roles || [])].map(r => (r || '').toLowerCase());
+      const isAdmin = roles.some(r => ['admin', 'super_admin'].includes(r));
       const pkg = await packageService.updatePackage(
         packageId,
         req.body,
-        req.requestId || 'update-package'
+        req.requestId || 'update-package',
+        { userId: req.user!.id, isAdmin }
       );
       const response: APIResponse = {
         success: true,
@@ -477,7 +480,11 @@ router.post(
   async (req: AuthenticatedRequest, res) => {
     try {
       const { packageId } = req.params;
-      const pkg = await packageService.cancelPackage(packageId, req.requestId || 'cancel-package');
+      const cRoles = [req.user?.role, ...(req.user?.roles || [])].map(r => (r || '').toLowerCase());
+      const pkg = await packageService.cancelPackage(packageId, req.requestId || 'cancel-package', {
+        userId: req.user!.id,
+        isAdmin: cRoles.some(r => ['admin', 'super_admin'].includes(r)),
+      });
       const response: APIResponse = {
         success: true,
         data: pkg,
@@ -543,7 +550,11 @@ router.delete(
   async (req: AuthenticatedRequest, res) => {
     try {
       const { packageId } = req.params;
-      await packageService.deletePackage(packageId, req.requestId || 'delete-package');
+      const dRoles = [req.user?.role, ...(req.user?.roles || [])].map(r => (r || '').toLowerCase());
+      await packageService.deletePackage(packageId, req.requestId || 'delete-package', {
+        userId: req.user!.id,
+        isAdmin: dRoles.some(r => ['admin', 'super_admin'].includes(r)),
+      });
       const response: APIResponse = {
         success: true,
         data: { message: 'Package deleted successfully' },
