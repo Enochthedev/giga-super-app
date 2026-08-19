@@ -176,10 +176,13 @@ for non-admins, or require admin to target others.
 | P1 | ✅ fixed | atomic claim (conditional status update) before credit; release on failure |
 | H1 | ✅ fixed | DB trigger decrements/blocks/restores room_availability (verified 2→1, overbook blocked, →2). Dormant until availability is seeded (H2) |
 | H3 | ✅ fixed | NaN/positive-int guard on room & guest counts |
-| H4 | ⚠️ partial | message made honest + gated to paid; automated refund dispatch still needs a payment_reference/refund_status column + payment-queue wiring (product decision) |
+| H4 | ✅ fixed | added hotel_bookings.refund_status; paid cancellation records a trackable 'requested' refund (worker/ops or a future payment-queue dispatcher actions it) instead of a silent promise |
 | H5 | ✅ fixed | refund only for paid bookings |
 | N1 | ✅ fixed | non-admins may only notify self; email recipient forced to JWT email; sms/push-to-other requires admin |
 | S1 | ✅ fixed | trigger on post_comments maintains comment_count (deleted_at-aware) + backfill (verified) |
-| H2 | ⛔ open | availability not seeded; needs capacity seeding to activate H1 enforcement — product decision |
+| H2 | ✅ fixed | seeded room_availability from room_types.total_rooms for a 365-day window (adjusted for existing active bookings), activating H1 enforcement. Operational follow-up: a nightly job should extend the window |
 
-Remaining open items are product/schema decisions (H2 seeding, H4 refund pipeline), not code defects.
+All 12 findings fixed. Two operational follow-ups remain (infrastructure, not defects):
+- a scheduled job to extend the room_availability window nightly (H2 seeded ~1 year);
+- an automated dispatcher that turns hotel_bookings.refund_status='requested' into an actual
+  payment-queue refund (H4 currently records the request durably for a worker/ops to action).
