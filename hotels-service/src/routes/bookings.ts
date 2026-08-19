@@ -196,8 +196,10 @@ router.post('/create', async (req: AuthenticatedRequest, res) => {
     const roomTypeIdVal = roomTypeId || room_type_id;
     const checkInVal = checkInDate || check_in_date || checkIn || check_in;
     const checkOutVal = checkOutDate || check_out_date || checkOut || check_out;
-    const roomsVal = parseInt(numberOfRooms || number_of_rooms || rooms || '1');
-    const guestsVal = parseInt(guestCount || guest_count || guests || '1');
+    // H3: guard against NaN/zero/negative so a non-numeric count can't poison pricing
+    // (subtotal = rate * nights * NaN -> NaN) or the inventory decrement.
+    const roomsVal = Math.max(1, parseInt(String(numberOfRooms ?? number_of_rooms ?? rooms ?? '1'), 10) || 1);
+    const guestsVal = Math.max(1, parseInt(String(guestCount ?? guest_count ?? guests ?? '1'), 10) || 1);
     const guestNameVal = guestName || guest_name || req.user!.email;
     const guestEmailVal = guestEmail || guest_email || userEmail;
     const guestPhoneVal = guestPhone || guest_phone || '';
@@ -378,14 +380,21 @@ router.post('/:id/cancel', async (req: AuthenticatedRequest, res) => {
       return;
     }
 
-    // Calculate refund
+    // Calculate refund.
+    // H5: only a booking that was actually paid can be refunded — otherwise cancelling an
+    // unpaid ('pending') booking reported a refund owed on money never taken.
+    const wasPaid = ['paid', 'completed', 'success'].includes(
+      String(booking.payment_status || '').toLowerCase()
+    );
     const checkInDate = new Date(booking.check_in_date);
     const now = new Date();
     const hoursUntilCheckIn = (checkInDate.getTime() - now.getTime()) / (1000 * 60 * 60);
 
     let refundPercentage = 0;
-    if (hoursUntilCheckIn >= 48) refundPercentage = 100;
-    else if (hoursUntilCheckIn >= 24) refundPercentage = 50;
+    if (wasPaid) {
+      if (hoursUntilCheckIn >= 48) refundPercentage = 100;
+      else if (hoursUntilCheckIn >= 24) refundPercentage = 50;
+    }
 
     const refundAmount = (booking.total_amount * refundPercentage) / 100;
 
@@ -410,10 +419,15 @@ router.post('/:id/cancel', async (req: AuthenticatedRequest, res) => {
         status: 'cancelled',
         refundAmount,
         refundPercentage,
+        // H4: a refund is recorded on the booking but the actual disbursement pipeline
+        // (payment-queue refund against the original charge) is not yet wired — say what is
+        // true rather than promising an automated payout that does not happen.
         message:
           refundAmount > 0
-            ? `Booking cancelled. Refund of ${refundAmount.toFixed(2)} (${refundPercentage}%) will be processed.`
-            : 'Booking cancelled. No refund available due to cancellation policy.',
+            ? `Booking cancelled. A refund of ${refundAmount.toFixed(2)} (${refundPercentage}%) has been recorded and will be reviewed for processing.`
+            : wasPaid
+              ? 'Booking cancelled. No refund available under the cancellation policy.'
+              : 'Booking cancelled. No payment was taken, so no refund is due.',
       },
     });
   } catch (error) {

@@ -126,11 +126,38 @@ router.post('/send', requireAuth, async (req: AuthenticatedRequest, res: Respons
       category = 'general',
     } = req.body;
 
-    // Use authenticated user's ID if not provided (for self-notifications)
-    const targetUserId = userId || req.user!.id;
+    // N1: this endpoint is requireAuth (any logged-in user), so it must not let a caller send to
+    // arbitrary recipients — that is a spam/phishing vector that also burns SMS/email credit.
+    // Non-admins may only notify themselves: cross-user targeting is rejected, the email recipient
+    // is forced to the caller's own verified JWT email (a client-supplied address is ignored), and
+    // sms/push to a caller-specified address requires admin since ownership can't be verified here.
+    // (Bulk/campaign sends have their own requireAdmin endpoints.)
+    const isAdminSender = isPlatformAdmin(req.user);
+    let targetUserId = userId || req.user!.id;
+    let effectiveRecipient = recipient;
+    if (!isAdminSender) {
+      if (userId && userId !== req.user!.id) {
+        return res.status(403).json({
+          success: false,
+          error: 'You can only send notifications to yourself',
+          metadata: { timestamp: new Date().toISOString(), requestId: req.requestId },
+        });
+      }
+      targetUserId = req.user!.id;
+      if (type === 'email') {
+        effectiveRecipient = req.user!.email;
+      } else {
+        return res.status(403).json({
+          success: false,
+          error: 'Sending SMS/push to a specified recipient requires admin privileges',
+          metadata: { timestamp: new Date().toISOString(), requestId: req.requestId },
+        });
+      }
+    }
 
-    // Validate required fields
-    if (!type || !recipient) {
+    // Validate required fields (effectiveRecipient: for a non-admin email send the recipient is
+    // derived from the caller's JWT, so a client-supplied one isn't required).
+    if (!type || !effectiveRecipient) {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields: type, recipient',
@@ -222,13 +249,13 @@ router.post('/send', requireAuth, async (req: AuthenticatedRequest, res: Respons
     // Set recipient field based on type
     switch (type) {
       case 'email':
-        historyData.recipient_email = recipient;
+        historyData.recipient_email = effectiveRecipient;
         break;
       case 'sms':
-        historyData.recipient_phone = recipient;
+        historyData.recipient_phone = effectiveRecipient;
         break;
       case 'push':
-        historyData.recipient_device_token = recipient;
+        historyData.recipient_device_token = effectiveRecipient;
         break;
     }
 
@@ -255,7 +282,7 @@ router.post('/send', requireAuth, async (req: AuthenticatedRequest, res: Respons
       userId: targetUserId,
       templateId,
       type,
-      recipient,
+      recipient: effectiveRecipient,
       subject,
       body: body || template?.body || '',
       variables,

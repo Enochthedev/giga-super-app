@@ -162,3 +162,24 @@ for non-admins, or require admin to target others.
 | S1 | 🟠 | social | comment_count never updates (E12) |
 | T2 | 🟠 | taxi | accept-race loser gets 500 instead of 409 |
 | H3 | 🟡 | hotels | parseInt without NaN guard on room/guest counts |
+
+---
+
+## Fix log (2026-08-19)
+
+| ID | Status | How |
+|----|--------|-----|
+| D1 | ✅ fixed | ownership (sender/admin) check on package update/cancel/delete |
+| D2 | ✅ fixed | column whitelist; delivery_fee admin-only |
+| T1 | ✅ fixed | earnings upsert(onConflict ride_id) before completion + error thrown; UNIQUE(ride_id) added |
+| T2 | ✅ fixed | maybeSingle → 409 on accept-race loss |
+| P1 | ✅ fixed | atomic claim (conditional status update) before credit; release on failure |
+| H1 | ✅ fixed | DB trigger decrements/blocks/restores room_availability (verified 2→1, overbook blocked, →2). Dormant until availability is seeded (H2) |
+| H3 | ✅ fixed | NaN/positive-int guard on room & guest counts |
+| H4 | ⚠️ partial | message made honest + gated to paid; automated refund dispatch still needs a payment_reference/refund_status column + payment-queue wiring (product decision) |
+| H5 | ✅ fixed | refund only for paid bookings |
+| N1 | ✅ fixed | non-admins may only notify self; email recipient forced to JWT email; sms/push-to-other requires admin |
+| S1 | ✅ fixed | trigger on post_comments maintains comment_count (deleted_at-aware) + backfill (verified) |
+| H2 | ⛔ open | availability not seeded; needs capacity seeding to activate H1 enforcement — product decision |
+
+Remaining open items are product/schema decisions (H2 seeding, H4 refund pipeline), not code defects.
