@@ -1599,35 +1599,81 @@ async function getPendingRoleApplications(roleName: string) {
 }
 
 /**
+ * Module -> table for the pending-entry approve/reject endpoints.
+ *
+ * Includes the module keys GET /api/pending-entries accepts as its `module`
+ * query param ('taxi', 'ecommerce') alongside the response keys ('drivers',
+ * 'products'), so a client can round-trip whichever key it filtered on.
+ */
+const PENDING_ENTRY_TABLES = new Map<string, string>([
+  ['products', 'ecommerce_products'],
+  ['ecommerce', 'ecommerce_products'],
+  ['hotels', 'hotels'],
+  ['drivers', 'role_applications'],
+  ['taxi', 'role_applications'],
+  ['sellers', 'role_applications'],
+  ['hosts', 'role_applications'],
+  ['advertisers', 'role_applications'],
+  ['media', 'media_content'],
+]);
+
+/**
  * Role-specific onboarding once a role application is approved.
  * Mirrors what the legacy review-role-application edge fn + pending-entries did.
+ *
+ * Every write is upserted on the profile's unique user_id: an approval may run
+ * against a user who already has a skeleton profile row (the on_new_role_granted
+ * trigger creates one whenever a role is granted), and a plain insert would fail
+ * on the unique constraint and silently leave the profile unverified/empty.
+ * Failures are collected and returned so the caller can surface them instead of
+ * reporting a clean approval for a half-finished onboarding.
  */
-async function completeRoleOnboarding(application: any, approvedBy: string) {
+async function completeRoleOnboarding(application: any, approvedBy: string): Promise<string[]> {
   const roleName = application.role_name;
   const appData = application.application_data || {};
+  const userId = application.user_id;
+  const warnings: string[] = [];
+
+  const record = (step: string, error: any) => {
+    if (!error) return;
+    warnings.push(`${step}: ${error.message}`);
+    logger.error('Role onboarding step failed', {
+      step,
+      role: roleName,
+      userId,
+      applicationId: application.id,
+      error: error.message,
+    });
+  };
 
   if (roleName === 'DRIVER') {
-    await supabase.from('driver_profiles').insert({
-      user_id: application.user_id,
-      license_number: appData.license_number,
-      vehicle_type: appData.vehicle_type || 'car',
-      vehicle_info: {
-        make: appData.vehicle_make,
-        model: appData.vehicle_model,
-        plate_number: appData.plate_number,
-        color: appData.vehicle_color,
-        year: appData.vehicle_year,
+    // license_number is NOT NULL on driver_profiles, so an application missing it
+    // can never produce a usable driver row - fail loudly rather than half-onboard.
+    const { error } = await supabase.from('driver_profiles').upsert(
+      {
+        user_id: userId,
+        license_number: appData.license_number,
+        vehicle_type: appData.vehicle_type || 'car',
+        vehicle_info: {
+          make: appData.vehicle_make,
+          model: appData.vehicle_model,
+          plate_number: appData.plate_number,
+          color: appData.vehicle_color,
+          year: appData.vehicle_year,
+        },
+        is_verified: true,
+        subscription_tier: 'BASIC',
       },
-      is_verified: true,
-      subscription_tier: 'BASIC',
-    });
+      { onConflict: 'user_id' }
+    );
+    record('driver_profiles', error);
   }
 
   if (roleName === 'VENDOR') {
-    await supabase.from('ecommerce_vendors').upsert(
+    const { error } = await supabase.from('ecommerce_vendors').upsert(
       {
-        id: application.user_id,
-        user_id: application.user_id,
+        id: userId,
+        user_id: userId,
         business_name: appData.business_name || '',
         business_registration: appData.business_registration || null,
         tax_id: appData.tax_id || null,
@@ -1640,20 +1686,64 @@ async function completeRoleOnboarding(application: any, approvedBy: string) {
       },
       { onConflict: 'id' }
     );
+    record('ecommerce_vendors', error);
   }
 
-  // Grant the role (ignore duplicate-role errors)
-  await supabase.from('user_roles').insert({
-    user_id: application.user_id,
-    role_name: roleName,
-    granted_by: approvedBy,
-  });
+  if (roleName === 'HOST') {
+    const { error } = await supabase.from('host_profiles').upsert(
+      {
+        user_id: userId,
+        business_name: appData.business_name || null,
+        host_type: appData.host_type || 'INDIVIDUAL',
+        description: appData.description || null,
+        is_verified: true,
+        subscription_tier: 'BASIC',
+      },
+      { onConflict: 'user_id' }
+    );
+    record('host_profiles', error);
+  }
 
-  // Make it the active role
-  await supabase
-    .from('user_active_roles')
-    .update({ active_role: roleName })
-    .eq('user_id', application.user_id);
+  if (roleName === 'ADVERTISER') {
+    // company_name is NOT NULL, so the trigger's skeleton insert can never create
+    // this row - the approval path is the only thing that populates it.
+    const { error } = await supabase.from('advertiser_profiles').upsert(
+      {
+        user_id: userId,
+        company_name: appData.company_name || appData.business_name,
+        industry: appData.industry || null,
+        website: appData.website || null,
+        is_verified: true,
+        subscription_tier: 'BASIC',
+      },
+      { onConflict: 'user_id' }
+    );
+    record('advertiser_profiles', error);
+  }
+
+  // Grant the role (a user re-approved for a role they already hold is fine)
+  const { error: roleError } = await supabase.from('user_roles').upsert(
+    {
+      user_id: userId,
+      role_name: roleName,
+      granted_by: approvedBy,
+    },
+    { onConflict: 'user_id,role_name', ignoreDuplicates: true }
+  );
+  record('user_roles', roleError);
+
+  // Make it the active role (the row may not exist yet for older accounts)
+  const { error: activeRoleError } = await supabase.from('user_active_roles').upsert(
+    {
+      user_id: userId,
+      active_role: roleName,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: 'user_id' }
+  );
+  record('user_active_roles', activeRoleError);
+
+  return warnings;
 }
 
 /**
@@ -1739,9 +1829,10 @@ router.post(
 
       if (updateError) throw updateError;
 
-      if (action === 'approve') {
-        await completeRoleOnboarding(application, reviewedBy || 'system');
-      }
+      const onboardingWarnings =
+        action === 'approve'
+          ? await completeRoleOnboarding(application, reviewedBy || 'system')
+          : [];
 
       await createAudit(req, `${action}_role_application`, 'role_applications', application_id, {
         role_name: application.role_name,
@@ -1750,6 +1841,7 @@ router.post(
       res.json({
         success: true,
         data: { application_id, action, role_name: application.role_name },
+        ...(onboardingWarnings.length ? { warnings: onboardingWarnings } : {}),
       });
     } catch (error: any) {
       logger.error('Failed to review role application', { error: error.message });
@@ -1772,7 +1864,7 @@ router.post(
  *         name: module
  *         schema:
  *           type: string
- *           enum: [ecommerce, hotels, taxi, media, sellers]
+ *           enum: [ecommerce, hotels, taxi, media, sellers, hosts, advertisers]
  *         description: Filter by specific module
  *     responses:
  *       200:
@@ -1971,7 +2063,7 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
- *           enum: [products, hotels, drivers, sellers, media]
+ *           enum: [products, ecommerce, hotels, drivers, taxi, sellers, hosts, advertisers, media]
  *       - in: path
  *         name: id
  *         required: true
@@ -1990,28 +2082,17 @@ router.post(
       const { module, id } = req.params;
       const approvedBy = req.user?.id || 'system';
 
-      const tableMap: Record<string, string> = {
-        products: 'ecommerce_products',
-        hotels: 'hotels',
-        drivers: 'role_applications',
-        sellers: 'role_applications',
-        hosts: 'role_applications',
-        advertisers: 'role_applications',
-        media: 'media_content',
-      };
-
-      // role_applications uses 'status', 'reviewed_by', 'reviewed_at'
-      // all other tables use 'approval_status', 'approved_by', 'approved_at'
-      const isRoleApplication = tableMap[module] === 'role_applications';
-
-      const tableName = tableMap[module];
+      const tableName = PENDING_ENTRY_TABLES.get(module);
       if (!tableName) {
         return res.status(400).json({
           success: false,
-          error:
-            'Invalid module. Valid modules: products, hotels, drivers, sellers, hosts, advertisers, media',
+          error: `Invalid module. Valid modules: ${[...PENDING_ENTRY_TABLES.keys()].join(', ')}`,
         });
       }
+
+      // role_applications uses 'status', 'reviewed_by', 'reviewed_at', 'rejection_reason';
+      // every other table uses 'approval_status', 'approved_by', 'approved_at'
+      const isRoleApplication = tableName === 'role_applications';
 
       const updatePayload = isRoleApplication
         ? {
@@ -2039,10 +2120,9 @@ router.post(
         return res.status(404).json({ success: false, error: 'Pending entry not found' });
       }
 
-      // Complete role-specific onboarding (driver profile, vendor record, role grant)
-      if (isRoleApplication && data) {
-        await completeRoleOnboarding(data, approvedBy);
-      }
+      // Complete role-specific onboarding (module profile row, role grant, active role)
+      const onboardingWarnings =
+        isRoleApplication && data ? await completeRoleOnboarding(data, approvedBy) : [];
 
       await createAudit(req, `approve_${module}`, tableName, id);
 
@@ -2050,6 +2130,7 @@ router.post(
         success: true,
         message: `${module} entry approved successfully`,
         data,
+        ...(onboardingWarnings.length ? { warnings: onboardingWarnings } : {}),
       });
     } catch (error: any) {
       logger.error('Failed to approve entry', { error: error.message });
@@ -2073,7 +2154,7 @@ router.post(
  *         required: true
  *         schema:
  *           type: string
- *           enum: [products, hotels, drivers, media]
+ *           enum: [products, ecommerce, hotels, drivers, taxi, sellers, hosts, advertisers, media]
  *       - in: path
  *         name: id
  *         required: true
@@ -2101,28 +2182,17 @@ router.post(
       const { reason } = req.body;
       const rejectedBy = req.user?.id || 'system';
 
-      const tableMap: Record<string, string> = {
-        products: 'ecommerce_products',
-        hotels: 'hotels',
-        drivers: 'role_applications',
-        sellers: 'role_applications',
-        hosts: 'role_applications',
-        advertisers: 'role_applications',
-        media: 'media_content',
-      };
-
-      // role_applications uses 'status', 'reviewed_by', 'reviewed_at', 'rejection_reason'
-      // all other tables use 'approval_status', 'approved_by' / 'rejected_by', 'rejection_reason'
-      const isRoleApplication = tableMap[module] === 'role_applications';
-
-      const tableName = tableMap[module];
+      const tableName = PENDING_ENTRY_TABLES.get(module);
       if (!tableName) {
         return res.status(400).json({
           success: false,
-          error:
-            'Invalid module. Valid modules: products, hotels, drivers, sellers, hosts, advertisers, media',
+          error: `Invalid module. Valid modules: ${[...PENDING_ENTRY_TABLES.keys()].join(', ')}`,
         });
       }
+
+      // role_applications uses 'status', 'reviewed_by', 'reviewed_at', 'rejection_reason';
+      // every other table uses 'approval_status', 'approved_by', 'approved_at'
+      const isRoleApplication = tableName === 'role_applications';
 
       const updatePayload = isRoleApplication
         ? {
