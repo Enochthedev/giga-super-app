@@ -398,6 +398,11 @@ router.post('/:id/cancel', async (req: AuthenticatedRequest, res) => {
 
     const refundAmount = (booking.total_amount * refundPercentage) / 100;
 
+    // H4: record a durable, trackable refund state instead of silently promising a payout.
+    // 'requested' → a refund worker / ops (or a future payment-queue dispatcher) will action it;
+    // 'not_eligible' → paid but outside the refund window; 'no_payment' → nothing was charged.
+    const refundStatus = !wasPaid ? 'no_payment' : refundAmount > 0 ? 'requested' : 'not_eligible';
+
     // Update booking
     const { error: updateError } = await databaseService.supabase
       .from('hotel_bookings')
@@ -406,6 +411,7 @@ router.post('/:id/cancel', async (req: AuthenticatedRequest, res) => {
         cancellation_reason: reason,
         cancelled_at: new Date().toISOString(),
         refund_amount: refundAmount,
+        refund_status: refundStatus,
         updated_at: new Date().toISOString(),
       })
       .eq('id', bookingId);
