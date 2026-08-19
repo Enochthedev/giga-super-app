@@ -274,18 +274,13 @@ export class WalletService {
       // Get old balance for audit
       const oldBalance = await this.getBalance(transaction.user_id);
 
-      // Credit wallet
-      const { data: wallet, error: walletError } = await supabase.rpc('credit_wallet', {
-        p_user_id: transaction.user_id,
-        p_amount: verification.amount,
-      });
-
-      if (walletError) {
-        throw walletError;
-      }
-
-      // Update transaction status
-      await supabase
+      // P1: atomically CLAIM the transaction before crediting. Paystack fires webhooks more than
+      // once and users retry verify, so the previous "check status then credit then set status"
+      // sequence could credit twice (two callers both passed the status check; and the status
+      // update's error was unchecked). The conditional update below flips the row to 'completed'
+      // only if it is not already completed; because `reference` is unique, exactly one concurrent
+      // caller gets a row back. Anyone who does not win the claim must NOT credit.
+      const { data: claimed, error: claimError } = await supabase
         .from('wallet_transactions')
         .update({
           status: 'completed',
@@ -295,7 +290,40 @@ export class WalletService {
             paystack_data: verification,
           },
         })
-        .eq('reference', reference);
+        .eq('reference', reference)
+        .neq('status', 'completed')
+        .select()
+        .maybeSingle();
+
+      if (claimError) {
+        throw claimError;
+      }
+
+      if (!claimed) {
+        // Another concurrent verify already completed this top-up — do not credit again.
+        const balance = await this.getBalance(transaction.user_id);
+        return {
+          success: true,
+          amount: parseFloat(transaction.amount),
+          newBalance: balance.balance,
+        };
+      }
+
+      // We own the claim; credit the wallet exactly once.
+      const { error: walletError } = await supabase.rpc('credit_wallet', {
+        p_user_id: transaction.user_id,
+        p_amount: verification.amount,
+      });
+
+      if (walletError) {
+        // Release the claim so a later retry can complete the credit instead of it being
+        // stuck 'completed' but uncredited.
+        await supabase
+          .from('wallet_transactions')
+          .update({ status: transaction.status })
+          .eq('reference', reference);
+        throw walletError;
+      }
 
       const updatedBalance = await this.getBalance(transaction.user_id);
 

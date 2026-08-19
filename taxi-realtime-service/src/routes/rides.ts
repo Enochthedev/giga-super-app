@@ -507,9 +507,16 @@ router.post('/:rideId/accept', authMiddleware, async (req: Request, res: Respons
       .eq('id', rideId)
       .eq('status', 'requested')
       .select()
-      .single();
+      .maybeSingle();
 
     if (error) throw error;
+    // T2: the conditional update above matches 0 rows if another driver won the race. Return a
+    // clean 409 rather than letting .single() throw a 500.
+    if (!ride)
+      return res.status(409).json({
+        success: false,
+        error: { code: 'RIDE_UNAVAILABLE', message: 'Ride was just taken by another driver' },
+      });
     await logAudit('UPDATE', 'rides', rideId, userId, {
       action: 'ride_accepted',
       driver_id: userId,
@@ -671,6 +678,31 @@ router.post('/:rideId/complete', authMiddleware, async (req: Request, res: Respo
     if (dropoff_lat && dropoff_lng)
       updateData.actual_dropoff_location = { latitude: dropoff_lat, longitude: dropoff_lng };
 
+    // T1: record the driver's earnings BEFORE flipping the ride to 'completed'. If this fails,
+    // the ride stays 'in_progress' so /complete can be retried; the upsert on ride_id keeps the
+    // retry idempotent (no double earning). Previously this was a fire-and-forget insert whose
+    // error was swallowed, so a failure left the driver silently uncredited with no retry path
+    // (the status guard at the top blocks a completed ride).
+    const { error: earningError } = await supabase.from('driver_earnings').upsert(
+      {
+        driver_id: userId,
+        ride_id: rideId,
+        amount: finalFare,
+        commission: platformFee,
+        net_earning: driverEarning,
+        payout_status: 'pending',
+      },
+      { onConflict: 'ride_id' }
+    );
+    if (earningError) {
+      console.error('Failed to record driver earnings', {
+        rideId,
+        driverId: userId,
+        error: earningError.message,
+      });
+      throw earningError;
+    }
+
     const { data: updatedRide, error } = await supabase
       .from('rides')
       .update(updateData)
@@ -678,15 +710,6 @@ router.post('/:rideId/complete', authMiddleware, async (req: Request, res: Respo
       .select()
       .single();
     if (error) throw error;
-
-    await supabase.from('driver_earnings').insert({
-      driver_id: userId,
-      ride_id: rideId,
-      amount: finalFare,
-      commission: platformFee,
-      net_earning: driverEarning,
-      payout_status: 'pending',
-    });
     await logAudit('UPDATE', 'rides', rideId, userId, {
       action: 'ride_completed',
       final_fare: finalFare,
