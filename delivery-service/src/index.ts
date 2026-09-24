@@ -98,12 +98,12 @@ app.get('/', (_req, res) => {
 });
 
 // 404 handler
-app.use((_req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
     error: {
       code: 'ENDPOINT_NOT_FOUND',
-      message: 'Route not found',
+      message: `Route ${req.method} ${req.path} not found`,
     },
     metadata: {
       timestamp: new Date().toISOString(),
