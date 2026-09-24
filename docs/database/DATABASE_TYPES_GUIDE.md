@@ -2,7 +2,9 @@
 
 ## Overview
 
-This guide explains how database types are managed across all services in the Giga platform. We use a **single source of truth** approach where types are generated from Supabase and shared across all Railway services.
+This guide explains how database types are managed across all services in the
+Giga platform. We use a **single source of truth** approach where types are
+generated from Supabase and shared across all Railway services.
 
 ## Architecture
 
@@ -52,7 +54,12 @@ npm run db:watch-types
 
 ```typescript
 // Import from shared package
-import { Database, UserProfile, Hotel, SocialPost } from '@shared/types/database';
+import {
+  Database,
+  UserProfile,
+  Hotel,
+  SocialPost,
+} from '@shared/types/database';
 import { createClient } from '@supabase/supabase-js';
 
 // Create typed Supabase client
@@ -160,8 +167,12 @@ import {
 } from '@shared/types/database';
 
 // Use directly without Tables<>
-const user: UserProfile = { /* ... */ };
-const post: SocialPost = { /* ... */ };
+const user: UserProfile = {
+  /* ... */
+};
+const post: SocialPost = {
+  /* ... */
+};
 ```
 
 ## Handling Schema Changes
@@ -169,16 +180,19 @@ const post: SocialPost = { /* ... */ };
 ### When You Update the Database Schema
 
 1. **Apply migration in Supabase**:
+
    ```bash
    supabase db push
    ```
 
 2. **Regenerate types**:
+
    ```bash
    npm run db:generate-types
    ```
 
 3. **Rebuild shared package**:
+
    ```bash
    cd shared && npm run build
    ```
@@ -197,6 +211,7 @@ npm run db:watch-types
 ```
 
 This will automatically regenerate types whenever you:
+
 - Add a new migration
 - Modify an existing migration
 - Change the database schema
@@ -215,7 +230,9 @@ const supabase = createClient<Database>(
   process.env.SUPABASE_ANON_KEY!
 );
 
-export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+export async function getUserProfile(
+  userId: string
+): Promise<UserProfile | null> {
   const { data, error } = await supabase
     .from('user_profiles')
     .select('*')
@@ -238,7 +255,9 @@ const supabase = createClient<Database>(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function createPost(postData: InsertSocialPost): Promise<SocialPost> {
+export async function createPost(
+  postData: InsertSocialPost
+): Promise<SocialPost> {
   const { data, error } = await supabase
     .from('social_posts')
     .insert(postData)
@@ -284,6 +303,7 @@ export async function approveRequest(approvalId: string, adminId: string) {
 ### 1. Always Use Generated Types
 
 ❌ **Don't** define your own database types:
+
 ```typescript
 // Bad - manual types get out of sync
 interface User {
@@ -294,6 +314,7 @@ interface User {
 ```
 
 ✅ **Do** use generated types:
+
 ```typescript
 // Good - always in sync with database
 import { UserProfile } from '@shared/types/database';
@@ -302,12 +323,14 @@ import { UserProfile } from '@shared/types/database';
 ### 2. Use Helper Types
 
 ❌ **Don't** manually construct insert/update types:
+
 ```typescript
 // Bad - error-prone
 type NewUser = Omit<UserProfile, 'created_at' | 'updated_at'>;
 ```
 
 ✅ **Do** use provided helpers:
+
 ```typescript
 // Good - automatically correct
 import { Insertable } from '@shared/types/database';
@@ -317,6 +340,7 @@ type NewUser = Insertable<'user_profiles'>;
 ### 3. Regenerate After Schema Changes
 
 Always regenerate types after:
+
 - Adding new tables
 - Adding/removing columns
 - Changing column types
@@ -330,6 +354,7 @@ npm run db:generate-types
 ### 4. Commit Generated Types
 
 ✅ **Do** commit `shared/types/database.ts` to git:
+
 - Ensures all developers have the same types
 - CI/CD can build without database access
 - Types are versioned with your code
@@ -351,11 +376,13 @@ const { data } = await supabase
 ### Types Not Updating
 
 1. **Regenerate types**:
+
    ```bash
    npm run db:generate-types
    ```
 
 2. **Rebuild shared package**:
+
    ```bash
    cd shared && npm run build
    ```
@@ -398,11 +425,13 @@ The project ref is stored in `supabase/.temp/project-ref`.
 If services can't find types:
 
 1. **Check shared package is built**:
+
    ```bash
    cd shared && npm run build
    ```
 
 2. **Verify import paths**:
+
    ```typescript
    import { Database } from '@shared/types/database'; // ✅ Correct
    import { Database } from 'shared/types/database'; // ❌ Wrong
@@ -433,20 +462,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Generate database types
         run: npm run db:generate-types
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      
+
       - name: Type check all services
         run: npm run type-check
 ```
@@ -458,3 +487,4 @@ Add to `.husky/pre-commit`:
 ```bash
 #!/bin/sh
 . "$(dirname "$0")/_/husky.s
+```

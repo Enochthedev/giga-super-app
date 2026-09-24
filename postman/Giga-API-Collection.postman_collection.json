@@ -27,12 +27,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin-get-dashboard-stats?period=30d",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-get-dashboard-stats"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["admin-get-dashboard-stats"],
               "query": [
                 {
                   "key": "period",
@@ -60,12 +56,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin-get-dashboard-stats?period=30d",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "admin-get-dashboard-stats"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["admin-get-dashboard-stats"],
                   "query": [
                     {
                       "key": "period",
@@ -103,12 +95,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin-get-dashboard-stats?period=30d",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "admin-get-dashboard-stats"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["admin-get-dashboard-stats"],
                   "query": [
                     {
                       "key": "period",
@@ -177,12 +165,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin-financial-reports?startDate=2024-01-01&endDate=2024-01-31&type=revenue",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-financial-reports"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["admin-financial-reports"],
               "query": [
                 {
                   "key": "startDate",
@@ -220,12 +204,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin-financial-reports?startDate=2024-01-01&endDate=2024-01-31&type=revenue",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "admin-financial-reports"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["admin-financial-reports"],
                   "query": [
                     {
                       "key": "startDate",
@@ -308,12 +288,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin-manage-users",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-manage-users"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["admin-manage-users"]
             },
             "description": "Search and manage platform users. View details, status, and history.\n\n**Authentication:** Required\n\n**Request Body:**\nSearch criteria\n",
             "body": {
@@ -347,12 +323,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin-manage-users",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "admin-manage-users"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["admin-manage-users"]
                 },
                 "description": "Search and manage platform users. View details, status, and history.\n\n**Authentication:** Required\n\n**Request Body:**\nSearch criteria\n",
                 "body": {
@@ -427,12 +399,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/block-user",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "block-user"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["block-user"]
             },
             "description": "Suspend a user account, preventing login and access.\n\n**Authentication:** Required\n\n**Request Body:**\nBlock details\n",
             "body": {
@@ -466,12 +434,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/block-user",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "block-user"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["block-user"]
                 },
                 "description": "Suspend a user account, preventing login and access.\n\n**Authentication:** Required\n\n**Request Body:**\nBlock details\n",
                 "body": {
@@ -546,12 +510,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/unblock-user",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "unblock-user"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["unblock-user"]
             },
             "description": "Restore access to a suspended user account.\n\n**Authentication:** Required\n\n**Request Body:**\nUnblock details\n",
             "body": {
@@ -585,12 +545,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/unblock-user",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "unblock-user"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["unblock-user"]
                 },
                 "description": "Restore access to a suspended user account.\n\n**Authentication:** Required\n\n**Request Body:**\nUnblock details\n",
                 "body": {
@@ -665,12 +621,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/review-role-application",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "review-role-application"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["review-role-application"]
             },
             "description": "Approve or reject a user request for a specialized role (vendor, driver, etc.).\n\n**Authentication:** Required\n\n**Request Body:**\nReview decision\n",
             "body": {
@@ -704,12 +656,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/review-role-application",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "review-role-application"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["review-role-application"]
                 },
                 "description": "Approve or reject a user request for a specialized role (vendor, driver, etc.).\n\n**Authentication:** Required\n\n**Request Body:**\nReview decision\n",
                 "body": {
@@ -780,12 +728,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-platform-settings",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-platform-settings"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-platform-settings"]
             },
             "description": "Retrieve global platform configuration settings.\n\n**Authentication:** Required\n"
           },
@@ -806,12 +750,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-platform-settings",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-platform-settings"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-platform-settings"]
                 },
                 "description": "Retrieve global platform configuration settings.\n\n**Authentication:** Required\n"
               },
@@ -877,12 +817,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/update-platform-setting",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-platform-setting"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-platform-setting"]
             },
             "description": "Modify a global platform setting.\n\n**Authentication:** Required\n\n**Request Body:**\nSetting to update\n\n**Notes:**\n- Requires SUPER_ADMIN role",
             "body": {
@@ -916,12 +852,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-platform-setting",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-platform-setting"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-platform-setting"]
                 },
                 "description": "Modify a global platform setting.\n\n**Authentication:** Required\n\n**Request Body:**\nSetting to update\n\n**Notes:**\n- Requires SUPER_ADMIN role",
                 "body": {
@@ -996,12 +928,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/admin-manage-content",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "admin-manage-content"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["admin-manage-content"]
             },
             "description": "Moderate user-generated content (posts, comments, reviews).\n\n**Authentication:** Required\n\n**Request Body:**\nContent action\n",
             "body": {
@@ -1035,12 +963,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/admin-manage-content",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "admin-manage-content"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["admin-manage-content"]
                 },
                 "description": "Moderate user-generated content (posts, comments, reviews).\n\n**Authentication:** Required\n\n**Request Body:**\nContent action\n",
                 "body": {
@@ -1115,12 +1039,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Admin-process-payout",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Admin-process-payout"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Admin-process-payout"]
             },
             "description": "Manually approve/process a vendor payout request.\n\n**Authentication:** Required\n\n**Request Body:**\nPayout processing details\n",
             "body": {
@@ -1154,12 +1074,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Admin-process-payout",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Admin-process-payout"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Admin-process-payout"]
                 },
                 "description": "Manually approve/process a vendor payout request.\n\n**Authentication:** Required\n\n**Request Body:**\nPayout processing details\n",
                 "body": {
@@ -1236,12 +1152,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-user-profile?userId=123e4567-e89b-12d3-a456-426614174000",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-user-profile"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-user-profile"],
               "query": [
                 {
                   "key": "userId",
@@ -1269,12 +1181,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-profile?userId=123e4567-e89b-12d3-a456-426614174000",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-profile"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-profile"],
                   "query": [
                     {
                       "key": "userId",
@@ -1312,12 +1220,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-profile?userId=123e4567-e89b-12d3-a456-426614174000",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-profile"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-profile"],
                   "query": [
                     {
                       "key": "userId",
@@ -1355,12 +1259,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-profile?userId=123e4567-e89b-12d3-a456-426614174000",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-profile"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-profile"],
                   "query": [
                     {
                       "key": "userId",
@@ -1398,12 +1298,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-profile?userId=123e4567-e89b-12d3-a456-426614174000",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-profile"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-profile"],
                   "query": [
                     {
                       "key": "userId",
@@ -1441,12 +1337,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-profile?userId=123e4567-e89b-12d3-a456-426614174000",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-profile"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-profile"],
                   "query": [
                     {
                       "key": "userId",
@@ -1524,12 +1416,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-current-profile",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-current-profile"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-current-profile"]
             },
             "description": "Retrieves the authenticated user's own profile. Shortcut that doesn't require passing userId.\n\n**Authentication:** Required\n\n**Edge Cases:**\n- **Expired Token:** User sends request with expired auth token → Returns 401 with token expired message\n"
           },
@@ -1550,12 +1438,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-current-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-current-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-current-profile"]
                 },
                 "description": "Retrieves the authenticated user's own profile. Shortcut that doesn't require passing userId.\n\n**Authentication:** Required\n\n**Edge Cases:**\n- **Expired Token:** User sends request with expired auth token → Returns 401 with token expired message\n"
               },
@@ -1586,12 +1470,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-current-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-current-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-current-profile"]
                 },
                 "description": "Retrieves the authenticated user's own profile. Shortcut that doesn't require passing userId.\n\n**Authentication:** Required\n\n**Edge Cases:**\n- **Expired Token:** User sends request with expired auth token → Returns 401 with token expired message\n"
               },
@@ -1622,12 +1502,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-current-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-current-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-current-profile"]
                 },
                 "description": "Retrieves the authenticated user's own profile. Shortcut that doesn't require passing userId.\n\n**Authentication:** Required\n\n**Edge Cases:**\n- **Expired Token:** User sends request with expired auth token → Returns 401 with token expired message\n"
               },
@@ -1658,12 +1534,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-current-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-current-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-current-profile"]
                 },
                 "description": "Retrieves the authenticated user's own profile. Shortcut that doesn't require passing userId.\n\n**Authentication:** Required\n\n**Edge Cases:**\n- **Expired Token:** User sends request with expired auth token → Returns 401 with token expired message\n"
               },
@@ -1729,12 +1601,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/update-user-profile",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-user-profile"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-user-profile"]
             },
             "description": "Updates the authenticated user's profile. Allows updating name, bio, avatar, phone, and preferences.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile fields to update. Only include fields you want to change.\n\n**Edge Cases:**\n- **Empty Update:** Request body is empty {} → Returns 400 with message that at least one field is required\n- **Bio Too Long:** Bio is over 500 characters → Returns 400 with max length error\n- **Profanity in Bio:** Bio contains profanity or offensive content → May be flagged for moderation or rejected\n\n**Notes:**\n- Avatar URL should point to an image hosted via upload-file endpoint\n- Phone number verification may be required for some features",
             "body": {
@@ -1768,12 +1636,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-user-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-user-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-user-profile"]
                 },
                 "description": "Updates the authenticated user's profile. Allows updating name, bio, avatar, phone, and preferences.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile fields to update. Only include fields you want to change.\n\n**Edge Cases:**\n- **Empty Update:** Request body is empty {} → Returns 400 with message that at least one field is required\n- **Bio Too Long:** Bio is over 500 characters → Returns 400 with max length error\n- **Profanity in Bio:** Bio contains profanity or offensive content → May be flagged for moderation or rejected\n\n**Notes:**\n- Avatar URL should point to an image hosted via upload-file endpoint\n- Phone number verification may be required for some features",
                 "body": {
@@ -1817,12 +1681,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-user-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-user-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-user-profile"]
                 },
                 "description": "Updates the authenticated user's profile. Allows updating name, bio, avatar, phone, and preferences.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile fields to update. Only include fields you want to change.\n\n**Edge Cases:**\n- **Empty Update:** Request body is empty {} → Returns 400 with message that at least one field is required\n- **Bio Too Long:** Bio is over 500 characters → Returns 400 with max length error\n- **Profanity in Bio:** Bio contains profanity or offensive content → May be flagged for moderation or rejected\n\n**Notes:**\n- Avatar URL should point to an image hosted via upload-file endpoint\n- Phone number verification may be required for some features",
                 "body": {
@@ -1866,12 +1726,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-user-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-user-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-user-profile"]
                 },
                 "description": "Updates the authenticated user's profile. Allows updating name, bio, avatar, phone, and preferences.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile fields to update. Only include fields you want to change.\n\n**Edge Cases:**\n- **Empty Update:** Request body is empty {} → Returns 400 with message that at least one field is required\n- **Bio Too Long:** Bio is over 500 characters → Returns 400 with max length error\n- **Profanity in Bio:** Bio contains profanity or offensive content → May be flagged for moderation or rejected\n\n**Notes:**\n- Avatar URL should point to an image hosted via upload-file endpoint\n- Phone number verification may be required for some features",
                 "body": {
@@ -1915,12 +1771,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-user-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-user-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-user-profile"]
                 },
                 "description": "Updates the authenticated user's profile. Allows updating name, bio, avatar, phone, and preferences.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile fields to update. Only include fields you want to change.\n\n**Edge Cases:**\n- **Empty Update:** Request body is empty {} → Returns 400 with message that at least one field is required\n- **Bio Too Long:** Bio is over 500 characters → Returns 400 with max length error\n- **Profanity in Bio:** Bio contains profanity or offensive content → May be flagged for moderation or rejected\n\n**Notes:**\n- Avatar URL should point to an image hosted via upload-file endpoint\n- Phone number verification may be required for some features",
                 "body": {
@@ -1964,12 +1816,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-user-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-user-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-user-profile"]
                 },
                 "description": "Updates the authenticated user's profile. Allows updating name, bio, avatar, phone, and preferences.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile fields to update. Only include fields you want to change.\n\n**Edge Cases:**\n- **Empty Update:** Request body is empty {} → Returns 400 with message that at least one field is required\n- **Bio Too Long:** Bio is over 500 characters → Returns 400 with max length error\n- **Profanity in Bio:** Bio contains profanity or offensive content → May be flagged for moderation or rejected\n\n**Notes:**\n- Avatar URL should point to an image hosted via upload-file endpoint\n- Phone number verification may be required for some features",
                 "body": {
@@ -2044,12 +1892,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/switch-role",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "switch-role"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["switch-role"]
             },
             "description": "Switch the user's active role between available roles (user, vendor, driver, admin). User must have the target role in their available_roles.\n\n**Authentication:** Required\n\n**Request Body:**\nThe role to switch to\n\n**Edge Cases:**\n- **Same Role:** User is already in user role and tries to switch to user → Returns 200 with no change message\n- **Admin Role Without Permission:** Regular user tries to access admin role → Returns 403 Forbidden\n",
             "body": {
@@ -2083,12 +1927,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/switch-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "switch-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["switch-role"]
                 },
                 "description": "Switch the user's active role between available roles (user, vendor, driver, admin). User must have the target role in their available_roles.\n\n**Authentication:** Required\n\n**Request Body:**\nThe role to switch to\n\n**Edge Cases:**\n- **Same Role:** User is already in user role and tries to switch to user → Returns 200 with no change message\n- **Admin Role Without Permission:** Regular user tries to access admin role → Returns 403 Forbidden\n",
                 "body": {
@@ -2132,12 +1972,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/switch-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "switch-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["switch-role"]
                 },
                 "description": "Switch the user's active role between available roles (user, vendor, driver, admin). User must have the target role in their available_roles.\n\n**Authentication:** Required\n\n**Request Body:**\nThe role to switch to\n\n**Edge Cases:**\n- **Same Role:** User is already in user role and tries to switch to user → Returns 200 with no change message\n- **Admin Role Without Permission:** Regular user tries to access admin role → Returns 403 Forbidden\n",
                 "body": {
@@ -2181,12 +2017,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/switch-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "switch-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["switch-role"]
                 },
                 "description": "Switch the user's active role between available roles (user, vendor, driver, admin). User must have the target role in their available_roles.\n\n**Authentication:** Required\n\n**Request Body:**\nThe role to switch to\n\n**Edge Cases:**\n- **Same Role:** User is already in user role and tries to switch to user → Returns 200 with no change message\n- **Admin Role Without Permission:** Regular user tries to access admin role → Returns 403 Forbidden\n",
                 "body": {
@@ -2230,12 +2062,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/switch-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "switch-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["switch-role"]
                 },
                 "description": "Switch the user's active role between available roles (user, vendor, driver, admin). User must have the target role in their available_roles.\n\n**Authentication:** Required\n\n**Request Body:**\nThe role to switch to\n\n**Edge Cases:**\n- **Same Role:** User is already in user role and tries to switch to user → Returns 200 with no change message\n- **Admin Role Without Permission:** Regular user tries to access admin role → Returns 403 Forbidden\n",
                 "body": {
@@ -2279,12 +2107,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/switch-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "switch-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["switch-role"]
                 },
                 "description": "Switch the user's active role between available roles (user, vendor, driver, admin). User must have the target role in their available_roles.\n\n**Authentication:** Required\n\n**Request Body:**\nThe role to switch to\n\n**Edge Cases:**\n- **Same Role:** User is already in user role and tries to switch to user → Returns 200 with no change message\n- **Admin Role Without Permission:** Regular user tries to access admin role → Returns 403 Forbidden\n",
                 "body": {
@@ -2359,12 +2183,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/apply-for-role",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "apply-for-role"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["apply-for-role"]
             },
             "description": "Submit an application for a new role (vendor or driver). Application goes through approval process.\n\n**Authentication:** Required\n\n**Request Body:**\nRole application details\n\n**Edge Cases:**\n- **Missing Documents:** Application without ID card → Returns 400 with list of required documents\n- **Already Has Role:** Vendor applies for vendor role again → Returns 409 with message that role already granted\n",
             "body": {
@@ -2398,12 +2218,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/apply-for-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "apply-for-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["apply-for-role"]
                 },
                 "description": "Submit an application for a new role (vendor or driver). Application goes through approval process.\n\n**Authentication:** Required\n\n**Request Body:**\nRole application details\n\n**Edge Cases:**\n- **Missing Documents:** Application without ID card → Returns 400 with list of required documents\n- **Already Has Role:** Vendor applies for vendor role again → Returns 409 with message that role already granted\n",
                 "body": {
@@ -2447,12 +2263,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/apply-for-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "apply-for-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["apply-for-role"]
                 },
                 "description": "Submit an application for a new role (vendor or driver). Application goes through approval process.\n\n**Authentication:** Required\n\n**Request Body:**\nRole application details\n\n**Edge Cases:**\n- **Missing Documents:** Application without ID card → Returns 400 with list of required documents\n- **Already Has Role:** Vendor applies for vendor role again → Returns 409 with message that role already granted\n",
                 "body": {
@@ -2496,12 +2308,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/apply-for-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "apply-for-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["apply-for-role"]
                 },
                 "description": "Submit an application for a new role (vendor or driver). Application goes through approval process.\n\n**Authentication:** Required\n\n**Request Body:**\nRole application details\n\n**Edge Cases:**\n- **Missing Documents:** Application without ID card → Returns 400 with list of required documents\n- **Already Has Role:** Vendor applies for vendor role again → Returns 409 with message that role already granted\n",
                 "body": {
@@ -2545,12 +2353,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/apply-for-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "apply-for-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["apply-for-role"]
                 },
                 "description": "Submit an application for a new role (vendor or driver). Application goes through approval process.\n\n**Authentication:** Required\n\n**Request Body:**\nRole application details\n\n**Edge Cases:**\n- **Missing Documents:** Application without ID card → Returns 400 with list of required documents\n- **Already Has Role:** Vendor applies for vendor role again → Returns 409 with message that role already granted\n",
                 "body": {
@@ -2594,12 +2398,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/apply-for-role",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "apply-for-role"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["apply-for-role"]
                 },
                 "description": "Submit an application for a new role (vendor or driver). Application goes through approval process.\n\n**Authentication:** Required\n\n**Request Body:**\nRole application details\n\n**Edge Cases:**\n- **Missing Documents:** Application without ID card → Returns 400 with list of required documents\n- **Already Has Role:** Vendor applies for vendor role again → Returns 409 with message that role already granted\n",
                 "body": {
@@ -2674,12 +2474,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/upload-profile-picture",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "upload-profile-picture"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["upload-profile-picture"]
             },
             "description": "Upload a new profile picture. Returns the URL of the uploaded image.\n\n**Authentication:** Required\n\n**Request Body:**\nImage file in base64 or multipart form data\n\n**Edge Cases:**\n- **File Too Large:** User uploads 10MB image → Returns 400 with file size error\n- **Invalid Format:** User uploads PDF instead of image → Returns 400 with format error\n- **Corrupted Image:** Base64 data is malformed → Returns 400 with processing error\n\n**Notes:**\n- Supported formats: JPEG, PNG, WebP\n- Maximum file size: 5MB\n- Images are automatically resized and optimized\n- Previous avatar is replaced, not versioned",
             "body": {
@@ -2713,12 +2509,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/upload-profile-picture",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "upload-profile-picture"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["upload-profile-picture"]
                 },
                 "description": "Upload a new profile picture. Returns the URL of the uploaded image.\n\n**Authentication:** Required\n\n**Request Body:**\nImage file in base64 or multipart form data\n\n**Edge Cases:**\n- **File Too Large:** User uploads 10MB image → Returns 400 with file size error\n- **Invalid Format:** User uploads PDF instead of image → Returns 400 with format error\n- **Corrupted Image:** Base64 data is malformed → Returns 400 with processing error\n\n**Notes:**\n- Supported formats: JPEG, PNG, WebP\n- Maximum file size: 5MB\n- Images are automatically resized and optimized\n- Previous avatar is replaced, not versioned",
                 "body": {
@@ -2762,12 +2554,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/upload-profile-picture",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "upload-profile-picture"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["upload-profile-picture"]
                 },
                 "description": "Upload a new profile picture. Returns the URL of the uploaded image.\n\n**Authentication:** Required\n\n**Request Body:**\nImage file in base64 or multipart form data\n\n**Edge Cases:**\n- **File Too Large:** User uploads 10MB image → Returns 400 with file size error\n- **Invalid Format:** User uploads PDF instead of image → Returns 400 with format error\n- **Corrupted Image:** Base64 data is malformed → Returns 400 with processing error\n\n**Notes:**\n- Supported formats: JPEG, PNG, WebP\n- Maximum file size: 5MB\n- Images are automatically resized and optimized\n- Previous avatar is replaced, not versioned",
                 "body": {
@@ -2811,12 +2599,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/upload-profile-picture",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "upload-profile-picture"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["upload-profile-picture"]
                 },
                 "description": "Upload a new profile picture. Returns the URL of the uploaded image.\n\n**Authentication:** Required\n\n**Request Body:**\nImage file in base64 or multipart form data\n\n**Edge Cases:**\n- **File Too Large:** User uploads 10MB image → Returns 400 with file size error\n- **Invalid Format:** User uploads PDF instead of image → Returns 400 with format error\n- **Corrupted Image:** Base64 data is malformed → Returns 400 with processing error\n\n**Notes:**\n- Supported formats: JPEG, PNG, WebP\n- Maximum file size: 5MB\n- Images are automatically resized and optimized\n- Previous avatar is replaced, not versioned",
                 "body": {
@@ -2860,12 +2644,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/upload-profile-picture",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "upload-profile-picture"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["upload-profile-picture"]
                 },
                 "description": "Upload a new profile picture. Returns the URL of the uploaded image.\n\n**Authentication:** Required\n\n**Request Body:**\nImage file in base64 or multipart form data\n\n**Edge Cases:**\n- **File Too Large:** User uploads 10MB image → Returns 400 with file size error\n- **Invalid Format:** User uploads PDF instead of image → Returns 400 with format error\n- **Corrupted Image:** Base64 data is malformed → Returns 400 with processing error\n\n**Notes:**\n- Supported formats: JPEG, PNG, WebP\n- Maximum file size: 5MB\n- Images are automatically resized and optimized\n- Previous avatar is replaced, not versioned",
                 "body": {
@@ -2942,12 +2722,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Search-hotels",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Search-hotels"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Search-hotels"]
             },
             "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
             "body": {
@@ -2977,12 +2753,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3022,12 +2794,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3067,12 +2835,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3112,12 +2876,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3157,12 +2917,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3202,12 +2958,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3247,12 +2999,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Search-hotels",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Search-hotels"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Search-hotels"]
                 },
                 "description": "Search for hotels based on location, dates, guests, and various filters. Returns paginated list of matching hotels with availability.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria and filters\n\n**Edge Cases:**\n- **Empty Location:** Request without location field → Returns 400 with validation error\n- **Invalid Date Range:** checkOut date is earlier than checkIn → Returns 400 with date validation error\n- **Past Dates:** Check-in date is in the past → Returns 400 or adjusts to today\n- **No Results Found:** Very specific filters with no matches → Returns 200 with empty hotels array\n- **Price Range Mismatch:** minPrice is 500, maxPrice is 100 → Returns 400 with validation error\n\n**Notes:**\n- Results are cached for 5 minutes for identical queries\n- Prices shown are for the specified date range\n- Availability is real-time when dates are provided",
                 "body": {
@@ -3319,12 +3067,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Get-hotel-details?hotelId=hotel-uuid-123&checkIn=2024-12-01&checkOut=2024-12-05",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Get-hotel-details"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["Get-hotel-details"],
               "query": [
                 {
                   "key": "hotelId",
@@ -3358,12 +3102,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-hotel-details?hotelId=hotel-uuid-123&checkIn=2024-12-01&checkOut=2024-12-05",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-hotel-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-hotel-details"],
                   "query": [
                     {
                       "key": "hotelId",
@@ -3407,12 +3147,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-hotel-details?hotelId=hotel-uuid-123&checkIn=2024-12-01&checkOut=2024-12-05",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-hotel-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-hotel-details"],
                   "query": [
                     {
                       "key": "hotelId",
@@ -3456,12 +3192,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-hotel-details?hotelId=hotel-uuid-123&checkIn=2024-12-01&checkOut=2024-12-05",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-hotel-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-hotel-details"],
                   "query": [
                     {
                       "key": "hotelId",
@@ -3505,12 +3237,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-hotel-details?hotelId=hotel-uuid-123&checkIn=2024-12-01&checkOut=2024-12-05",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-hotel-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-hotel-details"],
                   "query": [
                     {
                       "key": "hotelId",
@@ -3589,12 +3317,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-recommended-hotels?limit=10",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-recommended-hotels"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-recommended-hotels"],
               "query": [
                 {
                   "key": "limit",
@@ -3622,12 +3346,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-recommended-hotels?limit=10",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-recommended-hotels"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-recommended-hotels"],
                   "query": [
                     {
                       "key": "limit",
@@ -3665,12 +3385,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-recommended-hotels?limit=10",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-recommended-hotels"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-recommended-hotels"],
                   "query": [
                     {
                       "key": "limit",
@@ -3743,12 +3459,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/add-hotel-to-favorites",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "add-hotel-to-favorites"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["add-hotel-to-favorites"]
             },
             "description": "Add a hotel to the user's favorites list for quick access later.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to add to favorites\n\n**Edge Cases:**\n- **Non-existent Hotel:** HotelId points to deleted or non-existent hotel → Returns 404\n- **Maximum Favorites Reached:** User has 100 favorites already → May return 400 or silently replace oldest\n",
             "body": {
@@ -3782,12 +3494,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/add-hotel-to-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "add-hotel-to-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["add-hotel-to-favorites"]
                 },
                 "description": "Add a hotel to the user's favorites list for quick access later.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to add to favorites\n\n**Edge Cases:**\n- **Non-existent Hotel:** HotelId points to deleted or non-existent hotel → Returns 404\n- **Maximum Favorites Reached:** User has 100 favorites already → May return 400 or silently replace oldest\n",
                 "body": {
@@ -3831,12 +3539,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/add-hotel-to-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "add-hotel-to-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["add-hotel-to-favorites"]
                 },
                 "description": "Add a hotel to the user's favorites list for quick access later.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to add to favorites\n\n**Edge Cases:**\n- **Non-existent Hotel:** HotelId points to deleted or non-existent hotel → Returns 404\n- **Maximum Favorites Reached:** User has 100 favorites already → May return 400 or silently replace oldest\n",
                 "body": {
@@ -3880,12 +3584,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/add-hotel-to-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "add-hotel-to-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["add-hotel-to-favorites"]
                 },
                 "description": "Add a hotel to the user's favorites list for quick access later.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to add to favorites\n\n**Edge Cases:**\n- **Non-existent Hotel:** HotelId points to deleted or non-existent hotel → Returns 404\n- **Maximum Favorites Reached:** User has 100 favorites already → May return 400 or silently replace oldest\n",
                 "body": {
@@ -3929,12 +3629,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/add-hotel-to-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "add-hotel-to-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["add-hotel-to-favorites"]
                 },
                 "description": "Add a hotel to the user's favorites list for quick access later.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to add to favorites\n\n**Edge Cases:**\n- **Non-existent Hotel:** HotelId points to deleted or non-existent hotel → Returns 404\n- **Maximum Favorites Reached:** User has 100 favorites already → May return 400 or silently replace oldest\n",
                 "body": {
@@ -4009,12 +3705,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/remove-hotel-from-favorites",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "remove-hotel-from-favorites"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["remove-hotel-from-favorites"]
             },
             "description": "Remove a hotel from the user's favorites list.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to remove from favorites\n",
             "body": {
@@ -4048,12 +3740,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/remove-hotel-from-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "remove-hotel-from-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["remove-hotel-from-favorites"]
                 },
                 "description": "Remove a hotel from the user's favorites list.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to remove from favorites\n",
                 "body": {
@@ -4097,12 +3785,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/remove-hotel-from-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "remove-hotel-from-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["remove-hotel-from-favorites"]
                 },
                 "description": "Remove a hotel from the user's favorites list.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to remove from favorites\n",
                 "body": {
@@ -4146,12 +3830,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/remove-hotel-from-favorites",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "remove-hotel-from-favorites"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["remove-hotel-from-favorites"]
                 },
                 "description": "Remove a hotel from the user's favorites list.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to remove from favorites\n",
                 "body": {
@@ -4222,12 +3902,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-user-favorites?page=1&limit=20",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-user-favorites"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-user-favorites"],
               "query": [
                 {
                   "key": "page",
@@ -4260,12 +3936,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-favorites?page=1&limit=20",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-favorites"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-favorites"],
                   "query": [
                     {
                       "key": "page",
@@ -4308,12 +3980,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-user-favorites?page=1&limit=20",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-user-favorites"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-user-favorites"],
                   "query": [
                     {
                       "key": "page",
@@ -4391,12 +4059,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-hotel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-hotel"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-hotel"]
             },
             "description": "Create a new hotel listing. Only available for users with vendor role.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel details\n\n**Edge Cases:**\n- **Non-Vendor User:** Regular user tries to create hotel → Returns 403 Forbidden\n- **Duplicate Hotel Name:** Vendor creates hotel with existing name+city combo → Returns 409 Conflict or allows with warning\n- **Maximum Hotels Reached:** Free tier vendor with 10 hotels tries to add 11th → Returns 402 Payment Required or 400\n\n**Notes:**\n- Hotel will be in pending_approval status until reviewed\n- Images should be uploaded via upload-file endpoint first\n- At least one image is recommended",
             "body": {
@@ -4430,12 +4094,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-hotel"]
                 },
                 "description": "Create a new hotel listing. Only available for users with vendor role.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel details\n\n**Edge Cases:**\n- **Non-Vendor User:** Regular user tries to create hotel → Returns 403 Forbidden\n- **Duplicate Hotel Name:** Vendor creates hotel with existing name+city combo → Returns 409 Conflict or allows with warning\n- **Maximum Hotels Reached:** Free tier vendor with 10 hotels tries to add 11th → Returns 402 Payment Required or 400\n\n**Notes:**\n- Hotel will be in pending_approval status until reviewed\n- Images should be uploaded via upload-file endpoint first\n- At least one image is recommended",
                 "body": {
@@ -4479,12 +4139,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-hotel"]
                 },
                 "description": "Create a new hotel listing. Only available for users with vendor role.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel details\n\n**Edge Cases:**\n- **Non-Vendor User:** Regular user tries to create hotel → Returns 403 Forbidden\n- **Duplicate Hotel Name:** Vendor creates hotel with existing name+city combo → Returns 409 Conflict or allows with warning\n- **Maximum Hotels Reached:** Free tier vendor with 10 hotels tries to add 11th → Returns 402 Payment Required or 400\n\n**Notes:**\n- Hotel will be in pending_approval status until reviewed\n- Images should be uploaded via upload-file endpoint first\n- At least one image is recommended",
                 "body": {
@@ -4528,12 +4184,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-hotel"]
                 },
                 "description": "Create a new hotel listing. Only available for users with vendor role.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel details\n\n**Edge Cases:**\n- **Non-Vendor User:** Regular user tries to create hotel → Returns 403 Forbidden\n- **Duplicate Hotel Name:** Vendor creates hotel with existing name+city combo → Returns 409 Conflict or allows with warning\n- **Maximum Hotels Reached:** Free tier vendor with 10 hotels tries to add 11th → Returns 402 Payment Required or 400\n\n**Notes:**\n- Hotel will be in pending_approval status until reviewed\n- Images should be uploaded via upload-file endpoint first\n- At least one image is recommended",
                 "body": {
@@ -4608,12 +4260,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/update-hotel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-hotel"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-hotel"]
             },
             "description": "Update an existing hotel. Only the hotel owner can update.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel fields to update\n\n**Edge Cases:**\n- **Update During Active Booking:** Vendor updates room amenities while bookings are active → Updates apply, existing bookings retain original terms\n",
             "body": {
@@ -4647,12 +4295,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-hotel"]
                 },
                 "description": "Update an existing hotel. Only the hotel owner can update.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel fields to update\n\n**Edge Cases:**\n- **Update During Active Booking:** Vendor updates room amenities while bookings are active → Updates apply, existing bookings retain original terms\n",
                 "body": {
@@ -4696,12 +4340,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-hotel"]
                 },
                 "description": "Update an existing hotel. Only the hotel owner can update.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel fields to update\n\n**Edge Cases:**\n- **Update During Active Booking:** Vendor updates room amenities while bookings are active → Updates apply, existing bookings retain original terms\n",
                 "body": {
@@ -4745,12 +4385,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-hotel"]
                 },
                 "description": "Update an existing hotel. Only the hotel owner can update.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel fields to update\n\n**Edge Cases:**\n- **Update During Active Booking:** Vendor updates room amenities while bookings are active → Updates apply, existing bookings retain original terms\n",
                 "body": {
@@ -4825,12 +4461,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/delete-hotel",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "delete-hotel"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["delete-hotel"]
             },
             "description": "Soft delete a hotel. Hotel will be deactivated, not permanently removed.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to delete\n\n**Edge Cases:**\n- **Hotel with Active Bookings:** Delete request when 3 bookings are confirmed → Returns 400 with booking count and action required\n- **Already Deleted:** Double delete request → Returns 404 or 200 with no-op message\n\n**Notes:**\n- Deletion is soft delete - hotel can be reactivated if needed\n- All future bookings must be cancelled before deletion\n- Historical data is retained for reporting",
             "body": {
@@ -4864,12 +4496,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/delete-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "delete-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["delete-hotel"]
                 },
                 "description": "Soft delete a hotel. Hotel will be deactivated, not permanently removed.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to delete\n\n**Edge Cases:**\n- **Hotel with Active Bookings:** Delete request when 3 bookings are confirmed → Returns 400 with booking count and action required\n- **Already Deleted:** Double delete request → Returns 404 or 200 with no-op message\n\n**Notes:**\n- Deletion is soft delete - hotel can be reactivated if needed\n- All future bookings must be cancelled before deletion\n- Historical data is retained for reporting",
                 "body": {
@@ -4913,12 +4541,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/delete-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "delete-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["delete-hotel"]
                 },
                 "description": "Soft delete a hotel. Hotel will be deactivated, not permanently removed.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to delete\n\n**Edge Cases:**\n- **Hotel with Active Bookings:** Delete request when 3 bookings are confirmed → Returns 400 with booking count and action required\n- **Already Deleted:** Double delete request → Returns 404 or 200 with no-op message\n\n**Notes:**\n- Deletion is soft delete - hotel can be reactivated if needed\n- All future bookings must be cancelled before deletion\n- Historical data is retained for reporting",
                 "body": {
@@ -4962,12 +4586,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/delete-hotel",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "delete-hotel"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["delete-hotel"]
                 },
                 "description": "Soft delete a hotel. Hotel will be deactivated, not permanently removed.\n\n**Authentication:** Required\n\n**Request Body:**\nHotel to delete\n\n**Edge Cases:**\n- **Hotel with Active Bookings:** Delete request when 3 bookings are confirmed → Returns 400 with booking count and action required\n- **Already Deleted:** Double delete request → Returns 404 or 200 with no-op message\n\n**Notes:**\n- Deletion is soft delete - hotel can be reactivated if needed\n- All future bookings must be cancelled before deletion\n- Historical data is retained for reporting",
                 "body": {
@@ -5048,12 +4668,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Calculate-booking-price",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Calculate-booking-price"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Calculate-booking-price"]
             },
             "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
             "body": {
@@ -5087,12 +4703,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Calculate-booking-price",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Calculate-booking-price"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Calculate-booking-price"]
                 },
                 "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
                 "body": {
@@ -5136,12 +4748,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Calculate-booking-price",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Calculate-booking-price"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Calculate-booking-price"]
                 },
                 "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
                 "body": {
@@ -5185,12 +4793,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Calculate-booking-price",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Calculate-booking-price"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Calculate-booking-price"]
                 },
                 "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
                 "body": {
@@ -5234,12 +4838,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Calculate-booking-price",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Calculate-booking-price"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Calculate-booking-price"]
                 },
                 "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
                 "body": {
@@ -5283,12 +4883,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Calculate-booking-price",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Calculate-booking-price"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Calculate-booking-price"]
                 },
                 "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
                 "body": {
@@ -5332,12 +4928,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Calculate-booking-price",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Calculate-booking-price"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Calculate-booking-price"]
                 },
                 "description": "Calculate the total price for a booking before confirming. Includes taxes, fees, and any applicable discounts.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details for price calculation\n\n**Edge Cases:**\n- **No Availability:** All rooms of this type are booked for the dates → Returns price but with availability: false\n- **Expired Promo Code:** Valid code but past expiry date → Returns 400 with promo error\n- **Minimum Stay Not Met:** 1 night booking when minimum is 2 → Returns 400 with minimum stay error\n\n**Notes:**\n- Prices may change between calculation and booking confirmation\n- Promo codes are validated but not locked at this stage\n- Currency is determined by hotel location",
                 "body": {
@@ -5412,12 +5004,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Create-booking",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Create-booking"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Create-booking"]
             },
             "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
             "body": {
@@ -5451,12 +5039,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-booking"]
                 },
                 "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
                 "body": {
@@ -5500,12 +5084,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-booking"]
                 },
                 "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
                 "body": {
@@ -5549,12 +5129,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-booking"]
                 },
                 "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
                 "body": {
@@ -5598,12 +5174,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-booking"]
                 },
                 "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
                 "body": {
@@ -5647,12 +5219,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-booking"]
                 },
                 "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
                 "body": {
@@ -5696,12 +5264,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-booking"]
                 },
                 "description": "Create a new hotel booking. Requires successful payment initialization first.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking details and guest information\n\n**Edge Cases:**\n- **Race Condition - Same Room:** Two concurrent booking requests for last available room → One succeeds, other gets ROOM_NOT_AVAILABLE\n- **Invalid Payment Reference:** User provides tampered or old payment reference → Returns 400 or 402 with payment verification error\n- **Guest Count Exceeds Capacity:** 5 guests for room with 2-person capacity → Returns 400 with capacity error\n- **Check-in Same Day:** User books room for same-day check-in → Allowed if within hotel check-in hours, otherwise warning\n\n**Notes:**\n- A confirmation email is sent automatically to guest email\n- Booking confirmation code is unique and used for check-in\n- Payment must be completed/authorized before booking creation",
                 "body": {
@@ -5772,12 +5336,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Get-user-bookings?status=confirmed&page=1&limit=10",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Get-user-bookings"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["Get-user-bookings"],
               "query": [
                 {
                   "key": "status",
@@ -5815,12 +5375,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-user-bookings?status=confirmed&page=1&limit=10",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-user-bookings"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-user-bookings"],
                   "query": [
                     {
                       "key": "status",
@@ -5868,12 +5424,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-user-bookings?status=confirmed&page=1&limit=10",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-user-bookings"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-user-bookings"],
                   "query": [
                     {
                       "key": "status",
@@ -5921,12 +5473,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-user-bookings?status=confirmed&page=1&limit=10",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-user-bookings"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-user-bookings"],
                   "query": [
                     {
                       "key": "status",
@@ -6005,12 +5553,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-booking-details?bookingId=booking-uuid-123",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-booking-details"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-booking-details"],
               "query": [
                 {
                   "key": "bookingId",
@@ -6038,12 +5582,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-booking-details?bookingId=booking-uuid-123",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-booking-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-booking-details"],
                   "query": [
                     {
                       "key": "bookingId",
@@ -6081,12 +5621,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-booking-details?bookingId=booking-uuid-123",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-booking-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-booking-details"],
                   "query": [
                     {
                       "key": "bookingId",
@@ -6124,12 +5660,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-booking-details?bookingId=booking-uuid-123",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-booking-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-booking-details"],
                   "query": [
                     {
                       "key": "bookingId",
@@ -6167,12 +5699,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-booking-details?bookingId=booking-uuid-123",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-booking-details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-booking-details"],
                   "query": [
                     {
                       "key": "bookingId",
@@ -6245,12 +5773,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/cancel-booking",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "cancel-booking"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["cancel-booking"]
             },
             "description": "Cancel an existing booking. Refund is processed based on cancellation policy.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking to cancel\n\n**Edge Cases:**\n- **Already Cancelled:** Double cancellation request → Returns 400 with already cancelled message\n- **Checked In:** Cancel after check-in process → Returns 400, suggest contact hotel\n- **Completed Stay:** Cancel booking after check-out date → Returns 400, cannot cancel completed booking\n\n**Notes:**\n- Refund processing time varies by payment provider\n- Vendors are notified immediately of cancellations\n- Booking history is retained even after cancellation",
             "body": {
@@ -6284,12 +5808,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/cancel-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "cancel-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["cancel-booking"]
                 },
                 "description": "Cancel an existing booking. Refund is processed based on cancellation policy.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking to cancel\n\n**Edge Cases:**\n- **Already Cancelled:** Double cancellation request → Returns 400 with already cancelled message\n- **Checked In:** Cancel after check-in process → Returns 400, suggest contact hotel\n- **Completed Stay:** Cancel booking after check-out date → Returns 400, cannot cancel completed booking\n\n**Notes:**\n- Refund processing time varies by payment provider\n- Vendors are notified immediately of cancellations\n- Booking history is retained even after cancellation",
                 "body": {
@@ -6333,12 +5853,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/cancel-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "cancel-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["cancel-booking"]
                 },
                 "description": "Cancel an existing booking. Refund is processed based on cancellation policy.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking to cancel\n\n**Edge Cases:**\n- **Already Cancelled:** Double cancellation request → Returns 400 with already cancelled message\n- **Checked In:** Cancel after check-in process → Returns 400, suggest contact hotel\n- **Completed Stay:** Cancel booking after check-out date → Returns 400, cannot cancel completed booking\n\n**Notes:**\n- Refund processing time varies by payment provider\n- Vendors are notified immediately of cancellations\n- Booking history is retained even after cancellation",
                 "body": {
@@ -6382,12 +5898,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/cancel-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "cancel-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["cancel-booking"]
                 },
                 "description": "Cancel an existing booking. Refund is processed based on cancellation policy.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking to cancel\n\n**Edge Cases:**\n- **Already Cancelled:** Double cancellation request → Returns 400 with already cancelled message\n- **Checked In:** Cancel after check-in process → Returns 400, suggest contact hotel\n- **Completed Stay:** Cancel booking after check-out date → Returns 400, cannot cancel completed booking\n\n**Notes:**\n- Refund processing time varies by payment provider\n- Vendors are notified immediately of cancellations\n- Booking history is retained even after cancellation",
                 "body": {
@@ -6431,12 +5943,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/cancel-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "cancel-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["cancel-booking"]
                 },
                 "description": "Cancel an existing booking. Refund is processed based on cancellation policy.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking to cancel\n\n**Edge Cases:**\n- **Already Cancelled:** Double cancellation request → Returns 400 with already cancelled message\n- **Checked In:** Cancel after check-in process → Returns 400, suggest contact hotel\n- **Completed Stay:** Cancel booking after check-out date → Returns 400, cannot cancel completed booking\n\n**Notes:**\n- Refund processing time varies by payment provider\n- Vendors are notified immediately of cancellations\n- Booking history is retained even after cancellation",
                 "body": {
@@ -6511,12 +6019,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/modify-booking",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "modify-booking"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["modify-booking"]
             },
             "description": "Modify dates or room details of an existing booking. Subject to availability and price changes.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking modifications\n\n**Edge Cases:**\n- **New Dates Not Available:** Room is booked for new dates → Returns 400 with availability error\n- **Price Decreased:** Shorter stay or cheaper room → Returns success with refund information\n",
             "body": {
@@ -6550,12 +6054,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/modify-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "modify-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["modify-booking"]
                 },
                 "description": "Modify dates or room details of an existing booking. Subject to availability and price changes.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking modifications\n\n**Edge Cases:**\n- **New Dates Not Available:** Room is booked for new dates → Returns 400 with availability error\n- **Price Decreased:** Shorter stay or cheaper room → Returns success with refund information\n",
                 "body": {
@@ -6599,12 +6099,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/modify-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "modify-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["modify-booking"]
                 },
                 "description": "Modify dates or room details of an existing booking. Subject to availability and price changes.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking modifications\n\n**Edge Cases:**\n- **New Dates Not Available:** Room is booked for new dates → Returns 400 with availability error\n- **Price Decreased:** Shorter stay or cheaper room → Returns success with refund information\n",
                 "body": {
@@ -6648,12 +6144,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/modify-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "modify-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["modify-booking"]
                 },
                 "description": "Modify dates or room details of an existing booking. Subject to availability and price changes.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking modifications\n\n**Edge Cases:**\n- **New Dates Not Available:** Room is booked for new dates → Returns 400 with availability error\n- **Price Decreased:** Shorter stay or cheaper room → Returns success with refund information\n",
                 "body": {
@@ -6697,12 +6189,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/modify-booking",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "modify-booking"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["modify-booking"]
                 },
                 "description": "Modify dates or room details of an existing booking. Subject to availability and price changes.\n\n**Authentication:** Required\n\n**Request Body:**\nBooking modifications\n\n**Edge Cases:**\n- **New Dates Not Available:** Room is booked for new dates → Returns 400 with availability error\n- **Price Decreased:** Shorter stay or cheaper room → Returns success with refund information\n",
                 "body": {
@@ -6777,12 +6265,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/check-in-guest",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "check-in-guest"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["check-in-guest"]
             },
             "description": "Mark a booking as checked-in. Available only to hotel vendors.\n\n**Authentication:** Required\n\n**Request Body:**\nCheck-in details\n\n**Edge Cases:**\n- **Already Checked In:** Double check-in attempt → Returns 400 with already checked in message\n- **Wrong Date:** Check-in 2 days before booking → May be allowed with early check-in fee or rejected\n",
             "body": {
@@ -6816,12 +6300,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/check-in-guest",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "check-in-guest"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["check-in-guest"]
                 },
                 "description": "Mark a booking as checked-in. Available only to hotel vendors.\n\n**Authentication:** Required\n\n**Request Body:**\nCheck-in details\n\n**Edge Cases:**\n- **Already Checked In:** Double check-in attempt → Returns 400 with already checked in message\n- **Wrong Date:** Check-in 2 days before booking → May be allowed with early check-in fee or rejected\n",
                 "body": {
@@ -6865,12 +6345,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/check-in-guest",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "check-in-guest"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["check-in-guest"]
                 },
                 "description": "Mark a booking as checked-in. Available only to hotel vendors.\n\n**Authentication:** Required\n\n**Request Body:**\nCheck-in details\n\n**Edge Cases:**\n- **Already Checked In:** Double check-in attempt → Returns 400 with already checked in message\n- **Wrong Date:** Check-in 2 days before booking → May be allowed with early check-in fee or rejected\n",
                 "body": {
@@ -6945,12 +6421,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Checkout-guest",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Checkout-guest"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Checkout-guest"]
             },
             "description": "Mark a booking as checked-out and complete the stay. Triggers escrow release.\n\n**Authentication:** Required\n\n**Request Body:**\nCheckout details\n\n**Edge Cases:**\n- **Not Checked In:** Checkout without prior check-in → May auto-check-in then checkout, or require check-in first\n- **Late Checkout:** Checkout at 3pm when checkout time is 12pm → May include late checkout fee in additional charges\n\n**Notes:**\n- Escrow funds are released to vendor after successful checkout\n- Guest receives checkout confirmation email\n- Review prompt is sent to guest after checkout",
             "body": {
@@ -6984,12 +6456,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Checkout-guest",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Checkout-guest"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Checkout-guest"]
                 },
                 "description": "Mark a booking as checked-out and complete the stay. Triggers escrow release.\n\n**Authentication:** Required\n\n**Request Body:**\nCheckout details\n\n**Edge Cases:**\n- **Not Checked In:** Checkout without prior check-in → May auto-check-in then checkout, or require check-in first\n- **Late Checkout:** Checkout at 3pm when checkout time is 12pm → May include late checkout fee in additional charges\n\n**Notes:**\n- Escrow funds are released to vendor after successful checkout\n- Guest receives checkout confirmation email\n- Review prompt is sent to guest after checkout",
                 "body": {
@@ -7033,12 +6501,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Checkout-guest",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Checkout-guest"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Checkout-guest"]
                 },
                 "description": "Mark a booking as checked-out and complete the stay. Triggers escrow release.\n\n**Authentication:** Required\n\n**Request Body:**\nCheckout details\n\n**Edge Cases:**\n- **Not Checked In:** Checkout without prior check-in → May auto-check-in then checkout, or require check-in first\n- **Late Checkout:** Checkout at 3pm when checkout time is 12pm → May include late checkout fee in additional charges\n\n**Notes:**\n- Escrow funds are released to vendor after successful checkout\n- Guest receives checkout confirmation email\n- Review prompt is sent to guest after checkout",
                 "body": {
@@ -7119,12 +6583,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/request-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "request-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["request-ride"]
             },
             "description": "Request a taxi ride from pickup to destination.\n\n**Authentication:** Required\n\n**Request Body:**\nRide request details\n\n**Edge Cases:**\n- **No Drivers:** Request in remote location → Returns success with searching, eventually timeouts via socket\n",
             "body": {
@@ -7158,12 +6618,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/request-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "request-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["request-ride"]
                 },
                 "description": "Request a taxi ride from pickup to destination.\n\n**Authentication:** Required\n\n**Request Body:**\nRide request details\n\n**Edge Cases:**\n- **No Drivers:** Request in remote location → Returns success with searching, eventually timeouts via socket\n",
                 "body": {
@@ -7238,12 +6694,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-ride-estimate",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-ride-estimate"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-ride-estimate"]
             },
             "description": "Get fare estimate and ETA for a potential ride without booking.\n\n**Authentication:** Required\n\n**Request Body:**\nRoute for estimation\n",
             "body": {
@@ -7277,12 +6729,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-ride-estimate",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-ride-estimate"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-ride-estimate"]
                 },
                 "description": "Get fare estimate and ETA for a potential ride without booking.\n\n**Authentication:** Required\n\n**Request Body:**\nRoute for estimation\n",
                 "body": {
@@ -7357,12 +6805,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/cancel-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "cancel-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["cancel-ride"]
             },
             "description": "Cancel an active ride request.\n\n**Authentication:** Required\n\n**Request Body:**\nCancellation details\n",
             "body": {
@@ -7396,12 +6840,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/cancel-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "cancel-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["cancel-ride"]
                 },
                 "description": "Cancel an active ride request.\n\n**Authentication:** Required\n\n**Request Body:**\nCancellation details\n",
                 "body": {
@@ -7472,12 +6912,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-active-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-active-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-active-ride"]
             },
             "description": "Get details of the currently active ride for user or driver.\n\n**Authentication:** Required\n"
           },
@@ -7498,12 +6934,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-active-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-active-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-active-ride"]
                 },
                 "description": "Get details of the currently active ride for user or driver.\n\n**Authentication:** Required\n"
               },
@@ -7534,12 +6966,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-active-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-active-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-active-ride"]
                 },
                 "description": "Get details of the currently active ride for user or driver.\n\n**Authentication:** Required\n"
               },
@@ -7605,12 +7033,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-nearby-drivers",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-nearby-drivers"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-nearby-drivers"]
             },
             "description": "Get locations of nearby available drivers for map display.\n\n**Authentication:** Required\n\n**Request Body:**\nUser location\n",
             "body": {
@@ -7644,12 +7068,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-nearby-drivers",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-nearby-drivers"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-nearby-drivers"]
                 },
                 "description": "Get locations of nearby available drivers for map display.\n\n**Authentication:** Required\n\n**Request Body:**\nUser location\n",
                 "body": {
@@ -7724,12 +7144,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/accept-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "accept-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["accept-ride"]
             },
             "description": "Driver accepts a ride request.\n\n**Authentication:** Required\n\n**Request Body:**\nRide to accept\n",
             "body": {
@@ -7763,12 +7179,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/accept-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "accept-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["accept-ride"]
                 },
                 "description": "Driver accepts a ride request.\n\n**Authentication:** Required\n\n**Request Body:**\nRide to accept\n",
                 "body": {
@@ -7843,12 +7255,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/start-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "start-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["start-ride"]
             },
             "description": "Driver starts the ride after pickup.\n\n**Authentication:** Required\n\n**Request Body:**\nRide to start\n",
             "body": {
@@ -7882,12 +7290,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/start-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "start-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["start-ride"]
                 },
                 "description": "Driver starts the ride after pickup.\n\n**Authentication:** Required\n\n**Request Body:**\nRide to start\n",
                 "body": {
@@ -7962,12 +7366,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/complete-ride",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "complete-ride"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["complete-ride"]
             },
             "description": "Driver completes the ride at destination.\n\n**Authentication:** Required\n\n**Request Body:**\nRide to complete\n",
             "body": {
@@ -8001,12 +7401,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/complete-ride",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "complete-ride"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["complete-ride"]
                 },
                 "description": "Driver completes the ride at destination.\n\n**Authentication:** Required\n\n**Request Body:**\nRide to complete\n",
                 "body": {
@@ -8081,12 +7477,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/rate-driver",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "rate-driver"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["rate-driver"]
             },
             "description": "Rate driver after ride completion.\n\n**Authentication:** Required\n\n**Request Body:**\nRating details\n",
             "body": {
@@ -8120,12 +7512,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/rate-driver",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "rate-driver"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["rate-driver"]
                 },
                 "description": "Rate driver after ride completion.\n\n**Authentication:** Required\n\n**Request Body:**\nRating details\n",
                 "body": {
@@ -8206,12 +7594,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/onboard-courier",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "onboard-courier"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["onboard-courier"]
             },
             "description": "Register and submit documents for a new courier account.\n\n**Authentication:** Required\n\n**Request Body:**\nCourier details\n",
             "body": {
@@ -8245,12 +7629,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/onboard-courier",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "onboard-courier"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["onboard-courier"]
                 },
                 "description": "Register and submit documents for a new courier account.\n\n**Authentication:** Required\n\n**Request Body:**\nCourier details\n",
                 "body": {
@@ -8325,12 +7705,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/update-courier-availability",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-courier-availability"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-courier-availability"]
             },
             "description": "Toggle courier online/offline status and location.\n\n**Authentication:** Required\n\n**Request Body:**\nStatus update\n",
             "body": {
@@ -8364,12 +7740,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-courier-availability",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-courier-availability"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-courier-availability"]
                 },
                 "description": "Toggle courier online/offline status and location.\n\n**Authentication:** Required\n\n**Request Body:**\nStatus update\n",
                 "body": {
@@ -8440,12 +7812,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-courier-assignments",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-courier-assignments"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-courier-assignments"]
             },
             "description": "Get list of assigned delivery orders (active and pending).\n\n**Authentication:** Required\n"
           },
@@ -8466,12 +7834,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-courier-assignments",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-courier-assignments"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-courier-assignments"]
                 },
                 "description": "Get list of assigned delivery orders (active and pending).\n\n**Authentication:** Required\n"
               },
@@ -8537,12 +7901,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/update-booking-status",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-booking-status"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-booking-status"]
             },
             "description": "Update the status of a specific delivery (picked up, delivered).\n\n**Authentication:** Required\n\n**Request Body:**\nStatus update\n",
             "body": {
@@ -8576,12 +7936,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-booking-status",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-booking-status"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-booking-status"]
                 },
                 "description": "Update the status of a specific delivery (picked up, delivered).\n\n**Authentication:** Required\n\n**Request Body:**\nStatus update\n",
                 "body": {
@@ -8652,12 +8008,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/calculate-courier-earnings?period=weekly",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "calculate-courier-earnings"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["calculate-courier-earnings"],
               "query": [
                 {
                   "key": "period",
@@ -8685,12 +8037,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/calculate-courier-earnings?period=weekly",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "calculate-courier-earnings"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["calculate-courier-earnings"],
                   "query": [
                     {
                       "key": "period",
@@ -8759,12 +8107,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/track-courier-performance",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "track-courier-performance"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["track-courier-performance"]
             },
             "description": "Get courier performance metrics (rating, completion rate).\n\n**Authentication:** Required\n"
           },
@@ -8785,12 +8129,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/track-courier-performance",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "track-courier-performance"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["track-courier-performance"]
                 },
                 "description": "Get courier performance metrics (rating, completion rate).\n\n**Authentication:** Required\n"
               },
@@ -8862,12 +8202,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-social-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-social-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-social-post"]
             },
             "description": "Create a new text or media post.\n\n**Authentication:** Required\n\n**Request Body:**\nPost content\n",
             "body": {
@@ -8901,12 +8237,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-social-post",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-social-post"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-social-post"]
                 },
                 "description": "Create a new text or media post.\n\n**Authentication:** Required\n\n**Request Body:**\nPost content\n",
                 "body": {
@@ -8977,12 +8309,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-social-feed?page=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-social-feed"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-social-feed"],
               "query": [
                 {
                   "key": "page",
@@ -9010,12 +8338,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-social-feed?page=1",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-social-feed"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-social-feed"],
                   "query": [
                     {
                       "key": "page",
@@ -9088,12 +8412,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/like-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "like-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["like-post"]
             },
             "description": "Like or unlike a post.\n\n**Authentication:** Required\n\n**Request Body:**\nPost to like\n",
             "body": {
@@ -9127,12 +8447,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/like-post",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "like-post"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["like-post"]
                 },
                 "description": "Like or unlike a post.\n\n**Authentication:** Required\n\n**Request Body:**\nPost to like\n",
                 "body": {
@@ -9207,12 +8523,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/comment-on-post",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "comment-on-post"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["comment-on-post"]
             },
             "description": "Add a comment to a post.\n\n**Authentication:** Required\n\n**Request Body:**\nComment content\n",
             "body": {
@@ -9246,12 +8558,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/comment-on-post",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "comment-on-post"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["comment-on-post"]
                 },
                 "description": "Add a comment to a post.\n\n**Authentication:** Required\n\n**Request Body:**\nComment content\n",
                 "body": {
@@ -9326,12 +8634,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/send-friend-request",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-friend-request"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-friend-request"]
             },
             "description": "Send a friend request to another user.\n\n**Authentication:** Required\n\n**Request Body:**\nTarget user\n",
             "body": {
@@ -9365,12 +8669,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/send-friend-request",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "send-friend-request"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["send-friend-request"]
                 },
                 "description": "Send a friend request to another user.\n\n**Authentication:** Required\n\n**Request Body:**\nTarget user\n",
                 "body": {
@@ -9445,12 +8745,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/respond-to-friend-request",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "respond-to-friend-request"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["respond-to-friend-request"]
             },
             "description": "Accept or reject a friend request.\n\n**Authentication:** Required\n\n**Request Body:**\nResponse\n",
             "body": {
@@ -9484,12 +8780,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/respond-to-friend-request",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "respond-to-friend-request"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["respond-to-friend-request"]
                 },
                 "description": "Accept or reject a friend request.\n\n**Authentication:** Required\n\n**Request Body:**\nResponse\n",
                 "body": {
@@ -9564,12 +8856,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-story",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-story"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-story"]
             },
             "description": "Post a temporary story (image/video).\n\n**Authentication:** Required\n\n**Request Body:**\nStory content\n",
             "body": {
@@ -9603,12 +8891,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-story",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-story"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-story"]
                 },
                 "description": "Post a temporary story (image/video).\n\n**Authentication:** Required\n\n**Request Body:**\nStory content\n",
                 "body": {
@@ -9685,12 +8969,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-conversations",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-conversations"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-conversations"]
             },
             "description": "Get list of active conversations/chats.\n\n**Authentication:** Required\n"
           },
@@ -9711,12 +8991,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-conversations",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-conversations"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-conversations"]
                 },
                 "description": "Get list of active conversations/chats.\n\n**Authentication:** Required\n"
               },
@@ -9782,12 +9058,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-conversation",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-conversation"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-conversation"]
             },
             "description": "Start a new conversation with one or more users.\n\n**Authentication:** Required\n\n**Request Body:**\nConversation details\n",
             "body": {
@@ -9821,12 +9093,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-conversation",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-conversation"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-conversation"]
                 },
                 "description": "Start a new conversation with one or more users.\n\n**Authentication:** Required\n\n**Request Body:**\nConversation details\n",
                 "body": {
@@ -9901,12 +9169,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/send-message",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "send-message"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["send-message"]
             },
             "description": "Send a text or media message to a conversation.\n\n**Authentication:** Required\n\n**Request Body:**\nMessage content\n",
             "body": {
@@ -9940,12 +9204,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/send-message",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "send-message"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["send-message"]
                 },
                 "description": "Send a text or media message to a conversation.\n\n**Authentication:** Required\n\n**Request Body:**\nMessage content\n",
                 "body": {
@@ -10016,12 +9276,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-messages?conversationId=conv-uuid&limit=50&before=msg-uuid",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-messages"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-messages"],
               "query": [
                 {
                   "key": "conversationId",
@@ -10059,12 +9315,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-messages?conversationId=conv-uuid&limit=50&before=msg-uuid",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-messages"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-messages"],
                   "query": [
                     {
                       "key": "conversationId",
@@ -10147,12 +9399,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/initiate-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "initiate-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["initiate-call"]
             },
             "description": "Start a voice or video call. Returns Agora credentials.\n\n**Authentication:** Required\n\n**Request Body:**\nCall details\n",
             "body": {
@@ -10186,12 +9434,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/initiate-call",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "initiate-call"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["initiate-call"]
                 },
                 "description": "Start a voice or video call. Returns Agora credentials.\n\n**Authentication:** Required\n\n**Request Body:**\nCall details\n",
                 "body": {
@@ -10266,12 +9510,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/answer-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "answer-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["answer-call"]
             },
             "description": "Join an incoming call.\n\n**Authentication:** Required\n\n**Request Body:**\nCall ID\n",
             "body": {
@@ -10305,12 +9545,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/answer-call",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "answer-call"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["answer-call"]
                 },
                 "description": "Join an incoming call.\n\n**Authentication:** Required\n\n**Request Body:**\nCall ID\n",
                 "body": {
@@ -10385,12 +9621,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/end-call",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "end-call"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["end-call"]
             },
             "description": "Terminate a call.\n\n**Authentication:** Required\n\n**Request Body:**\nCall ID\n",
             "body": {
@@ -10424,12 +9656,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/end-call",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "end-call"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["end-call"]
                 },
                 "description": "Terminate a call.\n\n**Authentication:** Required\n\n**Request Body:**\nCall ID\n",
                 "body": {
@@ -10510,12 +9738,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-advertiser-profile",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-advertiser-profile"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-advertiser-profile"]
             },
             "description": "Register as an advertiser to start running campaigns.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile details\n",
             "body": {
@@ -10549,12 +9773,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-advertiser-profile",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-advertiser-profile"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-advertiser-profile"]
                 },
                 "description": "Register as an advertiser to start running campaigns.\n\n**Authentication:** Required\n\n**Request Body:**\nProfile details\n",
                 "body": {
@@ -10629,12 +9849,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-ad-campaign",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-ad-campaign"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-ad-campaign"]
             },
             "description": "Create and launch a new ad campaign.\n\n**Authentication:** Required\n\n**Request Body:**\nCampaign details\n",
             "body": {
@@ -10668,12 +9884,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-ad-campaign",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-ad-campaign"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-ad-campaign"]
                 },
                 "description": "Create and launch a new ad campaign.\n\n**Authentication:** Required\n\n**Request Body:**\nCampaign details\n",
                 "body": {
@@ -10744,12 +9956,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-ad-analytics?campaignId=camp-uuid",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-ad-analytics"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-ad-analytics"],
               "query": [
                 {
                   "key": "campaignId",
@@ -10777,12 +9985,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-ad-analytics?campaignId=camp-uuid",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-ad-analytics"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-ad-analytics"],
                   "query": [
                     {
                       "key": "campaignId",
@@ -10861,12 +10065,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Initialize-payment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Initialize-payment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Initialize-payment"]
             },
             "description": "Initialize a payment session with supported payment providers (Paystack, Stripe). Returns a payment URL or checkout session.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment details\n\n**Edge Cases:**\n- **Minimum Amount:** Amount of ₦50 (below ₦100 minimum) → Returns 400 with minimum amount error\n- **Duplicate Reference:** Same reference sent twice → Returns 409 Conflict\n- **Invalid Currency for Provider:** NGN with Stripe (if not enabled) → Returns 400 with currency not supported error\n\n**Notes:**\n- Payment session expires in 30 minutes\n- Redirect user to authorization_url for payment\n- Reference must be unique per payment",
             "body": {
@@ -10900,12 +10100,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Initialize-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Initialize-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Initialize-payment"]
                 },
                 "description": "Initialize a payment session with supported payment providers (Paystack, Stripe). Returns a payment URL or checkout session.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment details\n\n**Edge Cases:**\n- **Minimum Amount:** Amount of ₦50 (below ₦100 minimum) → Returns 400 with minimum amount error\n- **Duplicate Reference:** Same reference sent twice → Returns 409 Conflict\n- **Invalid Currency for Provider:** NGN with Stripe (if not enabled) → Returns 400 with currency not supported error\n\n**Notes:**\n- Payment session expires in 30 minutes\n- Redirect user to authorization_url for payment\n- Reference must be unique per payment",
                 "body": {
@@ -10949,12 +10145,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Initialize-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Initialize-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Initialize-payment"]
                 },
                 "description": "Initialize a payment session with supported payment providers (Paystack, Stripe). Returns a payment URL or checkout session.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment details\n\n**Edge Cases:**\n- **Minimum Amount:** Amount of ₦50 (below ₦100 minimum) → Returns 400 with minimum amount error\n- **Duplicate Reference:** Same reference sent twice → Returns 409 Conflict\n- **Invalid Currency for Provider:** NGN with Stripe (if not enabled) → Returns 400 with currency not supported error\n\n**Notes:**\n- Payment session expires in 30 minutes\n- Redirect user to authorization_url for payment\n- Reference must be unique per payment",
                 "body": {
@@ -10998,12 +10190,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Initialize-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Initialize-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Initialize-payment"]
                 },
                 "description": "Initialize a payment session with supported payment providers (Paystack, Stripe). Returns a payment URL or checkout session.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment details\n\n**Edge Cases:**\n- **Minimum Amount:** Amount of ₦50 (below ₦100 minimum) → Returns 400 with minimum amount error\n- **Duplicate Reference:** Same reference sent twice → Returns 409 Conflict\n- **Invalid Currency for Provider:** NGN with Stripe (if not enabled) → Returns 400 with currency not supported error\n\n**Notes:**\n- Payment session expires in 30 minutes\n- Redirect user to authorization_url for payment\n- Reference must be unique per payment",
                 "body": {
@@ -11047,12 +10235,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Initialize-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Initialize-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Initialize-payment"]
                 },
                 "description": "Initialize a payment session with supported payment providers (Paystack, Stripe). Returns a payment URL or checkout session.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment details\n\n**Edge Cases:**\n- **Minimum Amount:** Amount of ₦50 (below ₦100 minimum) → Returns 400 with minimum amount error\n- **Duplicate Reference:** Same reference sent twice → Returns 409 Conflict\n- **Invalid Currency for Provider:** NGN with Stripe (if not enabled) → Returns 400 with currency not supported error\n\n**Notes:**\n- Payment session expires in 30 minutes\n- Redirect user to authorization_url for payment\n- Reference must be unique per payment",
                 "body": {
@@ -11127,12 +10311,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Verify-payment",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Verify-payment"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Verify-payment"]
             },
             "description": "Verify a payment after callback. Confirms payment status with provider.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment reference to verify\n\n**Edge Cases:**\n- **Unknown Reference:** Random/typo reference provided → Returns 404 with reference not found\n- **Already Verified:** Verify same reference twice → Returns cached result, does not double-process\n",
             "body": {
@@ -11166,12 +10346,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Verify-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Verify-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Verify-payment"]
                 },
                 "description": "Verify a payment after callback. Confirms payment status with provider.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment reference to verify\n\n**Edge Cases:**\n- **Unknown Reference:** Random/typo reference provided → Returns 404 with reference not found\n- **Already Verified:** Verify same reference twice → Returns cached result, does not double-process\n",
                 "body": {
@@ -11215,12 +10391,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Verify-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Verify-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Verify-payment"]
                 },
                 "description": "Verify a payment after callback. Confirms payment status with provider.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment reference to verify\n\n**Edge Cases:**\n- **Unknown Reference:** Random/typo reference provided → Returns 404 with reference not found\n- **Already Verified:** Verify same reference twice → Returns cached result, does not double-process\n",
                 "body": {
@@ -11264,12 +10436,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Verify-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Verify-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Verify-payment"]
                 },
                 "description": "Verify a payment after callback. Confirms payment status with provider.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment reference to verify\n\n**Edge Cases:**\n- **Unknown Reference:** Random/typo reference provided → Returns 404 with reference not found\n- **Already Verified:** Verify same reference twice → Returns cached result, does not double-process\n",
                 "body": {
@@ -11313,12 +10481,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Verify-payment",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Verify-payment"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Verify-payment"]
                 },
                 "description": "Verify a payment after callback. Confirms payment status with provider.\n\n**Authentication:** Required\n\n**Request Body:**\nPayment reference to verify\n\n**Edge Cases:**\n- **Unknown Reference:** Random/typo reference provided → Returns 404 with reference not found\n- **Already Verified:** Verify same reference twice → Returns cached result, does not double-process\n",
                 "body": {
@@ -11393,12 +10557,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Pay-with-wallet",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Pay-with-wallet"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Pay-with-wallet"]
             },
             "description": "Pay for a booking or product using wallet balance.\n\n**Authentication:** Required\n\n**Request Body:**\nWallet payment details\n\n**Edge Cases:**\n- **Negative Amount:** amount: -100 → Returns 400 validation error\n- **Concurrent Payments:** Balance is ₦1000, two ₦600 payments at once → One succeeds, one fails with insufficient balance\n",
             "body": {
@@ -11432,12 +10592,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Pay-with-wallet",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Pay-with-wallet"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Pay-with-wallet"]
                 },
                 "description": "Pay for a booking or product using wallet balance.\n\n**Authentication:** Required\n\n**Request Body:**\nWallet payment details\n\n**Edge Cases:**\n- **Negative Amount:** amount: -100 → Returns 400 validation error\n- **Concurrent Payments:** Balance is ₦1000, two ₦600 payments at once → One succeeds, one fails with insufficient balance\n",
                 "body": {
@@ -11481,12 +10637,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Pay-with-wallet",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Pay-with-wallet"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Pay-with-wallet"]
                 },
                 "description": "Pay for a booking or product using wallet balance.\n\n**Authentication:** Required\n\n**Request Body:**\nWallet payment details\n\n**Edge Cases:**\n- **Negative Amount:** amount: -100 → Returns 400 validation error\n- **Concurrent Payments:** Balance is ₦1000, two ₦600 payments at once → One succeeds, one fails with insufficient balance\n",
                 "body": {
@@ -11530,12 +10682,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Pay-with-wallet",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Pay-with-wallet"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Pay-with-wallet"]
                 },
                 "description": "Pay for a booking or product using wallet balance.\n\n**Authentication:** Required\n\n**Request Body:**\nWallet payment details\n\n**Edge Cases:**\n- **Negative Amount:** amount: -100 → Returns 400 validation error\n- **Concurrent Payments:** Balance is ₦1000, two ₦600 payments at once → One succeeds, one fails with insufficient balance\n",
                 "body": {
@@ -11610,12 +10758,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Topup-wallet",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Topup-wallet"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Topup-wallet"]
             },
             "description": "Add funds to user wallet via payment provider.\n\n**Authentication:** Required\n\n**Request Body:**\nTopup details\n\n**Edge Cases:**\n- **Below Minimum:** Topup ₦100 when minimum is ₦500 → Returns 400 with minimum topup error\n- **Above Maximum:** Topup ₦1,000,000 → Returns 400 with limit exceeded error\n",
             "body": {
@@ -11649,12 +10793,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Topup-wallet",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Topup-wallet"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Topup-wallet"]
                 },
                 "description": "Add funds to user wallet via payment provider.\n\n**Authentication:** Required\n\n**Request Body:**\nTopup details\n\n**Edge Cases:**\n- **Below Minimum:** Topup ₦100 when minimum is ₦500 → Returns 400 with minimum topup error\n- **Above Maximum:** Topup ₦1,000,000 → Returns 400 with limit exceeded error\n",
                 "body": {
@@ -11725,12 +10865,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Get-vendor-balance",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Get-vendor-balance"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Get-vendor-balance"]
             },
             "description": "Get vendor's current balance including pending payouts and escrow.\n\n**Authentication:** Required\n"
           },
@@ -11751,12 +10887,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-vendor-balance",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-vendor-balance"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-vendor-balance"]
                 },
                 "description": "Get vendor's current balance including pending payouts and escrow.\n\n**Authentication:** Required\n"
               },
@@ -11787,12 +10919,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-vendor-balance",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-vendor-balance"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-vendor-balance"]
                 },
                 "description": "Get vendor's current balance including pending payouts and escrow.\n\n**Authentication:** Required\n"
               },
@@ -11823,12 +10951,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Get-vendor-balance",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Get-vendor-balance"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Get-vendor-balance"]
                 },
                 "description": "Get vendor's current balance including pending payouts and escrow.\n\n**Authentication:** Required\n"
               },
@@ -11894,12 +11018,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Create-payout-request",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Create-payout-request"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Create-payout-request"]
             },
             "description": "Request a payout of available balance to vendor's bank account.\n\n**Authentication:** Required\n\n**Request Body:**\nPayout request details\n\n**Edge Cases:**\n- **Below Minimum Payout:** Request ₦500 payout (minimum ₦5000) → Returns 400 with minimum payout error\n- **Invalid Bank Account:** Non-existent or unverified bank account → Returns 404 or 400\n- **Pending Payout Exists:** Request new payout while one is processing → May allow or block with pending payout error\n\n**Notes:**\n- Payouts are processed in 2-3 business days\n- Bank account must be verified before first payout\n- Minimum payout amount is ₦5,000",
             "body": {
@@ -11933,12 +11053,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-payout-request",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-payout-request"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-payout-request"]
                 },
                 "description": "Request a payout of available balance to vendor's bank account.\n\n**Authentication:** Required\n\n**Request Body:**\nPayout request details\n\n**Edge Cases:**\n- **Below Minimum Payout:** Request ₦500 payout (minimum ₦5000) → Returns 400 with minimum payout error\n- **Invalid Bank Account:** Non-existent or unverified bank account → Returns 404 or 400\n- **Pending Payout Exists:** Request new payout while one is processing → May allow or block with pending payout error\n\n**Notes:**\n- Payouts are processed in 2-3 business days\n- Bank account must be verified before first payout\n- Minimum payout amount is ₦5,000",
                 "body": {
@@ -11982,12 +11098,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-payout-request",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-payout-request"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-payout-request"]
                 },
                 "description": "Request a payout of available balance to vendor's bank account.\n\n**Authentication:** Required\n\n**Request Body:**\nPayout request details\n\n**Edge Cases:**\n- **Below Minimum Payout:** Request ₦500 payout (minimum ₦5000) → Returns 400 with minimum payout error\n- **Invalid Bank Account:** Non-existent or unverified bank account → Returns 404 or 400\n- **Pending Payout Exists:** Request new payout while one is processing → May allow or block with pending payout error\n\n**Notes:**\n- Payouts are processed in 2-3 business days\n- Bank account must be verified before first payout\n- Minimum payout amount is ₦5,000",
                 "body": {
@@ -12031,12 +11143,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Create-payout-request",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Create-payout-request"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Create-payout-request"]
                 },
                 "description": "Request a payout of available balance to vendor's bank account.\n\n**Authentication:** Required\n\n**Request Body:**\nPayout request details\n\n**Edge Cases:**\n- **Below Minimum Payout:** Request ₦500 payout (minimum ₦5000) → Returns 400 with minimum payout error\n- **Invalid Bank Account:** Non-existent or unverified bank account → Returns 404 or 400\n- **Pending Payout Exists:** Request new payout while one is processing → May allow or block with pending payout error\n\n**Notes:**\n- Payouts are processed in 2-3 business days\n- Bank account must be verified before first payout\n- Minimum payout amount is ₦5,000",
                 "body": {
@@ -12111,12 +11219,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Process-refund",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Process-refund"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Process-refund"]
             },
             "description": "Process a refund for a booking or order. Funds return to original payment method or wallet.\n\n**Authentication:** Required\n\n**Request Body:**\nRefund details\n\n**Edge Cases:**\n- **Exceeds Original Amount:** Refund ₦70,000 on ₦63,000 payment → Returns 400 with exceed original error\n- **Already Refunded:** Second refund request for same payment → Returns 400 with already refunded error\n- **Old Payment:** Refund payment from 6 months ago → May be rejected by provider\n",
             "body": {
@@ -12150,12 +11254,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Process-refund",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Process-refund"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Process-refund"]
                 },
                 "description": "Process a refund for a booking or order. Funds return to original payment method or wallet.\n\n**Authentication:** Required\n\n**Request Body:**\nRefund details\n\n**Edge Cases:**\n- **Exceeds Original Amount:** Refund ₦70,000 on ₦63,000 payment → Returns 400 with exceed original error\n- **Already Refunded:** Second refund request for same payment → Returns 400 with already refunded error\n- **Old Payment:** Refund payment from 6 months ago → May be rejected by provider\n",
                 "body": {
@@ -12199,12 +11299,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Process-refund",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Process-refund"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Process-refund"]
                 },
                 "description": "Process a refund for a booking or order. Funds return to original payment method or wallet.\n\n**Authentication:** Required\n\n**Request Body:**\nRefund details\n\n**Edge Cases:**\n- **Exceeds Original Amount:** Refund ₦70,000 on ₦63,000 payment → Returns 400 with exceed original error\n- **Already Refunded:** Second refund request for same payment → Returns 400 with already refunded error\n- **Old Payment:** Refund payment from 6 months ago → May be rejected by provider\n",
                 "body": {
@@ -12248,12 +11344,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Process-refund",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Process-refund"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Process-refund"]
                 },
                 "description": "Process a refund for a booking or order. Funds return to original payment method or wallet.\n\n**Authentication:** Required\n\n**Request Body:**\nRefund details\n\n**Edge Cases:**\n- **Exceeds Original Amount:** Refund ₦70,000 on ₦63,000 payment → Returns 400 with exceed original error\n- **Already Refunded:** Second refund request for same payment → Returns 400 with already refunded error\n- **Old Payment:** Refund payment from 6 months ago → May be rejected by provider\n",
                 "body": {
@@ -12297,12 +11389,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Process-refund",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Process-refund"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Process-refund"]
                 },
                 "description": "Process a refund for a booking or order. Funds return to original payment method or wallet.\n\n**Authentication:** Required\n\n**Request Body:**\nRefund details\n\n**Edge Cases:**\n- **Exceeds Original Amount:** Refund ₦70,000 on ₦63,000 payment → Returns 400 with exceed original error\n- **Already Refunded:** Second refund request for same payment → Returns 400 with already refunded error\n- **Old Payment:** Refund payment from 6 months ago → May be rejected by provider\n",
                 "body": {
@@ -12346,12 +11434,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Process-refund",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Process-refund"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Process-refund"]
                 },
                 "description": "Process a refund for a booking or order. Funds return to original payment method or wallet.\n\n**Authentication:** Required\n\n**Request Body:**\nRefund details\n\n**Edge Cases:**\n- **Exceeds Original Amount:** Refund ₦70,000 on ₦63,000 payment → Returns 400 with exceed original error\n- **Already Refunded:** Second refund request for same payment → Returns 400 with already refunded error\n- **Old Payment:** Refund payment from 6 months ago → May be rejected by provider\n",
                 "body": {
@@ -12426,12 +11510,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Release-escrow",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Release-escrow"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Release-escrow"]
             },
             "description": "Release funds from escrow after service completion. Moves funds to vendor available balance.\n\n**Authentication:** Required\n\n**Request Body:**\nEscrow release details\n\n**Edge Cases:**\n- **Dispute Open:** Guest filed complaint before checkout → Returns 400 with dispute pending message\n- **Already Released:** Double release request → Returns 400 or 200 with no-op\n",
             "body": {
@@ -12465,12 +11545,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Release-escrow",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Release-escrow"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Release-escrow"]
                 },
                 "description": "Release funds from escrow after service completion. Moves funds to vendor available balance.\n\n**Authentication:** Required\n\n**Request Body:**\nEscrow release details\n\n**Edge Cases:**\n- **Dispute Open:** Guest filed complaint before checkout → Returns 400 with dispute pending message\n- **Already Released:** Double release request → Returns 400 or 200 with no-op\n",
                 "body": {
@@ -12514,12 +11590,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Release-escrow",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Release-escrow"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Release-escrow"]
                 },
                 "description": "Release funds from escrow after service completion. Moves funds to vendor available balance.\n\n**Authentication:** Required\n\n**Request Body:**\nEscrow release details\n\n**Edge Cases:**\n- **Dispute Open:** Guest filed complaint before checkout → Returns 400 with dispute pending message\n- **Already Released:** Double release request → Returns 400 or 200 with no-op\n",
                 "body": {
@@ -12594,12 +11666,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/Paystack-webhook",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "Paystack-webhook"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["Paystack-webhook"]
             },
             "description": "Webhook endpoint for Paystack payment notifications. Not for direct API calls.\n\n**Authentication:** Not Required\n\n**Request Body:**\nPaystack webhook payload\n\n**Edge Cases:**\n- **Invalid Signature:** Tampered or forged webhook → Returns 401 and ignores the request\n- **Duplicate Webhook:** Paystack retries webhook → Idempotent - returns 200 without reprocessing\n\n**Notes:**\n- This endpoint is called by Paystack, not by clients\n- Signature verification is required\n- Always return 200 to acknowledge receipt",
             "body": {
@@ -12633,12 +11701,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Paystack-webhook",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Paystack-webhook"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Paystack-webhook"]
                 },
                 "description": "Webhook endpoint for Paystack payment notifications. Not for direct API calls.\n\n**Authentication:** Not Required\n\n**Request Body:**\nPaystack webhook payload\n\n**Edge Cases:**\n- **Invalid Signature:** Tampered or forged webhook → Returns 401 and ignores the request\n- **Duplicate Webhook:** Paystack retries webhook → Idempotent - returns 200 without reprocessing\n\n**Notes:**\n- This endpoint is called by Paystack, not by clients\n- Signature verification is required\n- Always return 200 to acknowledge receipt",
                 "body": {
@@ -12682,12 +11746,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Paystack-webhook",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Paystack-webhook"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Paystack-webhook"]
                 },
                 "description": "Webhook endpoint for Paystack payment notifications. Not for direct API calls.\n\n**Authentication:** Not Required\n\n**Request Body:**\nPaystack webhook payload\n\n**Edge Cases:**\n- **Invalid Signature:** Tampered or forged webhook → Returns 401 and ignores the request\n- **Duplicate Webhook:** Paystack retries webhook → Idempotent - returns 200 without reprocessing\n\n**Notes:**\n- This endpoint is called by Paystack, not by clients\n- Signature verification is required\n- Always return 200 to acknowledge receipt",
                 "body": {
@@ -12731,12 +11791,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/Paystack-webhook",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "Paystack-webhook"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["Paystack-webhook"]
                 },
                 "description": "Webhook endpoint for Paystack payment notifications. Not for direct API calls.\n\n**Authentication:** Not Required\n\n**Request Body:**\nPaystack webhook payload\n\n**Edge Cases:**\n- **Invalid Signature:** Tampered or forged webhook → Returns 401 and ignores the request\n- **Duplicate Webhook:** Paystack retries webhook → Idempotent - returns 200 without reprocessing\n\n**Notes:**\n- This endpoint is called by Paystack, not by clients\n- Signature verification is required\n- Always return 200 to acknowledge receipt",
                 "body": {
@@ -12813,12 +11869,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-notification-history?page=1",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-notification-history"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["get-notification-history"],
               "query": [
                 {
                   "key": "page",
@@ -12846,12 +11898,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-notification-history?page=1",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-notification-history"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["get-notification-history"],
                   "query": [
                     {
                       "key": "page",
@@ -12924,12 +11972,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/update-notification-preferences",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "update-notification-preferences"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["update-notification-preferences"]
             },
             "description": "Update notification settings (email, push, sms).\n\n**Authentication:** Required\n\n**Request Body:**\nPreferences\n",
             "body": {
@@ -12963,12 +12007,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/update-notification-preferences",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "update-notification-preferences"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["update-notification-preferences"]
                 },
                 "description": "Update notification settings (email, push, sms).\n\n**Authentication:** Required\n\n**Request Body:**\nPreferences\n",
                 "body": {
@@ -13043,12 +12083,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/register-device",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "register-device"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["register-device"]
             },
             "description": "Register a device token for push notifications (internal use mostly, but good to doc).\n\n**Authentication:** Required\n\n**Request Body:**\nDevice token\n",
             "body": {
@@ -13082,12 +12118,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/register-device",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "register-device"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["register-device"]
                 },
                 "description": "Register a device token for push notifications (internal use mostly, but good to doc).\n\n**Authentication:** Required\n\n**Request Body:**\nDevice token\n",
                 "body": {
@@ -13168,12 +12200,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/upload-file",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "upload-file"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["upload-file"]
             },
             "description": "Upload a file to Supabase Storage.\n\n**Authentication:** Required\n\n**Request Body:**\nFile data\n",
             "body": {
@@ -13207,12 +12235,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/upload-file",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "upload-file"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["upload-file"]
                 },
                 "description": "Upload a file to Supabase Storage.\n\n**Authentication:** Required\n\n**Request Body:**\nFile data\n",
                 "body": {
@@ -13287,12 +12311,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/process-image",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "process-image"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["process-image"]
             },
             "description": "Resize and optimize images.\n\n**Authentication:** Required\n\n**Request Body:**\nOptions\n",
             "body": {
@@ -13326,12 +12346,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/process-image",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "process-image"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["process-image"]
                 },
                 "description": "Resize and optimize images.\n\n**Authentication:** Required\n\n**Request Body:**\nOptions\n",
                 "body": {
@@ -13406,12 +12422,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/create-support-ticket",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "create-support-ticket"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["create-support-ticket"]
             },
             "description": "Open a support ticket.\n\n**Authentication:** Required\n\n**Request Body:**\nTicket details\n",
             "body": {
@@ -13445,12 +12457,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/create-support-ticket",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "create-support-ticket"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["create-support-ticket"]
                 },
                 "description": "Open a support ticket.\n\n**Authentication:** Required\n\n**Request Body:**\nTicket details\n",
                 "body": {
@@ -13521,12 +12529,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/get-my-tickets",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "get-my-tickets"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["get-my-tickets"]
             },
             "description": "List user tickets.\n\n**Authentication:** Required\n"
           },
@@ -13547,12 +12551,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/get-my-tickets",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "get-my-tickets"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["get-my-tickets"]
                 },
                 "description": "List user tickets.\n\n**Authentication:** Required\n"
               },
@@ -13620,15 +12620,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/v1/products/search",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "search"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "search"]
             },
             "description": "Search for products with pagination and filtering. Publicly accessible.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria\n",
             "body": {
@@ -13658,15 +12651,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/v1/products/search",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "products",
-                    "search"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "products", "search"]
                 },
                 "description": "Search for products with pagination and filtering. Publicly accessible.\n\n**Authentication:** Not Required\n\n**Request Body:**\nSearch criteria\n",
                 "body": {
@@ -13733,15 +12719,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/v1/products/categories",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "categories"
-              ]
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "categories"]
             },
             "description": "Retrieve all product categories and their subcategories. Publicly accessible.\n\n**Authentication:** Not Required\n"
           },
@@ -13758,15 +12737,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/v1/products/categories",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "products",
-                    "categories"
-                  ]
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "products", "categories"]
                 },
                 "description": "Retrieve all product categories and their subcategories. Publicly accessible.\n\n**Authentication:** Not Required\n"
               },
@@ -13824,15 +12796,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/v1/products/trending?limit=10",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "trending"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "trending"],
               "query": [
                 {
                   "key": "limit",
@@ -13856,15 +12821,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/v1/products/trending?limit=10",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "products",
-                    "trending"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "products", "trending"],
                   "query": [
                     {
                       "key": "limit",
@@ -13929,15 +12887,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/v1/products/brands?category_id=cat-uuid",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "brands"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "brands"],
               "query": [
                 {
                   "key": "category_id",
@@ -13961,15 +12912,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/v1/products/brands?category_id=cat-uuid",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "products",
-                    "brands"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "products", "brands"],
                   "query": [
                     {
                       "key": "category_id",
@@ -14034,15 +12978,8 @@
             ],
             "url": {
               "raw": "{{base_url}}/api/v1/products/details?id=product-uuid",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "api",
-                "v1",
-                "products",
-                "details"
-              ],
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "products", "details"],
               "query": [
                 {
                   "key": "id",
@@ -14066,15 +13003,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/v1/products/details?id=product-uuid",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "products",
-                    "details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "products", "details"],
                   "query": [
                     {
                       "key": "id",
@@ -14108,15 +13038,8 @@
                 ],
                 "url": {
                   "raw": "{{base_url}}/api/v1/products/details?id=product-uuid",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "api",
-                    "v1",
-                    "products",
-                    "details"
-                  ],
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "v1", "products", "details"],
                   "query": [
                     {
                       "key": "id",
@@ -14204,10 +13127,7 @@
       "listen": "prerequest",
       "script": {
         "type": "text/javascript",
-        "exec": [
-          "// Global prerequest script",
-          "console.log(\"Request to:\", pm.request.url.toString());"
-        ]
+        "exec": ["// Global prerequest script", "console.log(\"Request to:\", pm.request.url.toString());"]
       }
     }
   ]

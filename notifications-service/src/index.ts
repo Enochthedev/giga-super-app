@@ -770,7 +770,8 @@ const limiter = rateLimit({
   // Health endpoints must never be rate limited. The gateway polls /health, and a 429
   // there made serviceRegistry mark the service unhealthy, which 503'd EVERY route
   // until the window rolled over — a self-amplifying outage.
-  skip: req => req.path === '/health' || req.path === '/health/ready' || req.path === '/health/live',
+  skip: req =>
+    req.path === '/health' || req.path === '/health/ready' || req.path === '/health/live',
 });
 app.use(limiter);
 

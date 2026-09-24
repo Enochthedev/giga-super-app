@@ -1,9 +1,11 @@
-import { Request, Response } from 'express';
 import crypto from 'crypto';
+
+import { Request, Response } from 'express';
+
 import { config } from '../config';
-import logger from '../utils/logger';
-import { UnauthorizedError, BadRequestError } from '../utils/errors';
 import { addWebhookJob } from '../queues/webhook.queue';
+import { UnauthorizedError, BadRequestError } from '../utils/errors';
+import logger from '../utils/logger';
 
 /**
  * POST /api/v1/webhooks/paystack

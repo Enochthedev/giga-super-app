@@ -38,6 +38,7 @@ jest.mock('../middleware/auth', () => ({
 
 import express from 'express';
 import request from 'supertest';
+
 import modulesRoutes from '../routes/modules';
 
 const app = express();

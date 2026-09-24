@@ -31,6 +31,7 @@ Service runs on: `http://localhost:3004`
 Open in browser: `http://localhost:3004/api-docs`
 
 You'll see:
+
 - All wallet endpoints
 - Request/response schemas
 - Try-it-out functionality
@@ -43,6 +44,7 @@ You'll see:
 ### Step 1: Add Environment Variable
 
 In your service's `.env`:
+
 ```bash
 PAYMENT_SERVICE_URL=http://localhost:3004
 ```
@@ -50,6 +52,7 @@ PAYMENT_SERVICE_URL=http://localhost:3004
 ### Step 2: Copy Helper File
 
 Copy `PAYMENT_CLIENT_HELPER.ts` to your service:
+
 ```bash
 cp payment-queue-service/PAYMENT_CLIENT_HELPER.ts your-service/src/utils/paymentClient.ts
 ```
@@ -67,7 +70,7 @@ const result = await deductFromWallet({
   amount: 50000,
   description: 'Hotel booking',
   reference: 'HOTEL-123',
-  token: req.headers.authorization
+  token: req.headers.authorization,
 });
 
 if (result.success) {
@@ -81,7 +84,8 @@ if (result.success) {
 
 ## 📖 Documentation Files
 
-1. **PAYMENT_INTEGRATION_GUIDE.md** - Complete integration examples for all services
+1. **PAYMENT_INTEGRATION_GUIDE.md** - Complete integration examples for all
+   services
 2. **PAYMENT_CLIENT_HELPER.ts** - Ready-to-use helper functions
 3. **DATABASE_SETUP_COMPLETE.md** - Database schema and functions
 4. **PAYSTACK_GUIDE.md** - How Paystack works
@@ -93,12 +97,14 @@ if (result.success) {
 ## 🧪 Test Endpoints
 
 ### 1. Check Wallet Balance
+
 ```bash
 curl http://localhost:3004/api/v1/wallet/balance \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### 2. Top Up Wallet (Demo Mode)
+
 ```bash
 curl -X POST http://localhost:3004/api/v1/wallet/topup \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -110,6 +116,7 @@ curl -X POST http://localhost:3004/api/v1/wallet/topup \
 ```
 
 ### 3. Get Transactions
+
 ```bash
 curl http://localhost:3004/api/v1/wallet/transactions \
   -H "Authorization: Bearer YOUR_TOKEN"
@@ -120,6 +127,7 @@ curl http://localhost:3004/api/v1/wallet/transactions \
 ## 💡 Common Use Cases
 
 ### Hotels: Room Booking Payment
+
 ```typescript
 // Check if user can pay with wallet
 const options = await getPaymentOptions(bookingAmount, token);
@@ -130,7 +138,7 @@ if (options.wallet.available) {
     amount: bookingAmount,
     description: `Hotel booking #${bookingNumber}`,
     reference: `HOTEL-${bookingId}`,
-    token
+    token,
   });
 } else {
   // Pay with Paystack
@@ -138,20 +146,21 @@ if (options.wallet.available) {
     amount: bookingAmount,
     email: user.email,
     reference: `HOTEL-${bookingId}`,
-    token
+    token,
   });
   // Redirect user to: result.authorizationUrl
 }
 ```
 
 ### Taxi: Ride Payment
+
 ```typescript
 // Auto-deduct from wallet when ride completes
 const result = await deductFromWallet({
   amount: rideAmount,
   description: `Taxi ride #${rideNumber}`,
   reference: `RIDE-${rideId}`,
-  token
+  token,
 });
 
 if (!result.success) {
@@ -161,6 +170,7 @@ if (!result.success) {
 ```
 
 ### Ecommerce: Product Purchase
+
 ```typescript
 // Try wallet first, fallback to Paystack
 const result = await processPaymentWithFallback({
@@ -168,7 +178,7 @@ const result = await processPaymentWithFallback({
   description: `Order #${orderNumber}`,
   reference: `ORDER-${orderId}`,
   email: user.email,
-  token
+  token,
 });
 
 if (result.method === 'wallet') {
@@ -205,17 +215,17 @@ if (result.method === 'wallet') {
 
 ```typescript
 const COMMISSION_RATES = {
-  hotels: 0.10,      // 10%
-  taxi: 0.15,        // 15%
-  ecommerce: 0.05,   // 5%
-  delivery: 0.12,    // 12%
+  hotels: 0.1, // 10%
+  taxi: 0.15, // 15%
+  ecommerce: 0.05, // 5%
+  delivery: 0.12, // 12%
 };
 
 // Example calculation
 const totalAmount = 50000;
-const commissionRate = 0.10;
-const commission = totalAmount * commissionRate;  // 5000
-const vendorAmount = totalAmount - commission;     // 45000
+const commissionRate = 0.1;
+const commission = totalAmount * commissionRate; // 5000
+const vendorAmount = totalAmount - commission; // 45000
 ```
 
 ---
@@ -223,7 +233,12 @@ const vendorAmount = totalAmount - commission;     // 45000
 ## 🐛 Error Handling
 
 ```typescript
-const result = await deductFromWallet({ amount, description, reference, token });
+const result = await deductFromWallet({
+  amount,
+  description,
+  reference,
+  token,
+});
 
 if (!result.success) {
   switch (result.code) {
@@ -245,13 +260,16 @@ if (!result.success) {
 ## 🔄 Demo Mode vs Production
 
 ### Demo Mode (Default)
+
 - No API keys needed
 - Simulates successful payments
 - No real money charged
 - Perfect for testing
 
 ### Production Mode
+
 Add to `.env`:
+
 ```bash
 PAYSTACK_SECRET_KEY=sk_live_xxxxx
 PAYSTACK_PUBLIC_KEY=pk_live_xxxxx
@@ -295,6 +313,7 @@ git push origin main
 ```
 
 Environment variables needed in Railway:
+
 ```
 SUPABASE_URL=your-supabase-url
 SUPABASE_ANON_KEY=your-anon-key

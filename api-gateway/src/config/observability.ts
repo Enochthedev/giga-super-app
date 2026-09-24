@@ -1,4 +1,5 @@
 import { Express } from 'express';
+
 import {
   createDatabaseChecker,
   createExternalServiceChecker,
@@ -11,6 +12,7 @@ import {
   tracingMiddleware,
 } from '../../../shared/observability';
 import { serviceRegistry } from '../services/serviceRegistry';
+
 import { config } from './index';
 
 const SERVICE_NAME = 'api-gateway';

@@ -98,13 +98,13 @@ export async function sendPushNotification(
 
     await admin.messaging().send(message);
     logger.info('Push notification sent successfully', {
-      deviceToken: deviceToken.substring(0, 10) + '...',
+      deviceToken: `${deviceToken.substring(0, 10)}...`,
     });
     return true;
   } catch (error) {
     logger.error('Failed to send push notification', {
       error: error instanceof Error ? error.message : 'Unknown error',
-      deviceToken: deviceToken.substring(0, 10) + '...',
+      deviceToken: `${deviceToken.substring(0, 10)}...`,
     });
     return false;
   }

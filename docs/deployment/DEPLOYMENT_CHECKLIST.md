@@ -363,17 +363,17 @@ Deployment is successful when:
 
 ## Deployment Log
 
-### Deployment Date: ******\_******
+### Deployment Date: **\*\***\_**\*\***
 
 ### Services Deployed:
 
-- [ ] social-service - URL: **********\_\_\_**********
-- [ ] admin-service - URL: **********\_\_\_**********
-- [ ] payment-queue-service - URL: **********\_\_\_**********
-- [ ] search-service - URL: **********\_\_\_**********
-- [ ] delivery-service - URL: **********\_\_\_**********
-- [ ] taxi-realtime-service - URL: **********\_\_\_**********
-- [ ] notifications-service - URL: **********\_\_\_**********
+- [ ] social-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
+- [ ] admin-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
+- [ ] payment-queue-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
+- [ ] search-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
+- [ ] delivery-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
+- [ ] taxi-realtime-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
+- [ ] notifications-service - URL: \***\*\*\*\*\***\_\_\_\***\*\*\*\*\***
 
 ### Issues Encountered:
 
@@ -393,7 +393,7 @@ Deployment is successful when:
 
 ### Deployment Time: **\_\_\_** minutes
 
-### Deployed By: ******\_******
+### Deployed By: **\*\***\_**\*\***
 
 ---
 

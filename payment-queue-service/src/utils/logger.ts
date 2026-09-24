@@ -46,10 +46,7 @@ const transports: winston.transport[] = [
   // Console transport
   new winston.transports.Console({
     level: config.logLevel,
-    format: winston.format.combine(
-      winston.format.colorize({ all: true }),
-      winston.format.simple()
-    ),
+    format: winston.format.combine(winston.format.colorize({ all: true }), winston.format.simple()),
   }),
 ];
 

@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
-import logger from './logger';
-
 import { config } from '../config';
+
+import logger from './logger';
 
 // Initialize Supabase client with service role key
 export const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey, {

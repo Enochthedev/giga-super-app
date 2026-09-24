@@ -83,7 +83,7 @@ serve(async req => {
   }
 });
 async function handleSuccessfulPayment(supabase, data) {
-  const {reference} = data;
+  const { reference } = data;
   const amountInKobo = data.amount;
   const amount = amountInKobo / 100; // Convert from kobo to naira
   console.log('Processing successful payment:', reference, 'Amount:', amount);
@@ -288,7 +288,7 @@ async function handleSuccessfulPayment(supabase, data) {
   }
 }
 async function handleFailedPayment(supabase, data) {
-  const {reference} = data;
+  const { reference } = data;
   console.log('Processing failed payment:', reference);
   try {
     // Find payment record

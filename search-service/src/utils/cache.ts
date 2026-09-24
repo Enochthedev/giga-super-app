@@ -5,6 +5,7 @@
 
 import Redis from 'ioredis';
 import NodeCache from 'node-cache';
+
 import { AutocompleteResponse, SearchQuery, SearchResponse } from '../types/index.js';
 
 /**

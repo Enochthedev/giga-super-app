@@ -160,51 +160,56 @@ router.post('/', authenticate, requireNationalAccess, async (req: AuthRequest, r
  * PATCH /api/admin/regions/:id
  * Update a region. National (global) access only.
  */
-router.patch('/:id', authenticate, requireNationalAccess, async (req: AuthRequest, res: Response) => {
-  try {
-    const { id } = req.params;
-    const allowed: Record<string, any> = {};
-    for (const key of [
-      'region_name',
-      'region_type',
-      'parent_region_id',
-      'country_code',
-      'phone_code',
-      'currency',
-      'timezone',
-      'is_active',
-    ]) {
-      if (req.body[key] !== undefined) allowed[key] = req.body[key];
-    }
-    if (allowed.region_type && !REGION_TYPES.includes(allowed.region_type)) {
-      return res.status(400).json({
-        success: false,
-        error: `region_type must be one of: ${REGION_TYPES.join(', ')}`,
-        code: 'INVALID_REGION_TYPE',
-      });
-    }
-    if (Object.keys(allowed).length === 0) {
-      return res.status(400).json({ success: false, error: 'No updatable fields provided' });
-    }
-    allowed.updated_at = new Date().toISOString();
+router.patch(
+  '/:id',
+  authenticate,
+  requireNationalAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { id } = req.params;
+      const allowed: Record<string, any> = {};
+      for (const key of [
+        'region_name',
+        'region_type',
+        'parent_region_id',
+        'country_code',
+        'phone_code',
+        'currency',
+        'timezone',
+        'is_active',
+      ]) {
+        if (req.body[key] !== undefined) allowed[key] = req.body[key];
+      }
+      if (allowed.region_type && !REGION_TYPES.includes(allowed.region_type)) {
+        return res.status(400).json({
+          success: false,
+          error: `region_type must be one of: ${REGION_TYPES.join(', ')}`,
+          code: 'INVALID_REGION_TYPE',
+        });
+      }
+      if (Object.keys(allowed).length === 0) {
+        return res.status(400).json({ success: false, error: 'No updatable fields provided' });
+      }
+      allowed.updated_at = new Date().toISOString();
 
-    const { data, error } = await supabase
-      .from('nipost_regions')
-      .update(allowed)
-      .eq('id', id)
-      .select()
-      .maybeSingle();
+      const { data, error } = await supabase
+        .from('nipost_regions')
+        .update(allowed)
+        .eq('id', id)
+        .select()
+        .maybeSingle();
 
-    if (error) throw error;
-    if (!data) return res.status(404).json({ success: false, error: 'Region not found' });
+      if (error) throw error;
+      if (!data) return res.status(404).json({ success: false, error: 'Region not found' });
 
-    await createAudit(req, 'update_region', 'nipost_region', id, allowed);
-    res.json({ success: true, data });
-  } catch (error: any) {
-    logger.error('Failed to update region', { error: error.message });
-    res.status(500).json({ success: false, error: 'Failed to update region' });
+      await createAudit(req, 'update_region', 'nipost_region', id, allowed);
+      res.json({ success: true, data });
+    } catch (error: any) {
+      logger.error('Failed to update region', { error: error.message });
+      res.status(500).json({ success: false, error: 'Failed to update region' });
+    }
   }
-});
+);
 
 /**
  * GET /api/admin/regions/:id/admins
@@ -230,12 +235,12 @@ router.get(
 
       const userIds = [...new Set((perms ?? []).map(p => p.user_id).filter(Boolean))];
       const profiles = userIds.length
-        ? (
+        ? ((
             await supabase
               .from('user_profiles')
               .select('id, email, first_name, last_name')
               .in('id', userIds)
-          ).data ?? []
+          ).data ?? [])
         : [];
       const byId = new Map(profiles.map(p => [p.id, p]));
 

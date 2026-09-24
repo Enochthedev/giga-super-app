@@ -55,7 +55,10 @@ export const stripeService = {
       throw new Error('Stripe did not return a checkout URL');
     }
 
-    logger.info('Stripe checkout session created', { reference: params.reference, sessionId: session.id });
+    logger.info('Stripe checkout session created', {
+      reference: params.reference,
+      sessionId: session.id,
+    });
 
     return {
       authorizationUrl: session.url,

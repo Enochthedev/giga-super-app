@@ -32,7 +32,10 @@ serve(async req => {
     // E8: validate required fields so a missing body/bank_details returns 400, not a 500 crash
     if (!business_name || !bank_details || typeof bank_details !== 'object') {
       return new Response(
-        JSON.stringify({ error: 'business_name and bank_details (bank_name, account_number, account_name) are required' }),
+        JSON.stringify({
+          error:
+            'business_name and bank_details (bank_name, account_number, account_name) are required',
+        }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }

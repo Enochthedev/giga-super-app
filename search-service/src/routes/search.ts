@@ -4,6 +4,7 @@
 
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
+
 import { optionalAuth, rateLimitByUser } from '../middleware/auth.js';
 import { SearchCategory, SearchResponse, SearchResult } from '../types/index.js';
 import { CacheService } from '../utils/cache.js';

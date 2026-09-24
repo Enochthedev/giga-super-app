@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+
 import { config } from '../config';
 import { InternalServerError } from '../utils/errors';
 import logger from '../utils/logger';

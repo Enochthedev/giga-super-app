@@ -1,6 +1,6 @@
-import { BadRequestError } from './errors';
-
 import { isSupportedCurrency, SUPPORTED_CURRENCIES } from '../config/currency';
+
+import { BadRequestError } from './errors';
 
 export class Validator {
   /**
@@ -182,7 +182,7 @@ export class Validator {
     if (startDate > endDate) {
       throw new BadRequestError('Start date must be before end date');
     }
-    
+
     // Check if date range is not too large (max 1 year)
     const oneYear = 365 * 24 * 60 * 60 * 1000;
     if (endDate.getTime() - startDate.getTime() > oneYear) {

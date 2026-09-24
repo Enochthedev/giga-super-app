@@ -4,7 +4,7 @@ services:
   # ============================================
   # INFRASTRUCTURE SERVICES
   # ============================================
-  
+
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
@@ -240,7 +240,7 @@ services:
   # ============================================
   # OPTIONAL: NGINX LOAD BALANCER
   # ============================================
-  
+
   nginx:
     image: nginx:alpine
     ports:

@@ -338,7 +338,7 @@ paths:
           name: status
           schema:
             type: string
-            enum: [active, inactive]
+            enum: [active, inactive, online, offline, verified, unverified]
           description: Filter by driver status
       responses:
         200:
@@ -1415,29 +1415,6 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 
   # Taxi Endpoints
-  /api/taxi/drivers:
-    get:
-      tags: [Taxi]
-      summary: Get taxi drivers
-      parameters:
-        - $ref: '#/components/parameters/Page'
-        - $ref: '#/components/parameters/Limit'
-        - in: query
-          name: search
-          schema:
-            type: string
-          description: Search by license number or name
-        - in: query
-          name: status
-          schema:
-            type: string
-            enum: [active, inactive, online, offline, verified, unverified]
-      responses:
-        200:
-          description: Drivers retrieved successfully
-        401:
-          $ref: '#/components/responses/Unauthorized'
-
   /api/taxi/drivers/{id}:
     get:
       tags: [Taxi]
@@ -1554,37 +1531,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 
   # Hotel Endpoints
-  /api/hotel/hotels:
-    get:
-      tags: [Hotel]
-      summary: Get hotels
-      parameters:
-        - $ref: '#/components/parameters/Page'
-        - $ref: '#/components/parameters/Limit'
-        - in: query
-          name: search
-          schema:
-            type: string
-          description: Search by hotel name, city, or state
-        - in: query
-          name: status
-          schema:
-            type: string
-            enum: [active, inactive, verified, unverified]
-        - in: query
-          name: city
-          schema:
-            type: string
-        - in: query
-          name: state
-          schema:
-            type: string
-      responses:
-        200:
-          description: Hotels retrieved successfully
-        401:
-          $ref: '#/components/responses/Unauthorized'
-
   /api/hotel/hotels/{id}:
     get:
       tags: [Hotel]
@@ -1972,7 +1918,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: "products entry approved successfully"
+                    example: 'products entry approved successfully'
                   data:
                     type: object
                     description: The approved entry with updated status
@@ -1988,7 +1934,7 @@ paths:
                     example: false
                   error:
                     type: string
-                    example: "Invalid module. Valid modules: products, hotels, drivers, media"
+                    example: 'Invalid module. Valid modules: products, hotels, drivers, media'
         401:
           $ref: '#/components/responses/Unauthorized'
         403:
@@ -2028,7 +1974,7 @@ paths:
                 reason:
                   type: string
                   description: Reason for rejection
-                  example: "Product images do not meet quality standards"
+                  example: 'Product images do not meet quality standards'
       responses:
         200:
           description: Entry rejected successfully
@@ -2042,7 +1988,7 @@ paths:
                     example: true
                   message:
                     type: string
-                    example: "products entry rejected successfully"
+                    example: 'products entry rejected successfully'
                   data:
                     type: object
                     description: The rejected entry with updated status
@@ -2092,14 +2038,14 @@ paths:
               example:
                 success: true
                 data:
-                  - id: "o1234567-89ab-cdef-0123-456789abcdef"
-                    order_number: "ORD-2026-001234"
-                    product_name: "Analog Table Clock"
+                  - id: 'o1234567-89ab-cdef-0123-456789abcdef'
+                    order_number: 'ORD-2026-001234'
+                    product_name: 'Analog Table Clock'
                     quantity: 2
-                    date: "2026-02-05"
+                    date: '2026-02-05'
                     revenue: 253.82
                     net_profit: 60.76
-                    status: "pending"
+                    status: 'pending'
                     is_delivered: false
                 pagination:
                   page: 1
@@ -2145,8 +2091,8 @@ paths:
               example:
                 success: true
                 data:
-                  id: "o1234567-89ab-cdef-0123-456789abcdef"
-                  status: "delivered"
+                  id: 'o1234567-89ab-cdef-0123-456789abcdef'
+                  status: 'delivered'
                   is_delivered: true
         401:
           $ref: '#/components/responses/Unauthorized'
@@ -2167,7 +2113,7 @@ paths:
           schema:
             type: string
           description: Search query (tracking number, name, address)
-          example: "127777489"
+          example: '127777489'
         - in: query
           name: status
           schema:
@@ -2193,14 +2139,14 @@ paths:
               example:
                 success: true
                 data:
-                  - id: "p1234567-89ab-cdef-0123-456789abcdef"
-                    tracking_id: "#127777489-DL-NY"
-                    status: "in_transit"
-                    status_label: "In Transit"
-                    sender_name: "John Smith"
-                    recipient_name: "Jane Doe"
-                    package_type: "Parcel"
-                    current_location: "NEW YORK CITY, NEW YORK"
+                  - id: 'p1234567-89ab-cdef-0123-456789abcdef'
+                    tracking_id: '#127777489-DL-NY'
+                    status: 'in_transit'
+                    status_label: 'In Transit'
+                    sender_name: 'John Smith'
+                    recipient_name: 'Jane Doe'
+                    package_type: 'Parcel'
+                    current_location: 'NEW YORK CITY, NEW YORK'
                 pagination:
                   page: 1
                   limit: 20
@@ -2224,7 +2170,7 @@ paths:
           schema:
             type: string
           description: Package tracking ID (with or without # prefix)
-          example: "127777489-DL-NY"
+          example: '127777489-DL-NY'
       responses:
         200:
           description: Package tracking info retrieved successfully
@@ -2240,37 +2186,37 @@ paths:
               example:
                 success: true
                 data:
-                  tracking_id: "#127777489-DL-NY"
-                  status: "out_for_delivery"
-                  package_type: "Parcel"
+                  tracking_id: '#127777489-DL-NY'
+                  status: 'out_for_delivery'
+                  package_type: 'Parcel'
                   sender:
-                    name: "John Smith"
-                    address: "123 Main St, San Francisco, CA"
+                    name: 'John Smith'
+                    address: '123 Main St, San Francisco, CA'
                   recipient:
-                    name: "Jane Doe"
-                    address: "456 Park Ave, New York, NY"
-                  delivery_address: "456 Park Ave, New York, NY"
-                  estimated_delivery: "2026-03-01T00:00:00Z"
+                    name: 'Jane Doe'
+                    address: '456 Park Ave, New York, NY'
+                  delivery_address: '456 Park Ave, New York, NY'
+                  estimated_delivery: '2026-03-01T00:00:00Z'
                   status_history:
-                    - status: "Package Created"
-                      location: "Processing Center"
-                      timestamp: "2026-02-28T08:00:00Z"
+                    - status: 'Package Created'
+                      location: 'Processing Center'
+                      timestamp: '2026-02-28T08:00:00Z'
                       is_current: false
-                    - status: "Package Picked Up"
-                      location: "SAN FRANCISCO, CALIFORNIA"
-                      timestamp: "2026-02-28T10:00:00Z"
+                    - status: 'Package Picked Up'
+                      location: 'SAN FRANCISCO, CALIFORNIA'
+                      timestamp: '2026-02-28T10:00:00Z'
                       is_current: false
-                    - status: "Package has left Courier Facility"
-                      location: "SAN FRANCISCO, CALIFORNIA"
-                      timestamp: "2026-02-28T14:00:00Z"
+                    - status: 'Package has left Courier Facility'
+                      location: 'SAN FRANCISCO, CALIFORNIA'
+                      timestamp: '2026-02-28T14:00:00Z'
                       is_current: false
-                    - status: "Package arrived at Local Facility"
-                      location: "NEW YORK CITY, NEW YORK"
-                      timestamp: "2026-03-01T08:00:00Z"
+                    - status: 'Package arrived at Local Facility'
+                      location: 'NEW YORK CITY, NEW YORK'
+                      timestamp: '2026-03-01T08:00:00Z'
                       is_current: false
-                    - status: "Out for Delivery"
-                      location: "NEW YORK CITY, NEW YORK"
-                      timestamp: "2026-03-01T09:00:00Z"
+                    - status: 'Out for Delivery'
+                      location: 'NEW YORK CITY, NEW YORK'
+                      timestamp: '2026-03-01T09:00:00Z'
                       is_current: true
         404:
           $ref: '#/components/responses/NotFound'
@@ -2306,18 +2252,18 @@ paths:
               example:
                 success: true
                 data:
-                  - tracking_id: "#127777489-DL-NY"
-                    status: "in_transit"
-                    status_label: "In Transit"
-                    package_type: "Documents"
-                    current_location: "DETROIT, MICHIGAN"
-                    last_update: "Package has left Courier Facility"
-                  - tracking_id: "#127777490-DL-CH"
-                    status: "out_for_delivery"
-                    status_label: "Out for Delivery"
-                    package_type: "Parcel"
-                    current_location: "NEW YORK CITY, NEW YORK"
-                    last_update: "Out for Delivery"
+                  - tracking_id: '#127777489-DL-NY'
+                    status: 'in_transit'
+                    status_label: 'In Transit'
+                    package_type: 'Documents'
+                    current_location: 'DETROIT, MICHIGAN'
+                    last_update: 'Package has left Courier Facility'
+                  - tracking_id: '#127777490-DL-CH'
+                    status: 'out_for_delivery'
+                    status_label: 'Out for Delivery'
+                    package_type: 'Parcel'
+                    current_location: 'NEW YORK CITY, NEW YORK'
+                    last_update: 'Out for Delivery'
         401:
           $ref: '#/components/responses/Unauthorized'
         500:
@@ -2348,7 +2294,20 @@ paths:
               properties:
                 status:
                   type: string
-                  enum: [pending, assigned, picked_up, left_facility, in_transit, arrived_facility, out_for_delivery, delivered, failed, cancelled, returned]
+                  enum:
+                    [
+                      pending,
+                      assigned,
+                      picked_up,
+                      left_facility,
+                      in_transit,
+                      arrived_facility,
+                      out_for_delivery,
+                      delivered,
+                      failed,
+                      cancelled,
+                      returned,
+                    ]
                   description: New package status
                 location:
                   type: string
@@ -2361,9 +2320,9 @@ paths:
                   default: true
                   description: Whether to send notification to recipient
             example:
-              status: "out_for_delivery"
-              location: "NEW YORK CITY, NEW YORK"
-              notes: "Package is out for delivery"
+              status: 'out_for_delivery'
+              location: 'NEW YORK CITY, NEW YORK'
+              notes: 'Package is out for delivery'
               notify_recipient: true
       responses:
         200:
@@ -2373,10 +2332,10 @@ paths:
               example:
                 success: true
                 data:
-                  id: "p1234567-89ab-cdef-0123-456789abcdef"
-                  tracking_number: "127777489-DL-NY"
-                  status: "out_for_delivery"
-                  current_location: "NEW YORK CITY, NEW YORK"
+                  id: 'p1234567-89ab-cdef-0123-456789abcdef'
+                  tracking_number: '127777489-DL-NY'
+                  status: 'out_for_delivery'
+                  current_location: 'NEW YORK CITY, NEW YORK'
                   notification_sent: true
         400:
           $ref: '#/components/responses/BadRequest'
@@ -2413,17 +2372,17 @@ paths:
                     delivered_today: 28
                     pending_pickup: 12
                   featured_package:
-                    tracking_id: "#127777489-DL-NY"
-                    status: "out_for_delivery"
-                    status_label: "Out for Delivery"
-                    package_type: "Parcel"
-                    current_location: "NEW YORK CITY, NEW YORK"
+                    tracking_id: '#127777489-DL-NY'
+                    status: 'out_for_delivery'
+                    status_label: 'Out for Delivery'
+                    package_type: 'Parcel'
+                    current_location: 'NEW YORK CITY, NEW YORK'
                   recent_packages:
-                    - tracking_id: "#127777489-DL-NY"
-                      status: "in_transit"
-                      status_label: "In Transit"
-                      package_type: "Documents"
-                      current_location: "DETROIT, MICHIGAN"
+                    - tracking_id: '#127777489-DL-NY'
+                      status: 'in_transit'
+                      status_label: 'In Transit'
+                      package_type: 'Documents'
+                      current_location: 'DETROIT, MICHIGAN'
         401:
           $ref: '#/components/responses/Unauthorized'
         500:
@@ -3164,10 +3123,10 @@ components:
           format: uuid
         name:
           type: string
-          example: "Samsung Galaxy S24 Ultra"
+          example: 'Samsung Galaxy S24 Ultra'
         description:
           type: string
-          example: "Latest flagship smartphone with AI features"
+          example: 'Latest flagship smartphone with AI features'
         final_price:
           type: number
           example: 850000
@@ -3180,7 +3139,7 @@ components:
         approval_status:
           type: string
           enum: [pending, approved, rejected]
-          example: "pending"
+          example: 'pending'
         created_at:
           type: string
           format: date-time
@@ -3193,16 +3152,16 @@ components:
           format: uuid
         name:
           type: string
-          example: "Grand Lekki Resort"
+          example: 'Grand Lekki Resort'
         description:
           type: string
-          example: "5-star luxury resort with ocean view"
+          example: '5-star luxury resort with ocean view'
         city:
           type: string
-          example: "Lagos"
+          example: 'Lagos'
         state:
           type: string
-          example: "Lagos"
+          example: 'Lagos'
         star_rating:
           type: integer
           minimum: 1
@@ -3211,7 +3170,7 @@ components:
         approval_status:
           type: string
           enum: [pending, approved, rejected]
-          example: "pending"
+          example: 'pending'
         created_at:
           type: string
           format: date-time
@@ -3224,36 +3183,36 @@ components:
           format: uuid
         first_name:
           type: string
-          example: "Chukwuemeka"
+          example: 'Chukwuemeka'
         last_name:
           type: string
-          example: "Okonkwo"
+          example: 'Okonkwo'
         email:
           type: string
           format: email
-          example: "chukwuemeka@email.com"
+          example: 'chukwuemeka@email.com'
         phone:
           type: string
-          example: "+2348012345678"
+          example: '+2348012345678'
         city:
           type: string
-          example: "Lagos"
+          example: 'Lagos'
         license_number:
           type: string
-          example: "LIC-2024-12345"
+          example: 'LIC-2024-12345'
         vehicle_make:
           type: string
-          example: "Toyota"
+          example: 'Toyota'
         vehicle_model:
           type: string
-          example: "Camry"
+          example: 'Camry'
         plate_number:
           type: string
-          example: "ABC-123-XY"
+          example: 'ABC-123-XY'
         approval_status:
           type: string
           enum: [pending, approved, rejected]
-          example: "pending"
+          example: 'pending'
         created_at:
           type: string
           format: date-time
@@ -3266,30 +3225,30 @@ components:
           format: uuid
         title:
           type: string
-          example: "Hotel Promotional Video"
+          example: 'Hotel Promotional Video'
         description:
           type: string
-          example: "Marketing video for Grand Lekki Resort"
+          example: 'Marketing video for Grand Lekki Resort'
         content_type:
           type: string
-          example: "video/mp4"
+          example: 'video/mp4'
         file_name:
           type: string
-          example: "grand-lekki-promo.mp4"
+          example: 'grand-lekki-promo.mp4'
         category:
           type: string
-          example: "promotional"
+          example: 'promotional'
         publisher_name:
           type: string
-          example: "Marketing Team"
+          example: 'Marketing Team'
         publisher_email:
           type: string
           format: email
-          example: "marketing@grandlekki.com"
+          example: 'marketing@grandlekki.com'
         approval_status:
           type: string
           enum: [pending, approved, rejected]
-          example: "pending"
+          example: 'pending'
         created_at:
           type: string
           format: date-time
@@ -3303,17 +3262,17 @@ components:
           format: uuid
         order_number:
           type: string
-          example: "ORD-2026-001234"
+          example: 'ORD-2026-001234'
         product_name:
           type: string
-          example: "Analog Table Clock"
+          example: 'Analog Table Clock'
         quantity:
           type: integer
           example: 2
         date:
           type: string
           format: date
-          example: "2026-02-05"
+          example: '2026-02-05'
         revenue:
           type: number
           example: 253.82
@@ -3323,7 +3282,7 @@ components:
         status:
           type: string
           enum: [pending, processing, shipped, delivered, cancelled]
-          example: "pending"
+          example: 'pending'
         is_delivered:
           type: boolean
           example: false
@@ -3336,31 +3295,31 @@ components:
           format: uuid
         tracking_id:
           type: string
-          example: "#127777489-DL-NY"
+          example: '#127777489-DL-NY'
         status:
           type: string
-          example: "in_transit"
+          example: 'in_transit'
         status_label:
           type: string
-          example: "In Transit"
+          example: 'In Transit'
         sender_name:
           type: string
-          example: "John Smith"
+          example: 'John Smith'
         recipient_name:
           type: string
-          example: "Jane Doe"
+          example: 'Jane Doe'
         sender_address:
           type: string
-          example: "123 Main St, San Francisco, CA"
+          example: '123 Main St, San Francisco, CA'
         recipient_address:
           type: string
-          example: "456 Park Ave, New York, NY"
+          example: '456 Park Ave, New York, NY'
         package_type:
           type: string
-          example: "Parcel"
+          example: 'Parcel'
         current_location:
           type: string
-          example: "NEW YORK CITY, NEW YORK"
+          example: 'NEW YORK CITY, NEW YORK'
         estimated_delivery:
           type: string
           format: date-time
@@ -3376,34 +3335,34 @@ components:
       properties:
         tracking_id:
           type: string
-          example: "#127777489-DL-NY"
+          example: '#127777489-DL-NY'
         status:
           type: string
-          example: "out_for_delivery"
+          example: 'out_for_delivery'
         package_type:
           type: string
-          example: "Parcel"
+          example: 'Parcel'
         sender:
           type: object
           properties:
             name:
               type: string
-              example: "John Smith"
+              example: 'John Smith'
             address:
               type: string
-              example: "123 Main St, San Francisco, CA"
+              example: '123 Main St, San Francisco, CA'
         recipient:
           type: object
           properties:
             name:
               type: string
-              example: "Jane Doe"
+              example: 'Jane Doe'
             address:
               type: string
-              example: "456 Park Ave, New York, NY"
+              example: '456 Park Ave, New York, NY'
         delivery_address:
           type: string
-          example: "456 Park Ave, New York, NY"
+          example: '456 Park Ave, New York, NY'
         estimated_delivery:
           type: string
           format: date-time
@@ -3417,10 +3376,10 @@ components:
       properties:
         status:
           type: string
-          example: "Package has left Courier Facility"
+          example: 'Package has left Courier Facility'
         location:
           type: string
-          example: "SAN FRANCISCO, CALIFORNIA"
+          example: 'SAN FRANCISCO, CALIFORNIA'
         timestamp:
           type: string
           format: date-time
@@ -3433,22 +3392,22 @@ components:
       properties:
         tracking_id:
           type: string
-          example: "#127777489-DL-NY"
+          example: '#127777489-DL-NY'
         status:
           type: string
-          example: "in_transit"
+          example: 'in_transit'
         status_label:
           type: string
-          example: "In Transit"
+          example: 'In Transit'
         package_type:
           type: string
-          example: "Documents"
+          example: 'Documents'
         current_location:
           type: string
-          example: "DETROIT, MICHIGAN"
+          example: 'DETROIT, MICHIGAN'
         last_update:
           type: string
-          example: "Package has left Courier Facility"
+          example: 'Package has left Courier Facility'
         updated_at:
           type: string
           format: date-time
@@ -3477,19 +3436,19 @@ components:
           properties:
             tracking_id:
               type: string
-              example: "#127777489-DL-NY"
+              example: '#127777489-DL-NY'
             status:
               type: string
-              example: "out_for_delivery"
+              example: 'out_for_delivery'
             status_label:
               type: string
-              example: "Out for Delivery"
+              example: 'Out for Delivery'
             package_type:
               type: string
-              example: "Parcel"
+              example: 'Parcel'
             current_location:
               type: string
-              example: "NEW YORK CITY, NEW YORK"
+              example: 'NEW YORK CITY, NEW YORK'
         recent_packages:
           type: array
           items:

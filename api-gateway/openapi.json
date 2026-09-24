@@ -226,10 +226,7 @@
           },
           "platform": {
             "type": "string",
-            "enum": [
-              "supabase",
-              "railway"
-            ],
+            "enum": ["supabase", "railway"],
             "example": "railway"
           },
           "healthy": {
@@ -306,19 +303,14 @@
       "post": {
         "summary": "Register a new user",
         "description": "Creates a new user account. The user will receive a confirmation email\nif email confirmation is enabled in Supabase settings.\n\nThis endpoint proxies to Supabase Auth and automatically creates:\n- User record in auth.users\n- Customer profile via database trigger\n- Default CUSTOMER role\n- User wallet (if trigger is configured)\n",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -391,19 +383,14 @@
       "post": {
         "summary": "Login with email and password",
         "description": "Authenticates a user and returns access and refresh tokens.\n\nThe access_token should be used in the Authorization header for\nsubsequent API requests: `Authorization: Bearer <access_token>`\n",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
+                "required": ["email", "password"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -487,9 +474,7 @@
       "post": {
         "summary": "Logout current session",
         "description": "Invalidates the current session and refresh token",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -509,9 +494,7 @@
       "get": {
         "summary": "Get current authenticated user",
         "description": "Returns the currently authenticated user's information",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -587,18 +570,14 @@
       "post": {
         "summary": "Refresh access token",
         "description": "Exchanges a refresh token for a new access token.\nUse this when the access token expires.\n",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "refresh_token"
-                ],
+                "required": ["refresh_token"],
                 "properties": {
                   "refresh_token": {
                     "type": "string",
@@ -644,18 +623,14 @@
       "post": {
         "summary": "Request password reset",
         "description": "Sends a password reset email to the user.\nThe email contains a link with a reset token.\n",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "email"
-                ],
+                "required": ["email"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -681,19 +656,14 @@
       "post": {
         "summary": "Reset password with token",
         "description": "Resets the user's password using the token from the reset email.\nThe token is typically passed as a URL parameter from the reset link.\n",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "token",
-                  "password"
-                ],
+                "required": ["token", "password"],
                 "properties": {
                   "token": {
                     "type": "string",
@@ -723,9 +693,7 @@
       "get": {
         "summary": "List all available service documentation",
         "description": "Returns a list of all services with links to their API documentation",
-        "tags": [
-          "Documentation"
-        ],
+        "tags": ["Documentation"],
         "responses": {
           "200": {
             "description": "List of services with documentation links"
@@ -737,18 +705,14 @@
       "get": {
         "summary": "Get all OpenAPI specifications",
         "description": "Returns links to all service OpenAPI JSON specs",
-        "tags": [
-          "Documentation"
-        ]
+        "tags": ["Documentation"]
       }
     },
     "/docs/{service}/json": {
       "get": {
         "summary": "Get OpenAPI JSON specification for a service",
         "description": "Returns the OpenAPI JSON spec for the specified service",
-        "tags": [
-          "Documentation"
-        ],
+        "tags": ["Documentation"],
         "parameters": [
           {
             "in": "path",
@@ -756,16 +720,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "gateway",
-                "social",
-                "admin",
-                "search",
-                "delivery",
-                "payment",
-                "notifications",
-                "taxi"
-              ]
+              "enum": ["gateway", "social", "admin", "search", "delivery", "payment", "notifications", "taxi"]
             }
           }
         ],
@@ -783,9 +738,7 @@
       "get": {
         "summary": "Get API documentation for a specific service",
         "description": "Proxies the Swagger UI documentation for the specified service",
-        "tags": [
-          "Documentation"
-        ],
+        "tags": ["Documentation"],
         "parameters": [
           {
             "in": "path",
@@ -793,15 +746,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "social",
-                "admin",
-                "search",
-                "delivery",
-                "payment",
-                "notifications",
-                "taxi"
-              ]
+              "enum": ["social", "admin", "search", "delivery", "payment", "notifications", "taxi"]
             }
           }
         ],
@@ -819,9 +764,7 @@
       "get": {
         "summary": "Basic health check",
         "description": "Returns the health status of the API Gateway",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is healthy",
@@ -856,9 +799,7 @@
       "get": {
         "summary": "Readiness check",
         "description": "Checks if the service registry is initialized",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is ready"
@@ -873,9 +814,7 @@
       "get": {
         "summary": "Liveness check",
         "description": "Simple check to see if the process is alive",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is alive"
@@ -887,9 +826,7 @@
       "get": {
         "summary": "Detailed health check",
         "description": "Checks health of all downstream services",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Detailed health status"
@@ -901,9 +838,7 @@
       "get": {
         "summary": "Service statistics",
         "description": "Returns statistics about registered services",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service statistics"
@@ -915,9 +850,7 @@
       "get": {
         "summary": "Get user profile",
         "description": "Get the current user's profile information",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -967,30 +900,13 @@
                           "type": "array",
                           "items": {
                             "type": "string",
-                            "enum": [
-                              "CUSTOMER",
-                              "VENDOR",
-                              "DRIVER",
-                              "HOST",
-                              "ADVERTISER",
-                              "ADMIN"
-                            ]
+                            "enum": ["CUSTOMER", "VENDOR", "DRIVER", "HOST", "ADVERTISER", "ADMIN"]
                           },
-                          "example": [
-                            "CUSTOMER",
-                            "DRIVER"
-                          ]
+                          "example": ["CUSTOMER", "DRIVER"]
                         },
                         "active_role": {
                           "type": "string",
-                          "enum": [
-                            "CUSTOMER",
-                            "VENDOR",
-                            "DRIVER",
-                            "HOST",
-                            "ADVERTISER",
-                            "ADMIN"
-                          ],
+                          "enum": ["CUSTOMER", "VENDOR", "DRIVER", "HOST", "ADVERTISER", "ADMIN"],
                           "example": "DRIVER"
                         },
                         "is_verified": {
@@ -1019,9 +935,7 @@
       "put": {
         "summary": "Update user profile",
         "description": "Update the current user's profile information",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -1094,9 +1008,7 @@
       "post": {
         "summary": "Upload profile picture",
         "description": "Upload a new profile picture",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -1108,9 +1020,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "file"
-                ],
+                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -1163,9 +1073,7 @@
       "post": {
         "summary": "Add user address",
         "description": "Add a new address to the user's address book",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -1177,12 +1085,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "label",
-                  "address_line1",
-                  "city",
-                  "state"
-                ],
+                "required": ["label", "address_line1", "city", "state"],
                 "properties": {
                   "label": {
                     "type": "string",
@@ -1288,9 +1191,7 @@
       "post": {
         "summary": "Apply for a role",
         "description": "Submit an application for a new role (driver, vendor, etc.)",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -1302,18 +1203,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "role_name"
-                ],
+                "required": ["role_name"],
                 "properties": {
                   "role_name": {
                     "type": "string",
-                    "enum": [
-                      "VENDOR",
-                      "DRIVER",
-                      "HOST",
-                      "ADVERTISER"
-                    ],
+                    "enum": ["VENDOR", "DRIVER", "HOST", "ADVERTISER"],
                     "description": "The role you're applying for"
                   },
                   "application_data": {
@@ -1367,9 +1261,7 @@
                       "business_type": "Electronics",
                       "rc_number": "RC-1234567"
                     },
-                    "document_urls": [
-                      "https://storage.supabase.co/docs/cac-certificate.pdf"
-                    ]
+                    "document_urls": ["https://storage.supabase.co/docs/cac-certificate.pdf"]
                   }
                 },
                 "driver_application": {
@@ -1466,9 +1358,7 @@
       "post": {
         "summary": "Switch active role",
         "description": "Switch between user roles (e.g., user to driver)",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -1480,30 +1370,16 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "role"
-                ],
+                "required": ["role"],
                 "properties": {
                   "role_name": {
                     "type": "string",
-                    "enum": [
-                      "CUSTOMER",
-                      "VENDOR",
-                      "DRIVER",
-                      "HOST",
-                      "ADVERTISER",
-                      "ADMIN"
-                    ],
+                    "enum": ["CUSTOMER", "VENDOR", "DRIVER", "HOST", "ADVERTISER", "ADMIN"],
                     "description": "The role to switch to (must be one you have)"
                   },
                   "role": {
                     "type": "string",
-                    "enum": [
-                      "user",
-                      "driver",
-                      "vendor",
-                      "courier"
-                    ],
+                    "enum": ["user", "driver", "vendor", "courier"],
                     "example": "driver"
                   }
                 }
@@ -1558,10 +1434,7 @@
       "post": {
         "summary": "Review role application (Admin)",
         "description": "Approve or reject a role application",
-        "tags": [
-          "Admin Panel",
-          "Admin"
-        ],
+        "tags": ["Admin Panel", "Admin"],
         "security": [
           {
             "BearerAuth": []
@@ -1573,10 +1446,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "application_id",
-                  "decision"
-                ],
+                "required": ["application_id", "decision"],
                 "properties": {
                   "application_id": {
                     "type": "string",
@@ -1585,10 +1455,7 @@
                   },
                   "action": {
                     "type": "string",
-                    "enum": [
-                      "approve",
-                      "reject"
-                    ],
+                    "enum": ["approve", "reject"],
                     "description": "Approve or reject the application"
                   },
                   "review_notes": {
@@ -1598,10 +1465,7 @@
                   },
                   "decision": {
                     "type": "string",
-                    "enum": [
-                      "approved",
-                      "rejected"
-                    ]
+                    "enum": ["approved", "rejected"]
                   },
                   "notes": {
                     "type": "string"
@@ -1650,10 +1514,7 @@
                         },
                         "new_status": {
                           "type": "string",
-                          "enum": [
-                            "approved",
-                            "rejected"
-                          ]
+                          "enum": ["approved", "rejected"]
                         },
                         "user_notified": {
                           "type": "boolean",
@@ -1682,9 +1543,7 @@
       "post": {
         "summary": "Search for hotels",
         "description": "Search hotels by location, dates, guests, amenities, and price range.\nReturns paginated results with availability and pricing.\n",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "security": [
           {
             "BearerAuth": []
@@ -1696,11 +1555,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "location",
-                  "check_in",
-                  "check_out"
-                ],
+                "required": ["location", "check_in", "check_out"],
                 "properties": {
                   "location": {
                     "type": "string",
@@ -1745,12 +1600,7 @@
                       "type": "string"
                     },
                     "description": "Required amenities",
-                    "example": [
-                      "wifi",
-                      "pool",
-                      "parking",
-                      "gym"
-                    ]
+                    "example": ["wifi", "pool", "parking", "gym"]
                   },
                   "star_rating": {
                     "type": "integer",
@@ -1761,12 +1611,7 @@
                   },
                   "sort_by": {
                     "type": "string",
-                    "enum": [
-                      "price_low",
-                      "price_high",
-                      "rating",
-                      "distance"
-                    ],
+                    "enum": ["price_low", "price_high", "rating", "distance"],
                     "default": "rating"
                   },
                   "page": {
@@ -1790,10 +1635,7 @@
                 "rooms": 1,
                 "price_min": 25000,
                 "price_max": 75000,
-                "amenities": [
-                  "wifi",
-                  "pool"
-                ],
+                "amenities": ["wifi", "pool"],
                 "star_rating": 4
               }
             }
@@ -1851,9 +1693,7 @@
       "get": {
         "summary": "Search hotels",
         "description": "Search for hotels with filtering by location, dates, price, and amenities",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "query",
@@ -1965,9 +1805,7 @@
       "get": {
         "summary": "Get hotel details",
         "description": "Get full details of a specific hotel including rooms, amenities, and reviews",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "security": [
           {
             "BearerAuth": []
@@ -2060,10 +1898,7 @@
       "get": {
         "summary": "Get hotel reviews",
         "description": "Get paginated reviews for a specific hotel",
-        "tags": [
-          "Hotels",
-          "Reviews"
-        ],
+        "tags": ["Hotels", "Reviews"],
         "parameters": [
           {
             "in": "path",
@@ -2095,13 +1930,7 @@
             "name": "sort_by",
             "schema": {
               "type": "string",
-              "enum": [
-                "newest",
-                "oldest",
-                "highest_rating",
-                "lowest_rating",
-                "most_helpful"
-              ],
+              "enum": ["newest", "oldest", "highest_rating", "lowest_rating", "most_helpful"],
               "default": "newest"
             }
           }
@@ -2179,10 +2008,7 @@
       "get": {
         "summary": "Check room availability",
         "description": "Check room availability for specific dates",
-        "tags": [
-          "Hotels",
-          "Rooms"
-        ],
+        "tags": ["Hotels", "Rooms"],
         "security": [
           {
             "BearerAuth": []
@@ -2267,10 +2093,7 @@
       "post": {
         "summary": "Calculate booking price",
         "description": "Calculate the total price for a booking including taxes and fees",
-        "tags": [
-          "Hotels",
-          "Bookings"
-        ],
+        "tags": ["Hotels", "Bookings"],
         "security": [
           {
             "BearerAuth": []
@@ -2293,11 +2116,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "room_type_id",
-                  "check_in",
-                  "check_out"
-                ],
+                "required": ["room_type_id", "check_in", "check_out"],
                 "properties": {
                   "room_type_id": {
                     "type": "string",
@@ -2352,9 +2171,7 @@
       "post": {
         "summary": "Request a ride",
         "description": "Request a new ride with pickup and dropoff locations",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2366,12 +2183,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "pickup_lat",
-                  "pickup_lng",
-                  "dropoff_lat",
-                  "dropoff_lng"
-                ],
+                "required": ["pickup_lat", "pickup_lng", "dropoff_lat", "dropoff_lng"],
                 "properties": {
                   "pickup_address": {
                     "type": "string",
@@ -2403,21 +2215,12 @@
                   },
                   "vehicle_type": {
                     "type": "string",
-                    "enum": [
-                      "standard",
-                      "comfort",
-                      "premium",
-                      "xl"
-                    ],
+                    "enum": ["standard", "comfort", "premium", "xl"],
                     "default": "standard"
                   },
                   "payment_method": {
                     "type": "string",
-                    "enum": [
-                      "cash",
-                      "card",
-                      "wallet"
-                    ],
+                    "enum": ["cash", "card", "wallet"],
                     "default": "cash"
                   },
                   "notes": {
@@ -2474,9 +2277,7 @@
       "post": {
         "summary": "Get ride estimate",
         "description": "Get price and time estimate for a ride",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2488,12 +2289,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "pickup_lat",
-                  "pickup_lng",
-                  "dropoff_lat",
-                  "dropoff_lng"
-                ],
+                "required": ["pickup_lat", "pickup_lng", "dropoff_lat", "dropoff_lng"],
                 "properties": {
                   "pickup_lat": {
                     "type": "number",
@@ -2567,9 +2363,7 @@
       "post": {
         "summary": "Accept a ride (Driver)",
         "description": "Driver accepts a ride request",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2581,9 +2375,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "ride_id"
-                ],
+                "required": ["ride_id"],
                 "properties": {
                   "ride_id": {
                     "type": "string",
@@ -2627,9 +2419,7 @@
       "post": {
         "summary": "Start a ride (Driver)",
         "description": "Driver starts the ride after passenger pickup",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2641,9 +2431,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "ride_id"
-                ],
+                "required": ["ride_id"],
                 "properties": {
                   "ride_id": {
                     "type": "string",
@@ -2681,9 +2469,7 @@
       "post": {
         "summary": "Complete a ride (Driver)",
         "description": "Driver marks the ride as completed",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2695,9 +2481,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "ride_id"
-                ],
+                "required": ["ride_id"],
                 "properties": {
                   "ride_id": {
                     "type": "string",
@@ -2732,11 +2516,7 @@
                         },
                         "payment_status": {
                           "type": "string",
-                          "enum": [
-                            "pending",
-                            "completed",
-                            "failed"
-                          ]
+                          "enum": ["pending", "completed", "failed"]
                         },
                         "earnings": {
                           "type": "number",
@@ -2758,9 +2538,7 @@
       "post": {
         "summary": "Cancel a ride",
         "description": "Cancel an ongoing or requested ride",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2772,9 +2550,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "ride_id"
-                ],
+                "required": ["ride_id"],
                 "properties": {
                   "ride_id": {
                     "type": "string",
@@ -2828,9 +2604,7 @@
       "get": {
         "summary": "Get nearby drivers",
         "description": "Find available drivers near a location",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2863,12 +2637,7 @@
             "schema": {
               "type": "string",
               "default": 5,
-              "enum": [
-                "standard",
-                "comfort",
-                "premium",
-                "xl"
-              ]
+              "enum": ["standard", "comfort", "premium", "xl"]
             },
             "description": "Search radius in kilometers"
           },
@@ -2877,12 +2646,7 @@
             "name": "radius_km",
             "schema": {
               "type": "number",
-              "enum": [
-                "standard",
-                "comfort",
-                "premium",
-                "xl"
-              ],
+              "enum": ["standard", "comfort", "premium", "xl"],
               "default": 5
             },
             "description": "Filter by vehicle type"
@@ -2918,9 +2682,7 @@
       "get": {
         "summary": "Get ride history",
         "description": "Get user's ride history with pagination",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "security": [
           {
             "BearerAuth": []
@@ -2938,11 +2700,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "completed",
-                "cancelled",
-                "all"
-              ],
+              "enum": ["completed", "cancelled", "all"],
               "default": "all"
             }
           }
@@ -2995,9 +2753,7 @@
       "get": {
         "summary": "Get user's cart",
         "description": "Retrieve the current user's shopping cart",
-        "tags": [
-          "E-commerce"
-        ],
+        "tags": ["E-commerce"],
         "security": [
           {
             "BearerAuth": []
@@ -3030,9 +2786,7 @@
       "post": {
         "summary": "Add item to cart",
         "description": "Add a product to the shopping cart",
-        "tags": [
-          "E-commerce"
-        ],
+        "tags": ["E-commerce"],
         "security": [
           {
             "BearerAuth": []
@@ -3084,10 +2838,7 @@
       "post": {
         "summary": "Checkout cart",
         "description": "Process checkout and create an order",
-        "tags": [
-          "E-commerce",
-          "Payments"
-        ],
+        "tags": ["E-commerce", "Payments"],
         "security": [
           {
             "BearerAuth": []
@@ -3169,9 +2920,7 @@
       "post": {
         "summary": "Initiate a call",
         "description": "Start a voice or video call with another user",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "security": [
           {
             "BearerAuth": []
@@ -3213,9 +2962,7 @@
     "/api/v1/calls/answer": {
       "post": {
         "summary": "Answer a call",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "security": [
           {
             "BearerAuth": []
@@ -3227,9 +2974,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "call_id"
-                ],
+                "required": ["call_id"],
                 "properties": {
                   "call_id": {
                     "type": "string",
@@ -3267,9 +3012,7 @@
     "/api/v1/calls/decline": {
       "post": {
         "summary": "Decline a call",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "security": [
           {
             "BearerAuth": []
@@ -3281,9 +3024,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "call_id"
-                ],
+                "required": ["call_id"],
                 "properties": {
                   "call_id": {
                     "type": "string",
@@ -3305,9 +3046,7 @@
     "/api/v1/calls/end": {
       "post": {
         "summary": "End a call",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "security": [
           {
             "BearerAuth": []
@@ -3319,9 +3058,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "call_id"
-                ],
+                "required": ["call_id"],
                 "properties": {
                   "call_id": {
                     "type": "string",
@@ -3367,9 +3104,7 @@
       "post": {
         "summary": "Upload file",
         "description": "Upload a file to storage",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "security": [
           {
             "BearerAuth": []
@@ -3381,9 +3116,7 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "file"
-                ],
+                "required": ["file"],
                 "properties": {
                   "file": {
                     "type": "string",
@@ -3391,12 +3124,7 @@
                   },
                   "bucket": {
                     "type": "string",
-                    "enum": [
-                      "avatars",
-                      "posts",
-                      "documents",
-                      "hotels"
-                    ],
+                    "enum": ["avatars", "posts", "documents", "hotels"],
                     "default": "posts"
                   },
                   "folder": {
@@ -3426,9 +3154,7 @@
       "post": {
         "summary": "Process image",
         "description": "Resize, crop, or optimize an image",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "security": [
           {
             "BearerAuth": []
@@ -3440,9 +3166,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "image_url"
-                ],
+                "required": ["image_url"],
                 "properties": {
                   "image_url": {
                     "type": "string",
@@ -3464,11 +3188,7 @@
                   },
                   "format": {
                     "type": "string",
-                    "enum": [
-                      "jpeg",
-                      "png",
-                      "webp"
-                    ],
+                    "enum": ["jpeg", "png", "webp"],
                     "default": "webp"
                   }
                 }
@@ -3518,9 +3238,7 @@
       "get": {
         "summary": "Get my support tickets",
         "description": "Get the current user's support tickets",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "security": [
           {
             "BearerAuth": []
@@ -3533,12 +3251,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "open",
-                "in_progress",
-                "resolved",
-                "closed"
-              ]
+              "enum": ["open", "in_progress", "resolved", "closed"]
             }
           },
           {
@@ -3549,13 +3262,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "open",
-                "in_progress",
-                "resolved",
-                "closed",
-                "all"
-              ],
+              "enum": ["open", "in_progress", "resolved", "closed", "all"],
               "default": "all"
             },
             "$ref": "#/components/parameters/Limit"
@@ -3589,20 +3296,14 @@
       "post": {
         "summary": "Create support ticket",
         "description": "Create a new support ticket",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "subject",
-                  "description",
-                  "category"
-                ],
+                "required": ["subject", "description", "category"],
                 "properties": {
                   "subject": {
                     "type": "string"
@@ -3612,22 +3313,11 @@
                   },
                   "category": {
                     "type": "string",
-                    "enum": [
-                      "ride",
-                      "order",
-                      "payment",
-                      "account",
-                      "other"
-                    ]
+                    "enum": ["ride", "order", "payment", "account", "other"]
                   },
                   "priority": {
                     "type": "string",
-                    "enum": [
-                      "low",
-                      "medium",
-                      "high",
-                      "urgent"
-                    ],
+                    "enum": ["low", "medium", "high", "urgent"],
                     "default": "medium"
                   }
                 }
@@ -3651,10 +3341,7 @@
       "post": {
         "summary": "Create admin or specialized user",
         "description": "**Secure endpoint for programmatic user creation.**\n\nThis endpoint allows authorized administrators to create users with specific roles\nwithout manual database intervention.\n\n**Authentication Options:**\n1. **Master Key**: Use `x-admin-master-key` header with the admin master key\n2. **Admin Token**: Use a valid JWT from an existing ADMIN user\n\n**Supported User Types:**\n- `ADMIN` - System administrators\n- `CUSTOMER` - Regular customers\n- `VENDOR` - E-commerce vendors\n- `DRIVER` - Taxi/delivery drivers\n- `HOST` - Hotel hosts\n- `ADVERTISER` - Ad platform users\n- `NIPOST_OFFICIAL` - Nigerian Postal Service officials (requires additional details)\n\n**Rate Limiting:** Maximum 20 user creations per hour.\n\n**Direct Supabase URL:**\n`https://nkrqcigvcakqicutkpfd.supabase.co/functions/v1/admin-create-user`\n",
-        "tags": [
-          "Admin",
-          "User Management"
-        ],
+        "tags": ["Admin", "User Management"],
         "security": [
           {
             "BearerAuth": []
@@ -3680,11 +3367,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "email",
-                  "password",
-                  "user_type"
-                ],
+                "required": ["email", "password", "user_type"],
                 "properties": {
                   "email": {
                     "type": "string",
@@ -3700,15 +3383,7 @@
                   },
                   "user_type": {
                     "type": "string",
-                    "enum": [
-                      "ADMIN",
-                      "CUSTOMER",
-                      "VENDOR",
-                      "DRIVER",
-                      "HOST",
-                      "ADVERTISER",
-                      "NIPOST_OFFICIAL"
-                    ],
+                    "enum": ["ADMIN", "CUSTOMER", "VENDOR", "DRIVER", "HOST", "ADVERTISER", "NIPOST_OFFICIAL"],
                     "description": "Role to assign to the user",
                     "example": "ADMIN"
                   },
@@ -4006,9 +3681,7 @@
       "get": {
         "summary": "Get hotel details",
         "description": "Get detailed information about a specific hotel including rooms and amenities",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4049,9 +3722,7 @@
       "put": {
         "summary": "Update hotel (Manager)",
         "description": "Update hotel details",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4102,9 +3773,7 @@
       "get": {
         "summary": "Get hotel reviews",
         "description": "Fetch reviews for a specific hotel with pagination",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4149,9 +3818,7 @@
       "post": {
         "summary": "Create hotel review",
         "description": "Submit a review for a hotel stay",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4169,10 +3836,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "booking_id",
-                  "rating"
-                ],
+                "required": ["booking_id", "rating"],
                 "properties": {
                   "booking_id": {
                     "type": "string",
@@ -4210,9 +3874,7 @@
       "get": {
         "summary": "Check room availability",
         "description": "Check available rooms for specific dates",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4279,9 +3941,7 @@
       "post": {
         "summary": "Calculate booking price",
         "description": "Calculate total price including taxes and fees for a booking",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4299,11 +3959,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "room_type",
-                  "check_in",
-                  "check_out"
-                ],
+                "required": ["room_type", "check_in", "check_out"],
                 "properties": {
                   "room_type": {
                     "type": "string",
@@ -4357,21 +4013,14 @@
       "post": {
         "summary": "Create a booking",
         "description": "Create a new hotel booking",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "hotel_id",
-                  "room_type",
-                  "check_in",
-                  "check_out"
-                ],
+                "required": ["hotel_id", "room_type", "check_in", "check_out"],
                 "properties": {
                   "hotel_id": {
                     "type": "string",
@@ -4397,11 +4046,7 @@
                   },
                   "payment_method": {
                     "type": "string",
-                    "enum": [
-                      "card",
-                      "wallet",
-                      "pay_at_hotel"
-                    ]
+                    "enum": ["card", "wallet", "pay_at_hotel"]
                   }
                 }
               }
@@ -4422,22 +4067,14 @@
       "get": {
         "summary": "Get user bookings",
         "description": "Get all bookings for the authenticated user",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "query",
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "confirmed",
-                "checked_in",
-                "completed",
-                "cancelled"
-              ]
+              "enum": ["pending", "confirmed", "checked_in", "completed", "cancelled"]
             }
           },
           {
@@ -4463,9 +4100,7 @@
       "get": {
         "summary": "Get booking details",
         "description": "Get detailed information about a specific booking",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4496,9 +4131,7 @@
       "post": {
         "summary": "Cancel booking",
         "description": "Cancel an existing booking",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4540,9 +4173,7 @@
       "put": {
         "summary": "Modify booking",
         "description": "Modify booking dates or details",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4595,9 +4226,7 @@
       "post": {
         "summary": "Check in guest",
         "description": "Check in a guest for their booking (Hotel staff)",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -4625,21 +4254,14 @@
       "post": {
         "summary": "Initialize payment",
         "description": "Initialize a payment transaction with Paystack or Stripe",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "amount",
-                  "email",
-                  "reference_type",
-                  "reference_id"
-                ],
+                "required": ["amount", "email", "reference_type", "reference_id"],
                 "properties": {
                   "amount": {
                     "type": "number",
@@ -4652,20 +4274,12 @@
                   },
                   "currency": {
                     "type": "string",
-                    "enum": [
-                      "NGN",
-                      "USD"
-                    ],
+                    "enum": ["NGN", "USD"],
                     "default": "NGN"
                   },
                   "reference_type": {
                     "type": "string",
-                    "enum": [
-                      "booking",
-                      "order",
-                      "ride",
-                      "wallet_topup"
-                    ]
+                    "enum": ["booking", "order", "ride", "wallet_topup"]
                   },
                   "reference_id": {
                     "type": "string",
@@ -4723,18 +4337,14 @@
       "post": {
         "summary": "Verify payment",
         "description": "Verify a payment transaction status",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "reference"
-                ],
+                "required": ["reference"],
                 "properties": {
                   "reference": {
                     "type": "string"
@@ -4760,11 +4370,7 @@
                       "properties": {
                         "status": {
                           "type": "string",
-                          "enum": [
-                            "success",
-                            "failed",
-                            "pending"
-                          ]
+                          "enum": ["success", "failed", "pending"]
                         },
                         "amount": {
                           "type": "number"
@@ -4792,9 +4398,7 @@
       "post": {
         "summary": "Paystack webhook",
         "description": "Handle Paystack payment webhooks",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "requestBody": {
           "required": true,
           "content": {
@@ -4824,9 +4428,7 @@
       "post": {
         "summary": "Stripe webhook",
         "description": "Handle Stripe payment webhooks",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "requestBody": {
           "required": true,
           "content": {
@@ -4848,18 +4450,14 @@
       "post": {
         "summary": "Top up wallet",
         "description": "Add funds to user's wallet",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "amount"
-                ],
+                "required": ["amount"],
                 "properties": {
                   "amount": {
                     "type": "number",
@@ -4887,31 +4485,21 @@
       "post": {
         "summary": "Pay with wallet",
         "description": "Make a payment using wallet balance",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "amount",
-                  "reference_type",
-                  "reference_id"
-                ],
+                "required": ["amount", "reference_type", "reference_id"],
                 "properties": {
                   "amount": {
                     "type": "number"
                   },
                   "reference_type": {
                     "type": "string",
-                    "enum": [
-                      "booking",
-                      "order",
-                      "ride"
-                    ]
+                    "enum": ["booking", "order", "ride"]
                   },
                   "reference_id": {
                     "type": "string",
@@ -4941,9 +4529,7 @@
       "post": {
         "summary": "Process refund",
         "description": "Initiate a refund for a payment",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "parameters": [
           {
             "in": "path",
@@ -4989,18 +4575,14 @@
       "post": {
         "summary": "Create a post",
         "description": "Create a new social media post",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "content"
-                ],
+                "required": ["content"],
                 "properties": {
                   "content": {
                     "type": "string",
@@ -5015,11 +4597,7 @@
                   },
                   "visibility": {
                     "type": "string",
-                    "enum": [
-                      "public",
-                      "friends",
-                      "private"
-                    ],
+                    "enum": ["public", "friends", "private"],
                     "default": "public"
                   }
                 }
@@ -5043,9 +4621,7 @@
       "get": {
         "summary": "Get social feed",
         "description": "Get personalized social media feed",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "$ref": "#/components/parameters/Page"
@@ -5070,9 +4646,7 @@
       "post": {
         "summary": "Like a post",
         "description": "Like or unlike a post",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -5100,9 +4674,7 @@
       "post": {
         "summary": "Comment on post",
         "description": "Add a comment to a post",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -5120,9 +4692,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "content"
-                ],
+                "required": ["content"],
                 "properties": {
                   "content": {
                     "type": "string"
@@ -5148,18 +4718,14 @@
       "post": {
         "summary": "Create a story",
         "description": "Create a new story (expires in 24h)",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "media_url"
-                ],
+                "required": ["media_url"],
                 "properties": {
                   "media_url": {
                     "type": "string",
@@ -5187,9 +4753,7 @@
       "get": {
         "summary": "Get stories",
         "description": "Get stories from friends",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "responses": {
           "200": {
             "description": "List of stories"
@@ -5206,18 +4770,14 @@
       "post": {
         "summary": "Send friend request",
         "description": "Send a friend request to another user",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "user_id"
-                ],
+                "required": ["user_id"],
                 "properties": {
                   "user_id": {
                     "type": "string",
@@ -5244,9 +4804,7 @@
       "get": {
         "summary": "Get friends list",
         "description": "Get user's friends",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "responses": {
           "200": {
             "description": "Friends list"
@@ -5263,20 +4821,14 @@
       "post": {
         "summary": "Send notification",
         "description": "Send a push notification to a user",
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "user_id",
-                  "title",
-                  "body"
-                ],
+                "required": ["user_id", "title", "body"],
                 "properties": {
                   "user_id": {
                     "type": "string",
@@ -5295,11 +4847,7 @@
                     "type": "array",
                     "items": {
                       "type": "string",
-                      "enum": [
-                        "push",
-                        "email",
-                        "sms"
-                      ]
+                      "enum": ["push", "email", "sms"]
                     }
                   }
                 }
@@ -5323,9 +4871,7 @@
       "get": {
         "summary": "Get notification history",
         "description": "Get user's notification history",
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "parameters": [
           {
             "in": "query",
@@ -5357,9 +4903,7 @@
       "put": {
         "summary": "Update notification preferences",
         "description": "Update user's notification preferences",
-        "tags": [
-          "Notifications"
-        ],
+        "tags": ["Notifications"],
         "requestBody": {
           "required": true,
           "content": {
@@ -5406,30 +4950,21 @@
       "post": {
         "summary": "Apply as vendor",
         "description": "Submit application to become a vendor",
-        "tags": [
-          "E-commerce"
-        ],
+        "tags": ["E-commerce"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "business_name",
-                  "business_type",
-                  "phone"
-                ],
+                "required": ["business_name", "business_type", "phone"],
                 "properties": {
                   "business_name": {
                     "type": "string"
                   },
                   "business_type": {
                     "type": "string",
-                    "enum": [
-                      "individual",
-                      "company"
-                    ]
+                    "enum": ["individual", "company"]
                   },
                   "phone": {
                     "type": "string"
@@ -5465,9 +5000,7 @@
       "get": {
         "summary": "Get vendor balance",
         "description": "Get vendor's earnings balance and payout info",
-        "tags": [
-          "E-commerce"
-        ],
+        "tags": ["E-commerce"],
         "responses": {
           "200": {
             "description": "Vendor balance",
@@ -5513,18 +5046,14 @@
       "post": {
         "summary": "Request payout",
         "description": "Request a payout of vendor earnings",
-        "tags": [
-          "E-commerce"
-        ],
+        "tags": ["E-commerce"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "amount"
-                ],
+                "required": ["amount"],
                 "properties": {
                   "amount": {
                     "type": "number"
@@ -5556,20 +5085,14 @@
       "post": {
         "summary": "Create hotel (Manager)",
         "description": "Register a new hotel",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "address",
-                  "city"
-                ],
+                "required": ["name", "address", "city"],
                 "properties": {
                   "name": {
                     "type": "string"
@@ -5618,9 +5141,7 @@
       "post": {
         "summary": "Create room type (Manager)",
         "description": "Add a new room type to hotel",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -5638,11 +5159,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "price_per_night",
-                  "max_guests"
-                ],
+                "required": ["name", "price_per_night", "max_guests"],
                 "properties": {
                   "name": {
                     "type": "string"
@@ -5686,9 +5203,7 @@
       "get": {
         "summary": "Get hotel analytics (Manager)",
         "description": "Get booking and revenue analytics for hotel",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -5704,12 +5219,7 @@
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "7d",
-                "30d",
-                "90d",
-                "1y"
-              ],
+              "enum": ["7d", "30d", "90d", "1y"],
               "default": "30d"
             }
           }
@@ -5730,9 +5240,7 @@
       "post": {
         "summary": "Respond to review (Manager)",
         "description": "Post a response to a guest review",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -5759,9 +5267,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "response"
-                ],
+                "required": ["response"],
                 "properties": {
                   "response": {
                     "type": "string"
@@ -5787,19 +5293,14 @@
       "post": {
         "summary": "Verify driver (Admin)",
         "description": "Verify a driver's documents and approve them",
-        "tags": [
-          "Admin Panel"
-        ],
+        "tags": ["Admin Panel"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "driver_id",
-                  "status"
-                ],
+                "required": ["driver_id", "status"],
                 "properties": {
                   "driver_id": {
                     "type": "string",
@@ -5807,10 +5308,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "approved",
-                      "rejected"
-                    ]
+                    "enum": ["approved", "rejected"]
                   },
                   "notes": {
                     "type": "string"
@@ -5836,18 +5334,14 @@
       "put": {
         "summary": "Update driver availability",
         "description": "Toggle driver online/offline status",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "available"
-                ],
+                "required": ["available"],
                 "properties": {
                   "available": {
                     "type": "boolean"
@@ -5873,19 +5367,14 @@
       "put": {
         "summary": "Update driver location",
         "description": "Update driver's current location",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "latitude",
-                  "longitude"
-                ],
+                "required": ["latitude", "longitude"],
                 "properties": {
                   "latitude": {
                     "type": "number"
@@ -5917,20 +5406,14 @@
       "get": {
         "summary": "Get driver earnings",
         "description": "Get driver's earnings summary and history",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "parameters": [
           {
             "in": "query",
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "today",
-                "week",
-                "month"
-              ],
+              "enum": ["today", "week", "month"],
               "default": "today"
             }
           }
@@ -5951,9 +5434,7 @@
       "post": {
         "summary": "Rate driver",
         "description": "Rate a driver after ride completion",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "parameters": [
           {
             "in": "path",
@@ -5971,9 +5452,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "rating"
-                ],
+                "required": ["rating"],
                 "properties": {
                   "rating": {
                     "type": "integer",
@@ -6007,32 +5486,21 @@
       "post": {
         "summary": "Create ad campaign",
         "description": "Create a new advertising campaign",
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "type",
-                  "budget"
-                ],
+                "required": ["name", "type", "budget"],
                 "properties": {
                   "name": {
                     "type": "string"
                   },
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "banner",
-                      "interstitial",
-                      "native",
-                      "video"
-                    ]
+                    "enum": ["banner", "interstitial", "native", "video"]
                   },
                   "budget": {
                     "type": "number"
@@ -6067,9 +5535,7 @@
       "get": {
         "summary": "Get my campaigns",
         "description": "Get advertiser's campaigns",
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "responses": {
           "200": {
             "description": "List of campaigns"
@@ -6086,21 +5552,14 @@
       "get": {
         "summary": "Fetch ads",
         "description": "Fetch relevant ads for display",
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "parameters": [
           {
             "in": "query",
             "name": "placement",
             "schema": {
               "type": "string",
-              "enum": [
-                "home",
-                "search",
-                "ride",
-                "checkout"
-              ]
+              "enum": ["home", "search", "ride", "checkout"]
             }
           },
           {
@@ -6108,10 +5567,7 @@
             "name": "type",
             "schema": {
               "type": "string",
-              "enum": [
-                "banner",
-                "native"
-              ]
+              "enum": ["banner", "native"]
             }
           }
         ],
@@ -6126,9 +5582,7 @@
       "get": {
         "summary": "Get ad analytics",
         "description": "Get analytics for advertising campaigns",
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "parameters": [
           {
             "in": "query",
@@ -6143,11 +5597,7 @@
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "7d",
-                "30d",
-                "90d"
-              ]
+              "enum": ["7d", "30d", "90d"]
             }
           }
         ],
@@ -6167,28 +5617,18 @@
       "post": {
         "summary": "Onboard courier",
         "description": "Register as a courier/delivery partner",
-        "tags": [
-          "Delivery"
-        ],
+        "tags": ["Delivery"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "vehicle_type",
-                  "documents"
-                ],
+                "required": ["vehicle_type", "documents"],
                 "properties": {
                   "vehicle_type": {
                     "type": "string",
-                    "enum": [
-                      "bicycle",
-                      "motorcycle",
-                      "car",
-                      "van"
-                    ]
+                    "enum": ["bicycle", "motorcycle", "car", "van"]
                   },
                   "documents": {
                     "type": "array",
@@ -6221,20 +5661,14 @@
       "get": {
         "summary": "Get courier assignments",
         "description": "Get list of delivery assignments for courier",
-        "tags": [
-          "Delivery"
-        ],
+        "tags": ["Delivery"],
         "parameters": [
           {
             "in": "query",
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "active",
-                "completed"
-              ]
+              "enum": ["pending", "active", "completed"]
             }
           }
         ],
@@ -6254,18 +5688,14 @@
       "put": {
         "summary": "Update courier availability",
         "description": "Toggle courier online/offline status",
-        "tags": [
-          "Delivery"
-        ],
+        "tags": ["Delivery"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "available"
-                ],
+                "required": ["available"],
                 "properties": {
                   "available": {
                     "type": "boolean"
@@ -6291,20 +5721,14 @@
       "get": {
         "summary": "Get courier earnings",
         "description": "Get courier's earnings summary",
-        "tags": [
-          "Delivery"
-        ],
+        "tags": ["Delivery"],
         "parameters": [
           {
             "in": "query",
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "today",
-                "week",
-                "month"
-              ]
+              "enum": ["today", "week", "month"]
             }
           }
         ],
@@ -6324,9 +5748,7 @@
       "get": {
         "summary": "Get courier performance",
         "description": "Get courier performance metrics",
-        "tags": [
-          "Delivery"
-        ],
+        "tags": ["Delivery"],
         "responses": {
           "200": {
             "description": "Performance metrics"
@@ -6343,9 +5765,7 @@
       "get": {
         "summary": "Get conversations",
         "description": "Get user's message conversations",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "responses": {
           "200": {
             "description": "List of conversations"
@@ -6360,18 +5780,14 @@
       "post": {
         "summary": "Create conversation",
         "description": "Start a new conversation with a user",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "recipient_id"
-                ],
+                "required": ["recipient_id"],
                 "properties": {
                   "recipient_id": {
                     "type": "string",
@@ -6398,9 +5814,7 @@
       "get": {
         "summary": "Get messages",
         "description": "Get messages in a conversation",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6432,9 +5846,7 @@
       "post": {
         "summary": "Send message",
         "description": "Send a message in a conversation",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6452,9 +5864,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "content"
-                ],
+                "required": ["content"],
                 "properties": {
                   "content": {
                     "type": "string"
@@ -6484,9 +5894,7 @@
       "post": {
         "summary": "Add hotel to favorites",
         "description": "Add a hotel to user's favorites list",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -6512,9 +5920,7 @@
       "delete": {
         "summary": "Remove hotel from favorites",
         "description": "Remove a hotel from user's favorites list",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -6542,9 +5948,7 @@
       "get": {
         "summary": "Get favorite hotels",
         "description": "Get user's favorite hotels",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "responses": {
           "200": {
             "description": "Favorite hotels"
@@ -6561,9 +5965,7 @@
       "get": {
         "summary": "Get recommended hotels",
         "description": "Get personalized hotel recommendations",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "query",
@@ -6589,9 +5991,7 @@
       "post": {
         "summary": "Create promo code (Manager)",
         "description": "Create a promotional code for hotel",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -6609,10 +6009,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "code",
-                  "discount_percent"
-                ],
+                "required": ["code", "discount_percent"],
                 "properties": {
                   "code": {
                     "type": "string",
@@ -6655,19 +6052,14 @@
       "post": {
         "summary": "Validate promo code",
         "description": "Check if a promo code is valid",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "code",
-                  "hotel_id"
-                ],
+                "required": ["code", "hotel_id"],
                 "properties": {
                   "code": {
                     "type": "string"
@@ -6697,9 +6089,7 @@
       "get": {
         "summary": "Get post details",
         "description": "Get detailed information about a specific post",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6720,9 +6110,7 @@
       "put": {
         "summary": "Update post",
         "description": "Update an existing post",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6763,9 +6151,7 @@
       "delete": {
         "summary": "Delete post",
         "description": "Delete a post",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6793,9 +6179,7 @@
       "post": {
         "summary": "Share post",
         "description": "Share a post to your timeline",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6837,9 +6221,7 @@
       "get": {
         "summary": "Get user posts",
         "description": "Get posts by a specific user",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6868,9 +6250,7 @@
       "post": {
         "summary": "View story",
         "description": "Mark a story as viewed",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6898,9 +6278,7 @@
       "get": {
         "summary": "Get story viewers",
         "description": "Get list of users who viewed a story",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6928,9 +6306,7 @@
       "get": {
         "summary": "Get friend requests",
         "description": "Get pending friend requests",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "responses": {
           "200": {
             "description": "Friend requests"
@@ -6947,9 +6323,7 @@
       "post": {
         "summary": "Respond to friend request",
         "description": "Accept or decline a friend request",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -6967,16 +6341,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "action"
-                ],
+                "required": ["action"],
                 "properties": {
                   "action": {
                     "type": "string",
-                    "enum": [
-                      "accept",
-                      "decline"
-                    ]
+                    "enum": ["accept", "decline"]
                   }
                 }
               }
@@ -6999,9 +6368,7 @@
       "delete": {
         "summary": "Unfriend",
         "description": "Remove a friend connection",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -7029,9 +6396,7 @@
       "post": {
         "summary": "Block user",
         "description": "Block a user",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -7059,9 +6424,7 @@
       "post": {
         "summary": "Unblock user",
         "description": "Unblock a previously blocked user",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "parameters": [
           {
             "in": "path",
@@ -7089,28 +6452,18 @@
       "post": {
         "summary": "Report content",
         "description": "Report a post, comment, or user for policy violation",
-        "tags": [
-          "Social Media"
-        ],
+        "tags": ["Social Media"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "type",
-                  "target_id",
-                  "reason"
-                ],
+                "required": ["type", "target_id", "reason"],
                 "properties": {
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "post",
-                      "comment",
-                      "user"
-                    ]
+                    "enum": ["post", "comment", "user"]
                   },
                   "target_id": {
                     "type": "string",
@@ -7118,13 +6471,7 @@
                   },
                   "reason": {
                     "type": "string",
-                    "enum": [
-                      "spam",
-                      "harassment",
-                      "inappropriate",
-                      "violence",
-                      "other"
-                    ]
+                    "enum": ["spam", "harassment", "inappropriate", "violence", "other"]
                   },
                   "details": {
                     "type": "string"
@@ -7150,9 +6497,7 @@
       "get": {
         "summary": "Search users",
         "description": "Search for users by name or username",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "parameters": [
           {
             "in": "query",
@@ -7177,9 +6522,7 @@
       "get": {
         "summary": "Get active ride",
         "description": "Get user's currently active ride",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "responses": {
           "200": {
             "description": "Active ride or null"
@@ -7196,9 +6539,7 @@
       "get": {
         "summary": "Get ride requests (Driver)",
         "description": "Get available ride requests for driver",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "responses": {
           "200": {
             "description": "Available ride requests"
@@ -7215,9 +6556,7 @@
       "post": {
         "summary": "Reject ride (Driver)",
         "description": "Driver rejects a ride request",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "parameters": [
           {
             "in": "path",
@@ -7259,20 +6598,14 @@
       "get": {
         "summary": "Get ride analytics (Driver)",
         "description": "Get driver's ride analytics and stats",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "parameters": [
           {
             "in": "query",
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "today",
-                "week",
-                "month"
-              ]
+              "enum": ["today", "week", "month"]
             }
           }
         ],
@@ -7292,9 +6625,7 @@
       "get": {
         "summary": "Get booking calendar (Manager)",
         "description": "Get hotel bookings calendar view",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "query",
@@ -7330,9 +6661,7 @@
       "put": {
         "summary": "Update booking status (Manager)",
         "description": "Update booking status",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -7350,19 +6679,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "confirmed",
-                      "checked_in",
-                      "checked_out",
-                      "cancelled",
-                      "no_show"
-                    ]
+                    "enum": ["confirmed", "checked_in", "checked_out", "cancelled", "no_show"]
                   }
                 }
               }
@@ -7385,9 +6706,7 @@
       "post": {
         "summary": "Release escrow",
         "description": "Release funds from escrow to vendor",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "parameters": [
           {
             "in": "path",
@@ -7415,19 +6734,14 @@
       "post": {
         "summary": "Calculate dynamic price",
         "description": "Calculate dynamic pricing based on demand",
-        "tags": [
-          "Taxi"
-        ],
+        "tags": ["Taxi"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "pickup_lat",
-                  "pickup_lng"
-                ],
+                "required": ["pickup_lat", "pickup_lng"],
                 "properties": {
                   "pickup_lat": {
                     "type": "number"
@@ -7454,9 +6768,7 @@
       "put": {
         "summary": "Bulk update room pricing (Manager)",
         "description": "Update pricing for multiple dates",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",
@@ -7474,10 +6786,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "room_type",
-                  "prices"
-                ],
+                "required": ["room_type", "prices"],
                 "properties": {
                   "room_type": {
                     "type": "string"
@@ -7518,9 +6827,7 @@
       "post": {
         "summary": "Reply to ticket",
         "description": "Add a reply to a support ticket",
-        "tags": [
-          "Authentication"
-        ],
+        "tags": ["Authentication"],
         "parameters": [
           {
             "in": "path",
@@ -7538,9 +6845,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "message"
-                ],
+                "required": ["message"],
                 "properties": {
                   "message": {
                     "type": "string"
@@ -7566,9 +6871,7 @@
       "post": {
         "summary": "Mark review helpful",
         "description": "Mark a review as helpful",
-        "tags": [
-          "Hotels"
-        ],
+        "tags": ["Hotels"],
         "parameters": [
           {
             "in": "path",

@@ -10,7 +10,8 @@ export class EncryptionService {
   private encryptionKey: Buffer;
 
   constructor(secretKey?: string) {
-    const key = secretKey || process.env.ENCRYPTION_KEY || 'default-encryption-key-change-in-production';
+    const key =
+      secretKey || process.env.ENCRYPTION_KEY || 'default-encryption-key-change-in-production';
     this.encryptionKey = crypto.scryptSync(key, 'salt', KEY_LENGTH);
   }
 
@@ -97,19 +98,14 @@ export class EncryptionService {
   /**
    * Encrypt customer PII fields
    */
-  encryptCustomerPII(data: {
-    email?: string;
-    phone?: string;
-    name?: string;
-    address?: string;
-  }): {
+  encryptCustomerPII(data: { email?: string; phone?: string; name?: string; address?: string }): {
     email?: string;
     phone?: string;
     name?: string;
     address?: string;
   } {
     const encrypted: any = {};
-    
+
     if (data.email) encrypted.email = this.encrypt(data.email);
     if (data.phone) encrypted.phone = this.encrypt(data.phone);
     if (data.name) encrypted.name = this.encrypt(data.name);
@@ -121,19 +117,14 @@ export class EncryptionService {
   /**
    * Decrypt customer PII fields
    */
-  decryptCustomerPII(data: {
-    email?: string;
-    phone?: string;
-    name?: string;
-    address?: string;
-  }): {
+  decryptCustomerPII(data: { email?: string; phone?: string; name?: string; address?: string }): {
     email?: string;
     phone?: string;
     name?: string;
     address?: string;
   } {
     const decrypted: any = {};
-    
+
     if (data.email) {
       try {
         decrypted.email = this.decrypt(data.email);
@@ -141,7 +132,7 @@ export class EncryptionService {
         decrypted.email = data.email; // Return as-is if decryption fails (might not be encrypted)
       }
     }
-    
+
     if (data.phone) {
       try {
         decrypted.phone = this.decrypt(data.phone);
@@ -149,7 +140,7 @@ export class EncryptionService {
         decrypted.phone = data.phone;
       }
     }
-    
+
     if (data.name) {
       try {
         decrypted.name = this.decrypt(data.name);
@@ -157,7 +148,7 @@ export class EncryptionService {
         decrypted.name = data.name;
       }
     }
-    
+
     if (data.address) {
       try {
         decrypted.address = this.decrypt(data.address);

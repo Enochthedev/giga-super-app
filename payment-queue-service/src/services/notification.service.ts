@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+
 import { config } from '../config';
 import logger from '../utils/logger';
 
@@ -45,7 +46,7 @@ export class NotificationService {
       };
 
       await this.sendNotification(payload);
-      
+
       logger.info('Payment success notification sent', {
         userId,
         transactionId: paymentData.transactionId,
@@ -79,7 +80,7 @@ export class NotificationService {
       };
 
       await this.sendNotification(payload);
-      
+
       logger.info('Payment failed notification sent', {
         userId,
         transactionId: paymentData.transactionId,
@@ -116,7 +117,7 @@ export class NotificationService {
       };
 
       await this.sendNotification(payload);
-      
+
       logger.info('Refund notification sent', {
         userId,
         transactionId: refundData.transactionId,
@@ -154,7 +155,7 @@ export class NotificationService {
       };
 
       await this.sendNotification(payload);
-      
+
       logger.info('Settlement notification sent', {
         userId,
         settlementId: settlementData.settlementId,
@@ -174,18 +175,16 @@ export class NotificationService {
   private async sendNotification(payload: NotificationPayload): Promise<void> {
     try {
       // Store notification in database
-      const { error: dbError } = await this.supabase
-        .from('notifications')
-        .insert({
-          user_id: payload.userId,
-          type: payload.type,
-          title: payload.title,
-          message: payload.message,
-          data: payload.data || {},
-          channels: payload.channels || ['in_app'],
-          status: 'pending',
-          created_at: new Date().toISOString(),
-        });
+      const { error: dbError } = await this.supabase.from('notifications').insert({
+        user_id: payload.userId,
+        type: payload.type,
+        title: payload.title,
+        message: payload.message,
+        data: payload.data || {},
+        channels: payload.channels || ['in_app'],
+        status: 'pending',
+        created_at: new Date().toISOString(),
+      });
 
       if (dbError) {
         logger.error('Failed to store notification in database', {
@@ -205,7 +204,6 @@ export class NotificationService {
 
       // Optionally: Call external notification service API
       // await this.callExternalNotificationService(payload);
-
     } catch (error: any) {
       logger.error('Failed to send notification', {
         error: error.message,

@@ -8,7 +8,7 @@ const options = {
   timeout: 5000,
 };
 
-const request = http.request(options, (res) => {
+const request = http.request(options, res => {
   if (res.statusCode === 200) {
     process.exit(0);
   } else {
@@ -17,7 +17,7 @@ const request = http.request(options, (res) => {
   }
 });
 
-request.on('error', (err) => {
+request.on('error', err => {
   console.error('Health check request failed:', err.message);
   process.exit(1);
 });

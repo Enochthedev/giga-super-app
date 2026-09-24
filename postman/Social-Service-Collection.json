@@ -14,12 +14,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "posts"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["posts"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -63,12 +59,8 @@
               "name": "Posts retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -115,12 +107,8 @@
               "name": "Bad Request - Invalid input data",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -167,12 +155,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -230,12 +214,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "posts"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["posts"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -275,12 +255,8 @@
               "name": "Post created successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -326,12 +302,8 @@
               "name": "Bad Request - Invalid input data",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -377,12 +349,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -428,12 +396,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "posts"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -494,13 +458,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "posts",
-                    ":postId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts", ":postId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -527,13 +486,8 @@
                   "name": "Post retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -571,13 +525,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -615,13 +564,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -670,13 +614,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "posts",
-                    ":postId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts", ":postId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -724,13 +663,8 @@
                   "name": "Post updated successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -784,13 +718,8 @@
                   "name": "Bad Request - Invalid input data",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -844,13 +773,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -904,13 +828,8 @@
                   "name": "Forbidden - Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -964,13 +883,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1024,13 +938,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1095,13 +1004,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "posts",
-                    ":postId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts", ":postId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1136,13 +1040,8 @@
                   "name": "Post deleted successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1188,13 +1087,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1240,13 +1134,8 @@
                   "name": "Forbidden - Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1292,13 +1181,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1344,13 +1228,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1411,14 +1290,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "comments"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "comments"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -1456,14 +1329,8 @@
                       "name": "Comments retrieved successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -1510,14 +1377,8 @@
                       "name": "Not Found - Resource does not exist",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -1564,14 +1425,8 @@
                       "name": "Internal Server Error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -1629,14 +1484,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "comments"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "comments"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1684,14 +1533,8 @@
                       "name": "Comment created successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -1741,14 +1584,8 @@
                       "name": "Bad Request - Invalid input data",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -1802,14 +1639,8 @@
                       "name": "Unauthorized - Authentication required",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -1863,14 +1694,8 @@
                       "name": "Not Found - Resource does not exist",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -1924,14 +1749,8 @@
                       "name": "Internal Server Error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -2000,15 +1819,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments",
-                            ":commentId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments", ":commentId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -2063,15 +1875,8 @@
                           "name": "Comment updated successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2128,15 +1933,8 @@
                           "name": "Unauthorized - Authentication required",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2197,15 +1995,8 @@
                           "name": "Forbidden - Insufficient permissions",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2266,15 +2057,8 @@
                           "name": "Not Found - Resource does not exist",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2335,15 +2119,8 @@
                           "name": "Internal Server Error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2415,15 +2192,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "comments",
-                            ":commentId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "comments", ":commentId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -2465,15 +2235,8 @@
                           "name": "Comment deleted successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2522,15 +2285,8 @@
                           "name": "Unauthorized - Authentication required",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2583,15 +2339,8 @@
                           "name": "Forbidden - Insufficient permissions",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2644,15 +2393,8 @@
                           "name": "Not Found - Resource does not exist",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2705,15 +2447,8 @@
                           "name": "Internal Server Error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "posts",
-                                ":postId",
-                                "comments",
-                                ":commentId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["posts", ":postId", "comments", ":commentId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -2787,14 +2522,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "like"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "like"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2829,14 +2558,8 @@
                       "name": "Like toggled successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -2882,14 +2605,8 @@
                       "name": "Unauthorized - Authentication required",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -2935,14 +2652,8 @@
                       "name": "Not Found - Resource does not exist",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -2988,14 +2699,8 @@
                       "name": "Internal Server Error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -3052,14 +2757,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "like"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "like"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3094,14 +2793,8 @@
                       "name": "Post unliked successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -3143,14 +2836,8 @@
                       "name": "Unauthorized - Authentication required",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -3196,14 +2883,8 @@
                       "name": "Not Found - Resource does not exist",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -3249,14 +2930,8 @@
                       "name": "Internal Server Error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "posts",
-                            ":postId",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["posts", ":postId", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -3316,14 +2991,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "posts",
-                    ":postId",
-                    "likes"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts", ":postId", "likes"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -3356,14 +3025,8 @@
                   "name": "Likes retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "likes"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "likes"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "limit",
@@ -3406,14 +3069,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "likes"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "likes"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "limit",
@@ -3456,14 +3113,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "likes"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "likes"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "limit",
@@ -3517,14 +3168,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "posts",
-                    ":postId",
-                    "report"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["posts", ":postId", "report"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3572,14 +3217,8 @@
                   "name": "Report submitted successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "report"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "report"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3629,14 +3268,8 @@
                   "name": "Bad Request - Invalid input data",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "report"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "report"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3690,14 +3323,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "report"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "report"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3751,14 +3378,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "report"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "report"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3812,14 +3433,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "posts",
-                        ":postId",
-                        "report"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["posts", ":postId", "report"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3894,12 +3509,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "connections"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["connections"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -3937,12 +3548,8 @@
               "name": "Connections retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "status",
@@ -3985,12 +3592,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "status",
@@ -4048,12 +3651,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "connections"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["connections"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -4093,12 +3692,8 @@
               "name": "Connection request sent",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4140,12 +3735,8 @@
               "name": "Bad Request - Invalid input data",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4191,12 +3782,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4242,12 +3829,8 @@
               "name": "Connection already exists",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4300,13 +3883,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "connections",
-                "requests"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["connections", "requests"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -4333,13 +3911,8 @@
               "name": "Requests retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections",
-                    "requests"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections", "requests"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4373,13 +3946,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "connections",
-                    "requests"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections", "requests"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4432,13 +4000,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "connections",
-                    ":connectionId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections", ":connectionId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -4486,13 +4049,8 @@
                   "name": "Connection updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4542,13 +4100,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4602,13 +4155,8 @@
                   "name": "Forbidden - Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4662,13 +4210,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4733,13 +4276,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "connections",
-                    ":connectionId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["connections", ":connectionId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -4774,13 +4312,8 @@
                   "name": "Connection removed",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4822,13 +4355,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4874,13 +4402,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "connections",
-                        ":connectionId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["connections", ":connectionId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4947,12 +4470,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "feed"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["feed"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -4982,12 +4501,8 @@
               "name": "Feed retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5026,12 +4541,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5081,13 +4592,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "feed",
-                "trending"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["feed", "trending"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -5123,13 +4629,8 @@
               "name": "Trending posts retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed",
-                    "trending"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed", "trending"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5166,13 +4667,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed",
-                    "trending"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed", "trending"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5226,13 +4722,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "feed",
-                "following"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["feed", "following"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -5270,13 +4761,8 @@
               "name": "Following feed retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed",
-                    "following"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed", "following"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5319,13 +4805,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed",
-                    "following"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed", "following"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5372,13 +4853,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "feed",
-                    "following"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["feed", "following"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -5443,12 +4919,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5467,12 +4939,8 @@
               "name": "Service is healthy",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5513,13 +4981,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "ready"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "ready"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5532,13 +4995,8 @@
               "name": "Service is ready",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "ready"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "ready"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5573,13 +5031,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "live"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "live"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5592,13 +5045,8 @@
               "name": "Service is alive",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "live"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "live"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5636,14 +5084,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "comments",
-            ":commentId",
-            "like"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["comments", ":commentId", "like"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": [
             {
@@ -5678,14 +5120,8 @@
           "name": "Comment like toggled successfully",
           "originalRequest": {
             "url": {
-              "path": [
-                "comments",
-                ":commentId",
-                "like"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["comments", ":commentId", "like"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -5727,14 +5163,8 @@
           "name": "Unauthorized - Authentication required",
           "originalRequest": {
             "url": {
-              "path": [
-                "comments",
-                ":commentId",
-                "like"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["comments", ":commentId", "like"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -5780,14 +5210,8 @@
           "name": "Not Found - Resource does not exist",
           "originalRequest": {
             "url": {
-              "path": [
-                "comments",
-                ":commentId",
-                "like"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["comments", ":commentId", "like"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -5833,14 +5257,8 @@
           "name": "Internal Server Error",
           "originalRequest": {
             "url": {
-              "path": [
-                "comments",
-                ":commentId",
-                "like"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["comments", ":commentId", "like"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -5901,12 +5319,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "stories"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["stories"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5933,12 +5347,8 @@
               "name": "Stories retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5976,12 +5386,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6019,12 +5425,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6073,12 +5475,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "stories"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["stories"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -6118,12 +5516,8 @@
               "name": "Story created successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6165,12 +5559,8 @@
               "name": "Bad Request - Invalid input data",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6216,12 +5606,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6267,12 +5653,8 @@
               "name": "Internal Server Error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "stories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6333,13 +5715,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "stories",
-                    ":storyId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories", ":storyId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -6374,13 +5751,8 @@
                   "name": "Story retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6422,13 +5794,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6474,13 +5841,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6526,13 +5888,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6589,13 +5946,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "stories",
-                    ":storyId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories", ":storyId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -6630,13 +5982,8 @@
                   "name": "Story deleted successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6678,13 +6025,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6730,13 +6072,8 @@
                   "name": "Forbidden - Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6782,13 +6119,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6834,13 +6166,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6897,14 +6224,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "stories",
-                    ":storyId",
-                    "viewers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["stories", ":storyId", "viewers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -6939,14 +6260,8 @@
                   "name": "Viewers retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId",
-                        "viewers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId", "viewers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6988,14 +6303,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId",
-                        "viewers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId", "viewers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -7041,14 +6350,8 @@
                   "name": "Forbidden - Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId",
-                        "viewers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId", "viewers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -7094,14 +6397,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId",
-                        "viewers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId", "viewers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -7147,14 +6444,8 @@
                   "name": "Internal Server Error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "stories",
-                        ":storyId",
-                        "viewers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["stories", ":storyId", "viewers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {

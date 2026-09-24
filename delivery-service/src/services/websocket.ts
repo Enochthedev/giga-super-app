@@ -7,7 +7,6 @@ import config from '../config';
 import { DeliveryTracking } from '../types';
 import logger from '../utils/logger';
 
-
 // Initialize Supabase client
 const supabase = createClient(config.supabase.url, config.supabase.serviceRoleKey);
 

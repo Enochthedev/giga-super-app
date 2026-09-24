@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+
 import { config } from '../config';
 import { PaymentProcessingError, ServiceUnavailableError } from '../utils/errors';
 import logger from '../utils/logger';
@@ -198,7 +199,7 @@ export class PaystackService {
         throw new PaymentProcessingError(response.data.message || 'Paystack verification failed');
       }
 
-      const data = response.data.data;
+      const { data } = response.data;
 
       logger.info('Paystack transaction verified', {
         reference,

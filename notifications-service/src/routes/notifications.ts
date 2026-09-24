@@ -4,9 +4,10 @@ import { Request, Response, Router } from 'express';
 import IORedis from 'ioredis';
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
+
+import { isPlatformAdmin } from '../utils/adminRoles.js';
 import { PreferencesService } from '../utils/preferences.js';
 import { DeliveryTracking } from '../utils/tracking.js';
-import { isPlatformAdmin } from '../utils/adminRoles.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -733,7 +734,7 @@ router.get('/status/:id', requireAuth, async (req: AuthenticatedRequest, res: Re
     // Check if user owns this notification (or is admin)
     // Case-insensitive role comparison
     // Accepts admin/super_admin plus NIPOST DOP-tier roles, across both the `role`
-// claim and the `roles` array (see utils/adminRoles.ts).
+    // claim and the `roles` array (see utils/adminRoles.ts).
     const { data: notification } = await supabase
       .from('notification_logs')
       .select('user_id')

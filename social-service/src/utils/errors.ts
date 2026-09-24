@@ -4,7 +4,9 @@
  */
 
 import { Response } from 'express';
+
 import { APIError, APIResponse } from '../types';
+
 import logger from './logger';
 
 // ============================================================================

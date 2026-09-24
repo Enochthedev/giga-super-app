@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import config from '../config';
 import { webSocketService } from '../services/websocket';
+
 import logger from './logger';
 
 // Initialize Supabase client

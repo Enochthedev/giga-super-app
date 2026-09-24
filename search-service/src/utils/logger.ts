@@ -35,7 +35,7 @@ export const logger = winston.createLogger({
     winston.format.colorize({ all: true }),
     winston.format.printf(
       info =>
-        `${info.timestamp} ${info.level}: ${info.message}${info.stack ? '\n' + info.stack : ''}`
+        `${info.timestamp} ${info.level}: ${info.message}${info.stack ? `\n${info.stack}` : ''}`
     )
   ),
   transports: [

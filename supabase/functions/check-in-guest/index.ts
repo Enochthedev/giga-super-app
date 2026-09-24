@@ -70,8 +70,9 @@ serve(async req => {
     // Verify payment is complete
     if (booking.payment_status !== 'paid') {
       throw new Error(
-        `Payment must be completed before check-in. Current status: ${ 
-          booking.payment_status}`
+        `Payment must be completed before check-in. Current status: ${
+          booking.payment_status
+        }`
       );
     }
     // Check if check-in date is today or past

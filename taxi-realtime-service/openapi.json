@@ -103,12 +103,7 @@
           },
           "vehicle_type": {
             "type": "string",
-            "enum": [
-              "standard",
-              "premium",
-              "suv",
-              "motorcycle"
-            ]
+            "enum": ["standard", "premium", "suv", "motorcycle"]
           },
           "current_location": {
             "$ref": "#/components/schemas/GeoLocation"
@@ -145,10 +140,7 @@
       },
       "GeoLocation": {
         "type": "object",
-        "required": [
-          "latitude",
-          "longitude"
-        ],
+        "required": ["latitude", "longitude"],
         "properties": {
           "latitude": {
             "type": "number",
@@ -429,9 +421,7 @@
   "paths": {
     "/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Health check",
         "security": [],
         "responses": {
@@ -468,9 +458,7 @@
     },
     "/api/drivers/profile": {
       "get": {
-        "tags": [
-          "Drivers"
-        ],
+        "tags": ["Drivers"],
         "summary": "Get current driver's profile",
         "description": "Returns the authenticated driver's full profile including user details",
         "responses": {
@@ -508,9 +496,7 @@
     },
     "/api/drivers/availability": {
       "put": {
-        "tags": [
-          "Drivers"
-        ],
+        "tags": ["Drivers"],
         "summary": "Update driver availability status",
         "description": "Toggle driver online/offline status",
         "requestBody": {
@@ -519,9 +505,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "is_online"
-                ],
+                "required": ["is_online"],
                 "properties": {
                   "is_online": {
                     "type": "boolean",
@@ -570,9 +554,7 @@
     },
     "/api/drivers/location": {
       "put": {
-        "tags": [
-          "Drivers"
-        ],
+        "tags": ["Drivers"],
         "summary": "Update driver's current location",
         "description": "Update driver's current GPS coordinates. Call every 5 seconds while online.",
         "requestBody": {
@@ -581,10 +563,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "latitude",
-                  "longitude"
-                ],
+                "required": ["latitude", "longitude"],
                 "properties": {
                   "latitude": {
                     "type": "number",
@@ -628,9 +607,7 @@
     },
     "/api/drivers/nearby": {
       "get": {
-        "tags": [
-          "Drivers"
-        ],
+        "tags": ["Drivers"],
         "summary": "Find nearby available drivers",
         "description": "Find available drivers within a radius. Returns drivers sorted by distance.",
         "parameters": [
@@ -666,12 +643,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "standard",
-                "premium",
-                "suv",
-                "motorcycle"
-              ]
+              "enum": ["standard", "premium", "suv", "motorcycle"]
             },
             "description": "Filter by vehicle type"
           }
@@ -711,9 +683,7 @@
     },
     "/api/drivers/{driverId}": {
       "get": {
-        "tags": [
-          "Drivers"
-        ],
+        "tags": ["Drivers"],
         "summary": "Get a specific driver's public profile",
         "description": "Get a specific driver's public profile",
         "security": [],
@@ -755,9 +725,7 @@
     },
     "/api/rides/estimate": {
       "post": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Get fare estimate for a ride",
         "description": "Calculate fare estimate for a ride. No authentication required.",
         "security": [],
@@ -767,12 +735,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "pickup_lat",
-                  "pickup_lng",
-                  "dropoff_lat",
-                  "dropoff_lng"
-                ],
+                "required": ["pickup_lat", "pickup_lng", "dropoff_lat", "dropoff_lng"],
                 "properties": {
                   "pickup_lat": {
                     "type": "number",
@@ -792,11 +755,7 @@
                   },
                   "vehicle_type": {
                     "type": "string",
-                    "enum": [
-                      "standard",
-                      "premium",
-                      "suv"
-                    ],
+                    "enum": ["standard", "premium", "suv"],
                     "default": "standard"
                   }
                 }
@@ -852,9 +811,7 @@
     },
     "/api/rides": {
       "post": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Request a new ride",
         "description": "Create a new ride request",
         "requestBody": {
@@ -863,12 +820,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "pickup_lat",
-                  "pickup_lng",
-                  "dropoff_lat",
-                  "dropoff_lng"
-                ],
+                "required": ["pickup_lat", "pickup_lng", "dropoff_lat", "dropoff_lng"],
                 "properties": {
                   "pickup_lat": {
                     "type": "number",
@@ -948,9 +900,7 @@
     },
     "/api/rides/history": {
       "get": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Get user's ride history",
         "description": "Get paginated ride history for the authenticated user",
         "parameters": [
@@ -959,10 +909,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "passenger",
-                "driver"
-              ],
+              "enum": ["passenger", "driver"],
               "default": "passenger"
             },
             "description": "Filter by role (default based on user type)"
@@ -1042,9 +989,7 @@
     },
     "/api/rides/{rideId}": {
       "get": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Get ride details",
         "description": "Get full details of a specific ride including driver and passenger info",
         "parameters": [
@@ -1096,9 +1041,7 @@
     },
     "/api/rides/{rideId}/status": {
       "put": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Update ride status",
         "description": "Update the status of a ride. Status flow: requested → accepted → arrived → picked_up → in_progress → completed",
         "parameters": [
@@ -1118,21 +1061,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "accepted",
-                      "arrived",
-                      "picked_up",
-                      "in_progress",
-                      "completed",
-                      "cancelled",
-                      "no_show"
-                    ]
+                    "enum": ["accepted", "arrived", "picked_up", "in_progress", "completed", "cancelled", "no_show"]
                   },
                   "cancellation_reason": {
                     "type": "string",
@@ -1181,9 +1114,7 @@
     },
     "/api/rides/{rideId}/accept": {
       "post": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Driver accepts a ride request",
         "description": "Driver accepts a ride request. Only verified drivers can accept rides.",
         "parameters": [
@@ -1268,9 +1199,7 @@
     },
     "/api/rides/{rideId}/rate": {
       "post": {
-        "tags": [
-          "Rides"
-        ],
+        "tags": ["Rides"],
         "summary": "Rate a completed ride",
         "description": "Passenger rates a completed ride. Updates driver's average rating.",
         "parameters": [
@@ -1290,9 +1219,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "rating"
-                ],
+                "required": ["rating"],
                 "properties": {
                   "rating": {
                     "type": "integer",

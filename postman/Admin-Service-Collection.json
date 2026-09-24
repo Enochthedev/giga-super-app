@@ -18,15 +18,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "admin",
-                    "national",
-                    "dashboard"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "admin", "national", "dashboard"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -53,15 +46,8 @@
                   "name": "National dashboard data retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "national",
-                        "dashboard"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "national", "dashboard"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -99,15 +85,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "national",
-                        "dashboard"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "national", "dashboard"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -141,15 +120,8 @@
                   "name": "Forbidden - National access required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "national",
-                        "dashboard"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "national", "dashboard"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -183,15 +155,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "national",
-                        "dashboard"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "national", "dashboard"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -236,14 +201,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "admin",
-                    "categories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "admin", "categories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -270,14 +229,8 @@
                   "name": "Categories retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "categories"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "categories"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -315,14 +268,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "categories"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "categories"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -356,14 +303,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "categories"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "categories"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -412,14 +353,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "admin",
-                        "users"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "admin", "users"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -471,14 +406,8 @@
                       "name": "Users retrieved successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -533,14 +462,8 @@
                       "name": "Unauthorized",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -591,14 +514,8 @@
                       "name": "Forbidden - National access required",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -649,14 +566,8 @@
                       "name": "Internal server error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -722,15 +633,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users",
-                            ":userId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users", ":userId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -765,15 +669,8 @@
                           "name": "User details retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -819,15 +716,8 @@
                           "name": "Unauthorized",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -869,15 +759,8 @@
                           "name": "Forbidden",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -919,15 +802,8 @@
                           "name": "User not found",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -969,15 +845,8 @@
                           "name": "Internal server error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1030,15 +899,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users",
-                            ":userId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users", ":userId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -1086,15 +948,8 @@
                           "name": "User updated successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1148,15 +1003,8 @@
                           "name": "Unauthorized",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1206,15 +1054,8 @@
                           "name": "Forbidden",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1264,15 +1105,8 @@
                           "name": "Internal server error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1333,15 +1167,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "admin",
-                            "users",
-                            ":userId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "admin", "users", ":userId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -1389,15 +1216,8 @@
                           "name": "User deleted successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1451,15 +1271,8 @@
                           "name": "Unauthorized",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1509,15 +1322,8 @@
                           "name": "Forbidden",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1567,15 +1373,8 @@
                           "name": "Internal server error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "admin",
-                                "users",
-                                ":userId"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "admin", "users", ":userId"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -1649,14 +1448,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "ads",
-                    "incoming"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "ads", "incoming"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -1708,14 +1501,8 @@
                   "name": "Incoming ads retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        "incoming"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", "incoming"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -1770,14 +1557,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        "incoming"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", "incoming"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -1828,14 +1609,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        "incoming"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", "incoming"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -1897,15 +1672,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "ads",
-                    ":adId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "ads", ":adId", "status"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1953,15 +1721,8 @@
                   "name": "Advertisement status updated successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        ":adId",
-                        "status"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", ":adId", "status"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2015,15 +1776,8 @@
                   "name": "Bad request - invalid status",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        ":adId",
-                        "status"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", ":adId", "status"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2073,15 +1827,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        ":adId",
-                        "status"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", ":adId", "status"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2131,15 +1878,8 @@
                   "name": "Advertisement not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        ":adId",
-                        "status"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", ":adId", "status"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2189,15 +1929,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        ":adId",
-                        "status"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", ":adId", "status"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2258,14 +1991,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "ads",
-                    "fetch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "ads", "fetch"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -2297,14 +2024,8 @@
                   "name": "Ads retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        "fetch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", "fetch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2350,14 +2071,8 @@
                   "name": "Bad request",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        "fetch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", "fetch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2399,14 +2114,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ads",
-                        "fetch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ads", "fetch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2466,14 +2175,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "ecommerce",
-                    "traders"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "ecommerce", "traders"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -2525,14 +2228,8 @@
                   "name": "Traders retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -2587,14 +2284,8 @@
                   "name": "Unauthorized - Invalid or missing authentication token",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -2645,14 +2336,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -2714,14 +2399,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "ecommerce",
-                    "traders"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "ecommerce", "traders"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -2761,14 +2440,8 @@
                   "name": "Trader created successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2814,14 +2487,8 @@
                   "name": "Validation error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2863,14 +2530,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2912,14 +2573,8 @@
                   "name": "Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2961,14 +2616,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3021,15 +2670,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "ecommerce",
-                    "traders",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "ecommerce", "traders", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3064,15 +2706,8 @@
                   "name": "Trader details retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3118,15 +2753,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3168,15 +2796,8 @@
                   "name": "Trader not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3218,15 +2839,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "ecommerce",
-                        "traders",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "ecommerce", "traders", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3286,14 +2900,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "taxi",
-                    "drivers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "taxi", "drivers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -3345,14 +2953,8 @@
                   "name": "Drivers retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -3407,14 +3009,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -3465,14 +3061,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -3534,15 +3124,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "taxi",
-                    "drivers",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "taxi", "drivers", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3577,15 +3160,8 @@
                   "name": "Driver details retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3631,15 +3207,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3681,15 +3250,8 @@
                   "name": "Driver not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3731,15 +3293,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "taxi",
-                        "drivers",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "taxi", "drivers", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3799,14 +3354,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "hotel",
-                    "hotels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "hotel", "hotels"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -3858,14 +3407,8 @@
                   "name": "Hotels retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -3920,14 +3463,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -3978,14 +3515,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -4047,15 +3578,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "hotel",
-                    "hotels",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "hotel", "hotels", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -4090,15 +3614,8 @@
                   "name": "Hotel details retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4144,15 +3661,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4194,15 +3704,8 @@
                   "name": "Hotel not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4244,15 +3747,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "hotel",
-                        "hotels",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "hotel", "hotels", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4312,14 +3808,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "media",
-                    "content"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "media", "content"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -4365,14 +3855,8 @@
                   "name": "Media content retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -4423,14 +3907,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -4477,14 +3955,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -4542,15 +4014,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "media",
-                    "content",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "media", "content", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -4585,15 +4050,8 @@
                   "name": "Content details retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4639,15 +4097,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4689,15 +4140,8 @@
                   "name": "Content not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4739,15 +4183,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "media",
-                        "content",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "media", "content", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4804,14 +4241,8 @@
                 "name": "Get main dashboard statistics",
                 "description": {},
                 "url": {
-                  "path": [
-                    "api",
-                    "dashboard",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "dashboard", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4832,14 +4263,8 @@
                   "name": "Dashboard statistics",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "dashboard",
-                        "stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "dashboard", "stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -4884,14 +4309,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "dashboard",
-                    "sales"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "dashboard", "sales"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -4925,14 +4344,8 @@
                   "name": "Daily sales data",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "dashboard",
-                        "sales"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "dashboard", "sales"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "days",
@@ -4986,14 +4399,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "dashboard",
-                    "categories"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "dashboard", "categories"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -5027,14 +4434,8 @@
                   "name": "Category breakdown with trends",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "dashboard",
-                        "categories"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "dashboard", "categories"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "period",
@@ -5095,14 +4496,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "managers",
-                    "dashboard-stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "managers", "dashboard-stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5129,14 +4524,8 @@
                   "name": "Manager dashboard stats retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -5174,14 +4563,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -5215,14 +4598,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -5267,14 +4644,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "managers",
-                    "latest-orders"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "managers", "latest-orders"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -5320,14 +4691,8 @@
                   "name": "Latest orders retrieved successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "latest-orders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "latest-orders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -5378,14 +4743,8 @@
                   "name": "Unauthorized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "latest-orders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "latest-orders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -5432,14 +4791,8 @@
                   "name": "Internal server error",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "latest-orders"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "latest-orders"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -5501,15 +4854,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "orders",
-                        ":orderId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "orders", ":orderId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -5557,15 +4903,8 @@
                       "name": "Order updated successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5619,15 +4958,8 @@
                       "name": "Unauthorized",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5677,15 +5009,8 @@
                       "name": "Order not found",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5735,15 +5060,8 @@
                       "name": "Internal server error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5804,15 +5122,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "orders",
-                        ":orderId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "orders", ":orderId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -5860,15 +5171,8 @@
                       "name": "Order deleted successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5922,15 +5226,8 @@
                       "name": "Unauthorized",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5980,15 +5277,8 @@
                       "name": "Order not found",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -6038,15 +5328,8 @@
                       "name": "Internal server error",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "orders",
-                            ":orderId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "orders", ":orderId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -6114,15 +5397,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6160,15 +5436,8 @@
                       "name": "Dashboard stats retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "dashboard-stats"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "dashboard-stats"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "start_date",
@@ -6226,15 +5495,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "sales-forecast"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "sales-forecast"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6267,15 +5529,8 @@
                       "name": "Sales forecast retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "sales-forecast"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "sales-forecast"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "period",
@@ -6329,15 +5584,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "revenue-by-device"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "revenue-by-device"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6370,15 +5618,8 @@
                       "name": "Revenue by device retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "revenue-by-device"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "revenue-by-device"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "days",
@@ -6432,15 +5673,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "bestsellers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "bestsellers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6478,15 +5712,8 @@
                       "name": "Bestsellers retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "bestsellers"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "bestsellers"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "limit",
@@ -6544,15 +5771,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "cart-abandonment"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "cart-abandonment"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6585,15 +5805,8 @@
                       "name": "Cart abandonment stats retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "cart-abandonment"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "cart-abandonment"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "days",
@@ -6647,15 +5860,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "traffic"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "traffic"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6688,15 +5894,8 @@
                       "name": "Traffic data retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "traffic"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "traffic"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "days",
@@ -6750,15 +5949,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "ecommerce",
-                        "revenue-chart"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "ecommerce", "revenue-chart"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -6791,15 +5983,8 @@
                       "name": "Revenue chart data retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "revenue-chart"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "revenue-chart"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "days",
@@ -6857,15 +6042,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "orders"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "orders"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -6925,15 +6103,8 @@
                           "name": "Orders retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "orders"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "orders"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -7008,16 +6179,8 @@
                             "name": "Get order details with items",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "orders",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "orders", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -7052,16 +6215,8 @@
                               "name": "Order details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "orders",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "orders", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7107,16 +6262,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "orders",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "orders", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7173,17 +6320,8 @@
                               "type": "text/plain"
                             },
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "orders",
-                                ":id",
-                                "status"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "orders", ":id", "status"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -7231,17 +6369,8 @@
                               "name": "Order status updated",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "orders",
-                                    ":id",
-                                    "status"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "orders", ":id", "status"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7295,17 +6424,8 @@
                               "name": "Bad request - validation error",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "orders",
-                                    ":id",
-                                    "status"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "orders", ":id", "status"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7359,17 +6479,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "orders",
-                                    ":id",
-                                    "status"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "orders", ":id", "status"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7437,16 +6548,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "orders",
-                            "latest"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "orders", "latest"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -7479,16 +6582,8 @@
                           "name": "Latest orders retrieved",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "orders",
-                                "latest"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "orders", "latest"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "limit",
@@ -7549,15 +6644,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "vendors"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "vendors"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -7608,15 +6696,8 @@
                           "name": "Vendors retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "vendors"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "vendors"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -7683,16 +6764,8 @@
                             "name": "Get vendor details with products and sales",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "vendors",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "vendors", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -7727,16 +6800,8 @@
                               "name": "Vendor details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "vendors",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "vendors", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7782,16 +6847,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "vendors",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "vendors", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7845,17 +6902,8 @@
                             "name": "Verify or unverify vendor",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "vendors",
-                                ":id",
-                                "verify"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "vendors", ":id", "verify"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -7903,17 +6951,8 @@
                               "name": "Vendor verification updated",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "vendors",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "vendors", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -7967,17 +7006,8 @@
                               "name": "Bad request - validation error",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "vendors",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "vendors", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8031,17 +7061,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "vendors",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "vendors", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8116,15 +7137,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "products"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "products"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -8185,15 +7199,8 @@
                           "name": "Products retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "products"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "products"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -8264,15 +7271,8 @@
                         "name": "Create new product",
                         "description": {},
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "ecommerce",
-                            "products"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "ecommerce", "products"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -8312,15 +7312,8 @@
                           "name": "Product created successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "products"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "products"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": []
                             },
@@ -8366,15 +7359,8 @@
                           "name": "Bad request - validation error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "products"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "products"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": []
                             },
@@ -8432,16 +7418,8 @@
                             "name": "Get product details",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "products",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "products", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -8476,16 +7454,8 @@
                               "name": "Product details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "products",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "products", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8531,16 +7501,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "products",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "products", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8594,16 +7556,8 @@
                             "name": "Update product",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "products",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "products", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -8651,16 +7605,8 @@
                               "name": "Product updated successfully",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "products",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "products", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8714,16 +7660,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "products",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "products", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8785,16 +7723,8 @@
                             "name": "Soft delete product",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "ecommerce",
-                                "products",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "ecommerce", "products", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -8842,16 +7772,8 @@
                               "name": "Product deleted successfully",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "products",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "products", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8905,16 +7827,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "ecommerce",
-                                    "products",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "ecommerce", "products", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -8996,15 +7910,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "hotel",
-                            "hotels"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "hotel", "hotels"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -9065,15 +7972,8 @@
                           "name": "Hotels retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "hotels"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "hotels"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -9148,16 +8048,8 @@
                             "name": "Get hotel details with rooms, bookings, and reviews",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "hotels",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "hotels", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -9192,16 +8084,8 @@
                               "name": "Hotel details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "hotel",
-                                    "hotels",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "hotel", "hotels", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -9247,16 +8131,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "hotel",
-                                    "hotels",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "hotel", "hotels", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -9310,17 +8186,8 @@
                             "name": "Verify or unverify hotel",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "hotels",
-                                ":id",
-                                "verify"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "hotels", ":id", "verify"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -9368,17 +8235,8 @@
                               "name": "Hotel verification updated",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "hotel",
-                                    "hotels",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "hotel", "hotels", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -9432,17 +8290,8 @@
                               "name": "Bad request - validation error",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "hotel",
-                                    "hotels",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "hotel", "hotels", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -9496,17 +8345,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "hotel",
-                                    "hotels",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "hotel", "hotels", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -9581,15 +8421,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "hotel",
-                            "bookings"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "hotel", "bookings"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -9649,15 +8482,8 @@
                           "name": "Bookings retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "bookings"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "bookings"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -9728,17 +8554,8 @@
                         "name": "Update booking status",
                         "description": {},
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "hotel",
-                            "bookings",
-                            ":id",
-                            "status"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "hotel", "bookings", ":id", "status"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -9786,17 +8603,8 @@
                           "name": "Booking status updated",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "bookings",
-                                ":id",
-                                "status"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "bookings", ":id", "status"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -9850,17 +8658,8 @@
                           "name": "Bad request - validation error",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "bookings",
-                                ":id",
-                                "status"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "bookings", ":id", "status"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -9914,17 +8713,8 @@
                           "name": "Resource not found",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "hotel",
-                                "bookings",
-                                ":id",
-                                "status"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "hotel", "bookings", ":id", "status"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -9992,15 +8782,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "hotel",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "hotel", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -10038,15 +8821,8 @@
                       "name": "Dashboard stats retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "hotel",
-                            "dashboard-stats"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "hotel", "dashboard-stats"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "start_date",
@@ -10115,15 +8891,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "media",
-                            "files"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "media", "files"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -10173,15 +8942,8 @@
                           "name": "Files retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "media",
-                                "files"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "media", "files"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -10248,16 +9010,8 @@
                             "name": "Get file details",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "media",
-                                "files",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "media", "files", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -10292,16 +9046,8 @@
                               "name": "File details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "files",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "files", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10347,16 +9093,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "files",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "files", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10410,16 +9148,8 @@
                             "name": "Delete file (soft delete)",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "media",
-                                "files",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "media", "files", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -10454,16 +9184,8 @@
                               "name": "File deleted successfully",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "files",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "files", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10509,16 +9231,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "files",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "files", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10585,15 +9299,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "media",
-                            "advertisements"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "media", "advertisements"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -10638,15 +9345,8 @@
                           "name": "Advertisements retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "media",
-                                "advertisements"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "media", "advertisements"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -10709,16 +9409,8 @@
                             "name": "Get advertisement details",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "media",
-                                "advertisements",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "media", "advertisements", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -10753,16 +9445,8 @@
                               "name": "Advertisement details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "advertisements",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "advertisements", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10808,16 +9492,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "advertisements",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "advertisements", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10871,17 +9547,8 @@
                             "name": "Update advertisement status",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "media",
-                                "advertisements",
-                                ":id",
-                                "status"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "media", "advertisements", ":id", "status"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -10929,17 +9596,8 @@
                               "name": "Advertisement status updated",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "advertisements",
-                                    ":id",
-                                    "status"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "advertisements", ":id", "status"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -10993,17 +9651,8 @@
                               "name": "Bad request - validation error",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "advertisements",
-                                    ":id",
-                                    "status"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "advertisements", ":id", "status"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11057,17 +9706,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "media",
-                                    "advertisements",
-                                    ":id",
-                                    "status"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "media", "advertisements", ":id", "status"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11138,15 +9778,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "media",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "media", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -11184,15 +9817,8 @@
                       "name": "Dashboard stats retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "media",
-                            "dashboard-stats"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "media", "dashboard-stats"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "start_date",
@@ -11261,15 +9887,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "taxi",
-                            "drivers"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "taxi", "drivers"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -11320,15 +9939,8 @@
                           "name": "Drivers retrieved successfully",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "taxi",
-                                "drivers"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "taxi", "drivers"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -11395,16 +10007,8 @@
                             "name": "Get driver details with rides and earnings",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "taxi",
-                                "drivers",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "taxi", "drivers", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -11439,16 +10043,8 @@
                               "name": "Driver details retrieved",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "taxi",
-                                    "drivers",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "taxi", "drivers", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11494,16 +10090,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "taxi",
-                                    "drivers",
-                                    ":id"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "taxi", "drivers", ":id"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11557,17 +10145,8 @@
                             "name": "Verify or unverify driver",
                             "description": {},
                             "url": {
-                              "path": [
-                                "api",
-                                "managers",
-                                "taxi",
-                                "drivers",
-                                ":id",
-                                "verify"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "managers", "taxi", "drivers", ":id", "verify"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -11615,17 +10194,8 @@
                               "name": "Driver verification updated",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "taxi",
-                                    "drivers",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "taxi", "drivers", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11679,17 +10249,8 @@
                               "name": "Bad request - validation error",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "taxi",
-                                    "drivers",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "taxi", "drivers", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11743,17 +10304,8 @@
                               "name": "Resource not found",
                               "originalRequest": {
                                 "url": {
-                                  "path": [
-                                    "api",
-                                    "managers",
-                                    "taxi",
-                                    "drivers",
-                                    ":id",
-                                    "verify"
-                                  ],
-                                  "host": [
-                                    "{{baseUrl}}"
-                                  ],
+                                  "path": ["api", "managers", "taxi", "drivers", ":id", "verify"],
+                                  "host": ["{{baseUrl}}"],
                                   "query": [],
                                   "variable": [
                                     {
@@ -11824,15 +10376,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "taxi",
-                        "rides"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "taxi", "rides"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -11892,15 +10437,8 @@
                       "name": "Rides retrieved successfully",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "taxi",
-                            "rides"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "taxi", "rides"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -11974,15 +10512,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "managers",
-                        "taxi",
-                        "dashboard-stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "managers", "taxi", "dashboard-stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -12020,15 +10551,8 @@
                       "name": "Dashboard stats retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "managers",
-                            "taxi",
-                            "dashboard-stats"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "managers", "taxi", "dashboard-stats"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "start_date",
@@ -12092,14 +10616,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "api",
-                "postal-monitoring",
-                "staff"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["api", "postal-monitoring", "staff"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -12163,14 +10681,8 @@
               "name": "Staff retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "postal-monitoring",
-                    "staff"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "postal-monitoring", "staff"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -12233,14 +10745,8 @@
               "name": "Unauthorized",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "postal-monitoring",
-                    "staff"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "postal-monitoring", "staff"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -12299,14 +10805,8 @@
               "name": "Internal server error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "postal-monitoring",
-                    "staff"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "postal-monitoring", "staff"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",

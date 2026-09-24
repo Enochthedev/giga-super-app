@@ -1,4 +1,5 @@
 import logger from '../utils/logger';
+
 import {
   QueueLike,
   closeQueue,

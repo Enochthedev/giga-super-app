@@ -1,5 +1,6 @@
 import { Response, Router } from 'express';
 import winston from 'winston';
+
 import { createAudit, createFailedAudit } from '../middleware/audit';
 import {
   AuthRequest,
@@ -524,59 +525,54 @@ router.post('/', authenticate, requireAnyAccess, async (req: AuthRequest, res: R
  *       500:
  *         description: Internal server error
  */
-router.get(
-  '/:userId',
-  authenticate,
-  requireAnyAccess,
-  async (req: AuthRequest, res: Response) => {
-    try {
-      const { userId } = req.params;
+router.get('/:userId', authenticate, requireAnyAccess, async (req: AuthRequest, res: Response) => {
+  try {
+    const { userId } = req.params;
 
-      // Geo-scope: region-tagged admins can only fetch users in their subtree.
-      const allowedRegionIds = await getAllowedRegionIds(req.user!);
+    // Geo-scope: region-tagged admins can only fetch users in their subtree.
+    const allowedRegionIds = await getAllowedRegionIds(req.user!);
 
-      // V8: user_roles / user_active_roles carry no foreign key to user_profiles, so
-      // PostgREST cannot resolve them as embedded selects — including them here made
-      // every request 500 (the list endpoint works precisely because it has no embeds).
-      // Fetch the profile plainly, then join the role rows in a second round trip.
-      let detailQuery = supabase
-        .from('user_profiles')
-        .select(SELECT_FIELDS.USER_PROFILE)
-        .eq('id', userId);
+    // V8: user_roles / user_active_roles carry no foreign key to user_profiles, so
+    // PostgREST cannot resolve them as embedded selects — including them here made
+    // every request 500 (the list endpoint works precisely because it has no embeds).
+    // Fetch the profile plainly, then join the role rows in a second round trip.
+    let detailQuery = supabase
+      .from('user_profiles')
+      .select(SELECT_FIELDS.USER_PROFILE)
+      .eq('id', userId);
 
-      detailQuery = applyRegionScope(detailQuery, allowedRegionIds);
+    detailQuery = applyRegionScope(detailQuery, allowedRegionIds);
 
-      const { data: user, error } = await detailQuery.maybeSingle();
+    const { data: user, error } = await detailQuery.maybeSingle();
 
-      if (error) throw error;
+    if (error) throw error;
 
-      if (!user) {
-        // Either missing or outside the admin's region scope.
-        return res.status(404).json({ error: 'User not found' });
-      }
-
-      const [{ data: roles }, { data: activeRole }] = await Promise.all([
-        supabase.from('user_roles').select('role_name, granted_at, is_active').eq('user_id', userId),
-        supabase.from('user_active_roles').select('active_role').eq('user_id', userId).maybeSingle(),
-      ]);
-
-      await createAudit(req, 'view_user_details', 'user_profile', userId);
-
-      res.json({
-        success: true,
-        data: {
-          // SELECT_FIELDS.USER_PROFILE is a runtime string, so the row type is opaque to TS.
-          ...(user as unknown as Record<string, unknown>),
-          user_roles: roles ?? [],
-          user_active_roles: activeRole ? [activeRole] : [],
-        },
-      });
-    } catch (error: any) {
-      logger.error('Failed to get user', { error: error.message });
-      res.status(500).json({ error: 'Failed to fetch user' });
+    if (!user) {
+      // Either missing or outside the admin's region scope.
+      return res.status(404).json({ error: 'User not found' });
     }
+
+    const [{ data: roles }, { data: activeRole }] = await Promise.all([
+      supabase.from('user_roles').select('role_name, granted_at, is_active').eq('user_id', userId),
+      supabase.from('user_active_roles').select('active_role').eq('user_id', userId).maybeSingle(),
+    ]);
+
+    await createAudit(req, 'view_user_details', 'user_profile', userId);
+
+    res.json({
+      success: true,
+      data: {
+        // SELECT_FIELDS.USER_PROFILE is a runtime string, so the row type is opaque to TS.
+        ...(user as unknown as Record<string, unknown>),
+        user_roles: roles ?? [],
+        user_active_roles: activeRole ? [activeRole] : [],
+      },
+    });
+  } catch (error: any) {
+    logger.error('Failed to get user', { error: error.message });
+    res.status(500).json({ error: 'Failed to fetch user' });
   }
-);
+});
 
 /**
  * PATCH /api/admin/users/:userId

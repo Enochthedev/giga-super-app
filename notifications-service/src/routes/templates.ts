@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import winston from 'winston';
-import { TemplateEngine } from '../utils/templates.js';
+
 import { isPlatformAdmin } from '../utils/adminRoles.js';
+import { TemplateEngine } from '../utils/templates.js';
 
 const router = Router();
 const logger = winston.createLogger({
@@ -278,10 +279,13 @@ router.post('/', requireAdmin, async (req: AuthenticatedRequest, res: Response) 
 
     if (error) {
       logger.error('Failed to create template', { error, requestId: req.requestId });
-      const clientError = error.code === '23502' || error.code === '42703' || error.code === 'PGRST204';
+      const clientError =
+        error.code === '23502' || error.code === '42703' || error.code === 'PGRST204';
       return res.status(clientError ? 400 : 500).json({
         success: false,
-        error: clientError ? `Invalid template payload: ${error.message}` : 'Failed to create template',
+        error: clientError
+          ? `Invalid template payload: ${error.message}`
+          : 'Failed to create template',
         metadata: { timestamp: new Date().toISOString(), requestId: req.requestId },
       });
     }

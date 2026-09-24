@@ -3,11 +3,12 @@ import Stripe from 'stripe';
 import { v4 as uuidv4 } from 'uuid';
 
 import { config } from '../config';
-import { selectProcessor } from './currency.service';
 import { CircuitBreakerState, PaymentRequest, PaymentResponse } from '../types';
 import supabase from '../utils/database';
 import { PaymentProcessingError, ServiceUnavailableError } from '../utils/errors';
 import logger from '../utils/logger';
+
+import { selectProcessor } from './currency.service';
 
 // Initialize Stripe
 const stripe = new Stripe(config.stripeSecretKey, {

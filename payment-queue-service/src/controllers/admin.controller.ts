@@ -1,10 +1,11 @@
-import { Response } from 'express';
 import { createClient } from '@supabase/supabase-js';
+import { Response } from 'express';
+
 import { config } from '../config';
-import logger from '../utils/logger';
-import { BadRequestError } from '../utils/errors';
-import { Validator } from '../utils/validator';
 import { AuthenticatedRequest } from '../middleware/rbac.middleware';
+import { BadRequestError } from '../utils/errors';
+import logger from '../utils/logger';
+import { Validator } from '../utils/validator';
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
@@ -14,20 +15,10 @@ const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
  */
 export async function getBranchReport(req: AuthenticatedRequest, res: Response) {
   try {
-    const {
-      branchId,
-      startDate,
-      endDate,
-      module,
-      page = 1,
-      limit = 20,
-    } = req.query;
+    const { branchId, startDate, endDate, module, page = 1, limit = 20 } = req.query;
 
     // Validate pagination
-    const pagination = Validator.validatePagination(
-      Number(page),
-      Number(limit)
-    );
+    const pagination = Validator.validatePagination(Number(page), Number(limit));
 
     // Build query
     let query = supabase
@@ -67,12 +58,13 @@ export async function getBranchReport(req: AuthenticatedRequest, res: Response) 
 
     // Calculate aggregates
     const totalAmount = transactions?.reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
-    const totalCommission = transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
+    const totalCommission =
+      transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
     const netAmount = totalAmount - totalCommission;
 
     // Group by module
     const byModule: any = {};
-    transactions?.forEach((tx) => {
+    transactions?.forEach(tx => {
       const mod = tx.module;
       if (!byModule[mod]) {
         byModule[mod] = {
@@ -134,20 +126,10 @@ export async function getBranchReport(req: AuthenticatedRequest, res: Response) 
  */
 export async function getStateReport(req: AuthenticatedRequest, res: Response) {
   try {
-    const {
-      stateId,
-      startDate,
-      endDate,
-      module,
-      page = 1,
-      limit = 20,
-    } = req.query;
+    const { stateId, startDate, endDate, module, page = 1, limit = 20 } = req.query;
 
     // Validate pagination
-    const pagination = Validator.validatePagination(
-      Number(page),
-      Number(limit)
-    );
+    const pagination = Validator.validatePagination(Number(page), Number(limit));
 
     // Build query
     let query = supabase
@@ -187,12 +169,13 @@ export async function getStateReport(req: AuthenticatedRequest, res: Response) {
 
     // Calculate aggregates
     const totalAmount = transactions?.reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
-    const totalCommission = transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
+    const totalCommission =
+      transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
     const netAmount = totalAmount - totalCommission;
 
     // Group by branch
     const byBranch: any = {};
-    transactions?.forEach((tx) => {
+    transactions?.forEach(tx => {
       const branchId = tx.branch_id;
       if (!byBranch[branchId]) {
         byBranch[branchId] = {
@@ -211,7 +194,7 @@ export async function getStateReport(req: AuthenticatedRequest, res: Response) {
 
     // Group by module
     const byModule: any = {};
-    transactions?.forEach((tx) => {
+    transactions?.forEach(tx => {
       const mod = tx.module;
       if (!byModule[mod]) {
         byModule[mod] = {
@@ -274,19 +257,10 @@ export async function getStateReport(req: AuthenticatedRequest, res: Response) {
  */
 export async function getNationalReport(req: AuthenticatedRequest, res: Response) {
   try {
-    const {
-      startDate,
-      endDate,
-      module,
-      page = 1,
-      limit = 20,
-    } = req.query;
+    const { startDate, endDate, module, page = 1, limit = 20 } = req.query;
 
     // Validate pagination
-    const pagination = Validator.validatePagination(
-      Number(page),
-      Number(limit)
-    );
+    const pagination = Validator.validatePagination(Number(page), Number(limit));
 
     // Build query
     let query = supabase
@@ -321,12 +295,13 @@ export async function getNationalReport(req: AuthenticatedRequest, res: Response
 
     // Calculate aggregates
     const totalAmount = transactions?.reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
-    const totalCommission = transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
+    const totalCommission =
+      transactions?.reduce((sum, tx) => sum + (tx.commission_amount || 0), 0) || 0;
     const netAmount = totalAmount - totalCommission;
 
     // Group by state
     const byState: any = {};
-    transactions?.forEach((tx) => {
+    transactions?.forEach(tx => {
       const stateId = tx.state_id;
       if (!byState[stateId]) {
         byState[stateId] = {
@@ -345,7 +320,7 @@ export async function getNationalReport(req: AuthenticatedRequest, res: Response
 
     // Group by module
     const byModule: any = {};
-    transactions?.forEach((tx) => {
+    transactions?.forEach(tx => {
       const mod = tx.module;
       if (!byModule[mod]) {
         byModule[mod] = {

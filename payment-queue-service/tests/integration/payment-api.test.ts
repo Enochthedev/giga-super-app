@@ -11,9 +11,7 @@ describe('Payment API Endpoints', () => {
 
   describe('GET /health', () => {
     it('should return health status', async () => {
-      const response = await request(app)
-        .get('/health')
-        .expect('Content-Type', /json/);
+      const response = await request(app).get('/health').expect('Content-Type', /json/);
 
       expect(response.body).toHaveProperty('status');
       expect(response.body).toHaveProperty('timestamp');

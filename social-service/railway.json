@@ -3,10 +3,7 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "social-service/Dockerfile",
-    "watchPatterns": [
-      "social-service/**",
-      "shared/**"
-    ]
+    "watchPatterns": ["social-service/**", "shared/**"]
   },
   "deploy": {
     "numReplicas": 1,

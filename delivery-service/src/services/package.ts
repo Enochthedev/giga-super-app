@@ -93,7 +93,11 @@ export class PackageService {
       return this.mapDatabasePackage(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error fetching package', { error, package_id: packageId, request_id: requestId });
+      logger.error('Error fetching package', {
+        error,
+        package_id: packageId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -139,7 +143,11 @@ export class PackageService {
       };
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error fetching sender packages', { error, sender_id: senderId, request_id: requestId });
+      logger.error('Error fetching sender packages', {
+        error,
+        sender_id: senderId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -206,20 +214,24 @@ export class PackageService {
       // D1: authorize. Without this, requireAuth alone let any logged-in user modify any
       // package (address, delivery_fee, mark delivered). Only the sender or an admin may.
       if (actor && !actor.isAdmin && existing.sender_id !== actor.userId) {
-        throw new ServiceError(
-          'You can only modify your own packages',
-          'FORBIDDEN',
-          403
-        );
+        throw new ServiceError('You can only modify your own packages', 'FORBIDDEN', 403);
       }
 
       // D2: whitelist updatable columns so an unfiltered body cannot mass-assign
       // (e.g. courier_id, sender_id). Non-admins additionally cannot set delivery_fee.
       const ALLOWED: (keyof UpdatePackageRequest)[] = [
-        'sender_name', 'sender_phone', 'sender_address',
-        'recipient_name', 'recipient_phone', 'recipient_address',
-        'package_description', 'package_weight', 'package_dimensions',
-        'priority', 'delivery_instructions', 'status',
+        'sender_name',
+        'sender_phone',
+        'sender_address',
+        'recipient_name',
+        'recipient_phone',
+        'recipient_address',
+        'package_description',
+        'package_weight',
+        'package_dimensions',
+        'priority',
+        'delivery_instructions',
+        'status',
         'delivery_fee',
       ];
       const clean: Record<string, unknown> = {};
@@ -252,7 +264,11 @@ export class PackageService {
       return this.mapDatabasePackage(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error updating package', { error, package_id: packageId, request_id: requestId });
+      logger.error('Error updating package', {
+        error,
+        package_id: packageId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -298,7 +314,11 @@ export class PackageService {
       return this.mapDatabasePackage(data);
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error cancelling package', { error, package_id: packageId, request_id: requestId });
+      logger.error('Error cancelling package', {
+        error,
+        package_id: packageId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }
@@ -333,7 +353,11 @@ export class PackageService {
       logger.info('Package deleted', { package_id: packageId, request_id: requestId });
     } catch (error) {
       if (error instanceof ServiceError) throw error;
-      logger.error('Error deleting package', { error, package_id: packageId, request_id: requestId });
+      logger.error('Error deleting package', {
+        error,
+        package_id: packageId,
+        request_id: requestId,
+      });
       throw new ServiceError('Internal server error', 'INTERNAL_SERVER_ERROR', 500);
     }
   }

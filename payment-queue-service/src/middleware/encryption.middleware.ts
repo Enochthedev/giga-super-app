@@ -1,11 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
+
 import { encryptionService } from '../utils/encryption';
 import logger from '../utils/logger';
 
 /**
  * Encrypt sensitive fields in request body before processing
  */
-export const encryptSensitiveFields = (fields: string[] = ['email', 'phone', 'address', 'name']) => {
+export const encryptSensitiveFields = (
+  fields: string[] = ['email', 'phone', 'address', 'name']
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       if (!req.body) {
@@ -13,7 +16,7 @@ export const encryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
       }
 
       // Encrypt direct fields
-      fields.forEach((field) => {
+      fields.forEach(field => {
         if (req.body[field] && typeof req.body[field] === 'string') {
           req.body[field] = encryptionService.encrypt(req.body[field]);
         }
@@ -22,16 +25,24 @@ export const encryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
       // Encrypt metadata fields if present
       if (req.body.metadata && typeof req.body.metadata === 'object') {
         if (req.body.metadata.customerEmail) {
-          req.body.metadata.customerEmail = encryptionService.encrypt(req.body.metadata.customerEmail);
+          req.body.metadata.customerEmail = encryptionService.encrypt(
+            req.body.metadata.customerEmail
+          );
         }
         if (req.body.metadata.customerPhone) {
-          req.body.metadata.customerPhone = encryptionService.encrypt(req.body.metadata.customerPhone);
+          req.body.metadata.customerPhone = encryptionService.encrypt(
+            req.body.metadata.customerPhone
+          );
         }
         if (req.body.metadata.customerName) {
-          req.body.metadata.customerName = encryptionService.encrypt(req.body.metadata.customerName);
+          req.body.metadata.customerName = encryptionService.encrypt(
+            req.body.metadata.customerName
+          );
         }
         if (req.body.metadata.customerAddress) {
-          req.body.metadata.customerAddress = encryptionService.encrypt(req.body.metadata.customerAddress);
+          req.body.metadata.customerAddress = encryptionService.encrypt(
+            req.body.metadata.customerAddress
+          );
         }
       }
 
@@ -50,7 +61,9 @@ export const encryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
  * Decrypt sensitive fields in response before sending
  * This should be used carefully and only for authorized requests
  */
-export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'address', 'name']) => {
+export const decryptSensitiveFields = (
+  fields: string[] = ['email', 'phone', 'address', 'name']
+) => {
   return (req: Request, res: Response, next: NextFunction) => {
     try {
       const originalJson = res.json.bind(res);
@@ -58,7 +71,7 @@ export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
       res.json = function (data: any) {
         if (data && typeof data === 'object') {
           // Decrypt direct fields
-          fields.forEach((field) => {
+          fields.forEach(field => {
             if (data[field] && typeof data[field] === 'string') {
               try {
                 data[field] = encryptionService.decrypt(data[field]);
@@ -72,14 +85,18 @@ export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
           if (data.metadata && typeof data.metadata === 'object') {
             if (data.metadata.customerEmail) {
               try {
-                data.metadata.customerEmail = encryptionService.decrypt(data.metadata.customerEmail);
+                data.metadata.customerEmail = encryptionService.decrypt(
+                  data.metadata.customerEmail
+                );
               } catch {
                 // Ignore decryption errors
               }
             }
             if (data.metadata.customerPhone) {
               try {
-                data.metadata.customerPhone = encryptionService.decrypt(data.metadata.customerPhone);
+                data.metadata.customerPhone = encryptionService.decrypt(
+                  data.metadata.customerPhone
+                );
               } catch {
                 // Ignore decryption errors
               }
@@ -93,7 +110,9 @@ export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
             }
             if (data.metadata.customerAddress) {
               try {
-                data.metadata.customerAddress = encryptionService.decrypt(data.metadata.customerAddress);
+                data.metadata.customerAddress = encryptionService.decrypt(
+                  data.metadata.customerAddress
+                );
               } catch {
                 // Ignore decryption errors
               }
@@ -102,9 +121,9 @@ export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
 
           // Handle arrays of data
           if (Array.isArray(data)) {
-            data = data.map((item) => {
+            data = data.map(item => {
               if (item && typeof item === 'object') {
-                fields.forEach((field) => {
+                fields.forEach(field => {
                   if (item[field] && typeof item[field] === 'string') {
                     try {
                       item[field] = encryptionService.decrypt(item[field]);
@@ -123,7 +142,7 @@ export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
             if (Array.isArray(data.data)) {
               data.data = data.data.map((item: any) => {
                 if (item && typeof item === 'object') {
-                  fields.forEach((field) => {
+                  fields.forEach(field => {
                     if (item[field] && typeof item[field] === 'string') {
                       try {
                         item[field] = encryptionService.decrypt(item[field]);
@@ -136,7 +155,7 @@ export const decryptSensitiveFields = (fields: string[] = ['email', 'phone', 'ad
                 return item;
               });
             } else {
-              fields.forEach((field) => {
+              fields.forEach(field => {
                 if (data.data[field] && typeof data.data[field] === 'string') {
                   try {
                     data.data[field] = encryptionService.decrypt(data.data[field]);
@@ -195,7 +214,7 @@ export const maskSensitiveFields = () => {
 
           // Handle arrays
           if (Array.isArray(data)) {
-            data = data.map((item) => {
+            data = data.map(item => {
               if (item && typeof item === 'object') {
                 if (item.email) item.email = maskEmail(item.email);
                 if (item.phone) item.phone = maskPhone(item.phone);
@@ -237,10 +256,10 @@ function maskEmail(email: string): string {
   try {
     const [username, domain] = email.split('@');
     if (!username || !domain) return email;
-    
+
     const visibleChars = Math.min(3, Math.floor(username.length / 2));
-    const masked = username.substring(0, visibleChars) + '***';
-    
+    const masked = `${username.substring(0, visibleChars)}***`;
+
     return `${masked}@${domain}`;
   } catch {
     return email;
@@ -253,10 +272,10 @@ function maskEmail(email: string): string {
 function maskPhone(phone: string): string {
   try {
     if (phone.length < 4) return phone;
-    
+
     const lastFour = phone.slice(-4);
     const masked = '*'.repeat(phone.length - 4) + lastFour;
-    
+
     return masked;
   } catch {
     return phone;

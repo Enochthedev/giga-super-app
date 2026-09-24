@@ -3,10 +3,7 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "taxi-realtime-service/Dockerfile",
-    "watchPatterns": [
-      "taxi-realtime-service/**",
-      "shared/**"
-    ]
+    "watchPatterns": ["taxi-realtime-service/**", "shared/**"]
   },
   "deploy": {
     "numReplicas": 1,

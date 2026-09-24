@@ -177,11 +177,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "public",
-              "friends",
-              "private"
-            ]
+            "enum": ["public", "friends", "private"]
           },
           "like_count": {
             "type": "integer",
@@ -210,9 +206,7 @@
       },
       "CreatePostRequest": {
         "type": "object",
-        "required": [
-          "content"
-        ],
+        "required": ["content"],
         "properties": {
           "content": {
             "type": "string",
@@ -229,11 +223,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "public",
-              "friends",
-              "private"
-            ],
+            "enum": ["public", "friends", "private"],
             "default": "public"
           },
           "location": {
@@ -262,11 +252,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "public",
-              "friends",
-              "private"
-            ]
+            "enum": ["public", "friends", "private"]
           }
         }
       },
@@ -308,9 +294,7 @@
       },
       "CreateCommentRequest": {
         "type": "object",
-        "required": [
-          "content"
-        ],
+        "required": ["content"],
         "properties": {
           "content": {
             "type": "string",
@@ -361,10 +345,7 @@
           },
           "media_type": {
             "type": "string",
-            "enum": [
-              "image",
-              "video"
-            ]
+            "enum": ["image", "video"]
           },
           "caption": {
             "type": "string",
@@ -401,21 +382,11 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "accepted",
-              "blocked",
-              "declined"
-            ]
+            "enum": ["pending", "accepted", "blocked", "declined"]
           },
           "connection_type": {
             "type": "string",
-            "enum": [
-              "friend",
-              "follower",
-              "family",
-              "colleague"
-            ]
+            "enum": ["friend", "follower", "family", "colleague"]
           },
           "created_at": {
             "type": "string",
@@ -558,9 +529,7 @@
       "get": {
         "summary": "Get comments for a post",
         "description": "Retrieve paginated comments for a specific post",
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "parameters": [
           {
             "in": "path",
@@ -622,9 +591,7 @@
       "post": {
         "summary": "Create a comment",
         "description": "Add a comment to a post. Requires authentication.",
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "security": [
           {
             "BearerAuth": []
@@ -674,9 +641,7 @@
       "put": {
         "summary": "Update a comment",
         "description": "Update an existing comment. Only the comment owner can update.",
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "security": [
           {
             "BearerAuth": []
@@ -740,9 +705,7 @@
       "delete": {
         "summary": "Delete a comment",
         "description": "Soft delete a comment. Only the comment owner or admin can delete.",
-        "tags": [
-          "Comments"
-        ],
+        "tags": ["Comments"],
         "security": [
           {
             "BearerAuth": []
@@ -791,9 +754,7 @@
       "get": {
         "summary": "Get user connections",
         "description": "Retrieve list of user's connections (friends, followers, etc.)",
-        "tags": [
-          "Connections"
-        ],
+        "tags": ["Connections"],
         "security": [
           {
             "BearerAuth": []
@@ -805,11 +766,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "accepted",
-                "blocked"
-              ]
+              "enum": ["pending", "accepted", "blocked"]
             }
           },
           {
@@ -817,12 +774,7 @@
             "name": "type",
             "schema": {
               "type": "string",
-              "enum": [
-                "friend",
-                "follower",
-                "family",
-                "colleague"
-              ]
+              "enum": ["friend", "follower", "family", "colleague"]
             }
           }
         ],
@@ -838,9 +790,7 @@
       "post": {
         "summary": "Send connection request",
         "description": "Send a friend/follow request to another user",
-        "tags": [
-          "Connections"
-        ],
+        "tags": ["Connections"],
         "security": [
           {
             "BearerAuth": []
@@ -852,9 +802,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "connected_user_id"
-                ],
+                "required": ["connected_user_id"],
                 "properties": {
                   "connected_user_id": {
                     "type": "string",
@@ -862,12 +810,7 @@
                   },
                   "connection_type": {
                     "type": "string",
-                    "enum": [
-                      "friend",
-                      "follower",
-                      "family",
-                      "colleague"
-                    ],
+                    "enum": ["friend", "follower", "family", "colleague"],
                     "default": "friend"
                   }
                 }
@@ -895,9 +838,7 @@
       "get": {
         "summary": "Get pending connection requests",
         "description": "Retrieve pending connection requests received by the user",
-        "tags": [
-          "Connections"
-        ],
+        "tags": ["Connections"],
         "security": [
           {
             "BearerAuth": []
@@ -917,9 +858,7 @@
       "put": {
         "summary": "Update connection status",
         "description": "Accept, decline, or block a connection request",
-        "tags": [
-          "Connections"
-        ],
+        "tags": ["Connections"],
         "security": [
           {
             "BearerAuth": []
@@ -942,17 +881,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "accepted",
-                      "declined",
-                      "blocked"
-                    ]
+                    "enum": ["accepted", "declined", "blocked"]
                   }
                 }
               }
@@ -977,9 +910,7 @@
       "delete": {
         "summary": "Remove connection",
         "description": "Remove an existing connection or cancel a pending request",
-        "tags": [
-          "Connections"
-        ],
+        "tags": ["Connections"],
         "security": [
           {
             "BearerAuth": []
@@ -1013,9 +944,7 @@
       "get": {
         "summary": "Get personalized feed",
         "description": "Retrieve a personalized feed of posts. For authenticated users, includes posts from\nconnections and public posts. For unauthenticated users, shows only public posts.\n",
-        "tags": [
-          "Feed"
-        ],
+        "tags": ["Feed"],
         "parameters": [
           {
             "in": "query",
@@ -1070,9 +999,7 @@
       "get": {
         "summary": "Get trending posts",
         "description": "Retrieve trending posts based on engagement (likes, comments, shares)",
-        "tags": [
-          "Feed"
-        ],
+        "tags": ["Feed"],
         "parameters": [
           {
             "in": "query",
@@ -1096,11 +1023,7 @@
             "name": "timeframe",
             "schema": {
               "type": "string",
-              "enum": [
-                "day",
-                "week",
-                "month"
-              ],
+              "enum": ["day", "week", "month"],
               "default": "week"
             },
             "description": "Time period for trending calculation"
@@ -1120,9 +1043,7 @@
       "get": {
         "summary": "Get posts from followed users",
         "description": "Retrieve posts only from users the authenticated user follows",
-        "tags": [
-          "Feed"
-        ],
+        "tags": ["Feed"],
         "security": [
           {
             "BearerAuth": []
@@ -1163,9 +1084,7 @@
       "get": {
         "summary": "Health check",
         "description": "Check if the service is healthy and running",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is healthy",
@@ -1214,9 +1133,7 @@
       "get": {
         "summary": "Readiness check",
         "description": "Check if the service is ready to accept traffic",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is ready"
@@ -1228,9 +1145,7 @@
       "get": {
         "summary": "Liveness check",
         "description": "Check if the service is alive (for Kubernetes probes)",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is alive"
@@ -1242,9 +1157,7 @@
       "post": {
         "summary": "Like a post",
         "description": "Toggle like on a post. If already liked, it will unlike.",
-        "tags": [
-          "Likes"
-        ],
+        "tags": ["Likes"],
         "security": [
           {
             "BearerAuth": []
@@ -1302,9 +1215,7 @@
       "delete": {
         "summary": "Unlike a post",
         "description": "Remove like from a post",
-        "tags": [
-          "Likes"
-        ],
+        "tags": ["Likes"],
         "security": [
           {
             "BearerAuth": []
@@ -1341,9 +1252,7 @@
       "get": {
         "summary": "Get users who liked a post",
         "description": "Retrieve list of users who liked a specific post",
-        "tags": [
-          "Likes"
-        ],
+        "tags": ["Likes"],
         "parameters": [
           {
             "in": "path",
@@ -1399,9 +1308,7 @@
       "post": {
         "summary": "Like a comment",
         "description": "Toggle like on a comment",
-        "tags": [
-          "Likes"
-        ],
+        "tags": ["Likes"],
         "security": [
           {
             "BearerAuth": []
@@ -1438,9 +1345,7 @@
       "get": {
         "summary": "Get posts feed",
         "description": "Retrieve a paginated list of public posts. Supports filtering by user and visibility.",
-        "tags": [
-          "Posts"
-        ],
+        "tags": ["Posts"],
         "parameters": [
           {
             "in": "query",
@@ -1477,11 +1382,7 @@
             "name": "visibility",
             "schema": {
               "type": "string",
-              "enum": [
-                "public",
-                "friends",
-                "private"
-              ]
+              "enum": ["public", "friends", "private"]
             },
             "description": "Filter by visibility (requires authentication for non-public)"
           }
@@ -1526,9 +1427,7 @@
       "post": {
         "summary": "Create a new post",
         "description": "Create a new social post. Requires authentication.",
-        "tags": [
-          "Posts"
-        ],
+        "tags": ["Posts"],
         "security": [
           {
             "BearerAuth": []
@@ -1588,9 +1487,7 @@
       "get": {
         "summary": "Get a single post",
         "description": "Retrieve a specific post by ID with author information",
-        "tags": [
-          "Posts"
-        ],
+        "tags": ["Posts"],
         "parameters": [
           {
             "in": "path",
@@ -1637,9 +1534,7 @@
       "put": {
         "summary": "Update a post",
         "description": "Update an existing post. Only the post owner can update.",
-        "tags": [
-          "Posts"
-        ],
+        "tags": ["Posts"],
         "security": [
           {
             "BearerAuth": []
@@ -1710,9 +1605,7 @@
       "delete": {
         "summary": "Delete a post",
         "description": "Soft delete a post. Only the post owner or admin can delete.",
-        "tags": [
-          "Posts"
-        ],
+        "tags": ["Posts"],
         "security": [
           {
             "BearerAuth": []
@@ -1778,9 +1671,7 @@
       "post": {
         "summary": "Report a post",
         "description": "Report a post for violating community guidelines",
-        "tags": [
-          "Posts"
-        ],
+        "tags": ["Posts"],
         "security": [
           {
             "BearerAuth": []
@@ -1804,21 +1695,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "reason"
-                ],
+                "required": ["reason"],
                 "properties": {
                   "reason": {
                     "type": "string",
-                    "enum": [
-                      "spam",
-                      "harassment",
-                      "hate_speech",
-                      "violence",
-                      "nudity",
-                      "false_information",
-                      "other"
-                    ]
+                    "enum": ["spam", "harassment", "hate_speech", "violence", "nudity", "false_information", "other"]
                   },
                   "description": {
                     "type": "string",
@@ -1852,9 +1733,7 @@
       "get": {
         "summary": "Get stories feed",
         "description": "Retrieve stories from followed users and own stories. Stories expire after 24 hours.",
-        "tags": [
-          "Stories"
-        ],
+        "tags": ["Stories"],
         "security": [
           {
             "BearerAuth": []
@@ -1904,9 +1783,7 @@
       "post": {
         "summary": "Create a story",
         "description": "Create a new story that expires after 24 hours",
-        "tags": [
-          "Stories"
-        ],
+        "tags": ["Stories"],
         "security": [
           {
             "BearerAuth": []
@@ -1918,10 +1795,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "media_url",
-                  "media_type"
-                ],
+                "required": ["media_url", "media_type"],
                 "properties": {
                   "media_url": {
                     "type": "string",
@@ -1929,10 +1803,7 @@
                   },
                   "media_type": {
                     "type": "string",
-                    "enum": [
-                      "image",
-                      "video"
-                    ]
+                    "enum": ["image", "video"]
                   },
                   "caption": {
                     "type": "string",
@@ -1963,9 +1834,7 @@
       "get": {
         "summary": "Get a single story",
         "description": "Retrieve a specific story and mark it as viewed",
-        "tags": [
-          "Stories"
-        ],
+        "tags": ["Stories"],
         "security": [
           {
             "BearerAuth": []
@@ -2000,9 +1869,7 @@
       "delete": {
         "summary": "Delete a story",
         "description": "Delete a story. Only the story owner can delete.",
-        "tags": [
-          "Stories"
-        ],
+        "tags": ["Stories"],
         "security": [
           {
             "BearerAuth": []
@@ -2042,9 +1909,7 @@
       "get": {
         "summary": "Get story viewers",
         "description": "Get list of users who viewed a story. Only the story owner can see this.",
-        "tags": [
-          "Stories"
-        ],
+        "tags": ["Stories"],
         "security": [
           {
             "BearerAuth": []

@@ -59,7 +59,7 @@ function convertImports(filePath, srcDir) {
 
     // Ensure it starts with ./ or ../
     if (!relativePath.startsWith('.')) {
-      relativePath = './' + relativePath;
+      relativePath = `./${relativePath}`;
     }
 
     // Replace backslashes with forward slashes (for Windows)
@@ -76,7 +76,7 @@ function convertImports(filePath, srcDir) {
       let relativePath = path.relative(fileDir, absoluteImportPath);
 
       if (!relativePath.startsWith('.')) {
-        relativePath = './' + relativePath;
+        relativePath = `./${relativePath}`;
       }
 
       relativePath = relativePath.replace(/\\/g, '/');
