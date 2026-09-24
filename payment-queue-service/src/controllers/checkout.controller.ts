@@ -145,7 +145,11 @@ export async function initializeCheckout(req: AuthRequest, res: Response) {
     })
     .eq('id', payment.id);
 
-  logger.info('Payment initialized', { paymentId: payment.id, currency, provider: effectiveProvider });
+  logger.info('Payment initialized', {
+    paymentId: payment.id,
+    currency,
+    provider: effectiveProvider,
+  });
 
   res.status(200).json({
     success: true,

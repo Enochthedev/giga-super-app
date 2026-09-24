@@ -53,11 +53,7 @@
     "schemas": {
       "SendNotificationRequest": {
         "type": "object",
-        "required": [
-          "userId",
-          "type",
-          "recipient"
-        ],
+        "required": ["userId", "type", "recipient"],
         "properties": {
           "userId": {
             "type": "string",
@@ -66,11 +62,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "email",
-              "sms",
-              "push"
-            ],
+            "enum": ["email", "sms", "push"],
             "example": "email"
           },
           "templateId": {
@@ -121,10 +113,7 @@
       },
       "BulkSendRequest": {
         "type": "object",
-        "required": [
-          "templateId",
-          "recipients"
-        ],
+        "required": ["templateId", "recipients"],
         "properties": {
           "templateId": {
             "type": "string",
@@ -164,20 +153,14 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "email",
-              "sms",
-              "push"
-            ],
+            "enum": ["email", "sms", "push"],
             "default": "email"
           }
         }
       },
       "CreateTemplateRequest": {
         "type": "object",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
@@ -223,22 +206,12 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "email",
-              "sms",
-              "push"
-            ],
+            "enum": ["email", "sms", "push"],
             "example": "email"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "queued",
-              "processing",
-              "sent",
-              "delivered",
-              "failed"
-            ],
+            "enum": ["queued", "processing", "sent", "delivered", "failed"],
             "example": "queued"
           },
           "scheduledFor": {
@@ -310,11 +283,7 @@
             "items": {
               "type": "string"
             },
-            "example": [
-              "name",
-              "orderId",
-              "trackingUrl"
-            ]
+            "example": ["name", "orderId", "trackingUrl"]
           },
           "is_active": {
             "type": "boolean",
@@ -378,11 +347,7 @@
           },
           "email_frequency": {
             "type": "string",
-            "enum": [
-              "realtime",
-              "daily",
-              "weekly"
-            ],
+            "enum": ["realtime", "daily", "weekly"],
             "default": "realtime"
           },
           "quiet_hours_start": {
@@ -412,11 +377,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "email",
-              "sms",
-              "push"
-            ]
+            "enum": ["email", "sms", "push"]
           },
           "recipient": {
             "type": "string"
@@ -426,14 +387,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "queued",
-              "processing",
-              "sent",
-              "delivered",
-              "failed",
-              "bounced"
-            ]
+            "enum": ["queued", "processing", "sent", "delivered", "failed", "bounced"]
           },
           "sent_at": {
             "type": "string",
@@ -477,21 +431,11 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "email",
-              "sms",
-              "push"
-            ]
+            "enum": ["email", "sms", "push"]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "scheduled",
-              "sending",
-              "completed",
-              "cancelled"
-            ]
+            "enum": ["draft", "scheduled", "sending", "completed", "cancelled"]
           },
           "total_recipients": {
             "type": "integer",
@@ -540,11 +484,7 @@
         "properties": {
           "period": {
             "type": "string",
-            "enum": [
-              "day",
-              "week",
-              "month"
-            ]
+            "enum": ["day", "week", "month"]
           },
           "total_sent": {
             "type": "integer",

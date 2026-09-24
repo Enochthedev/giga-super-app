@@ -103,15 +103,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "assigned",
-              "picked_up",
-              "in_transit",
-              "delivered",
-              "failed",
-              "returned"
-            ],
+            "enum": ["pending", "assigned", "picked_up", "in_transit", "delivered", "failed", "returned"],
             "example": "in_transit"
           },
           "weight_kg": {
@@ -124,12 +116,7 @@
           },
           "package_type": {
             "type": "string",
-            "enum": [
-              "document",
-              "parcel",
-              "fragile",
-              "food"
-            ],
+            "enum": ["document", "parcel", "fragile", "food"],
             "example": "parcel"
           },
           "special_instructions": {
@@ -150,11 +137,7 @@
           },
           "payment_status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "paid",
-              "failed"
-            ],
+            "enum": ["pending", "paid", "failed"],
             "example": "paid"
           },
           "created_at": {
@@ -169,12 +152,7 @@
       },
       "CreatePackageRequest": {
         "type": "object",
-        "required": [
-          "recipient_name",
-          "recipient_phone",
-          "pickup_address",
-          "delivery_address"
-        ],
+        "required": ["recipient_name", "recipient_phone", "pickup_address", "delivery_address"],
         "properties": {
           "recipient_name": {
             "type": "string",
@@ -218,12 +196,7 @@
           },
           "package_type": {
             "type": "string",
-            "enum": [
-              "document",
-              "parcel",
-              "fragile",
-              "food"
-            ],
+            "enum": ["document", "parcel", "fragile", "food"],
             "default": "parcel"
           },
           "special_instructions": {
@@ -284,13 +257,7 @@
           },
           "vehicle_type": {
             "type": "string",
-            "enum": [
-              "bike",
-              "motorcycle",
-              "car",
-              "van",
-              "truck"
-            ],
+            "enum": ["bike", "motorcycle", "car", "van", "truck"],
             "example": "motorcycle"
           },
           "vehicle_plate": {
@@ -302,11 +269,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "available",
-              "busy",
-              "offline"
-            ],
+            "enum": ["available", "busy", "offline"],
             "example": "available"
           },
           "rating": {
@@ -367,13 +330,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "accepted",
-              "rejected",
-              "completed",
-              "cancelled"
-            ],
+            "enum": ["pending", "accepted", "rejected", "completed", "cancelled"],
             "example": "accepted"
           },
           "assigned_at": {
@@ -399,10 +356,7 @@
       },
       "AssignCourierRequest": {
         "type": "object",
-        "required": [
-          "package_id",
-          "courier_id"
-        ],
+        "required": ["package_id", "courier_id"],
         "properties": {
           "package_id": {
             "type": "string",
@@ -414,10 +368,7 @@
           },
           "priority": {
             "type": "string",
-            "enum": [
-              "normal",
-              "urgent"
-            ],
+            "enum": ["normal", "urgent"],
             "default": "normal"
           }
         }
@@ -495,12 +446,7 @@
       },
       "DeliveryFeeRequest": {
         "type": "object",
-        "required": [
-          "pickup_lat",
-          "pickup_lng",
-          "delivery_lat",
-          "delivery_lng"
-        ],
+        "required": ["pickup_lat", "pickup_lng", "delivery_lat", "delivery_lng"],
         "properties": {
           "pickup_lat": {
             "type": "number",
@@ -524,12 +470,7 @@
           },
           "package_type": {
             "type": "string",
-            "enum": [
-              "document",
-              "parcel",
-              "fragile",
-              "food"
-            ]
+            "enum": ["document", "parcel", "fragile", "food"]
           },
           "express_delivery": {
             "type": "boolean",
@@ -743,9 +684,7 @@
   "paths": {
     "/assignments": {
       "post": {
-        "tags": [
-          "Assignments"
-        ],
+        "tags": ["Assignments"],
         "summary": "Create delivery assignment",
         "description": "Creates a new delivery assignment linking a package to a courier",
         "security": [
@@ -759,13 +698,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "order_id",
-                  "pickup_location",
-                  "delivery_location",
-                  "recipient_name",
-                  "recipient_phone"
-                ],
+                "required": ["order_id", "pickup_location", "delivery_location", "recipient_name", "recipient_phone"],
                 "properties": {
                   "order_id": {
                     "type": "string",
@@ -831,9 +764,7 @@
     },
     "/assignments/{id}": {
       "get": {
-        "tags": [
-          "Assignments"
-        ],
+        "tags": ["Assignments"],
         "summary": "Get assignment by ID",
         "description": "Retrieves delivery assignment details including courier and order info",
         "security": [
@@ -874,9 +805,7 @@
     },
     "/assignments/find-couriers": {
       "post": {
-        "tags": [
-          "Assignments"
-        ],
+        "tags": ["Assignments"],
         "summary": "Find available couriers",
         "description": "Finds available couriers near a location for delivery assignment",
         "security": [
@@ -890,9 +819,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "location"
-                ],
+                "required": ["location"],
                 "properties": {
                   "location": {
                     "type": "object",
@@ -956,9 +883,7 @@
     },
     "/couriers": {
       "get": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "List all couriers",
         "description": "Retrieves all couriers with optional filtering",
         "security": [
@@ -972,12 +897,7 @@
             "name": "verification_status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "verified",
-                "rejected",
-                "suspended"
-              ]
+              "enum": ["pending", "verified", "rejected", "suspended"]
             },
             "description": "Filter by verification status"
           },
@@ -986,12 +906,7 @@
             "name": "availability_status",
             "schema": {
               "type": "string",
-              "enum": [
-                "available",
-                "busy",
-                "offline",
-                "on_break"
-              ]
+              "enum": ["available", "busy", "offline", "on_break"]
             },
             "description": "Filter by availability status"
           },
@@ -1000,13 +915,7 @@
             "name": "vehicle_type",
             "schema": {
               "type": "string",
-              "enum": [
-                "bicycle",
-                "motorcycle",
-                "car",
-                "van",
-                "truck"
-              ]
+              "enum": ["bicycle", "motorcycle", "car", "van", "truck"]
             },
             "description": "Filter by vehicle type"
           },
@@ -1078,9 +987,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Create courier profile",
         "description": "Creates a new courier profile for delivery agent onboarding",
         "security": [
@@ -1094,12 +1001,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "first_name",
-                  "last_name",
-                  "phone_number",
-                  "vehicle_type"
-                ],
+                "required": ["first_name", "last_name", "phone_number", "vehicle_type"],
                 "properties": {
                   "first_name": {
                     "type": "string",
@@ -1124,13 +1026,7 @@
                   },
                   "vehicle_type": {
                     "type": "string",
-                    "enum": [
-                      "bicycle",
-                      "motorcycle",
-                      "car",
-                      "van",
-                      "truck"
-                    ],
+                    "enum": ["bicycle", "motorcycle", "car", "van", "truck"],
                     "description": "Type of vehicle the courier uses",
                     "example": "motorcycle"
                   }
@@ -1162,9 +1058,7 @@
     },
     "/couriers/user/{userId}": {
       "get": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Get courier by user ID",
         "description": "Retrieves courier profile by the associated user ID",
         "security": [
@@ -1207,9 +1101,7 @@
     },
     "/couriers/{courierId}": {
       "get": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Get courier by ID",
         "description": "Retrieves courier profile details including location",
         "security": [
@@ -1250,9 +1142,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Update courier profile",
         "description": "Updates an existing courier profile",
         "security": [
@@ -1310,9 +1200,7 @@
     },
     "/couriers/{courierId}/location": {
       "post": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Update courier location",
         "description": "Updates the current GPS coordinates of a courier",
         "security": [
@@ -1337,10 +1225,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "latitude",
-                  "longitude"
-                ],
+                "required": ["latitude", "longitude"],
                 "properties": {
                   "latitude": {
                     "type": "number",
@@ -1384,9 +1269,7 @@
     },
     "/couriers/{courierId}/availability": {
       "post": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Update courier availability",
         "description": "Updates the availability status of a courier",
         "security": [
@@ -1411,18 +1294,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "available",
-                      "busy",
-                      "offline",
-                      "on_break"
-                    ],
+                    "enum": ["available", "busy", "offline", "on_break"],
                     "description": "New availability status",
                     "example": "available"
                   }
@@ -1446,9 +1322,7 @@
     },
     "/couriers/{courierId}/verification": {
       "post": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Update courier verification status",
         "description": "Admin/Moderator only",
         "security": [
@@ -1473,18 +1347,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "pending",
-                      "verified",
-                      "rejected",
-                      "suspended"
-                    ],
+                    "enum": ["pending", "verified", "rejected", "suspended"],
                     "description": "New verification status",
                     "example": "verified"
                   }
@@ -1516,9 +1383,7 @@
     },
     "/couriers/{courierId}/stats": {
       "get": {
-        "tags": [
-          "Couriers"
-        ],
+        "tags": ["Couriers"],
         "summary": "Get courier statistics",
         "description": "Retrieves performance statistics for a courier including deliveries completed, ratings, etc.",
         "security": [
@@ -1581,9 +1446,7 @@
     },
     "/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Basic health check",
         "description": "Returns service health status and basic information",
         "security": [],
@@ -1619,9 +1482,7 @@
     },
     "/ready": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Readiness check",
         "description": "Checks if the service is ready to accept traffic (database connectivity)",
         "security": [],
@@ -1661,9 +1522,7 @@
                     "checks": {
                       "database": false
                     },
-                    "errors": [
-                      "Database connection failed"
-                    ]
+                    "errors": ["Database connection failed"]
                   }
                 }
               }
@@ -1674,9 +1533,7 @@
     },
     "/live": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "Liveness check",
         "description": "Checks if the service process is alive with memory and CPU metrics",
         "security": [],
@@ -1718,9 +1575,7 @@
     },
     "/metrics": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "summary": "System metrics",
         "description": "Returns detailed system metrics including memory, CPU, and Node.js information",
         "security": [],
@@ -1768,9 +1623,7 @@
     },
     "/packages": {
       "post": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Create a new delivery package",
         "description": "Creates a new package for delivery with sender and recipient details",
         "security": [
@@ -1803,9 +1656,7 @@
     },
     "/packages/{packageId}": {
       "get": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Get package by ID",
         "description": "Retrieves detailed information about a specific package",
         "security": [
@@ -1837,9 +1688,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Update package information",
         "description": "Updates package details (sender, recipient, status, etc.)",
         "security": [
@@ -1881,9 +1730,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Delete a package",
         "description": "Soft deletes a package from the system",
         "security": [
@@ -1917,9 +1764,7 @@
     },
     "/packages/sender/{senderId}": {
       "get": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Get packages by sender",
         "description": "Retrieves all packages sent by a specific user with pagination",
         "security": [
@@ -1966,9 +1811,7 @@
     },
     "/packages/status/{status}": {
       "get": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Get packages by status",
         "description": "Retrieves all packages with a specific delivery status",
         "security": [
@@ -1983,15 +1826,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "assigned",
-                "picked_up",
-                "in_transit",
-                "delivered",
-                "cancelled",
-                "failed"
-              ]
+              "enum": ["pending", "assigned", "picked_up", "in_transit", "delivered", "cancelled", "failed"]
             }
           },
           {
@@ -2023,9 +1858,7 @@
     },
     "/packages/{packageId}/cancel": {
       "post": {
-        "tags": [
-          "Packages"
-        ],
+        "tags": ["Packages"],
         "summary": "Cancel a package",
         "description": "Cancels a package delivery (only if not yet picked up)",
         "security": [
@@ -2059,9 +1892,7 @@
     },
     "/scheduler/stats": {
       "get": {
-        "tags": [
-          "Scheduler"
-        ],
+        "tags": ["Scheduler"],
         "summary": "Get scheduler statistics",
         "description": "Retrieves scheduler service statistics (Admin/Dispatcher only)",
         "security": [
@@ -2097,9 +1928,7 @@
     },
     "/scheduler/cleanup": {
       "post": {
-        "tags": [
-          "Scheduler"
-        ],
+        "tags": ["Scheduler"],
         "summary": "Trigger manual cleanup",
         "description": "Triggers manual cleanup tasks (Admin/Dispatcher only)",
         "security": [
@@ -2113,18 +1942,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "type"
-                ],
+                "required": ["type"],
                 "properties": {
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "tracking",
-                      "websocket",
-                      "assignments",
-                      "all"
-                    ]
+                    "enum": ["tracking", "websocket", "assignments", "all"]
                   }
                 }
               }
@@ -2146,9 +1968,7 @@
     },
     "/track-delivery": {
       "post": {
-        "tags": [
-          "Tracking"
-        ],
+        "tags": ["Tracking"],
         "summary": "Update delivery location",
         "description": "Updates courier location with real-time tracking data",
         "security": [
@@ -2162,11 +1982,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "assignment_id",
-                  "latitude",
-                  "longitude"
-                ],
+                "required": ["assignment_id", "latitude", "longitude"],
                 "properties": {
                   "assignment_id": {
                     "type": "string",
@@ -2216,9 +2032,7 @@
     },
     "/tracking/{assignmentId}": {
       "get": {
-        "tags": [
-          "Tracking"
-        ],
+        "tags": ["Tracking"],
         "summary": "Get tracking data",
         "description": "Retrieves real-time tracking data for a delivery assignment",
         "security": [
@@ -2268,9 +2082,7 @@
     },
     "/tracking/{assignmentId}/progress": {
       "get": {
-        "tags": [
-          "Tracking"
-        ],
+        "tags": ["Tracking"],
         "summary": "Get delivery progress",
         "description": "Retrieves delivery progress and ETA information",
         "security": [
@@ -2304,9 +2116,7 @@
     },
     "/tracking/{assignmentId}/cleanup": {
       "post": {
-        "tags": [
-          "Tracking"
-        ],
+        "tags": ["Tracking"],
         "summary": "Cleanup tracking data",
         "description": "Removes old tracking data for a delivery assignment",
         "security": [
@@ -2352,9 +2162,7 @@
     },
     "/websocket/stats": {
       "get": {
-        "tags": [
-          "WebSocket"
-        ],
+        "tags": ["WebSocket"],
         "summary": "Get WebSocket statistics",
         "description": "Retrieves WebSocket server statistics (Admin/Dispatcher only)",
         "security": [
@@ -2389,9 +2197,7 @@
     },
     "/websocket/cleanup": {
       "post": {
-        "tags": [
-          "WebSocket"
-        ],
+        "tags": ["WebSocket"],
         "summary": "Cleanup inactive rooms",
         "description": "Cleans up inactive WebSocket tracking rooms (Admin/Dispatcher only)",
         "security": [
@@ -2431,9 +2237,7 @@
     },
     "/websocket/broadcast": {
       "post": {
-        "tags": [
-          "WebSocket"
-        ],
+        "tags": ["WebSocket"],
         "summary": "Broadcast message to tracking room",
         "description": "Broadcasts a message to a specific tracking room (Admin/Dispatcher only)",
         "security": [
@@ -2447,11 +2251,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "assignment_id",
-                  "message_type",
-                  "message"
-                ],
+                "required": ["assignment_id", "message_type", "message"],
                 "properties": {
                   "assignment_id": {
                     "type": "string",
@@ -2459,11 +2259,7 @@
                   },
                   "message_type": {
                     "type": "string",
-                    "enum": [
-                      "announcement",
-                      "alert",
-                      "update"
-                    ]
+                    "enum": ["announcement", "alert", "update"]
                   },
                   "message": {
                     "type": "string",

@@ -1,4 +1,5 @@
 import { AuthUser } from '../middleware/auth';
+
 import { supabase } from './database';
 
 /**
@@ -85,7 +86,10 @@ export async function resolveRegionId(opts: {
  * True if `targetRegionId` is within the admin's scope (or the admin is global).
  * Used to gate writes/registration into a region (Phase 3).
  */
-export async function isRegionInScope(user: AuthUser, targetRegionId: string | null): Promise<boolean> {
+export async function isRegionInScope(
+  user: AuthUser,
+  targetRegionId: string | null
+): Promise<boolean> {
   const allowed = await getAllowedRegionIds(user);
   if (allowed === null) return true; // global
   if (!targetRegionId) return false; // scoped admin must target a concrete region

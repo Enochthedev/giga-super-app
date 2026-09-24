@@ -14,12 +14,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "assignments"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["assignments"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -59,12 +55,8 @@
               "name": "Assignment created successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -106,12 +98,8 @@
               "name": "Bad Request - Invalid input",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -157,12 +145,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -219,13 +203,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "assignments",
-                ":id"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["assignments", ":id"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -260,13 +239,8 @@
               "name": "Assignment details retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -312,13 +286,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -364,13 +333,8 @@
               "name": "Not Found - Resource does not exist",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments",
-                    ":id"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments", ":id"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -427,13 +391,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "assignments",
-                "find-couriers"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["assignments", "find-couriers"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -473,13 +432,8 @@
               "name": "Available couriers found",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments",
-                    "find-couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments", "find-couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -525,13 +479,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "assignments",
-                    "find-couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["assignments", "find-couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -595,12 +544,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "couriers"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["couriers"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -658,12 +603,8 @@
               "name": "Couriers list retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "verification_status",
@@ -722,12 +663,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "verification_status",
@@ -797,12 +734,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "couriers"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["couriers"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -842,12 +775,8 @@
               "name": "Courier profile created",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -889,12 +818,8 @@
               "name": "Bad Request - Invalid input",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -940,12 +865,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1002,14 +923,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "couriers",
-                "user",
-                ":userId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["couriers", "user", ":userId"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -1044,14 +959,8 @@
               "name": "Courier details retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers",
-                    "user",
-                    ":userId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", "user", ":userId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1093,14 +1002,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers",
-                    "user",
-                    ":userId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", "user", ":userId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1146,14 +1049,8 @@
               "name": "Not Found - Resource does not exist",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "couriers",
-                    "user",
-                    ":userId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", "user", ":userId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1214,13 +1111,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "couriers",
-                    ":courierId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", ":courierId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1255,13 +1147,8 @@
                   "name": "Courier details retrieved",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1303,13 +1190,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1355,13 +1237,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1418,13 +1295,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "couriers",
-                    ":courierId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", ":courierId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1472,13 +1344,8 @@
                   "name": "Courier updated successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1528,13 +1395,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1588,13 +1450,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1659,14 +1516,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "couriers",
-                    ":courierId",
-                    "location"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", ":courierId", "location"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1714,14 +1565,8 @@
                   "name": "Location updated successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "location"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "location"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1771,14 +1616,8 @@
                   "name": "Bad Request - Invalid input",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "location"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "location"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1832,14 +1671,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "location"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "location"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1904,14 +1737,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "couriers",
-                    ":courierId",
-                    "availability"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", ":courierId", "availability"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1959,14 +1786,8 @@
                   "name": "Availability updated successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2016,14 +1837,8 @@
                   "name": "Invalid status value",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2073,14 +1888,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2145,14 +1954,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "couriers",
-                    ":courierId",
-                    "verification"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", ":courierId", "verification"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -2200,14 +2003,8 @@
                   "name": "Verification status updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "verification"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "verification"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2257,14 +2054,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "verification"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "verification"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2318,14 +2109,8 @@
                   "name": "Forbidden - Insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "verification"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "verification"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2390,14 +2175,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "couriers",
-                    ":courierId",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["couriers", ":courierId", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -2432,14 +2211,8 @@
                   "name": "Courier statistics retrieved",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2485,14 +2258,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2538,14 +2305,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "couriers",
-                        ":courierId",
-                        "stats"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["couriers", ":courierId", "stats"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -2608,12 +2369,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "health"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["health"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": []
         },
@@ -2632,12 +2389,8 @@
           "name": "Service is healthy",
           "originalRequest": {
             "url": {
-              "path": [
-                "health"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -2686,12 +2439,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "ready"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["ready"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": []
         },
@@ -2710,12 +2459,8 @@
           "name": "Service is ready",
           "originalRequest": {
             "url": {
-              "path": [
-                "ready"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["ready"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -2753,12 +2498,8 @@
           "name": "Service is not ready",
           "originalRequest": {
             "url": {
-              "path": [
-                "ready"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["ready"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -2807,12 +2548,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "live"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["live"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": []
         },
@@ -2831,12 +2568,8 @@
           "name": "Service is alive",
           "originalRequest": {
             "url": {
-              "path": [
-                "live"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["live"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -2885,12 +2618,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "metrics"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["metrics"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": []
         },
@@ -2909,12 +2638,8 @@
           "name": "Metrics retrieved successfully",
           "originalRequest": {
             "url": {
-              "path": [
-                "metrics"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["metrics"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -2967,12 +2692,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "packages"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["packages"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -3012,12 +2733,8 @@
               "name": "Package created successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -3059,12 +2776,8 @@
               "name": "Bad Request - Invalid input",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -3110,12 +2823,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -3176,13 +2885,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "packages",
-                    ":packageId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", ":packageId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3217,13 +2921,8 @@
                   "name": "Package details retrieved",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3265,13 +2964,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3317,13 +3011,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3380,13 +3069,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "packages",
-                    ":packageId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", ":packageId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3434,13 +3118,8 @@
                   "name": "Package updated successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3490,13 +3169,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3550,13 +3224,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3621,13 +3290,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "packages",
-                    ":packageId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", ":packageId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3662,13 +3326,8 @@
                   "name": "Package deleted successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3710,13 +3369,8 @@
                   "name": "Unauthorized - Authentication required",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3762,13 +3416,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3825,14 +3474,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "packages",
-                    ":packageId",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", ":packageId", "cancel"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -3867,14 +3510,8 @@
                   "name": "Package cancelled successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId",
-                        "cancel"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId", "cancel"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3916,14 +3553,8 @@
                   "name": "Package cannot be cancelled",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId",
-                        "cancel"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId", "cancel"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -3965,14 +3596,8 @@
                   "name": "Not Found - Resource does not exist",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "packages",
-                        ":packageId",
-                        "cancel"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["packages", ":packageId", "cancel"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4032,14 +3657,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "packages",
-                "sender",
-                ":senderId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["packages", "sender", ":senderId"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -4085,14 +3704,8 @@
               "name": "Packages retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages",
-                    "sender",
-                    ":senderId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", "sender", ":senderId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -4143,14 +3756,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages",
-                    "sender",
-                    ":senderId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", "sender", ":senderId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -4216,14 +3823,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "packages",
-                "status",
-                ":status"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["packages", "status", ":status"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -4269,14 +3870,8 @@
               "name": "Packages retrieved successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages",
-                    "status",
-                    ":status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", "status", ":status"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -4327,14 +3922,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "packages",
-                    "status",
-                    ":status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["packages", "status", ":status"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "page",
@@ -4407,13 +3996,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "scheduler",
-                "stats"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["scheduler", "stats"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -4440,13 +4024,8 @@
               "name": "Scheduler stats retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "scheduler",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["scheduler", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4484,13 +4063,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "scheduler",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["scheduler", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4528,13 +4102,8 @@
               "name": "Forbidden - Insufficient permissions",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "scheduler",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["scheduler", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4583,13 +4152,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "scheduler",
-                "cleanup"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["scheduler", "cleanup"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -4629,13 +4193,8 @@
               "name": "Cleanup completed successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "scheduler",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["scheduler", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4677,13 +4236,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "scheduler",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["scheduler", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4729,13 +4283,8 @@
               "name": "Forbidden - Insufficient permissions",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "scheduler",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["scheduler", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -4795,12 +4344,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "track-delivery"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["track-delivery"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": []
         },
@@ -4840,12 +4385,8 @@
           "name": "Location updated successfully",
           "originalRequest": {
             "url": {
-              "path": [
-                "track-delivery"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["track-delivery"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -4887,12 +4428,8 @@
           "name": "Bad Request - Invalid input",
           "originalRequest": {
             "url": {
-              "path": [
-                "track-delivery"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["track-delivery"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -4938,12 +4475,8 @@
           "name": "Unauthorized - Authentication required",
           "originalRequest": {
             "url": {
-              "path": [
-                "track-delivery"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["track-delivery"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5004,13 +4537,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "tracking",
-                ":assignmentId"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["tracking", ":assignmentId"],
+              "host": ["{{baseUrl}}"],
               "query": [
                 {
                   "disabled": false,
@@ -5056,13 +4584,8 @@
               "name": "Tracking data retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "limit",
@@ -5113,13 +4636,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "limit",
@@ -5174,13 +4692,8 @@
               "name": "Not Found - Resource does not exist",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "key": "limit",
@@ -5246,14 +4759,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "tracking",
-                ":assignmentId",
-                "progress"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["tracking", ":assignmentId", "progress"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -5288,14 +4795,8 @@
               "name": "Delivery progress retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId",
-                    "progress"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId", "progress"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -5337,14 +4838,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId",
-                    "progress"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId", "progress"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -5390,14 +4885,8 @@
               "name": "Not Found - Resource does not exist",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId",
-                    "progress"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId", "progress"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -5454,14 +4943,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "tracking",
-                ":assignmentId",
-                "cleanup"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["tracking", ":assignmentId", "cleanup"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -5509,14 +4992,8 @@
               "name": "Tracking data cleaned up",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -5566,14 +5043,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "tracking",
-                    ":assignmentId",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["tracking", ":assignmentId", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -5645,13 +5116,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "websocket",
-                "stats"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["websocket", "stats"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5678,13 +5144,8 @@
               "name": "WebSocket stats retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5722,13 +5183,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5766,13 +5222,8 @@
               "name": "Forbidden - Insufficient permissions",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5821,13 +5272,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "websocket",
-                "cleanup"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["websocket", "cleanup"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -5867,13 +5313,8 @@
               "name": "Cleanup completed successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5915,13 +5356,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -5967,13 +5403,8 @@
               "name": "Forbidden - Insufficient permissions",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "cleanup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "cleanup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6030,13 +5461,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "websocket",
-                "broadcast"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["websocket", "broadcast"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -6076,13 +5502,8 @@
               "name": "Message broadcasted successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "broadcast"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "broadcast"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6124,13 +5545,8 @@
               "name": "Unauthorized - Authentication required",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "broadcast"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "broadcast"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6176,13 +5592,8 @@
               "name": "Forbidden - Insufficient permissions",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "websocket",
-                    "broadcast"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["websocket", "broadcast"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },

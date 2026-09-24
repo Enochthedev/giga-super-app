@@ -14,13 +14,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "signup"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "signup"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -52,13 +47,8 @@
               "name": "User registered successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "signup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "signup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -104,13 +94,8 @@
               "name": "Invalid input or user already exists",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "signup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "signup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -156,13 +141,8 @@
               "name": "Validation error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "signup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "signup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -215,13 +195,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "login"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "login"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -253,13 +228,8 @@
               "name": "Login successful",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "login"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -305,13 +275,8 @@
               "name": "Invalid credentials",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "login"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "login"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -368,13 +333,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "logout"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "logout"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -395,13 +355,8 @@
               "name": "Logout successful",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "logout"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "logout"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -435,13 +390,8 @@
               "name": "Not authenticated",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "logout"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "logout"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -486,13 +436,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "me"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "me"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -519,13 +464,8 @@
               "name": "User information retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "me"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "me"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -563,13 +503,8 @@
               "name": "Not authenticated",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "me"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "me"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -618,13 +553,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "refresh"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "refresh"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -656,13 +586,8 @@
               "name": "Token refreshed successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "refresh"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -708,13 +633,8 @@
               "name": "Invalid refresh token",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "refresh"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -767,13 +687,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "forgot-password"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "forgot-password"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -801,13 +716,8 @@
               "name": "Reset email sent (if user exists)",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "forgot-password"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "forgot-password"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -849,13 +759,8 @@
               "name": "Invalid email format",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "forgot-password"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "forgot-password"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -908,13 +813,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "auth",
-                "reset-password"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["auth", "reset-password"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -942,13 +842,8 @@
               "name": "Password reset successful",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "reset-password"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "reset-password"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -990,13 +885,8 @@
               "name": "Invalid or expired token",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "auth",
-                    "reset-password"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["auth", "reset-password"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1056,12 +946,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "docs"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["docs"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1074,12 +960,8 @@
               "name": "List of services with documentation links",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "docs"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["docs"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1124,13 +1006,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "docs",
-                "specs"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["docs", "specs"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1157,13 +1034,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "docs",
-                    ":service"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["docs", ":service"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1184,13 +1056,8 @@
                   "name": "Swagger UI HTML page",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "docs",
-                        ":service"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["docs", ":service"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1232,13 +1099,8 @@
                   "name": "Service not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "docs",
-                        ":service"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["docs", ":service"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1291,14 +1153,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "docs",
-                    ":service",
-                    "json"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["docs", ":service", "json"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -1319,14 +1175,8 @@
                   "name": "OpenAPI JSON specification",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "docs",
-                        ":service",
-                        "json"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["docs", ":service", "json"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1368,14 +1218,8 @@
                   "name": "Service not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "docs",
-                        ":service",
-                        "json"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["docs", ":service", "json"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -1438,12 +1282,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1462,12 +1302,8 @@
               "name": "Service is healthy",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1516,13 +1352,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "ready"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "ready"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1535,13 +1366,8 @@
               "name": "Service is ready",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "ready"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "ready"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1575,13 +1401,8 @@
               "name": "Service is not ready",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "ready"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "ready"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1626,13 +1447,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "live"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "live"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1645,13 +1461,8 @@
               "name": "Service is alive",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "live"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "live"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1696,13 +1507,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "detailed"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "detailed"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1715,13 +1521,8 @@
               "name": "Detailed health status",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "detailed"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "detailed"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1766,13 +1567,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "stats"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "stats"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1785,13 +1581,8 @@
               "name": "Service statistics",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1851,15 +1642,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "profile"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "profile"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -1886,15 +1670,8 @@
                       "name": "User profile",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -1932,15 +1709,8 @@
                       "name": "Unauthorized - invalid or missing JWT token",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -1989,16 +1759,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "profile",
-                        "update"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "profile", "update"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2038,16 +1800,8 @@
                       "name": "Profile updated",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile",
-                            "update"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile", "update"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -2093,16 +1847,8 @@
                       "name": "Bad Request",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile",
-                            "update"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile", "update"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -2148,16 +1894,8 @@
                       "name": "Unauthorized - invalid or missing JWT token",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile",
-                            "update"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile", "update"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -2214,16 +1952,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "profile",
-                        "picture"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "profile", "picture"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2264,16 +1994,8 @@
                       "name": "Picture uploaded",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile",
-                            "picture"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile", "picture"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -2324,16 +2046,8 @@
                       "name": "Invalid file format or size",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile",
-                            "picture"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile", "picture"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -2380,16 +2094,8 @@
                       "name": "Unauthorized - invalid or missing JWT token",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "users",
-                            "profile",
-                            "picture"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "users", "profile", "picture"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -2454,15 +2160,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "users",
-                    "address"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "users", "address"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -2502,15 +2201,8 @@
                   "name": "Address added",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "address"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "address"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2556,15 +2248,8 @@
                   "name": "Bad Request",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "address"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "address"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2610,15 +2295,8 @@
                   "name": "Unauthorized - invalid or missing JWT token",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "address"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "address"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2675,15 +2353,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "users",
-                    "search"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "users", "search"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -2709,15 +2380,8 @@
                   "name": "Search results",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "users",
-                        "search"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "users", "search"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "q",
@@ -2778,15 +2442,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "roles",
-                    "apply"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "roles", "apply"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -2826,15 +2483,8 @@
                   "name": "Application submitted",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "apply"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "apply"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2880,15 +2530,8 @@
                   "name": "Invalid role or user already has this role",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "apply"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "apply"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2934,15 +2577,8 @@
                   "name": "Unauthorized - invalid or missing JWT token",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "apply"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "apply"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -2999,15 +2635,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "roles",
-                    "switch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "roles", "switch"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -3047,15 +2676,8 @@
                   "name": "Role switched",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "switch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "switch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3101,15 +2723,8 @@
                   "name": "User doesn't have the requested role",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "switch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "switch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3151,15 +2766,8 @@
                   "name": "Unauthorized - invalid or missing JWT token",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "switch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "switch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3216,15 +2824,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "roles",
-                    "review"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "roles", "review"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -3264,15 +2865,8 @@
                   "name": "Application reviewed",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "review"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "review"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3318,15 +2912,8 @@
                   "name": "Unauthorized - invalid or missing JWT token",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "review"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "review"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3372,15 +2959,8 @@
                   "name": "Forbidden - insufficient permissions",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "review"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "review"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3426,15 +3006,8 @@
                   "name": "Application not found",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "roles",
-                        "review"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "roles", "review"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3494,14 +3067,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "hotels"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "hotels"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -3537,14 +3104,8 @@
                   "name": "Hotel created",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3601,15 +3162,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        "search"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", "search"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -3649,15 +3203,8 @@
                       "name": "Hotels found",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            "search"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", "search"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -3703,15 +3250,8 @@
                       "name": "Bad Request",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            "search"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", "search"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -3768,15 +3308,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        "search"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", "search"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -3856,15 +3389,8 @@
                       "name": "List of matching hotels",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            "search"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", "search"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "city",
@@ -3947,15 +3473,8 @@
                       "name": "Bad Request",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            "search"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", "search"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "city",
@@ -4056,15 +3575,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":hotel_id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":hotel_id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4099,15 +3611,8 @@
                       "name": "Hotel details retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":hotel_id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":hotel_id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -4153,15 +3658,8 @@
                       "name": "Resource not found",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":hotel_id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":hotel_id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -4218,16 +3716,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":hotel_id",
-                        "reviews"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":hotel_id", "reviews"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -4278,16 +3768,8 @@
                       "name": "Reviews retrieved",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":hotel_id",
-                            "reviews"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":hotel_id", "reviews"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -4361,16 +3843,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":hotel_id",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":hotel_id", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -4423,16 +3897,8 @@
                       "name": "Availability information",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":hotel_id",
-                            "availability"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":hotel_id", "availability"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "check_in",
@@ -4502,16 +3968,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":hotel_id",
-                        "price"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":hotel_id", "price"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4559,16 +4017,8 @@
                       "name": "Price calculated",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":hotel_id",
-                            "price"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":hotel_id", "price"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -4640,15 +4090,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4675,15 +4118,8 @@
                       "name": "Hotel details",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -4729,15 +4165,8 @@
                       "name": "Resource not found",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -4794,15 +4223,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -4846,15 +4268,8 @@
                       "name": "Hotel updated",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -4919,16 +4334,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "reviews"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "reviews"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "disabled": false,
@@ -4968,16 +4375,8 @@
                           "name": "List of reviews",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "hotels",
-                                ":id",
-                                "reviews"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "hotels", ":id", "reviews"],
+                              "host": ["{{baseUrl}}"],
                               "query": [
                                 {
                                   "key": "page",
@@ -5043,16 +4442,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "reviews"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "reviews"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5096,16 +4487,8 @@
                           "name": "Review submitted",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "hotels",
-                                ":id",
-                                "reviews"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "hotels", ":id", "reviews"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -5166,18 +4549,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "reviews",
-                            ":reviewId",
-                            "respond"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "reviews", ":reviewId", "respond"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5228,18 +4601,8 @@
                           "name": "Response posted",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "hotels",
-                                ":id",
-                                "reviews",
-                                ":reviewId",
-                                "respond"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "hotels", ":id", "reviews", ":reviewId", "respond"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -5310,16 +4673,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -5364,16 +4719,8 @@
                       "name": "Available rooms",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "availability"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "availability"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "check_in",
@@ -5443,16 +4790,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id",
-                        "price"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id", "price"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -5500,16 +4839,8 @@
                       "name": "Calculated price breakdown",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "price"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "price"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5574,16 +4905,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id",
-                        "rooms"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id", "rooms"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -5627,16 +4950,8 @@
                       "name": "Room type created",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "rooms"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "rooms"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5697,16 +5012,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id",
-                        "analytics"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id", "analytics"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -5741,16 +5048,8 @@
                       "name": "Hotel analytics",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "analytics"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "analytics"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "period",
@@ -5812,16 +5111,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "favorite"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "favorite"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5850,16 +5141,8 @@
                           "name": "Added to favorites",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "hotels",
-                                ":id",
-                                "favorite"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "hotels", ":id", "favorite"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -5912,16 +5195,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "favorite"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "favorite"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -5950,16 +5225,8 @@
                           "name": "Removed from favorites",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "hotels",
-                                ":id",
-                                "favorite"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "hotels", ":id", "favorite"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -6015,16 +5282,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id",
-                        "promo-codes"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id", "promo-codes"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6068,16 +5327,8 @@
                       "name": "Promo code created",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "promo-codes"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "promo-codes"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -6138,17 +5389,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":id",
-                        "pricing",
-                        "bulk-update"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":id", "pricing", "bulk-update"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6192,17 +5434,8 @@
                       "name": "Pricing updated",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "hotels",
-                            ":id",
-                            "pricing",
-                            "bulk-update"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "hotels", ":id", "pricing", "bulk-update"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -6266,15 +5499,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "hotels",
-                    "favorites"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "hotels", "favorites"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6295,15 +5521,8 @@
                   "name": "Favorite hotels",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        "favorites"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", "favorites"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -6348,15 +5567,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "hotels",
-                    "recommended"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "hotels", "recommended"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -6383,15 +5595,8 @@
                   "name": "Recommended hotels",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        "recommended"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", "recommended"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "city",
@@ -6441,18 +5646,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "hotels",
-                    ":hotelId",
-                    "reviews",
-                    ":id",
-                    "helpful"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "hotels", ":hotelId", "reviews", ":id", "helpful"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -6488,18 +5683,8 @@
                   "name": "Marked as helpful",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "hotels",
-                        ":hotelId",
-                        "reviews",
-                        ":id",
-                        "helpful"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "hotels", ":hotelId", "reviews", ":id", "helpful"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -6566,15 +5751,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "request"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "request"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6614,15 +5792,8 @@
                   "name": "Ride requested successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "request"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "request"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -6668,15 +5839,8 @@
                   "name": "Bad Request",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "request"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "request"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -6722,15 +5886,8 @@
                   "name": "Unauthorized - invalid or missing JWT token",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "request"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "request"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -6787,15 +5944,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "estimate"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "estimate"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6835,15 +5985,8 @@
                   "name": "Ride estimates for all vehicle types",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "estimate"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "estimate"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -6900,15 +6043,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "accept"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "accept"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -6948,15 +6084,8 @@
                   "name": "Ride accepted",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "accept"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "accept"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -7002,15 +6131,8 @@
                   "name": "Ride already accepted or cancelled",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "accept"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "accept"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -7052,15 +6174,8 @@
                   "name": "Not a driver or not active",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "accept"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "accept"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -7113,15 +6228,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "start"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "start"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -7161,15 +6269,8 @@
                   "name": "Ride started",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "start"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "start"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -7226,15 +6327,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "complete"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "complete"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -7274,15 +6368,8 @@
                   "name": "Ride completed",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "complete"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "complete"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -7339,15 +6426,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "cancel"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "cancel"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -7387,15 +6467,8 @@
                   "name": "Ride cancelled",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "cancel"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "cancel"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -7452,15 +6525,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "nearby-drivers"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "nearby-drivers"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -7512,15 +6578,8 @@
                   "name": "List of nearby drivers",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "nearby-drivers"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "nearby-drivers"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "lat",
@@ -7586,15 +6645,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "history"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "history"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -7639,15 +6691,8 @@
                   "name": "Ride history",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "history"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "history"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -7713,16 +6758,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        ":id",
-                        "rate"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", ":id", "rate"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -7766,16 +6803,8 @@
                       "name": "Rating submitted",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "rides",
-                            ":id",
-                            "rate"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "rides", ":id", "rate"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -7836,16 +6865,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        ":id",
-                        "reject"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", ":id", "reject"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -7889,16 +6910,8 @@
                       "name": "Ride rejected",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "rides",
-                            ":id",
-                            "reject"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "rides", ":id", "reject"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -7962,15 +6975,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "active"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "active"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -7991,15 +6997,8 @@
                   "name": "Active ride or null",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "active"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "active"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8044,15 +7043,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "requests"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "requests"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8073,15 +7065,8 @@
                   "name": "Available ride requests",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "requests"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "requests"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8126,15 +7111,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "rides",
-                    "analytics"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "rides", "analytics"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -8161,15 +7139,8 @@
                   "name": "Ride analytics",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "rides",
-                        "analytics"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "rides", "analytics"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "period",
@@ -8226,14 +7197,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cart"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "cart"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8260,14 +7225,8 @@
                   "name": "User's cart",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "cart"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "cart"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8316,15 +7275,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cart",
-                    "add"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "cart", "add"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8364,15 +7316,8 @@
                   "name": "Item added to cart",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "cart",
-                        "add"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "cart", "add"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8418,15 +7363,8 @@
                   "name": "Bad Request",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "cart",
-                        "add"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "cart", "add"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8483,15 +7421,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "cart",
-                    "checkout"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "cart", "checkout"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8531,15 +7462,8 @@
                   "name": "Order created",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "cart",
-                        "checkout"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "cart", "checkout"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8585,15 +7509,8 @@
                   "name": "Order created successfully",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "cart",
-                        "checkout"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "cart", "checkout"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8639,15 +7556,8 @@
                   "name": "Bad Request",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "cart",
-                        "checkout"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "cart", "checkout"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8711,15 +7621,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "calls",
-                    "initiate"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "calls", "initiate"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8759,15 +7662,8 @@
                   "name": "Call initiated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "calls",
-                        "initiate"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "calls", "initiate"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8824,15 +7720,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "calls",
-                    "answer"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "calls", "answer"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8872,15 +7761,8 @@
                   "name": "Call answered",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "calls",
-                        "answer"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "calls", "answer"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -8937,15 +7819,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "calls",
-                    "decline"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "calls", "decline"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -8981,15 +7856,8 @@
                   "name": "Call declined",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "calls",
-                        "decline"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "calls", "decline"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -9042,15 +7910,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "calls",
-                    "end"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "calls", "end"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -9090,15 +7951,8 @@
                   "name": "Call ended",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "calls",
-                        "end"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "calls", "end"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -9162,15 +8016,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "media",
-                    "upload"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "media", "upload"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -9223,15 +8070,8 @@
                   "name": "File uploaded",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "media",
-                        "upload"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "media", "upload"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -9311,15 +8151,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "media",
-                    "process-image"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "media", "process-image"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -9359,15 +8192,8 @@
                   "name": "Processed image URL",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "media",
-                        "process-image"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "media", "process-image"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -9431,15 +8257,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "support",
-                    "tickets"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "support", "tickets"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -9485,15 +8304,8 @@
                   "name": "User's support tickets",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "support",
-                        "tickets"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "support", "tickets"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -9555,15 +8367,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "support",
-                    "tickets"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "support", "tickets"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -9599,15 +8404,8 @@
                   "name": "Ticket created",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "support",
-                        "tickets"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "support", "tickets"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -9660,17 +8458,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "support",
-                    "tickets",
-                    ":id",
-                    "reply"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "support", "tickets", ":id", "reply"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -9714,17 +8503,8 @@
                   "name": "Reply added",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "support",
-                        "tickets",
-                        ":id",
-                        "reply"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "support", "tickets", ":id", "reply"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -9788,15 +8568,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "api",
-                "v1",
-                "admin",
-                "create-user"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["api", "v1", "admin", "create-user"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -9842,15 +8615,8 @@
               "name": "User created successfully",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "admin",
-                    "create-user"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "admin", "create-user"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -9902,15 +8668,8 @@
               "name": "Bad request - Invalid input",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "admin",
-                    "create-user"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "admin", "create-user"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -9962,15 +8721,8 @@
               "name": "Unauthorized - Invalid or missing authentication",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "admin",
-                    "create-user"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "admin", "create-user"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -10022,15 +8774,8 @@
               "name": "Conflict - User already exists",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "admin",
-                    "create-user"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "admin", "create-user"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -10082,15 +8827,8 @@
               "name": "Rate limit exceeded",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "admin",
-                    "create-user"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "admin", "create-user"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -10142,15 +8880,8 @@
               "name": "Internal server error",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "admin",
-                    "create-user"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "admin", "create-user"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -10217,14 +8948,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "bookings"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "bookings"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -10260,14 +8985,8 @@
                   "name": "Booking created",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -10320,14 +9039,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "bookings"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "bookings"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -10366,14 +9079,8 @@
                   "name": "User's bookings",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "status",
@@ -10435,15 +9142,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -10478,15 +9178,8 @@
                       "name": "Booking details",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "bookings",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "bookings", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -10528,15 +9221,8 @@
                       "name": "Resource not found",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "bookings",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "bookings", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -10593,16 +9279,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings",
-                        ":id",
-                        "cancel"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings", ":id", "cancel"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -10646,16 +9324,8 @@
                       "name": "Booking cancelled",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "bookings",
-                            ":id",
-                            "cancel"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "bookings", ":id", "cancel"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -10716,16 +9386,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings",
-                        ":id",
-                        "modify"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings", ":id", "modify"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -10769,16 +9431,8 @@
                       "name": "Booking modified",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "bookings",
-                            ":id",
-                            "modify"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "bookings", ":id", "modify"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -10839,16 +9493,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings",
-                        ":id",
-                        "check-in"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings", ":id", "check-in"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -10877,16 +9523,8 @@
                       "name": "Guest checked in",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "bookings",
-                            ":id",
-                            "check-in"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "bookings", ":id", "check-in"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -10939,16 +9577,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings",
-                        ":id",
-                        "status"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings", ":id", "status"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -10992,16 +9622,8 @@
                       "name": "Status updated",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "bookings",
-                            ":id",
-                            "status"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "bookings", ":id", "status"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -11065,15 +9687,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "bookings",
-                    "calendar"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "bookings", "calendar"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -11106,15 +9721,8 @@
                   "name": "Booking calendar",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "bookings",
-                        "calendar"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "bookings", "calendar"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "hotel_id",
@@ -11175,15 +9783,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "payments",
-                    "initialize"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "payments", "initialize"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -11223,15 +9824,8 @@
                   "name": "Payment initialized",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "payments",
-                        "initialize"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "payments", "initialize"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -11288,15 +9882,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "payments",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "payments", "verify"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -11336,15 +9923,8 @@
                   "name": "Payment verification result",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "payments",
-                        "verify"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "payments", "verify"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -11405,16 +9985,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "payments",
-                        "webhook",
-                        "paystack"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "payments", "webhook", "paystack"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -11442,16 +10014,8 @@
                       "name": "Webhook processed",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "payments",
-                            "webhook",
-                            "paystack"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "payments", "webhook", "paystack"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -11504,16 +10068,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "payments",
-                        "webhook",
-                        "stripe"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "payments", "webhook", "stripe"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -11541,16 +10097,8 @@
                       "name": "Webhook processed",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "payments",
-                            "webhook",
-                            "stripe"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "payments", "webhook", "stripe"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -11606,16 +10154,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "payments",
-                    ":id",
-                    "refund"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "payments", ":id", "refund"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -11659,16 +10199,8 @@
                   "name": "Refund initiated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "payments",
-                        ":id",
-                        "refund"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "payments", ":id", "refund"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -11729,17 +10261,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "payments",
-                    "escrow",
-                    ":id",
-                    "release"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "payments", "escrow", ":id", "release"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -11768,17 +10291,8 @@
                   "name": "Escrow released",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "payments",
-                        "escrow",
-                        ":id",
-                        "release"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "payments", "escrow", ":id", "release"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -11838,15 +10352,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "wallet",
-                    "topup"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "wallet", "topup"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -11882,15 +10389,8 @@
                   "name": "Wallet top-up initiated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "wallet",
-                        "topup"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "wallet", "topup"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -11943,15 +10443,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "wallet",
-                    "pay"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "wallet", "pay"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -11987,15 +10480,8 @@
                   "name": "Payment successful",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "wallet",
-                        "pay"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "wallet", "pay"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -12037,15 +10523,8 @@
                   "name": "Insufficient balance",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "wallet",
-                        "pay"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "wallet", "pay"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -12109,15 +10588,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "posts"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "posts"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -12153,15 +10625,8 @@
                       "name": "Post created",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -12218,16 +10683,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -12248,16 +10705,8 @@
                           "name": "Post details",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "posts",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "posts", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -12310,16 +10759,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -12363,16 +10804,8 @@
                           "name": "Post updated",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "posts",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "posts", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -12433,16 +10866,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -12471,16 +10896,8 @@
                           "name": "Post deleted",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "posts",
-                                ":id"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "posts", ":id"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -12533,17 +10950,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts",
-                            ":id",
-                            "like"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts", ":id", "like"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -12572,17 +10980,8 @@
                           "name": "Post liked/unliked",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "posts",
-                                ":id",
-                                "like"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "posts", ":id", "like"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -12635,17 +11034,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts",
-                            ":id",
-                            "comment"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts", ":id", "comment"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -12689,17 +11079,8 @@
                           "name": "Comment added",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "posts",
-                                ":id",
-                                "comment"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "posts", ":id", "comment"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -12760,17 +11141,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "posts",
-                            ":id",
-                            "share"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "posts", ":id", "share"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -12814,17 +11186,8 @@
                           "name": "Post shared",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "posts",
-                                ":id",
-                                "share"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "posts", ":id", "share"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -12891,15 +11254,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "social",
-                    "feed"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "social", "feed"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -12933,15 +11289,8 @@
                   "name": "Social feed posts",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "feed"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "feed"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "page",
@@ -12999,15 +11348,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "stories"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "stories"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -13043,15 +11385,8 @@
                       "name": "Story created",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "stories"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "stories"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -13104,15 +11439,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "stories"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "stories"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -13133,15 +11461,8 @@
                       "name": "List of stories",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "stories"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "stories"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -13190,17 +11511,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "stories",
-                            ":id",
-                            "view"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "stories", ":id", "view"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -13229,17 +11541,8 @@
                           "name": "Story viewed",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "stories",
-                                ":id",
-                                "view"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "stories", ":id", "view"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -13292,17 +11595,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "stories",
-                            ":id",
-                            "viewers"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "stories", ":id", "viewers"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -13331,17 +11625,8 @@
                           "name": "Story viewers",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "stories",
-                                ":id",
-                                "viewers"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "stories", ":id", "viewers"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -13404,15 +11689,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "friends"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "friends"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -13433,15 +11711,8 @@
                       "name": "Friends list",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "friends"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "friends"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -13486,16 +11757,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "friends",
-                        "request"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "friends", "request"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -13531,16 +11794,8 @@
                       "name": "Friend request sent",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "friends",
-                            "request"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "friends", "request"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -13597,16 +11852,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "friends",
-                            "requests"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "friends", "requests"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -13627,16 +11874,8 @@
                           "name": "Friend requests",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "friends",
-                                "requests"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "friends", "requests"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": []
                             },
@@ -13681,18 +11920,8 @@
                           "type": "text/plain"
                         },
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "friends",
-                            "requests",
-                            ":id",
-                            "respond"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "friends", "requests", ":id", "respond"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -13736,18 +11965,8 @@
                           "name": "Request responded",
                           "originalRequest": {
                             "url": {
-                              "path": [
-                                "api",
-                                "v1",
-                                "social",
-                                "friends",
-                                "requests",
-                                ":id",
-                                "respond"
-                              ],
-                              "host": [
-                                "{{baseUrl}}"
-                              ],
+                              "path": ["api", "v1", "social", "friends", "requests", ":id", "respond"],
+                              "host": ["{{baseUrl}}"],
                               "query": [],
                               "variable": [
                                 {
@@ -13811,16 +12030,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "friends",
-                        ":id"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "friends", ":id"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -13849,16 +12060,8 @@
                       "name": "Friend removed",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "friends",
-                            ":id"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "friends", ":id"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -13918,17 +12121,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "users",
-                        ":id",
-                        "posts"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "users", ":id", "posts"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -13962,17 +12156,8 @@
                       "name": "User's posts",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "users",
-                            ":id",
-                            "posts"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "users", ":id", "posts"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -14034,17 +12219,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "users",
-                        ":id",
-                        "block"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "users", ":id", "block"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -14073,17 +12249,8 @@
                       "name": "User blocked",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "users",
-                            ":id",
-                            "block"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "users", ":id", "block"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -14136,17 +12303,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "users",
-                        ":id",
-                        "unblock"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "users", ":id", "unblock"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -14175,17 +12333,8 @@
                       "name": "User unblocked",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "social",
-                            "users",
-                            ":id",
-                            "unblock"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "social", "users", ":id", "unblock"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -14241,15 +12390,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "social",
-                    "report"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "social", "report"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -14285,15 +12427,8 @@
                   "name": "Report submitted",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "social",
-                        "report"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "social", "report"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -14353,15 +12488,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "notifications",
-                    "send"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "notifications", "send"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -14397,15 +12525,8 @@
                   "name": "Notification sent",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "notifications",
-                        "send"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "notifications", "send"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -14458,15 +12579,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "notifications",
-                    "history"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "notifications", "history"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -14505,15 +12619,8 @@
                   "name": "Notification history",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "notifications",
-                        "history"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "notifications", "history"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "unread_only",
@@ -14571,15 +12678,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "notifications",
-                    "preferences"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "notifications", "preferences"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -14615,15 +12715,8 @@
                   "name": "Preferences updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "notifications",
-                        "preferences"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "notifications", "preferences"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -14683,15 +12776,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "vendor",
-                    "apply"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "vendor", "apply"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -14727,15 +12813,8 @@
                   "name": "Application submitted",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "vendor",
-                        "apply"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "vendor", "apply"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -14788,15 +12867,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "vendor",
-                    "balance"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "vendor", "balance"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -14823,15 +12895,8 @@
                   "name": "Vendor balance",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "vendor",
-                        "balance"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "vendor", "balance"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -14880,16 +12945,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "vendor",
-                    "payout",
-                    "request"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "vendor", "payout", "request"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -14925,16 +12982,8 @@
                   "name": "Payout requested",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "vendor",
-                        "payout",
-                        "request"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "vendor", "payout", "request"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -14994,15 +13043,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "driver",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "driver", "verify"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -15038,15 +13080,8 @@
                   "name": "Driver verification updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "driver",
-                        "verify"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "driver", "verify"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -15099,15 +13134,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "driver",
-                    "availability"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "driver", "availability"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -15143,15 +13171,8 @@
                   "name": "Availability updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "driver",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "driver", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -15204,15 +13225,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "driver",
-                    "location"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "driver", "location"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -15248,15 +13262,8 @@
                   "name": "Location updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "driver",
-                        "location"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "driver", "location"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -15309,15 +13316,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "driver",
-                    "earnings"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "driver", "earnings"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -15344,15 +13344,8 @@
                   "name": "Earnings summary",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "driver",
-                        "earnings"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "driver", "earnings"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "period",
@@ -15413,15 +13406,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "ads",
-                        "campaigns"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "ads", "campaigns"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -15457,15 +13443,8 @@
                       "name": "Campaign created",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "ads",
-                            "campaigns"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "ads", "campaigns"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -15518,15 +13497,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "ads",
-                        "campaigns"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "ads", "campaigns"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -15547,15 +13519,8 @@
                       "name": "List of campaigns",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "ads",
-                            "campaigns"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "ads", "campaigns"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -15603,15 +13568,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "ads",
-                    "fetch"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "ads", "fetch"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -15635,15 +13593,8 @@
                   "name": "Ads to display",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "ads",
-                        "fetch"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "ads", "fetch"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "placement",
@@ -15697,15 +13648,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "ads",
-                    "analytics"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "ads", "analytics"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -15737,15 +13681,8 @@
                   "name": "Campaign analytics",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "ads",
-                        "analytics"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "ads", "analytics"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "campaign_id",
@@ -15806,15 +13743,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "courier",
-                    "onboard"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "courier", "onboard"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -15850,15 +13780,8 @@
                   "name": "Courier registered",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "courier",
-                        "onboard"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "courier", "onboard"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -15911,15 +13834,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "courier",
-                    "assignments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "courier", "assignments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -15946,15 +13862,8 @@
                   "name": "List of assignments",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "courier",
-                        "assignments"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "courier", "assignments"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "status",
@@ -16004,15 +13913,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "courier",
-                    "availability"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "courier", "availability"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -16048,15 +13950,8 @@
                   "name": "Availability updated",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "courier",
-                        "availability"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "courier", "availability"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -16109,15 +14004,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "courier",
-                    "earnings"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "courier", "earnings"],
+                  "host": ["{{baseUrl}}"],
                   "query": [
                     {
                       "disabled": false,
@@ -16144,15 +14032,8 @@
                   "name": "Earnings summary",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "courier",
-                        "earnings"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "courier", "earnings"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "key": "period",
@@ -16202,15 +14083,8 @@
                   "type": "text/plain"
                 },
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "courier",
-                    "performance"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "courier", "performance"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -16231,15 +14105,8 @@
                   "name": "Performance metrics",
                   "originalRequest": {
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "courier",
-                        "performance"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "courier", "performance"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -16295,15 +14162,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "messages",
-                        "conversations"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "messages", "conversations"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -16324,15 +14184,8 @@
                       "name": "List of conversations",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "messages",
-                            "conversations"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "messages", "conversations"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -16377,15 +14230,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "messages",
-                        "conversations"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "messages", "conversations"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": []
                     },
@@ -16421,15 +14267,8 @@
                       "name": "Conversation created",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "messages",
-                            "conversations"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "messages", "conversations"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": []
                         },
@@ -16489,15 +14328,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "messages",
-                        ":conversationId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "messages", ":conversationId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [
                         {
                           "disabled": false,
@@ -16539,15 +14371,8 @@
                       "name": "Messages",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "messages",
-                            ":conversationId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "messages", ":conversationId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [
                             {
                               "key": "page",
@@ -16609,15 +14434,8 @@
                       "type": "text/plain"
                     },
                     "url": {
-                      "path": [
-                        "api",
-                        "v1",
-                        "messages",
-                        ":conversationId"
-                      ],
-                      "host": [
-                        "{{baseUrl}}"
-                      ],
+                      "path": ["api", "v1", "messages", ":conversationId"],
+                      "host": ["{{baseUrl}}"],
                       "query": [],
                       "variable": [
                         {
@@ -16661,15 +14479,8 @@
                       "name": "Message sent",
                       "originalRequest": {
                         "url": {
-                          "path": [
-                            "api",
-                            "v1",
-                            "messages",
-                            ":conversationId"
-                          ],
-                          "host": [
-                            "{{baseUrl}}"
-                          ],
+                          "path": ["api", "v1", "messages", ":conversationId"],
+                          "host": ["{{baseUrl}}"],
                           "query": [],
                           "variable": [
                             {
@@ -16736,15 +14547,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "api",
-                "v1",
-                "promo-codes",
-                "validate"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["api", "v1", "promo-codes", "validate"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -16780,15 +14584,8 @@
               "name": "Promo code validation result",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "promo-codes",
-                    "validate"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "promo-codes", "validate"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -16841,15 +14638,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "api",
-                "v1",
-                "pricing",
-                "calculate"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["api", "v1", "pricing", "calculate"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -16877,15 +14667,8 @@
               "name": "Dynamic pricing info",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "api",
-                    "v1",
-                    "pricing",
-                    "calculate"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["api", "v1", "pricing", "calculate"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },

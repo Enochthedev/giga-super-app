@@ -5,7 +5,10 @@ export class AppError extends Error {
     public isOperational = true
   ) {
     super(message);
-    Object.setPrototypeOf(this, AppError.prototype);
+    // new.target, not AppError: hardcoding the base prototype made every
+    // subclass collapse to AppError, so `instanceof BadRequestError` was false
+    // for an error BadRequestError had just constructed.
+    Object.setPrototypeOf(this, new.target.prototype);
     Error.captureStackTrace(this, this.constructor);
   }
 }

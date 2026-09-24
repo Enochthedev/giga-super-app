@@ -871,5 +871,3 @@ components:
 
 security:
   - BearerAuth: []
-
-

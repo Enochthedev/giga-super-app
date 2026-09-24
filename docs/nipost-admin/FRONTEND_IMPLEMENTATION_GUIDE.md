@@ -830,4 +830,3 @@ If you encounter issues:
 - ✅ Automatic role creation happens on approval
 - ✅ State-scoped filtering handled by backend
 - ✅ No complex business logic needed in frontend
- 

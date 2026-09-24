@@ -170,9 +170,10 @@ const proxyServiceDocs = async (req: Request, res: Response, serviceKey: string)
       },
     });
 
-    // Forward relevant headers
+    // Forward relevant headers. Axios types this as string | number | boolean
+    // | string[] | AxiosHeaders, and setHeader takes none of the wider cases.
     const contentType = response.headers['content-type'];
-    if (contentType) {
+    if (typeof contentType === 'string') {
       res.setHeader('Content-Type', contentType);
     }
 

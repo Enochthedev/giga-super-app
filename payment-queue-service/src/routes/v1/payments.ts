@@ -1,4 +1,5 @@
 import { Router } from 'express';
+
 import { initializeCheckout } from '../../controllers/checkout.controller';
 import {
   createPaymentRequest,

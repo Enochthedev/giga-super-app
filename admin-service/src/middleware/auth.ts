@@ -299,12 +299,12 @@ export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction
   // Case-insensitive check
   const roleUpper = role ? role.toUpperCase() : '';
   const adminRolesUpper = ADMIN_ROLES.map(r => r.toUpperCase());
-  
+
   if (!adminRolesUpper.includes(roleUpper)) {
     return res.status(403).json({
       error: 'Insufficient role permissions',
       code: 'INSUFFICIENT_ROLE',
-      details: { required: ADMIN_ROLES, current: role }
+      details: { required: ADMIN_ROLES, current: role },
     });
   }
   next();
@@ -344,7 +344,12 @@ export const requireCourier = requireRole(['COURIER']);
 // NIPOST hierarchical access (DOP can access everything, PMG can access state-level, etc.)
 export const requireDOPOrHigher = requireRole(['DOP', 'DIRECTOR']);
 export const requirePMGOrHigher = requireRole(['DOP', 'DIRECTOR', 'PMG']);
-export const requireRegionalManagerOrHigher = requireRole(['DOP', 'DIRECTOR', 'PMG', 'REGIONAL_MANAGER']);
+export const requireRegionalManagerOrHigher = requireRole([
+  'DOP',
+  'DIRECTOR',
+  'PMG',
+  'REGIONAL_MANAGER',
+]);
 
 /**
  * Require NIPOST admin (any NIPOST role)
@@ -388,11 +393,7 @@ export const requireNipostAdmin = (req: AuthRequest, res: Response, next: NextFu
  * Reads the target region from: req.query.region_id, req.body.region_id,
  * req.params.regionId.
  */
-export const requireRegionScope = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const requireRegionScope = async (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.user) {
     return res.status(401).json({
       success: false,
@@ -406,8 +407,7 @@ export const requireRegionScope = async (
     return next();
   }
 
-  const requested =
-    (req.query.region_id as string) || req.body?.region_id || req.params.regionId;
+  const requested = (req.query.region_id as string) || req.body?.region_id || req.params.regionId;
 
   // No region specified on the request → nothing to validate here; the
   // route's own query-level applyRegionScope still constrains the data.

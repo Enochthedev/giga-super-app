@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+
 import { swaggerSpec } from '../config/swagger';
 
 const outputPath = path.join(process.cwd(), 'openapi.json');

@@ -1,10 +1,12 @@
 # Payment Queue Service
 
-Centralized payment queue service for the Giga platform. Handles all payment requests using BullMQ with support for Paystack and Stripe payment providers.
+Centralized payment queue service for the Giga platform. Handles all payment
+requests using BullMQ with support for Paystack and Stripe payment providers.
 
 ## Features
 
-- **Multiple BullMQ Queues**: Separate queues for payments, webhooks, refunds, settlements, and notifications
+- **Multiple BullMQ Queues**: Separate queues for payments, webhooks, refunds,
+  settlements, and notifications
 - **Payment Providers**: Support for Paystack and Stripe
 - **Commission Management**: Dynamic commission calculation with min/max rules
 - **Admin Hierarchy**: Branch, state, and national level reporting with RLS
@@ -181,6 +183,7 @@ psql -h your-host -U your-user -d your-db -f database/scripts/payment_queue_sche
 ## Commission Rules
 
 Commission rules support:
+
 - Percentage-based rates
 - Minimum commission amounts
 - Maximum commission amounts
@@ -189,8 +192,13 @@ Commission rules support:
 - Time-based effective periods
 
 Example commission calculation:
+
 ```typescript
-const commission = await commissionService.calculateCommission('hotel', 1000, 'standard');
+const commission = await commissionService.calculateCommission(
+  'hotel',
+  1000,
+  'standard'
+);
 // Returns: { grossAmount, commissionRate, commissionAmount, netAmount, appliedRule }
 ```
 
@@ -208,30 +216,39 @@ Filters are automatically applied based on user role and location.
 ## Security Features
 
 ### PII Encryption
-Customer sensitive data (email, phone, address) is encrypted at rest using AES-256-GCM.
+
+Customer sensitive data (email, phone, address) is encrypted at rest using
+AES-256-GCM.
 
 ### Webhook Signature Verification
+
 All webhooks are verified using provider-specific signature validation:
+
 - Paystack: HMAC SHA-512
 - Stripe: Stripe signature verification
 
 ### Rate Limiting
-API endpoints are rate-limited to prevent abuse (100 requests per 15 minutes by default).
+
+API endpoints are rate-limited to prevent abuse (100 requests per 15 minutes by
+default).
 
 ## Running the Service
 
 ### Development
+
 ```bash
 npm run dev
 ```
 
 ### Production
+
 ```bash
 npm run build
 npm start
 ```
 
 ### Running with Docker
+
 ```bash
 docker build -t payment-queue-service .
 docker run -p 3004:3004 --env-file .env payment-queue-service
@@ -256,16 +273,19 @@ npm test -- --coverage
 ## Monitoring
 
 ### Health Check
+
 ```bash
 curl http://localhost:3004/health
 ```
 
 ### Prometheus Metrics
+
 ```bash
 curl http://localhost:3004/metrics
 ```
 
 Available metrics:
+
 - Queue job counts (waiting, active, completed, failed)
 - Process CPU and memory usage
 - Node.js version info
@@ -279,6 +299,7 @@ railway up
 ```
 
 ### Health Check Configuration
+
 - Path: `/health`
 - Timeout: 100s
 - Expected: 200 status code
@@ -296,6 +317,7 @@ All workers run concurrently with configurable concurrency:
 ## Error Handling
 
 The service implements comprehensive error handling:
+
 - `AppError` - Base error class with statusCode and isOperational
 - `BadRequestError` (400)
 - `UnauthorizedError` (401)
@@ -310,6 +332,7 @@ The service implements comprehensive error handling:
 Full OpenAPI 3.0 specification is available in `openapi.yaml`.
 
 View documentation:
+
 ```bash
 # Using Swagger UI
 npx swagger-ui-express openapi.yaml

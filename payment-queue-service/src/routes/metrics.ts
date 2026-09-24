@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+
 import { getNotificationQueueMetrics } from '../queues/notification.queue';
 import { getPaymentQueueMetrics } from '../queues/payment.queue';
 import { getRefundQueueMetrics } from '../queues/refund.queue';
@@ -132,7 +133,7 @@ router.get('/', async (req: Request, res: Response) => {
     metrics.push(`nodejs_version_info{version="${process.version}"} 1`);
 
     // Join all metrics with newlines
-    const output = metrics.join('\n') + '\n';
+    const output = `${metrics.join('\n')}\n`;
 
     res.set('Content-Type', 'text/plain; version=0.0.4');
     res.send(output);

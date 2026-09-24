@@ -59,13 +59,7 @@
     "schemas": {
       "PaymentRequest": {
         "type": "object",
-        "required": [
-          "amount",
-          "currency",
-          "email",
-          "module",
-          "reference_id"
-        ],
+        "required": ["amount", "currency", "email", "module", "reference_id"],
         "properties": {
           "amount": {
             "type": "number",
@@ -75,12 +69,7 @@
           },
           "currency": {
             "type": "string",
-            "enum": [
-              "NGN",
-              "USD",
-              "EUR",
-              "GBP"
-            ],
+            "enum": ["NGN", "USD", "EUR", "GBP"],
             "default": "NGN",
             "example": "NGN"
           },
@@ -91,13 +80,7 @@
           },
           "module": {
             "type": "string",
-            "enum": [
-              "hotel",
-              "taxi",
-              "ecommerce",
-              "delivery",
-              "subscription"
-            ],
+            "enum": ["hotel", "taxi", "ecommerce", "delivery", "subscription"],
             "example": "hotel"
           },
           "reference_id": {
@@ -132,9 +115,7 @@
       },
       "VerifyPaymentRequest": {
         "type": "object",
-        "required": [
-          "reference"
-        ],
+        "required": ["reference"],
         "properties": {
           "reference": {
             "type": "string",
@@ -144,11 +125,7 @@
       },
       "RefundRequest": {
         "type": "object",
-        "required": [
-          "payment_id",
-          "amount",
-          "reason"
-        ],
+        "required": ["payment_id", "amount", "reason"],
         "properties": {
           "payment_id": {
             "type": "string",
@@ -174,11 +151,7 @@
       },
       "SettlementRequest": {
         "type": "object",
-        "required": [
-          "recipient_id",
-          "recipient_type",
-          "amount"
-        ],
+        "required": ["recipient_id", "recipient_type", "amount"],
         "properties": {
           "recipient_id": {
             "type": "string",
@@ -187,11 +160,7 @@
           },
           "recipient_type": {
             "type": "string",
-            "enum": [
-              "vendor",
-              "driver",
-              "hotel"
-            ],
+            "enum": ["vendor", "driver", "hotel"],
             "example": "hotel"
           },
           "amount": {
@@ -235,20 +204,12 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "processing",
-              "completed",
-              "failed"
-            ],
+            "enum": ["pending", "processing", "completed", "failed"],
             "example": "pending"
           },
           "provider": {
             "type": "string",
-            "enum": [
-              "paystack",
-              "stripe"
-            ],
+            "enum": ["paystack", "stripe"],
             "example": "paystack"
           }
         }
@@ -266,12 +227,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "success",
-              "failed",
-              "pending",
-              "abandoned"
-            ],
+            "enum": ["success", "failed", "pending", "abandoned"],
             "example": "success"
           },
           "amount": {
@@ -288,12 +244,7 @@
           },
           "channel": {
             "type": "string",
-            "enum": [
-              "card",
-              "bank_transfer",
-              "ussd",
-              "mobile_money"
-            ],
+            "enum": ["card", "bank_transfer", "ussd", "mobile_money"],
             "example": "card"
           },
           "card_type": {
@@ -327,12 +278,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "processing",
-              "completed",
-              "failed"
-            ],
+            "enum": ["pending", "processing", "completed", "failed"],
             "example": "processing"
           },
           "provider_reference": {
@@ -361,12 +307,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "processing",
-              "completed",
-              "failed"
-            ],
+            "enum": ["pending", "processing", "completed", "failed"],
             "example": "completed"
           },
           "bank_name": {
@@ -404,12 +345,7 @@
           },
           "module": {
             "type": "string",
-            "enum": [
-              "hotel",
-              "taxi",
-              "ecommerce",
-              "delivery"
-            ]
+            "enum": ["hotel", "taxi", "ecommerce", "delivery"]
           },
           "amount": {
             "type": "number",
@@ -421,20 +357,11 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "processing",
-              "completed",
-              "failed",
-              "refunded"
-            ]
+            "enum": ["pending", "processing", "completed", "failed", "refunded"]
           },
           "provider": {
             "type": "string",
-            "enum": [
-              "paystack",
-              "stripe"
-            ]
+            "enum": ["paystack", "stripe"]
           },
           "provider_reference": {
             "type": "string"
@@ -472,12 +399,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "payment",
-              "refund",
-              "settlement",
-              "chargeback"
-            ]
+            "enum": ["payment", "refund", "settlement", "chargeback"]
           },
           "amount": {
             "type": "number"
@@ -529,12 +451,7 @@
         "properties": {
           "event": {
             "type": "string",
-            "enum": [
-              "charge.success",
-              "transfer.success",
-              "refund.processed",
-              "subscription.create"
-            ],
+            "enum": ["charge.success", "transfer.success", "refund.processed", "subscription.create"],
             "example": "charge.success"
           },
           "data": {
@@ -767,9 +684,7 @@
       "get": {
         "summary": "Service health check",
         "description": "Returns comprehensive health status including database and queue health",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is healthy",
@@ -780,10 +695,7 @@
                   "properties": {
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "healthy",
-                        "degraded"
-                      ]
+                      "enum": ["healthy", "degraded"]
                     },
                     "service": {
                       "type": "string"
@@ -814,9 +726,7 @@
       "get": {
         "summary": "Readiness probe",
         "description": "Kubernetes readiness probe - checks if service is ready to accept traffic",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is ready"
@@ -831,9 +741,7 @@
       "get": {
         "summary": "Liveness probe",
         "description": "Kubernetes liveness probe - checks if service is alive",
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "responses": {
           "200": {
             "description": "Service is alive"
@@ -845,9 +753,7 @@
       "get": {
         "summary": "Prometheus metrics",
         "description": "Get Prometheus-compatible metrics for all queues and process stats",
-        "tags": [
-          "Metrics"
-        ],
+        "tags": ["Metrics"],
         "responses": {
           "200": {
             "description": "Metrics in Prometheus format",
@@ -869,9 +775,7 @@
       "post": {
         "summary": "Create payment request",
         "description": "Queue a new payment for processing",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "security": [
           {
             "BearerAuth": []
@@ -883,23 +787,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "module",
-                  "amount",
-                  "currency",
-                  "userId",
-                  "branchId",
-                  "stateId",
-                  "metadata"
-                ],
+                "required": ["module", "amount", "currency", "userId", "branchId", "stateId", "metadata"],
                 "properties": {
                   "module": {
                     "type": "string",
-                    "enum": [
-                      "hotel",
-                      "taxi",
-                      "ecommerce"
-                    ]
+                    "enum": ["hotel", "taxi", "ecommerce"]
                   },
                   "amount": {
                     "type": "number",
@@ -934,10 +826,7 @@
                   },
                   "paymentMethod": {
                     "type": "string",
-                    "enum": [
-                      "paystack",
-                      "stripe"
-                    ]
+                    "enum": ["paystack", "stripe"]
                   }
                 }
               }
@@ -961,9 +850,7 @@
       "get": {
         "summary": "Get payment status",
         "description": "Check the status of a queued payment",
-        "tags": [
-          "Payments"
-        ],
+        "tags": ["Payments"],
         "security": [
           {
             "BearerAuth": []
@@ -1023,9 +910,7 @@
       "post": {
         "summary": "Request refund",
         "description": "Queue a refund request for processing",
-        "tags": [
-          "Refunds"
-        ],
+        "tags": ["Refunds"],
         "security": [
           {
             "BearerAuth": []
@@ -1037,10 +922,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "transactionId",
-                  "reason"
-                ],
+                "required": ["transactionId", "reason"],
                 "properties": {
                   "transactionId": {
                     "type": "string"
@@ -1074,9 +956,7 @@
       "get": {
         "summary": "Get queue statistics",
         "description": "Get payment queue statistics including waiting, active, completed, and failed jobs",
-        "tags": [
-          "Metrics"
-        ],
+        "tags": ["Metrics"],
         "security": [
           {
             "BearerAuth": []

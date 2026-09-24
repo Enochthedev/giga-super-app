@@ -5,17 +5,14 @@
 
 import { Request, Response, NextFunction } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
-import { ValidationError } from '../utils/errors';
+
 import config from '../config';
+import { ValidationError } from '../utils/errors';
 
 /**
  * Middleware to handle validation results
  */
-export const handleValidationErrors = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+export const handleValidationErrors = (req: Request, res: Response, next: NextFunction): void => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -43,9 +40,7 @@ export const validateCreatePost = [
   body('content')
     .trim()
     .isLength({ min: 1, max: config.social.maxContentLength })
-    .withMessage(
-      `Content must be between 1 and ${config.social.maxContentLength} characters`
-    ),
+    .withMessage(`Content must be between 1 and ${config.social.maxContentLength} characters`),
 
   body('post_type')
     .optional()
@@ -62,20 +57,14 @@ export const validateCreatePost = [
     .isArray({ max: config.social.maxMediaUploads })
     .withMessage(`Media URLs must be an array with max ${config.social.maxMediaUploads} items`),
 
-  body('media_urls.*')
-    .optional()
-    .isURL()
-    .withMessage('Each media URL must be a valid URL'),
+  body('media_urls.*').optional().isURL().withMessage('Each media URL must be a valid URL'),
 
   body('allowed_viewers')
     .optional()
     .isArray()
     .withMessage('Allowed viewers must be an array of user IDs'),
 
-  body('allowed_viewers.*')
-    .optional()
-    .isUUID()
-    .withMessage('Each viewer ID must be a valid UUID'),
+  body('allowed_viewers.*').optional().isUUID().withMessage('Each viewer ID must be a valid UUID'),
 
   body('tagged_users')
     .optional()
@@ -87,10 +76,7 @@ export const validateCreatePost = [
     .isUUID()
     .withMessage('Each tagged user ID must be a valid UUID'),
 
-  body('location')
-    .optional()
-    .isObject()
-    .withMessage('Location must be an object'),
+  body('location').optional().isObject().withMessage('Location must be an object'),
 
   body('location.latitude')
     .optional()
@@ -118,9 +104,7 @@ export const validateUpdatePost = [
     .optional()
     .trim()
     .isLength({ min: 1, max: config.social.maxContentLength })
-    .withMessage(
-      `Content must be between 1 and ${config.social.maxContentLength} characters`
-    ),
+    .withMessage(`Content must be between 1 and ${config.social.maxContentLength} characters`),
 
   body('visibility')
     .optional()
@@ -147,10 +131,7 @@ export const validateDeletePost = [
 
 export const validateGetUserPosts = [
   param('userId').isUUID().withMessage('User ID must be a valid UUID'),
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -200,10 +181,7 @@ export const validateDeleteComment = [
 
 export const validateGetPostComments = [
   param('postId').isUUID().withMessage('Post ID must be a valid UUID'),
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -213,10 +191,7 @@ export const validateGetPostComments = [
 
 export const validateGetCommentReplies = [
   param('commentId').isUUID().withMessage('Comment ID must be a valid UUID'),
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -248,10 +223,7 @@ export const validateLikeComment = [
 
 export const validateGetPostLikers = [
   param('postId').isUUID().withMessage('Post ID must be a valid UUID'),
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -264,10 +236,7 @@ export const validateGetPostLikers = [
 // ============================================================================
 
 export const validateGetFeed = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -280,10 +249,7 @@ export const validateGetFeed = [
 ];
 
 export const validateGetTrending = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -300,13 +266,9 @@ export const validateGetTrending = [
 // ============================================================================
 
 export const validateCreateStory = [
-  body('media_url')
-    .isURL()
-    .withMessage('Media URL is required and must be a valid URL'),
+  body('media_url').isURL().withMessage('Media URL is required and must be a valid URL'),
 
-  body('media_type')
-    .isIn(['image', 'video'])
-    .withMessage('Media type must be: image or video'),
+  body('media_type').isIn(['image', 'video']).withMessage('Media type must be: image or video'),
 
   body('duration')
     .optional()
@@ -329,10 +291,7 @@ export const validateCreateStory = [
     .isArray()
     .withMessage('Viewers list must be an array of user IDs'),
 
-  body('viewers_list.*')
-    .optional()
-    .isUUID()
-    .withMessage('Each viewer ID must be a valid UUID'),
+  body('viewers_list.*').optional().isUUID().withMessage('Each viewer ID must be a valid UUID'),
 
   handleValidationErrors,
 ];
@@ -362,24 +321,16 @@ export const validateSharePost = [
     .optional()
     .trim()
     .isLength({ max: config.social.maxContentLength })
-    .withMessage(
-      `Content must be less than ${config.social.maxContentLength} characters`
-    ),
+    .withMessage(`Content must be less than ${config.social.maxContentLength} characters`),
 
   body('visibility')
     .optional()
     .isIn(['public', 'friends', 'private', 'custom'])
     .withMessage('Visibility must be: public, friends, private, or custom'),
 
-  body('recipient_ids')
-    .optional()
-    .isArray()
-    .withMessage('Recipient IDs must be an array'),
+  body('recipient_ids').optional().isArray().withMessage('Recipient IDs must be an array'),
 
-  body('recipient_ids.*')
-    .optional()
-    .isUUID()
-    .withMessage('Each recipient ID must be a valid UUID'),
+  body('recipient_ids.*').optional().isUUID().withMessage('Each recipient ID must be a valid UUID'),
 
   handleValidationErrors,
 ];
@@ -399,9 +350,7 @@ export const validateUnfollowUser = [
 ];
 
 export const validateBlockUser = [
-  body('blocked_user_id')
-    .isUUID()
-    .withMessage('Blocked user ID must be a valid UUID'),
+  body('blocked_user_id').isUUID().withMessage('Blocked user ID must be a valid UUID'),
   handleValidationErrors,
 ];
 
@@ -412,10 +361,7 @@ export const validateUnblockUser = [
 
 export const validateGetFollowers = [
   param('userId').isUUID().withMessage('User ID must be a valid UUID'),
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })
@@ -471,10 +417,7 @@ export const validateUpdateReportStatus = [
 // ============================================================================
 
 export const validatePagination = [
-  query('page')
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage('Page must be a positive integer'),
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
   query('limit')
     .optional()
     .isInt({ min: 1, max: config.pagination.maxLimit })

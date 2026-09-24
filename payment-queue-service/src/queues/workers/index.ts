@@ -1,11 +1,4 @@
 import logger from '../../utils/logger';
-import {
-  closeWorkerManager,
-  getWorkerStatus,
-  initializeWorkerManager,
-  processExistingJobs,
-  registerProcessor,
-} from './workerManager';
 
 // Import processor functions from each worker
 import { notificationProcessor } from './notification.worker';
@@ -13,6 +6,13 @@ import { paymentProcessor } from './payment.worker';
 import { refundProcessor } from './refund.worker';
 import { settlementProcessor } from './settlement.worker';
 import { webhookProcessor } from './webhook.worker';
+import {
+  closeWorkerManager,
+  getWorkerStatus,
+  initializeWorkerManager,
+  processExistingJobs,
+  registerProcessor,
+} from './workerManager';
 
 /**
  * Initialize all workers via WorkerManager (on-demand activation)

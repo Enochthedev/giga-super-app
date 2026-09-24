@@ -3,7 +3,26 @@
  */
 
 import { z } from 'zod';
+
 import { AutocompleteQuery, SearchQuery } from '../types/index.js';
+
+/**
+ * Query strings arrive as strings, JSON bodies as real values, and these
+ * schemas validate both. `queryNumber()` therefore rejected every request that
+ * came in through a query string — `?page=1` is "1", not 1.
+ *
+ * `queryNumber` coerces. `queryBoolean` does not use `z.coerce.boolean()`,
+ * which maps the string "false" to true.
+ */
+const queryNumber = () => z.coerce.number();
+const queryBoolean = () =>
+  z.preprocess(value => {
+    if (typeof value === 'string') {
+      if (value === 'true' || value === '1') return true;
+      if (value === 'false' || value === '0') return false;
+    }
+    return value;
+  }, z.boolean());
 
 // Search query validation schema
 export const SearchQuerySchema = z
@@ -14,10 +33,10 @@ export const SearchQuerySchema = z
       .optional()
       .default('all'),
     location: z.string().max(100).optional(),
-    min_price: z.number().min(0).optional(),
-    max_price: z.number().min(0).optional(),
-    page: z.number().int().min(1).optional().default(1),
-    limit: z.number().int().min(1).max(100).optional().default(20),
+    min_price: queryNumber().min(0).optional(),
+    max_price: queryNumber().min(0).optional(),
+    page: queryNumber().int().min(1).optional().default(1),
+    limit: queryNumber().int().min(1).max(100).optional().default(20),
     sort: z
       .enum(['relevance', 'price', 'rating', 'created_at', 'distance'])
       .optional()
@@ -27,7 +46,7 @@ export const SearchQuerySchema = z
       .object({
         // Hotel filters
         amenities: z.array(z.string()).optional(),
-        star_rating: z.number().int().min(1).max(5).optional(),
+        star_rating: queryNumber().int().min(1).max(5).optional(),
         room_type: z.string().optional(),
 
         // Product filters
@@ -36,13 +55,13 @@ export const SearchQuerySchema = z
 
         // Driver filters
         vehicle_type: z.string().optional(),
-        rating_min: z.number().min(0).max(5).optional(),
-        available_only: z.boolean().optional(),
+        rating_min: queryNumber().min(0).max(5).optional(),
+        available_only: queryBoolean().optional(),
 
         // Location filters
-        latitude: z.number().min(-90).max(90).optional(),
-        longitude: z.number().min(-180).max(180).optional(),
-        radius: z.number().min(0).max(100).optional().default(10),
+        latitude: queryNumber().min(-90).max(90).optional(),
+        longitude: queryNumber().min(-180).max(180).optional(),
+        radius: queryNumber().min(0).max(100).optional().default(10),
 
         // Date filters
         start_date: z.string().datetime().optional(),
@@ -88,7 +107,7 @@ export const AutocompleteQuerySchema = z.object({
     .enum(['all', 'hotels', 'products', 'drivers', 'posts', 'users'])
     .optional()
     .default('all'),
-  limit: z.number().int().min(1).max(20).optional().default(10),
+  limit: queryNumber().int().min(1).max(20).optional().default(10),
 });
 
 // Hotel search validation schema
@@ -96,15 +115,15 @@ export const HotelSearchSchema = z
   .object({
     q: z.string().optional(),
     location: z.string().optional(),
-    min_price: z.number().min(0).optional(),
-    max_price: z.number().min(0).optional(),
-    star_rating: z.number().int().min(1).max(5).optional(),
+    min_price: queryNumber().min(0).optional(),
+    max_price: queryNumber().min(0).optional(),
+    star_rating: queryNumber().int().min(1).max(5).optional(),
     amenities: z.array(z.string()).optional(),
     check_in: z.string().datetime().optional(),
     check_out: z.string().datetime().optional(),
-    guests: z.number().int().min(1).max(20).optional(),
-    page: z.number().int().min(1).optional().default(1),
-    limit: z.number().int().min(1).max(100).optional().default(20),
+    guests: queryNumber().int().min(1).max(20).optional(),
+    page: queryNumber().int().min(1).optional().default(1),
+    limit: queryNumber().int().min(1).max(100).optional().default(20),
     sort: z.enum(['relevance', 'price', 'rating', 'distance']).optional().default('relevance'),
     order: z.enum(['asc', 'desc']).optional().default('desc'),
   })
@@ -134,11 +153,11 @@ export const ProductSearchSchema = z
     category: z.string().optional(),
     brand: z.string().optional(),
     condition: z.enum(['new', 'used', 'refurbished']).optional(),
-    min_price: z.number().min(0).optional(),
-    max_price: z.number().min(0).optional(),
-    in_stock: z.boolean().optional(),
-    page: z.number().int().min(1).optional().default(1),
-    limit: z.number().int().min(1).max(100).optional().default(20),
+    min_price: queryNumber().min(0).optional(),
+    max_price: queryNumber().min(0).optional(),
+    in_stock: queryBoolean().optional(),
+    page: queryNumber().int().min(1).optional().default(1),
+    limit: queryNumber().int().min(1).max(100).optional().default(20),
     sort: z.enum(['relevance', 'price', 'rating', 'created_at']).optional().default('relevance'),
     order: z.enum(['asc', 'desc']).optional().default('desc'),
   })
@@ -158,14 +177,14 @@ export const ProductSearchSchema = z
 export const DriverSearchSchema = z
   .object({
     q: z.string().optional(),
-    latitude: z.number().min(-90).max(90).optional(),
-    longitude: z.number().min(-180).max(180).optional(),
-    radius: z.number().min(0).max(100).optional().default(10),
+    latitude: queryNumber().min(-90).max(90).optional(),
+    longitude: queryNumber().min(-180).max(180).optional(),
+    radius: queryNumber().min(0).max(100).optional().default(10),
     vehicle_type: z.string().optional(),
-    rating_min: z.number().min(0).max(5).optional(),
-    available_only: z.boolean().optional().default(true),
-    page: z.number().int().min(1).optional().default(1),
-    limit: z.number().int().min(1).max(100).optional().default(20),
+    rating_min: queryNumber().min(0).max(5).optional(),
+    available_only: queryBoolean().optional().default(true),
+    page: queryNumber().int().min(1).optional().default(1),
+    limit: queryNumber().int().min(1).max(100).optional().default(20),
     sort: z.enum(['distance', 'rating', 'price']).optional().default('distance'),
     order: z.enum(['asc', 'desc']).optional().default('asc'),
   })
@@ -186,11 +205,11 @@ export const DriverSearchSchema = z
 export const PostSearchSchema = z.object({
   q: z.string().optional(),
   user_id: z.string().uuid().optional(),
-  public_only: z.boolean().optional().default(true),
-  has_images: z.boolean().optional(),
-  min_likes: z.number().int().min(0).optional(),
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional().default(20),
+  public_only: queryBoolean().optional().default(true),
+  has_images: queryBoolean().optional(),
+  min_likes: queryNumber().int().min(0).optional(),
+  page: queryNumber().int().min(1).optional().default(1),
+  limit: queryNumber().int().min(1).max(100).optional().default(20),
   sort: z.enum(['relevance', 'created_at', 'likes_count']).optional().default('relevance'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
 });
@@ -199,9 +218,9 @@ export const PostSearchSchema = z.object({
 export const UserSearchSchema = z.object({
   q: z.string().optional(),
   location: z.string().optional(),
-  verified_only: z.boolean().optional(),
-  page: z.number().int().min(1).optional().default(1),
-  limit: z.number().int().min(1).max(100).optional().default(20),
+  verified_only: queryBoolean().optional(),
+  page: queryNumber().int().min(1).optional().default(1),
+  limit: queryNumber().int().min(1).max(100).optional().default(20),
   sort: z.enum(['relevance', 'created_at']).optional().default('relevance'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
 });

@@ -101,9 +101,7 @@ export function validateConfig(): void {
   // Validate environment
   const validEnvironments = ['development', 'staging', 'production', 'test'];
   if (!validEnvironments.includes(config.nodeEnv)) {
-    throw new Error(
-      `NODE_ENV must be one of: ${validEnvironments.join(', ')}`
-    );
+    throw new Error(`NODE_ENV must be one of: ${validEnvironments.join(', ')}`);
   }
 
   // Validate URLs

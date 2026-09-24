@@ -20,7 +20,11 @@ describe('CommissionService', () => {
     it('should calculate commission for different modules', async () => {
       const hotelResult = await commissionService.calculateCommission('hotel', 1000, 'standard');
       const taxiResult = await commissionService.calculateCommission('taxi', 1000, 'standard');
-      const ecommerceResult = await commissionService.calculateCommission('ecommerce', 1000, 'standard');
+      const ecommerceResult = await commissionService.calculateCommission(
+        'ecommerce',
+        1000,
+        'standard'
+      );
 
       expect(hotelResult.commissionAmount).toBeGreaterThan(0);
       expect(taxiResult.commissionAmount).toBeGreaterThan(0);

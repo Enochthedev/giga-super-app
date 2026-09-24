@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { body, param, query, validationResult } from 'express-validator';
+
 import { SUPPORTED_CURRENCIES } from '../config/currency';
 import { BadRequestError } from '../utils/errors';
 import { Validator } from '../utils/validator';
@@ -9,12 +10,15 @@ import { Validator } from '../utils/validator';
  */
 export const handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
-  
+
   if (!errors.isEmpty()) {
-    const errorMessages = errors.array().map(err => err.msg).join(', ');
+    const errorMessages = errors
+      .array()
+      .map(err => err.msg)
+      .join(', ');
     throw new BadRequestError(`Validation failed: ${errorMessages}`);
   }
-  
+
   next();
 };
 
@@ -23,61 +27,69 @@ export const handleValidationErrors = (req: Request, res: Response, next: NextFu
  */
 export const validatePaymentRequest = [
   body('module')
-    .notEmpty().withMessage('Module is required')
-    .isIn(['hotel', 'taxi', 'ecommerce']).withMessage('Invalid module'),
-  
+    .notEmpty()
+    .withMessage('Module is required')
+    .isIn(['hotel', 'taxi', 'ecommerce'])
+    .withMessage('Invalid module'),
+
   body('amount')
-    .notEmpty().withMessage('Amount is required')
-    .isFloat({ min: 0.01 }).withMessage('Amount must be greater than 0')
-    .custom((value) => {
+    .notEmpty()
+    .withMessage('Amount is required')
+    .isFloat({ min: 0.01 })
+    .withMessage('Amount must be greater than 0')
+    .custom(value => {
       if (!Validator.isValidAmount(value)) {
         throw new Error('Invalid amount format');
       }
       return true;
     }),
-  
+
   // Currency is resolved server-side from the region; accepted as an optional
   // advisory hint that must be a supported code if present.
-  body('currency')
-    .optional()
-    .isIn(SUPPORTED_CURRENCIES).withMessage('Invalid currency'),
-  
+  body('currency').optional().isIn(SUPPORTED_CURRENCIES).withMessage('Invalid currency'),
+
   body('userId')
-    .notEmpty().withMessage('User ID is required')
-    .isUUID().withMessage('Invalid user ID format'),
-  
+    .notEmpty()
+    .withMessage('User ID is required')
+    .isUUID()
+    .withMessage('Invalid user ID format'),
+
   body('branchId')
-    .notEmpty().withMessage('Branch ID is required')
-    .isUUID().withMessage('Invalid branch ID format'),
-  
+    .notEmpty()
+    .withMessage('Branch ID is required')
+    .isUUID()
+    .withMessage('Invalid branch ID format'),
+
   body('stateId')
-    .notEmpty().withMessage('State ID is required')
-    .isUUID().withMessage('Invalid state ID format'),
-  
+    .notEmpty()
+    .withMessage('State ID is required')
+    .isUUID()
+    .withMessage('Invalid state ID format'),
+
   body('metadata')
-    .notEmpty().withMessage('Metadata is required')
-    .isObject().withMessage('Metadata must be an object'),
-  
-  body('metadata.moduleTransactionId')
-    .notEmpty().withMessage('Module transaction ID is required'),
-  
-  body('metadata.customerEmail')
-    .optional()
-    .isEmail().withMessage('Invalid email format'),
-  
+    .notEmpty()
+    .withMessage('Metadata is required')
+    .isObject()
+    .withMessage('Metadata must be an object'),
+
+  body('metadata.moduleTransactionId').notEmpty().withMessage('Module transaction ID is required'),
+
+  body('metadata.customerEmail').optional().isEmail().withMessage('Invalid email format'),
+
   body('metadata.customerPhone')
     .optional()
-    .custom((value) => {
+    .custom(value => {
       if (value && !Validator.isValidPhone(value)) {
         throw new Error('Invalid phone format');
       }
       return true;
     }),
-  
+
   body('paymentMethod')
     .optional()
-    .isIn(['paystack', 'stripe']).withMessage('Invalid payment method'),
-  
+    .isIn(['paystack', 'stripe'])
+    .withMessage('Invalid payment method'),
+
   handleValidationErrors,
 ];
 
@@ -86,17 +98,19 @@ export const validatePaymentRequest = [
  */
 export const validateRefundRequest = [
   param('paymentId')
-    .notEmpty().withMessage('Payment ID is required')
-    .isUUID().withMessage('Invalid payment ID format'),
-  
+    .notEmpty()
+    .withMessage('Payment ID is required')
+    .isUUID()
+    .withMessage('Invalid payment ID format'),
+
   body('reason')
-    .notEmpty().withMessage('Reason is required')
-    .isLength({ min: 10 }).withMessage('Reason must be at least 10 characters'),
-  
-  body('amount')
-    .optional()
-    .isFloat({ min: 0.01 }).withMessage('Amount must be greater than 0'),
-  
+    .notEmpty()
+    .withMessage('Reason is required')
+    .isLength({ min: 10 })
+    .withMessage('Reason must be at least 10 characters'),
+
+  body('amount').optional().isFloat({ min: 0.01 }).withMessage('Amount must be greater than 0'),
+
   handleValidationErrors,
 ];
 
@@ -105,9 +119,11 @@ export const validateRefundRequest = [
  */
 export const validatePaymentStatus = [
   param('paymentId')
-    .notEmpty().withMessage('Payment ID is required')
-    .isUUID().withMessage('Invalid payment ID format'),
-  
+    .notEmpty()
+    .withMessage('Payment ID is required')
+    .isUUID()
+    .withMessage('Invalid payment ID format'),
+
   handleValidationErrors,
 ];
 
@@ -115,26 +131,19 @@ export const validatePaymentStatus = [
  * Validation rules for admin reports
  */
 export const validateAdminReport = [
-  query('startDate')
-    .optional()
-    .isISO8601().withMessage('Invalid start date format'),
-  
-  query('endDate')
-    .optional()
-    .isISO8601().withMessage('Invalid end date format'),
-  
-  query('module')
-    .optional()
-    .isIn(['hotel', 'taxi', 'ecommerce']).withMessage('Invalid module'),
-  
-  query('page')
-    .optional()
-    .isInt({ min: 1 }).withMessage('Page must be a positive integer'),
-  
+  query('startDate').optional().isISO8601().withMessage('Invalid start date format'),
+
+  query('endDate').optional().isISO8601().withMessage('Invalid end date format'),
+
+  query('module').optional().isIn(['hotel', 'taxi', 'ecommerce']).withMessage('Invalid module'),
+
+  query('page').optional().isInt({ min: 1 }).withMessage('Page must be a positive integer'),
+
   query('limit')
     .optional()
-    .isInt({ min: 1, max: 100 }).withMessage('Limit must be between 1 and 100'),
-  
+    .isInt({ min: 1, max: 100 })
+    .withMessage('Limit must be between 1 and 100'),
+
   handleValidationErrors,
 ];
 
@@ -142,10 +151,8 @@ export const validateAdminReport = [
  * Validation rules for branch report
  */
 export const validateBranchReport = [
-  query('branchId')
-    .optional()
-    .isUUID().withMessage('Invalid branch ID format'),
-  
+  query('branchId').optional().isUUID().withMessage('Invalid branch ID format'),
+
   ...validateAdminReport,
 ];
 
@@ -153,10 +160,8 @@ export const validateBranchReport = [
  * Validation rules for state report
  */
 export const validateStateReport = [
-  query('stateId')
-    .optional()
-    .isUUID().withMessage('Invalid state ID format'),
-  
+  query('stateId').optional().isUUID().withMessage('Invalid state ID format'),
+
   ...validateAdminReport,
 ];
 
@@ -165,13 +170,17 @@ export const validateStateReport = [
  */
 export const validateWebhook = [
   body('event')
-    .notEmpty().withMessage('Event is required')
-    .isString().withMessage('Event must be a string'),
-  
+    .notEmpty()
+    .withMessage('Event is required')
+    .isString()
+    .withMessage('Event must be a string'),
+
   body('data')
-    .notEmpty().withMessage('Data is required')
-    .isObject().withMessage('Data must be an object'),
-  
+    .notEmpty()
+    .withMessage('Data is required')
+    .isObject()
+    .withMessage('Data must be an object'),
+
   handleValidationErrors,
 ];
 
@@ -183,10 +192,10 @@ export const validateDateRange = (req: Request, res: Response, next: NextFunctio
     if (req.query.startDate && req.query.endDate) {
       const startDate = new Date(req.query.startDate as string);
       const endDate = new Date(req.query.endDate as string);
-      
+
       Validator.validateDateRange(startDate, endDate);
     }
-    
+
     next();
   } catch (error) {
     next(error);
@@ -198,12 +207,12 @@ export const validateDateRange = (req: Request, res: Response, next: NextFunctio
  */
 export const sanitizeBody = (req: Request, res: Response, next: NextFunction) => {
   if (req.body) {
-    Object.keys(req.body).forEach((key) => {
+    Object.keys(req.body).forEach(key => {
       if (typeof req.body[key] === 'string') {
         req.body[key] = Validator.sanitizeString(req.body[key]);
       }
     });
   }
-  
+
   next();
 };

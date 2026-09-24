@@ -1,13 +1,13 @@
 import * as Sentry from '@sentry/node';
 import { Express } from 'express';
 interface SentryConfig {
-    dsn: string;
-    environment: string;
-    serviceName: string;
-    release?: string;
-    tracesSampleRate?: number;
-    profilesSampleRate?: number;
-    enabled?: boolean;
+  dsn: string;
+  environment: string;
+  serviceName: string;
+  release?: string;
+  tracesSampleRate?: number;
+  profilesSampleRate?: number;
+  enabled?: boolean;
 }
 /**
  * Initialize Sentry for error tracking and performance monitoring
@@ -28,7 +28,11 @@ export declare const captureException: (error: Error, context?: Record<string, a
 /**
  * Capture message manually
  */
-export declare const captureMessage: (message: string, level?: Sentry.SeverityLevel, context?: Record<string, any>) => void;
+export declare const captureMessage: (
+  message: string,
+  level?: Sentry.SeverityLevel,
+  context?: Record<string, any>
+) => void;
 /**
  * Add breadcrumb for debugging
  */
@@ -36,11 +40,7 @@ export declare const addBreadcrumb: (breadcrumb: Sentry.Breadcrumb) => void;
 /**
  * Set user context
  */
-export declare const setUser: (user: {
-    id: string;
-    email?: string;
-    username?: string;
-}) => void;
+export declare const setUser: (user: { id: string; email?: string; username?: string }) => void;
 /**
  * Set custom context
  */

@@ -198,8 +198,14 @@ router.post('/create', async (req: AuthenticatedRequest, res) => {
     const checkOutVal = checkOutDate || check_out_date || checkOut || check_out;
     // H3: guard against NaN/zero/negative so a non-numeric count can't poison pricing
     // (subtotal = rate * nights * NaN -> NaN) or the inventory decrement.
-    const roomsVal = Math.max(1, parseInt(String(numberOfRooms ?? number_of_rooms ?? rooms ?? '1'), 10) || 1);
-    const guestsVal = Math.max(1, parseInt(String(guestCount ?? guest_count ?? guests ?? '1'), 10) || 1);
+    const roomsVal = Math.max(
+      1,
+      parseInt(String(numberOfRooms ?? number_of_rooms ?? rooms ?? '1'), 10) || 1
+    );
+    const guestsVal = Math.max(
+      1,
+      parseInt(String(guestCount ?? guest_count ?? guests ?? '1'), 10) || 1
+    );
     const guestNameVal = guestName || guest_name || req.user!.email;
     const guestEmailVal = guestEmail || guest_email || userEmail;
     const guestPhoneVal = guestPhone || guest_phone || '';

@@ -370,7 +370,10 @@ router.put('/:id/status', authenticate, requireAdmin, async (req: AuthRequest, r
       created_by: req.user?.id,
     });
     if (historyError) {
-      logger.error('Failed to record order status history', { error: historyError.message, orderId: id });
+      logger.error('Failed to record order status history', {
+        error: historyError.message,
+        orderId: id,
+      });
     }
 
     await createAudit(req, 'update_order_status', 'ecommerce_orders', id);

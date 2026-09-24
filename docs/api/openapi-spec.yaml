@@ -106,16 +106,16 @@ paths:
                   type: string
                   format: email
                   description: User's email address
-                  example: "user@example.com"
+                  example: 'user@example.com'
                 password:
                   type: string
                   format: password
                   minLength: 8
                   description: User's password (minimum 8 characters)
-                  example: "securePassword123"
+                  example: 'securePassword123'
             example:
-              email: "user@example.com"
-              password: "securePassword123"$'
+              email: 'user@example.com'
+              password: 'securePassword123'
       responses:
         '201':
           description: Registration successful
@@ -156,7 +156,7 @@ paths:
       description: |
         Update the authenticated user's profile information.
         All fields are optional - you can update just one field at a time.
-        
+
         Examples:
         - Update phone only: `{"phone": "123456789"}`
         - Update name: `{"first_name": "John", "last_name": "Doe"}`
@@ -172,18 +172,18 @@ paths:
               phoneOnly:
                 summary: Update phone number only
                 value:
-                  phone: "123456789"
+                  phone: '123456789'
               nameOnly:
                 summary: Update name only
                 value:
-                  first_name: "John"
-                  last_name: "Doe"
+                  first_name: 'John'
+                  last_name: 'Doe'
               fullUpdate:
                 summary: Update multiple fields
                 value:
-                  first_name: "John"
-                  last_name: "Doe"
-                  phone: "123456789"
+                  first_name: 'John'
+                  last_name: 'Doe'
+                  phone: '123456789'
       responses:
         '200':
           description: Profile updated successfully
@@ -884,20 +884,20 @@ components:
           type: string
           minLength: 1
           maxLength: 50
-          example: "John"
+          example: 'John'
         last_name:
           type: string
           minLength: 1
           maxLength: 50
-          example: "Doe"
+          example: 'Doe'
         phone:
           type: string
           description: Phone number (any format accepted)
-          example: "123456789"
+          example: '123456789'
         date_of_birth:
           type: string
           format: date
-          example: "1990-01-15"
+          example: '1990-01-15'
         gender:
           type: string
           enum: [male, female, other, prefer_not_to_say]
@@ -915,13 +915,7 @@ components:
         areas_of_interest:
           type: array
           items:
-            type: string$'
-        date_of_birth:
-          type: string
-          format: date
-        gender:
-          type: string
-          enum: [male, female, other, prefer_not_to_say]
+            type: string
         address:
           type: object
           properties:

@@ -3,10 +3,7 @@
   "build": {
     "builder": "DOCKERFILE",
     "dockerfilePath": "admin-service/Dockerfile",
-    "watchPatterns": [
-      "admin-service/**",
-      "shared/**"
-    ]
+    "watchPatterns": ["admin-service/**", "shared/**"]
   },
   "deploy": {
     "numReplicas": 1,

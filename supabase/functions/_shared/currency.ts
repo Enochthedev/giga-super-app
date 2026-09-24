@@ -25,7 +25,10 @@ const CURRENCY_PROCESSOR: Record<string, PaymentProcessor> = {
 export const SUPPORTED_CURRENCIES = Object.keys(CURRENCY_PROCESSOR);
 
 export function isSupportedCurrency(currency: string): boolean {
-  return typeof currency === 'string' && CURRENCY_PROCESSOR[currency.toUpperCase()] !== undefined;
+  return (
+    typeof currency === 'string' &&
+    CURRENCY_PROCESSOR[currency.toUpperCase()] !== undefined
+  );
 }
 
 export function selectProcessor(currency: string): PaymentProcessor {
@@ -94,7 +97,10 @@ export async function resolveRegionCurrency(
   while (currentId && !visited.has(currentId)) {
     visited.add(currentId);
 
-    const { data, error }: {
+    const {
+      data,
+      error,
+    }: {
       data: { currency: string | null; parent_region_id: string | null } | null;
       error: unknown;
     } = await supabase

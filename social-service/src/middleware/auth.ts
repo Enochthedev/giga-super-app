@@ -4,6 +4,7 @@
  */
 
 import { NextFunction, Response } from 'express';
+
 import { AuthenticatedRequest } from '../types';
 import { AuthenticationError, AuthorizationError } from '../utils/errors';
 import logger from '../utils/logger';

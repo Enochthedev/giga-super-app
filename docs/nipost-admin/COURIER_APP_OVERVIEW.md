@@ -465,4 +465,3 @@ ready** - Google Maps integration complete
 
 The courier app backend is production-ready and waiting for frontend
 development! f
- 

@@ -1,11 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  SettlementReport,
-  ModuleSettlement,
-  StateSettlement,
-  BranchSettlement,
-} from '../types';
+import { SettlementReport, ModuleSettlement, StateSettlement, BranchSettlement } from '../types';
 import supabase from '../utils/database';
 import logger from '../utils/logger';
 
@@ -33,7 +28,8 @@ export const generateSettlementReport = async (period: {
     // Calculate totals
     const totalTransactions = transactions?.length || 0;
     const totalRevenue = transactions?.reduce((sum, t) => sum + parseFloat(t.gross_amount), 0) || 0;
-    const totalCommission = transactions?.reduce((sum, t) => sum + parseFloat(t.commission_amount), 0) || 0;
+    const totalCommission =
+      transactions?.reduce((sum, t) => sum + parseFloat(t.commission_amount), 0) || 0;
     const totalNetAmount = transactions?.reduce((sum, t) => sum + parseFloat(t.net_amount), 0) || 0;
 
     // Aggregate by module
@@ -78,11 +74,8 @@ export const generateSettlementReport = async (period: {
 };
 
 // Calculate settlement for a specific module
-const calculateModuleSettlement = (
-  transactions: any[],
-  module: string
-): ModuleSettlement => {
-  const moduleTransactions = transactions?.filter((t) => t.module === module) || [];
+const calculateModuleSettlement = (transactions: any[], module: string): ModuleSettlement => {
+  const moduleTransactions = transactions?.filter(t => t.module === module) || [];
 
   return {
     transactions: moduleTransactions.length,
@@ -93,12 +86,10 @@ const calculateModuleSettlement = (
 };
 
 // Calculate settlements by state
-const calculateStateSettlements = (
-  transactions: any[]
-): Record<string, StateSettlement> => {
+const calculateStateSettlements = (transactions: any[]): Record<string, StateSettlement> => {
   const stateMap: Record<string, StateSettlement> = {};
 
-  transactions?.forEach((transaction) => {
+  transactions?.forEach(transaction => {
     const stateId = transaction.state_id;
     const branchId = transaction.branch_id;
 

@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
+
 import supabase from '../utils/database';
 import { BadRequestError, InternalServerError, NotFoundError } from '../utils/errors';
 import logger from '../utils/logger';
+
 import { paystackService } from './paystack.service';
 
 /**

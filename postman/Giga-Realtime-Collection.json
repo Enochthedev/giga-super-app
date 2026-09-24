@@ -26,13 +26,8 @@
             ],
             "url": {
               "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-              "host": [
-                "{{wsUrl}}"
-              ],
-              "path": [
-                "socket.io",
-                ""
-              ]
+              "host": ["{{wsUrl}}"],
+              "path": ["socket.io", ""]
             },
             "description": "Connect to Taxi Realtime Service via Socket.IO"
           },
@@ -48,13 +43,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"driver:location:update\" event",
                 "body": {
@@ -71,13 +61,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"trip:accept\"",
                 "body": {
@@ -94,13 +79,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"trip:status:update\"",
                 "body": {
@@ -122,13 +102,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"rider:request:nearby-drivers\"",
                 "body": {
@@ -145,13 +120,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"trip:request\"",
                 "body": {
@@ -175,13 +145,8 @@
             "header": [],
             "url": {
               "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-              "host": [
-                "{{wsUrl}}"
-              ],
-              "path": [
-                "socket.io",
-                ""
-              ]
+              "host": ["{{wsUrl}}"],
+              "path": ["socket.io", ""]
             },
             "description": "Connect and Authenticate",
             "body": {
@@ -201,13 +166,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"join_tracking\"",
                 "body": {
@@ -224,13 +184,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"leave_tracking\"",
                 "body": {
@@ -252,13 +207,8 @@
                 "header": [],
                 "url": {
                   "raw": "{{wsUrl}}/socket.io/?EIO=4&transport=websocket",
-                  "host": [
-                    "{{wsUrl}}"
-                  ],
-                  "path": [
-                    "socket.io",
-                    ""
-                  ]
+                  "host": ["{{wsUrl}}"],
+                  "path": ["socket.io", ""]
                 },
                 "description": "Emit \"courier_location_update\"",
                 "body": {

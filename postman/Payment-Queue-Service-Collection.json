@@ -14,12 +14,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -38,12 +34,8 @@
               "name": "Service is healthy",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -81,12 +73,8 @@
               "name": "Service is unhealthy or degraded",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -131,13 +119,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "ready"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "ready"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -150,13 +133,8 @@
               "name": "Service is ready",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "ready"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "ready"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -190,13 +168,8 @@
               "name": "Service is not ready",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "ready"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "ready"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -241,13 +214,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "health",
-                "live"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["health", "live"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -260,13 +228,8 @@
               "name": "Service is alive",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "health",
-                    "live"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["health", "live"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -314,12 +277,8 @@
           "type": "text/plain"
         },
         "url": {
-          "path": [
-            "metrics"
-          ],
-          "host": [
-            "{{baseUrl}}"
-          ],
+          "path": ["metrics"],
+          "host": ["{{baseUrl}}"],
           "query": [],
           "variable": []
         },
@@ -338,12 +297,8 @@
           "name": "Metrics in Prometheus format",
           "originalRequest": {
             "url": {
-              "path": [
-                "metrics"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["metrics"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -381,12 +336,8 @@
           "name": "Error generating metrics",
           "originalRequest": {
             "url": {
-              "path": [
-                "metrics"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["metrics"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -435,12 +386,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "payments"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["payments"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -476,12 +423,8 @@
               "name": "Payment queued for processing",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -523,12 +466,8 @@
               "name": "Invalid request",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -570,12 +509,8 @@
               "name": "Unauthorized",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -628,14 +563,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "payments",
-                ":paymentId",
-                "status"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["payments", ":paymentId", "status"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": [
                 {
@@ -670,14 +599,8 @@
               "name": "Payment status retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    ":paymentId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", ":paymentId", "status"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -723,14 +646,8 @@
               "name": "Payment not found",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    ":paymentId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", ":paymentId", "status"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -772,14 +689,8 @@
               "name": "Unauthorized",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    ":paymentId",
-                    "status"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", ":paymentId", "status"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": [
                     {
@@ -832,13 +743,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "payments",
-                "refund"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["payments", "refund"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -874,13 +780,8 @@
               "name": "Refund queued for processing",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    "refund"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", "refund"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -922,13 +823,8 @@
               "name": "Invalid request",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    "refund"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", "refund"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -970,13 +866,8 @@
               "name": "Unauthorized",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    "refund"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", "refund"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1029,14 +920,8 @@
               "type": "text/plain"
             },
             "url": {
-              "path": [
-                "payments",
-                "queue",
-                "stats"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "path": ["payments", "queue", "stats"],
+              "host": ["{{baseUrl}}"],
               "query": [],
               "variable": []
             },
@@ -1063,14 +948,8 @@
               "name": "Queue statistics retrieved",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    "queue",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", "queue", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },
@@ -1108,14 +987,8 @@
               "name": "Unauthorized",
               "originalRequest": {
                 "url": {
-                  "path": [
-                    "payments",
-                    "queue",
-                    "stats"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
+                  "path": ["payments", "queue", "stats"],
+                  "host": ["{{baseUrl}}"],
                   "query": [],
                   "variable": []
                 },

@@ -65,7 +65,8 @@ describe('Health Check Endpoints', () => {
 
       expect(response.body.data.memory).toBeDefined();
       expect(response.body.data.cpu).toBeDefined();
-      expect(response.body.data.cache).toBeDefined();
+      // No cache block: /metrics reports process memory, CPU and Node info,
+      // which is what its OpenAPI comment documents.
       expect(response.body.data.node).toBeDefined();
     });
   });

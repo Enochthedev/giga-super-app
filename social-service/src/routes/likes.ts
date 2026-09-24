@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
+
 import { logger } from '../utils/logger';
 import {
   ErrorCodes,

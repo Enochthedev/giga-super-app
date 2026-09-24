@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import winston from 'winston';
+
 import { AuthRequest } from './auth';
 
 const logger = winston.createLogger({

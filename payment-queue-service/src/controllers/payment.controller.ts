@@ -1,18 +1,19 @@
+import { createClient } from '@supabase/supabase-js';
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { createClient } from '@supabase/supabase-js';
+
 import { config } from '../config';
-import logger from '../utils/logger';
-import { BadRequestError, NotFoundError } from '../utils/errors';
-import { Validator } from '../utils/validator';
+import { AuthenticatedRequest } from '../middleware/rbac.middleware';
+import { addPaymentJob, getPaymentJobStatus } from '../queues/payment.queue';
 import { commissionService } from '../services/commission.service';
 import {
   isSupportedCurrency,
   resolveRegionCurrency,
   selectProcessor,
 } from '../services/currency.service';
-import { addPaymentJob, getPaymentJobStatus } from '../queues/payment.queue';
-import { AuthenticatedRequest } from '../middleware/rbac.middleware';
+import { BadRequestError, NotFoundError } from '../utils/errors';
+import logger from '../utils/logger';
+import { Validator } from '../utils/validator';
 
 const supabase = createClient(config.supabaseUrl, config.supabaseServiceKey);
 
@@ -173,16 +174,20 @@ export async function getPaymentStatus(req: AuthenticatedRequest, res: Response)
         paymentMethod: paymentRequest.payment_method,
         createdAt: paymentRequest.created_at,
         updatedAt: paymentRequest.updated_at,
-        jobStatus: jobStatus ? {
-          state: jobStatus.state,
-          progress: jobStatus.progress,
-          attemptsMade: jobStatus.attemptsMade,
-        } : null,
-        transaction: transaction ? {
-          id: transaction.id,
-          paymentReference: transaction.payment_reference,
-          status: transaction.status,
-        } : null,
+        jobStatus: jobStatus
+          ? {
+              state: jobStatus.state,
+              progress: jobStatus.progress,
+              attemptsMade: jobStatus.attemptsMade,
+            }
+          : null,
+        transaction: transaction
+          ? {
+              id: transaction.id,
+              paymentReference: transaction.payment_reference,
+              status: transaction.status,
+            }
+          : null,
       },
     });
   } catch (error: any) {
@@ -288,11 +293,11 @@ function generateCheckoutURL(
   metadata: any
 ): string {
   const baseUrl = process.env.FRONTEND_URL || 'https://app.giga.ng';
-  
+
   // In a real implementation, this would generate provider-specific checkout URLs
   // For Paystack: use Paystack's transaction initialize endpoint
   // For Stripe: use Stripe Checkout Session
-  
+
   const params = new URLSearchParams({
     payment_id: paymentId,
     method: paymentMethod,

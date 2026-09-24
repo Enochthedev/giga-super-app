@@ -7,13 +7,13 @@ import ecommerceOrders from './ecommerce-orders';
 import ecommerceVendors from './ecommerce-vendors';
 
 // Taxi module routes
-import taxiRoutes from './taxi';
 
 // Hotel module routes
 import hotelRoutes from './hotel';
 
 // Media module routes
 import mediaRoutes from './media';
+import taxiRoutes from './taxi';
 
 const router = Router();
 

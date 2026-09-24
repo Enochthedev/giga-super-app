@@ -144,10 +144,7 @@
               },
               "trend": {
                 "type": "string",
-                "enum": [
-                  "up",
-                  "down"
-                ],
+                "enum": ["up", "down"],
                 "example": "up"
               }
             }
@@ -165,10 +162,7 @@
               },
               "trend": {
                 "type": "string",
-                "enum": [
-                  "up",
-                  "down"
-                ],
+                "enum": ["up", "down"],
                 "example": "up"
               }
             }
@@ -186,10 +180,7 @@
               },
               "trend": {
                 "type": "string",
-                "enum": [
-                  "up",
-                  "down"
-                ],
+                "enum": ["up", "down"],
                 "example": "up"
               }
             }
@@ -207,10 +198,7 @@
               },
               "trend": {
                 "type": "string",
-                "enum": [
-                  "up",
-                  "down"
-                ],
+                "enum": ["up", "down"],
                 "example": "up"
               }
             }
@@ -271,10 +259,7 @@
               },
               "trend": {
                 "type": "string",
-                "enum": [
-                  "up",
-                  "down"
-                ],
+                "enum": ["up", "down"],
                 "example": "up"
               }
             }
@@ -702,11 +687,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "approved",
-              "rejected"
-            ],
+            "enum": ["pending", "approved", "rejected"],
             "example": "pending"
           },
           "created_at": {
@@ -938,11 +919,7 @@
           },
           "module": {
             "type": "string",
-            "enum": [
-              "hotel",
-              "taxi",
-              "ecommerce"
-            ],
+            "enum": ["hotel", "taxi", "ecommerce"],
             "example": "hotel"
           },
           "gross_amount": {
@@ -959,12 +936,7 @@
           },
           "payment_status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "completed",
-              "failed",
-              "refunded"
-            ],
+            "enum": ["pending", "completed", "failed", "refunded"],
             "example": "completed"
           },
           "payment_method": {
@@ -999,11 +971,7 @@
         "properties": {
           "period": {
             "type": "string",
-            "enum": [
-              "day",
-              "week",
-              "month"
-            ],
+            "enum": ["day", "week", "month"],
             "example": "week"
           },
           "transactions": {
@@ -1123,12 +1091,7 @@
           },
           "campaign_type": {
             "type": "string",
-            "enum": [
-              "banner",
-              "video",
-              "native",
-              "sponsored"
-            ],
+            "enum": ["banner", "video", "native", "sponsored"],
             "example": "banner"
           },
           "budget": {
@@ -1147,13 +1110,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "pending",
-              "approved",
-              "rejected",
-              "active",
-              "completed"
-            ],
+            "enum": ["pending", "approved", "rejected", "active", "completed"],
             "example": "pending"
           },
           "review_notes": {
@@ -1313,9 +1270,7 @@
   "paths": {
     "/api/admin/national/dashboard": {
       "get": {
-        "tags": [
-          "NIPOST Admin - National"
-        ],
+        "tags": ["NIPOST Admin - National"],
         "summary": "Get national dashboard statistics",
         "description": "Retrieve national-level dashboard statistics and summary data (National HQ access required)",
         "security": [
@@ -1467,9 +1422,7 @@
     },
     "/api/admin/categories": {
       "get": {
-        "tags": [
-          "Admin Panel"
-        ],
+        "tags": ["Admin Panel"],
         "summary": "Get business categories",
         "description": "Retrieve list of all business categories available in the platform",
         "security": [
@@ -1560,9 +1513,7 @@
     },
     "/api/ads/incoming": {
       "get": {
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "summary": "Get incoming ads for review",
         "description": "Retrieve paginated list of advertisements pending review",
         "security": [
@@ -1595,15 +1546,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "draft",
-                "pending_approval",
-                "active",
-                "paused",
-                "completed",
-                "cancelled",
-                "rejected"
-              ]
+              "enum": ["draft", "pending_approval", "active", "paused", "completed", "cancelled", "rejected"]
             },
             "description": "Filter by ad status",
             "example": "pending_approval"
@@ -1613,13 +1556,7 @@
             "name": "campaign_type",
             "schema": {
               "type": "string",
-              "enum": [
-                "banner",
-                "video",
-                "native",
-                "sponsored",
-                "search"
-              ]
+              "enum": ["banner", "video", "native", "sponsored", "search"]
             },
             "description": "Filter by campaign type"
           }
@@ -1730,9 +1667,7 @@
     },
     "/api/ads/{adId}/status": {
       "put": {
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "summary": "Update advertisement status",
         "description": "Approve or reject an advertisement campaign",
         "security": [
@@ -1758,18 +1693,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "active",
-                      "rejected",
-                      "paused",
-                      "cancelled"
-                    ],
+                    "enum": ["active", "rejected", "paused", "cancelled"],
                     "description": "New status for the campaign (active = approved)"
                   },
                   "review_notes": {
@@ -1850,9 +1778,7 @@
     },
     "/api/ads/fetch": {
       "post": {
-        "tags": [
-          "Advertisement Management"
-        ],
+        "tags": ["Advertisement Management"],
         "summary": "Fetch ads for display",
         "description": "Retrieve active advertisements based on placement type and targeting criteria",
         "requestBody": {
@@ -1864,12 +1790,7 @@
                 "properties": {
                   "placement_type": {
                     "type": "string",
-                    "enum": [
-                      "banner",
-                      "video",
-                      "native",
-                      "sponsored"
-                    ],
+                    "enum": ["banner", "video", "native", "sponsored"],
                     "description": "Type of ad placement"
                   },
                   "limit": {
@@ -1966,9 +1887,7 @@
     },
     "/api/ecommerce/traders": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get e-commerce traders",
         "description": "Retrieve paginated list of e-commerce traders/vendors with search and filtering",
         "security": [
@@ -2010,10 +1929,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive"
-              ]
+              "enum": ["active", "inactive"]
             },
             "description": "Filter by trader status"
           }
@@ -2146,9 +2062,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Create new trader",
         "description": "Create a new e-commerce trader/vendor account",
         "security": [
@@ -2265,9 +2179,7 @@
     },
     "/api/taxi/drivers": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get taxi drivers",
         "description": "Retrieve paginated list of taxi drivers with search and filtering",
         "security": [
@@ -2309,10 +2221,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive"
-              ]
+              "enum": ["active", "inactive"]
             },
             "description": "Filter by driver verification status"
           }
@@ -2441,9 +2350,7 @@
     },
     "/api/hotel/hotels": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get hotels",
         "description": "Retrieve paginated list of hotels with search and filtering",
         "security": [
@@ -2485,10 +2392,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive"
-              ]
+              "enum": ["active", "inactive"]
             },
             "description": "Filter by hotel status"
           }
@@ -2615,9 +2519,7 @@
     },
     "/api/media/content": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get media content",
         "description": "Retrieve paginated list of media files with filtering by type",
         "security": [
@@ -2766,9 +2668,7 @@
     },
     "/api/ecommerce/traders/{id}": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get trader details",
         "description": "Retrieve detailed information about a specific trader including products, sales, and ratings",
         "security": [
@@ -2896,9 +2796,7 @@
     },
     "/api/taxi/drivers/{id}": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get driver details",
         "description": "Retrieve detailed information about a specific driver including tracking, trips, and earnings",
         "security": [
@@ -3031,9 +2929,7 @@
     },
     "/api/hotel/hotels/{id}": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get hotel details",
         "description": "Retrieve detailed information about a specific hotel including rooms, amenities, and bookings",
         "security": [
@@ -3132,12 +3028,7 @@
                           "available": 5
                         }
                       ],
-                      "amenities": [
-                        "WiFi",
-                        "Pool",
-                        "Gym",
-                        "Restaurant"
-                      ],
+                      "amenities": ["WiFi", "Pool", "Gym", "Restaurant"],
                       "recent_bookings": [
                         {
                           "id": "b456",
@@ -3173,9 +3064,7 @@
     },
     "/api/media/content/{id}": {
       "get": {
-        "tags": [
-          "Business Modules"
-        ],
+        "tags": ["Business Modules"],
         "summary": "Get media content details",
         "description": "Retrieve detailed information about specific media content including views, likes, and comments",
         "security": [
@@ -3302,9 +3191,7 @@
     },
     "/api/dashboard/stats": {
       "get": {
-        "tags": [
-          "Dashboard"
-        ],
+        "tags": ["Dashboard"],
         "summary": "Get main dashboard statistics",
         "security": [
           {
@@ -3320,9 +3207,7 @@
     },
     "/api/dashboard/sales": {
       "get": {
-        "tags": [
-          "Dashboard"
-        ],
+        "tags": ["Dashboard"],
         "summary": "Get daily sales data by category",
         "description": "Returns normalized daily sales data for each business category.\nFrontend can transform this data for any chart library.\n",
         "security": [
@@ -3459,9 +3344,7 @@
     },
     "/api/dashboard/categories": {
       "get": {
-        "tags": [
-          "Dashboard"
-        ],
+        "tags": ["Dashboard"],
         "summary": "Get category breakdown with comparison",
         "description": "Returns revenue breakdown by category with current vs previous period comparison.\nIncludes percentage share and growth metrics.\n",
         "security": [
@@ -3475,10 +3358,7 @@
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "week",
-                "month"
-              ],
+              "enum": ["week", "month"],
               "default": "week"
             },
             "description": "Comparison period"
@@ -3552,11 +3432,7 @@
                               },
                               "trend": {
                                 "type": "string",
-                                "enum": [
-                                  "up",
-                                  "down",
-                                  "stable"
-                                ]
+                                "enum": ["up", "down", "stable"]
                               }
                             }
                           }
@@ -3614,9 +3490,7 @@
     },
     "/api/managers/dashboard-stats": {
       "get": {
-        "tags": [
-          "Manager Operations"
-        ],
+        "tags": ["Manager Operations"],
         "summary": "Get manager dashboard statistics",
         "description": "Retrieve dashboard statistics for post office managers",
         "security": [
@@ -3681,9 +3555,7 @@
     },
     "/api/managers/latest-orders": {
       "get": {
-        "tags": [
-          "Manager Operations"
-        ],
+        "tags": ["Manager Operations"],
         "summary": "Get latest orders",
         "description": "Retrieve latest orders for post office managers with pagination",
         "security": [
@@ -3716,12 +3588,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "processing",
-                "completed",
-                "cancelled"
-              ]
+              "enum": ["pending", "processing", "completed", "cancelled"]
             },
             "description": "Filter by order status"
           }
@@ -3814,9 +3681,7 @@
     },
     "/api/managers/orders/{orderId}": {
       "put": {
-        "tags": [
-          "Manager Operations"
-        ],
+        "tags": ["Manager Operations"],
         "summary": "Update order status",
         "description": "Update order status and add notes (manager operation)",
         "security": [
@@ -3845,12 +3710,7 @@
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "pending",
-                      "processing",
-                      "completed",
-                      "cancelled"
-                    ]
+                    "enum": ["pending", "processing", "completed", "cancelled"]
                   },
                   "notes": {
                     "type": "string"
@@ -3892,9 +3752,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Manager Operations"
-        ],
+        "tags": ["Manager Operations"],
         "summary": "Soft delete order",
         "description": "Mark an order as deleted (soft delete)",
         "security": [
@@ -3957,9 +3815,7 @@
     },
     "/api/postal-monitoring/staff": {
       "get": {
-        "tags": [
-          "Postal Monitoring"
-        ],
+        "tags": ["Postal Monitoring"],
         "summary": "Get postal staff listing",
         "description": "Retrieve paginated list of postal staff with search and filtering",
         "security": [
@@ -4125,9 +3981,7 @@
     },
     "/api/admin/users": {
       "get": {
-        "tags": [
-          "User Management"
-        ],
+        "tags": ["User Management"],
         "summary": "Get paginated list of users",
         "description": "Retrieve all users with search and filtering capabilities (National access required)",
         "security": [
@@ -4261,9 +4115,7 @@
     },
     "/api/admin/users/{userId}": {
       "get": {
-        "tags": [
-          "User Management"
-        ],
+        "tags": ["User Management"],
         "summary": "Get single user details",
         "description": "Retrieve detailed information about a specific user including roles",
         "security": [
@@ -4343,9 +4195,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "User Management"
-        ],
+        "tags": ["User Management"],
         "summary": "Update user details",
         "description": "Update user profile information (National access required)",
         "security": [
@@ -4424,9 +4274,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "User Management"
-        ],
+        "tags": ["User Management"],
         "summary": "Soft delete a user",
         "description": "Mark a user as deleted (soft delete) with optional reason",
         "security": [
@@ -4493,9 +4341,7 @@
     },
     "/api/managers/ecommerce/dashboard-stats": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get e-commerce dashboard statistics",
         "description": "Comprehensive dashboard stats including products, orders, vendors, and revenue",
         "security": [
@@ -4558,9 +4404,7 @@
     },
     "/api/managers/ecommerce/sales-forecast": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get sales forecast with period comparison",
         "description": "Returns revenue, net profit, orders, and visitors with percentage changes vs previous period",
         "security": [
@@ -4574,10 +4418,7 @@
             "name": "period",
             "schema": {
               "type": "string",
-              "enum": [
-                "week",
-                "month"
-              ],
+              "enum": ["week", "month"],
               "default": "week"
             }
           }
@@ -4629,9 +4470,7 @@
     },
     "/api/managers/ecommerce/revenue-by-device": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get revenue breakdown by device type",
         "description": "Returns revenue distribution across desktop, tablet, mobile, and unknown devices",
         "security": [
@@ -4695,9 +4534,7 @@
     },
     "/api/managers/ecommerce/bestsellers": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get bestselling products",
         "description": "Returns top selling products with price, sold count, and profit",
         "security": [
@@ -4761,9 +4598,7 @@
     },
     "/api/managers/ecommerce/cart-abandonment": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get cart abandonment statistics",
         "description": "Returns abandoned cart count and revenue percentage",
         "security": [
@@ -4806,9 +4641,7 @@
     },
     "/api/managers/ecommerce/traffic": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get store traffic analytics",
         "description": "Returns store visits and visitors over time for chart display",
         "security": [
@@ -4864,9 +4697,7 @@
     },
     "/api/managers/ecommerce/revenue-chart": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get revenue chart data",
         "description": "Returns daily revenue data for chart display",
         "security": [
@@ -4919,9 +4750,7 @@
     },
     "/api/managers/ecommerce/orders": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get e-commerce orders",
         "description": "Retrieve paginated list of orders with filtering by status and date range",
         "security": [
@@ -4941,14 +4770,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "processing",
-                "shipped",
-                "delivered",
-                "cancelled",
-                "refunded"
-              ]
+              "enum": ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"]
             }
           },
           {
@@ -4956,12 +4778,7 @@
             "name": "payment_status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "paid",
-                "failed",
-                "refunded"
-              ]
+              "enum": ["pending", "paid", "failed", "refunded"]
             }
           },
           {
@@ -5031,9 +4848,7 @@
     },
     "/api/managers/ecommerce/orders/{id}": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get order details with items",
         "security": [
           {
@@ -5097,9 +4912,7 @@
     },
     "/api/managers/ecommerce/orders/{id}/status": {
       "put": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Update order status",
         "description": "Update order status with optional tracking information",
         "security": [
@@ -5124,20 +4937,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "pending",
-                      "processing",
-                      "shipped",
-                      "delivered",
-                      "cancelled",
-                      "refunded"
-                    ]
+                    "enum": ["pending", "processing", "shipped", "delivered", "cancelled", "refunded"]
                   },
                   "tracking_number": {
                     "type": "string"
@@ -5190,9 +4994,7 @@
     },
     "/api/managers/ecommerce/orders/latest": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get latest orders for dashboard",
         "description": "Returns the most recent orders with product details for dashboard display",
         "security": [
@@ -5251,9 +5053,7 @@
     },
     "/api/managers/ecommerce/vendors": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get e-commerce vendors",
         "description": "Retrieve paginated list of vendors with search and status filtering",
         "security": [
@@ -5281,12 +5081,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive",
-                "verified",
-                "unverified"
-              ]
+              "enum": ["active", "inactive", "verified", "unverified"]
             }
           }
         ],
@@ -5335,9 +5130,7 @@
     },
     "/api/managers/ecommerce/vendors/{id}": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get vendor details with products and sales",
         "security": [
           {
@@ -5398,9 +5191,7 @@
     },
     "/api/managers/ecommerce/vendors/{id}/verify": {
       "put": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Verify or unverify vendor",
         "security": [
           {
@@ -5424,9 +5215,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "is_verified"
-                ],
+                "required": ["is_verified"],
                 "properties": {
                   "is_verified": {
                     "type": "boolean"
@@ -5469,9 +5258,7 @@
     },
     "/api/managers/ecommerce/products": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get e-commerce products",
         "description": "Retrieve paginated list of products with search and filtering",
         "security": [
@@ -5515,10 +5302,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive"
-              ]
+              "enum": ["active", "inactive"]
             }
           }
         ],
@@ -5572,9 +5356,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Create new product",
         "security": [
           {
@@ -5587,11 +5369,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "base_price",
-                  "vendor_id"
-                ],
+                "required": ["name", "base_price", "vendor_id"],
                 "properties": {
                   "name": {
                     "type": "string"
@@ -5644,9 +5422,7 @@
     },
     "/api/managers/ecommerce/products/{id}": {
       "get": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Get product details",
         "security": [
           {
@@ -5710,9 +5486,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Update product",
         "security": [
           {
@@ -5768,9 +5542,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Manager - E-commerce"
-        ],
+        "tags": ["Manager - E-commerce"],
         "summary": "Soft delete product",
         "security": [
           {
@@ -5817,9 +5589,7 @@
     },
     "/api/managers/hotel/hotels": {
       "get": {
-        "tags": [
-          "Manager - Hotel"
-        ],
+        "tags": ["Manager - Hotel"],
         "summary": "Get hotels",
         "description": "Retrieve paginated list of hotels with search and filtering",
         "security": [
@@ -5847,12 +5617,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive",
-                "verified",
-                "unverified"
-              ]
+              "enum": ["active", "inactive", "verified", "unverified"]
             }
           },
           {
@@ -5912,9 +5677,7 @@
     },
     "/api/managers/hotel/hotels/{id}": {
       "get": {
-        "tags": [
-          "Manager - Hotel"
-        ],
+        "tags": ["Manager - Hotel"],
         "summary": "Get hotel details with rooms, bookings, and reviews",
         "security": [
           {
@@ -5954,12 +5717,7 @@
                           "base_price": 50000,
                           "capacity": 2,
                           "total_rooms": 10,
-                          "amenities": [
-                            "WiFi",
-                            "AC",
-                            "TV",
-                            "Mini Bar"
-                          ]
+                          "amenities": ["WiFi", "AC", "TV", "Mini Bar"]
                         }
                       ],
                       "recent_bookings": [
@@ -5998,9 +5756,7 @@
     },
     "/api/managers/hotel/hotels/{id}/verify": {
       "put": {
-        "tags": [
-          "Manager - Hotel"
-        ],
+        "tags": ["Manager - Hotel"],
         "summary": "Verify or unverify hotel",
         "security": [
           {
@@ -6024,9 +5780,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "is_verified"
-                ],
+                "required": ["is_verified"],
                 "properties": {
                   "is_verified": {
                     "type": "boolean"
@@ -6069,9 +5823,7 @@
     },
     "/api/managers/hotel/bookings": {
       "get": {
-        "tags": [
-          "Manager - Hotel"
-        ],
+        "tags": ["Manager - Hotel"],
         "summary": "Get hotel bookings",
         "description": "Retrieve paginated list of bookings with filtering",
         "security": [
@@ -6091,13 +5843,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "confirmed",
-                "checked_in",
-                "checked_out",
-                "cancelled"
-              ]
+              "enum": ["pending", "confirmed", "checked_in", "checked_out", "cancelled"]
             }
           },
           {
@@ -6179,9 +5925,7 @@
     },
     "/api/managers/hotel/bookings/{id}/status": {
       "put": {
-        "tags": [
-          "Manager - Hotel"
-        ],
+        "tags": ["Manager - Hotel"],
         "summary": "Update booking status",
         "security": [
           {
@@ -6205,19 +5949,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "pending",
-                      "confirmed",
-                      "checked_in",
-                      "checked_out",
-                      "cancelled"
-                    ]
+                    "enum": ["pending", "confirmed", "checked_in", "checked_out", "cancelled"]
                   },
                   "notes": {
                     "type": "string"
@@ -6260,9 +5996,7 @@
     },
     "/api/managers/hotel/dashboard-stats": {
       "get": {
-        "tags": [
-          "Manager - Hotel"
-        ],
+        "tags": ["Manager - Hotel"],
         "summary": "Get hotel dashboard statistics",
         "description": "Comprehensive dashboard stats for hotel module",
         "security": [
@@ -6329,9 +6063,7 @@
     },
     "/api/managers/media/files": {
       "get": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Get media files",
         "description": "Retrieve paginated list of uploaded files with filtering",
         "security": [
@@ -6351,12 +6083,7 @@
             "name": "type",
             "schema": {
               "type": "string",
-              "enum": [
-                "image",
-                "video",
-                "document",
-                "audio"
-              ]
+              "enum": ["image", "video", "document", "audio"]
             }
           },
           {
@@ -6364,11 +6091,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive",
-                "pending"
-              ]
+              "enum": ["active", "inactive", "pending"]
             }
           }
         ],
@@ -6418,9 +6141,7 @@
     },
     "/api/managers/media/files/{id}": {
       "get": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Get file details",
         "security": [
           {
@@ -6472,9 +6193,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Delete file (soft delete)",
         "security": [
           {
@@ -6512,9 +6231,7 @@
     },
     "/api/managers/media/advertisements": {
       "get": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Get advertisements",
         "description": "Retrieve paginated list of advertisements with filtering",
         "security": [
@@ -6534,15 +6251,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "draft",
-                "pending_approval",
-                "active",
-                "paused",
-                "completed",
-                "cancelled",
-                "rejected"
-              ]
+              "enum": ["draft", "pending_approval", "active", "paused", "completed", "cancelled", "rejected"]
             }
           }
         ],
@@ -6563,10 +6272,7 @@
                         "media_type": "image",
                         "target_audience": {
                           "age_range": "18-45",
-                          "interests": [
-                            "electronics",
-                            "gadgets"
-                          ]
+                          "interests": ["electronics", "gadgets"]
                         },
                         "placement": "homepage_banner",
                         "budget": 500000,
@@ -6599,9 +6305,7 @@
     },
     "/api/managers/media/advertisements/{id}": {
       "get": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Get advertisement details",
         "security": [
           {
@@ -6657,9 +6361,7 @@
     },
     "/api/managers/media/advertisements/{id}/status": {
       "put": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Update advertisement status",
         "security": [
           {
@@ -6683,21 +6385,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "status"
-                ],
+                "required": ["status"],
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "pending_approval",
-                      "active",
-                      "paused",
-                      "completed",
-                      "cancelled",
-                      "rejected"
-                    ]
+                    "enum": ["draft", "pending_approval", "active", "paused", "completed", "cancelled", "rejected"]
                   },
                   "notes": {
                     "type": "string"
@@ -6740,9 +6432,7 @@
     },
     "/api/managers/media/dashboard-stats": {
       "get": {
-        "tags": [
-          "Manager - Media"
-        ],
+        "tags": ["Manager - Media"],
         "summary": "Get media dashboard statistics",
         "description": "Comprehensive dashboard stats for media module including files and advertisements",
         "security": [
@@ -6811,9 +6501,7 @@
     },
     "/api/managers/taxi/drivers": {
       "get": {
-        "tags": [
-          "Manager - Taxi"
-        ],
+        "tags": ["Manager - Taxi"],
         "summary": "Get taxi drivers",
         "description": "Retrieve paginated list of drivers with search and status filtering",
         "security": [
@@ -6841,14 +6529,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "active",
-                "inactive",
-                "online",
-                "offline",
-                "verified",
-                "unverified"
-              ]
+              "enum": ["active", "inactive", "online", "offline", "verified", "unverified"]
             }
           }
         ],
@@ -6901,9 +6582,7 @@
     },
     "/api/managers/taxi/drivers/{id}": {
       "get": {
-        "tags": [
-          "Manager - Taxi"
-        ],
+        "tags": ["Manager - Taxi"],
         "summary": "Get driver details with rides and earnings",
         "security": [
           {
@@ -6970,9 +6649,7 @@
     },
     "/api/managers/taxi/drivers/{id}/verify": {
       "put": {
-        "tags": [
-          "Manager - Taxi"
-        ],
+        "tags": ["Manager - Taxi"],
         "summary": "Verify or unverify driver",
         "security": [
           {
@@ -6996,9 +6673,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "is_verified"
-                ],
+                "required": ["is_verified"],
                 "properties": {
                   "is_verified": {
                     "type": "boolean"
@@ -7040,9 +6715,7 @@
     },
     "/api/managers/taxi/rides": {
       "get": {
-        "tags": [
-          "Manager - Taxi"
-        ],
+        "tags": ["Manager - Taxi"],
         "summary": "Get taxi rides",
         "description": "Retrieve paginated list of rides with filtering",
         "security": [
@@ -7062,13 +6735,7 @@
             "name": "status",
             "schema": {
               "type": "string",
-              "enum": [
-                "pending",
-                "accepted",
-                "in_progress",
-                "completed",
-                "cancelled"
-              ]
+              "enum": ["pending", "accepted", "in_progress", "completed", "cancelled"]
             }
           },
           {
@@ -7142,9 +6809,7 @@
     },
     "/api/managers/taxi/dashboard-stats": {
       "get": {
-        "tags": [
-          "Manager - Taxi"
-        ],
+        "tags": ["Manager - Taxi"],
         "summary": "Get taxi dashboard statistics",
         "description": "Comprehensive dashboard stats for taxi module",
         "security": [

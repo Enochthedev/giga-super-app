@@ -9,7 +9,7 @@ import logger from './logger';
  * Disable Redis for free tiers to avoid eviction policy issues
  */
 export const isRedisEnabled = (): boolean => {
-  const redisUrl = config.redisUrl;
+  const { redisUrl } = config;
   const forceDisable = process.env.DISABLE_REDIS === 'true';
   const forceEnable = process.env.FORCE_REDIS === 'true';
 

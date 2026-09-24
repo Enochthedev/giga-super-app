@@ -201,6 +201,7 @@ separate files. To broadcast from routes, we need to either:
    ```
 
 3. **Create a notification service module**
+
    ```typescript
    // services/notifications.ts
    export class NotificationService {

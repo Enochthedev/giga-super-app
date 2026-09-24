@@ -1,0 +1,12 @@
+packages:
+  - 'api-gateway'
+  - 'admin-service'
+  - 'delivery-service'
+  - 'hotels-service'
+  - 'notifications-service'
+  - 'payment-queue-service'
+  - 'search-service'
+  - 'social-service'
+  - 'taxi-realtime-service'
+  - 'shared'
+  - 'tests'

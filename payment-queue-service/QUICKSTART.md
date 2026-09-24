@@ -3,6 +3,7 @@
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - Node.js >= 18.0.0
 - Redis instance (for BullMQ)
 - PostgreSQL/Supabase database
@@ -11,17 +12,20 @@
 ### Installation
 
 1. **Install dependencies:**
+
 ```bash
 cd payment-queue-service
 npm install
 ```
 
 2. **Set up environment variables:**
+
 ```bash
 cp .env.example .env
 ```
 
 Edit `.env` with your configuration:
+
 ```bash
 # Required
 SUPABASE_URL=your-supabase-url
@@ -43,6 +47,7 @@ LOG_LEVEL=info
 ```
 
 3. **Set up database:**
+
 ```bash
 # Run the schema migration
 psql -h your-host -U your-user -d your-db -f database/scripts/payment_queue_schema.sql
@@ -51,6 +56,7 @@ psql -h your-host -U your-user -d your-db -f database/scripts/payment_queue_sche
 ### Development
 
 **Start development server with hot reload:**
+
 ```bash
 npm run dev
 ```
@@ -60,11 +66,13 @@ The service will start on `http://localhost:3004`
 ### Testing
 
 **Run all tests:**
+
 ```bash
 npm test
 ```
 
 **Run specific test suites:**
+
 ```bash
 npm run test:unit        # Unit tests only
 npm run test:integration # Integration tests only
@@ -73,6 +81,7 @@ npm run test:coverage   # With coverage report
 ```
 
 **Watch mode for TDD:**
+
 ```bash
 npm run test:watch
 ```
@@ -80,11 +89,13 @@ npm run test:watch
 ### Building for Production
 
 **Build TypeScript:**
+
 ```bash
 npm run build
 ```
 
 **Start production server:**
+
 ```bash
 npm start
 ```
@@ -92,11 +103,13 @@ npm start
 ### Docker Deployment
 
 **Build Docker image:**
+
 ```bash
 docker build -t payment-queue-service .
 ```
 
 **Run container:**
+
 ```bash
 docker run -p 3004:3004 \
   --env-file .env \
@@ -105,6 +118,7 @@ docker run -p 3004:3004 \
 ```
 
 **Using Docker Compose:**
+
 ```bash
 docker-compose up -d
 ```
@@ -112,16 +126,19 @@ docker-compose up -d
 ## 📋 API Endpoints
 
 ### Health Check
+
 ```bash
 curl http://localhost:3004/health
 ```
 
 ### Metrics
+
 ```bash
 curl http://localhost:3004/metrics
 ```
 
 ### Create Payment Request
+
 ```bash
 curl -X POST http://localhost:3004/api/v1/payments/request \
   -H "Content-Type: application/json" \
@@ -143,12 +160,14 @@ curl -X POST http://localhost:3004/api/v1/payments/request \
 ```
 
 ### Check Payment Status
+
 ```bash
 curl http://localhost:3004/api/v1/payments/{paymentId}/status \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
 ### Request Refund
+
 ```bash
 curl -X POST http://localhost:3004/api/v1/payments/{paymentId}/refund \
   -H "Content-Type: application/json" \
@@ -160,6 +179,7 @@ curl -X POST http://localhost:3004/api/v1/payments/{paymentId}/refund \
 ```
 
 ### Admin Reports
+
 ```bash
 # Branch level
 curl "http://localhost:3004/api/v1/admin/payments/branch?branchId=xxx&startDate=2024-01-01&endDate=2024-01-31" \
@@ -177,18 +197,23 @@ curl "http://localhost:3004/api/v1/admin/payments/national?startDate=2024-01-01&
 ## 🔍 Monitoring
 
 ### Queue Status
+
 Check queue health in the health endpoint response:
+
 ```bash
 curl http://localhost:3004/health | jq '.queues'
 ```
 
 ### Prometheus Metrics
+
 View all metrics:
+
 ```bash
 curl http://localhost:3004/metrics
 ```
 
 Key metrics:
+
 - `payment_queue_jobs_waiting` - Jobs waiting in payment queue
 - `payment_queue_jobs_active` - Currently processing jobs
 - `payment_queue_jobs_completed` - Total completed jobs
@@ -197,7 +222,9 @@ Key metrics:
 - `process_heap_bytes` - Memory usage
 
 ### Logs
+
 Logs are output to console in JSON format (Winston):
+
 ```bash
 # View logs in development
 npm run dev
@@ -209,13 +236,14 @@ docker logs payment-queue
 ## 🧪 Testing Commission Rules
 
 **Add a custom commission rule:**
+
 ```sql
 INSERT INTO commission_rules (
-  module, 
-  transaction_type, 
-  commission_rate, 
-  min_commission, 
-  max_commission, 
+  module,
+  transaction_type,
+  commission_rate,
+  min_commission,
+  max_commission,
   is_active
 )
 VALUES (
@@ -229,6 +257,7 @@ VALUES (
 ```
 
 **Test commission calculation:**
+
 ```bash
 # The system will automatically use the database rules
 # If no rule found, falls back to config defaults
@@ -237,45 +266,54 @@ VALUES (
 ## 🔒 Security Features
 
 ### PII Encryption
+
 Customer data is automatically encrypted at rest:
+
 - Email addresses
 - Phone numbers
 - Names
 - Addresses
 
 ### RBAC
+
 Admin endpoints enforce role-based access:
+
 - **Branch Admin**: Can only view their branch
 - **State Admin**: Can view all branches in their state
 - **National Admin**: Can view everything
 
 ### Webhook Verification
+
 All webhooks are verified:
+
 - Paystack: HMAC SHA-512 signature verification
 - Stripe: Stripe signature verification
 
 ## 📊 Database Management
 
 ### View Commission Rules
+
 ```sql
 SELECT * FROM commission_rules WHERE is_active = true;
 ```
 
 ### View Recent Transactions
+
 ```sql
-SELECT 
-  id, 
-  module, 
-  amount, 
-  commission_amount, 
-  status, 
-  created_at 
-FROM transactions 
-ORDER BY created_at DESC 
+SELECT
+  id,
+  module,
+  amount,
+  commission_amount,
+  status,
+  created_at
+FROM transactions
+ORDER BY created_at DESC
 LIMIT 10;
 ```
 
 ### View Queue Logs
+
 ```sql
 SELECT * FROM webhook_logs ORDER BY received_at DESC LIMIT 20;
 ```
@@ -283,6 +321,7 @@ SELECT * FROM webhook_logs ORDER BY received_at DESC LIMIT 20;
 ## 🛠️ Troubleshooting
 
 ### Redis Connection Issues
+
 ```bash
 # Check Redis is running
 redis-cli ping
@@ -292,6 +331,7 @@ echo $REDIS_URL
 ```
 
 ### Database Connection Issues
+
 ```bash
 # Test database connection
 npm run dev
@@ -299,6 +339,7 @@ npm run dev
 ```
 
 ### Queue Worker Issues
+
 ```bash
 # Check queue metrics
 curl http://localhost:3004/metrics | grep queue
@@ -308,6 +349,7 @@ docker logs payment-queue | grep worker
 ```
 
 ### Build Issues
+
 ```bash
 # Clean build
 rm -rf dist
@@ -320,11 +362,13 @@ npm run type-check
 ## 📝 Development Workflow
 
 1. **Create feature branch:**
+
 ```bash
 git checkout -b feature/your-feature
 ```
 
 2. **Make changes and test:**
+
 ```bash
 npm run dev
 npm test
@@ -332,12 +376,14 @@ npm run lint:fix
 ```
 
 3. **Build and verify:**
+
 ```bash
 npm run build
 npm start
 ```
 
 4. **Commit and push:**
+
 ```bash
 git add .
 git commit -m "feat: your feature description"
@@ -347,6 +393,7 @@ git push origin feature/your-feature
 ## 🚢 Deployment
 
 ### Railway Deployment
+
 ```bash
 # Install Railway CLI
 npm install -g @railway/cli
@@ -359,6 +406,7 @@ railway up
 ```
 
 ### Manual Docker Deployment
+
 ```bash
 # Build
 docker build -t payment-queue-service:v1.0.0 .
@@ -387,6 +435,7 @@ docker run -d \
 ## 🆘 Support
 
 For issues or questions:
+
 1. Check the logs: `docker logs payment-queue`
 2. Verify environment variables are set correctly
 3. Check Redis and database connectivity
@@ -396,6 +445,7 @@ For issues or questions:
 ## ✅ Verification Checklist
 
 Before deploying to production:
+
 - [ ] All environment variables set
 - [ ] Database schema migrated
 - [ ] Redis accessible
@@ -416,4 +466,5 @@ Before deploying to production:
 
 **You're ready to go! 🎉**
 
-The payment-queue-service is now fully operational and ready to process payments!
+The payment-queue-service is now fully operational and ready to process
+payments!

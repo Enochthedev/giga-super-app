@@ -4,9 +4,10 @@
  */
 
 import rateLimit from 'express-rate-limit';
+
 import config from '../config';
-import logger from '../utils/logger';
 import { RateLimitError } from '../utils/errors';
+import logger from '../utils/logger';
 
 /**
  * General rate limiter for all endpoints
@@ -38,7 +39,7 @@ export const generalLimiter = rateLimit({
       },
     });
   },
-  skip: (req) => {
+  skip: req => {
     // Skip rate limiting for health checks
     return req.path.startsWith('/health');
   },
@@ -61,9 +62,7 @@ export const writeLimiter = rateLimit({
       requestId: req.requestId,
     });
 
-    const error = new RateLimitError(
-      'Too many write requests, please slow down'
-    );
+    const error = new RateLimitError('Too many write requests, please slow down');
     res.status(error.statusCode).json({
       success: false,
       error: {
@@ -95,9 +94,7 @@ export const strictLimiter = rateLimit({
       requestId: req.requestId,
     });
 
-    const error = new RateLimitError(
-      'Too many attempts, please try again later'
-    );
+    const error = new RateLimitError('Too many attempts, please try again later');
     res.status(error.statusCode).json({
       success: false,
       error: {

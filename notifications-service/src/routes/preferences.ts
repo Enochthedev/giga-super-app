@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
+
 import { PreferencesService, UserPreferences } from '../utils/preferences.js';
 
 const router = Router();

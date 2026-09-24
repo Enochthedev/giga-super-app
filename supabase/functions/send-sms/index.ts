@@ -31,11 +31,9 @@ serve(async req => {
       {
         method: 'POST',
         headers: {
-          Authorization:
-            `Basic ${ 
-            btoa(
-              `${Deno.env.get('TWILIO_ACCOUNT_SID')}:${Deno.env.get('TWILIO_AUTH_TOKEN')}`
-            )}`,
+          Authorization: `Basic ${btoa(
+            `${Deno.env.get('TWILIO_ACCOUNT_SID')}:${Deno.env.get('TWILIO_AUTH_TOKEN')}`
+          )}`,
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({

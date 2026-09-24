@@ -112,7 +112,7 @@ export async function initializePayment(req: Request) {
       .single();
     if (paymentError) {
       console.error('Error creating payment record:', paymentError);
-      throw new Error(`Failed to initialize payment: ${  paymentError.message}`);
+      throw new Error(`Failed to initialize payment: ${paymentError.message}`);
     }
     let paymentUrl = '';
     let providerReference = '';
