@@ -13,6 +13,5 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/setup.ts'],
   testTimeout: 60000, // 60 seconds for property tests
   maxWorkers: 1, // Run tests sequentially to avoid database conflicts
-  verbose: true,
   bail: false, // Continue running tests even if some fail
 };
