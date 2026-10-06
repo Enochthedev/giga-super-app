@@ -12,6 +12,8 @@ export const requestLogger = (
   // Generate request ID
   req.id = (req.headers['x-request-id'] as string) ?? uuidv4();
   req.startTime = Date.now();
+  // Echo it so clients can quote the ID when reporting a failed request.
+  res.setHeader('X-Request-ID', req.id);
 
   // Log incoming request
   logger.info('Incoming request', {

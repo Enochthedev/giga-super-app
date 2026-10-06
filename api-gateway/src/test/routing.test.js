@@ -3,6 +3,26 @@ import request from 'supertest';
 import app from '../index.js';
 import { serviceRegistry } from '../services/serviceRegistry.js';
 
+// 'test-token' authenticates; any other token is rejected. Profiles are active.
+jest.mock('@supabase/supabase-js', () => ({
+  createClient: jest.fn(() => {
+    const q = {};
+    q.select = () => q;
+    q.eq = () => q;
+    q.maybeSingle = async () => ({ data: null, error: null });
+    return {
+      auth: {
+        getUser: jest.fn(async token =>
+          token === 'test-token'
+            ? { data: { user: { id: 'u1', email: 'u1@test.dev', app_metadata: {} } }, error: null }
+            : { data: { user: null }, error: { message: 'invalid JWT' } }
+        ),
+      },
+      from: () => q,
+    };
+  }),
+}));
+
 describe('Gateway Routing', () => {
   beforeAll(async () => {
     // Initialize service registry for tests
@@ -11,10 +31,11 @@ describe('Gateway Routing', () => {
 
   describe('Service Discovery', () => {
     test('should find correct service for hotel paths', () => {
+      // Hotels moved from Supabase edge functions to the Railway hotels-service.
       const service = serviceRegistry.findServiceForPath('/api/v1/hotels/123');
       expect(service).toBeTruthy();
-      expect(service.platform).toBe('supabase');
-      expect(service.name).toBe('Hotel Core Service');
+      expect(service.platform).toBe('railway');
+      expect(service.name).toBe('Hotels Service');
     });
 
     test('should find correct service for social paths', () => {
@@ -25,9 +46,10 @@ describe('Gateway Routing', () => {
     });
 
     test('should find correct service for ads paths', () => {
+      // User-facing ad operations are still Supabase edge functions.
       const service = serviceRegistry.findServiceForPath('/api/v1/ads/campaigns');
       expect(service).toBeTruthy();
-      expect(service.platform).toBe('railway');
+      expect(service.platform).toBe('supabase');
       expect(service.name).toBe('Ads Service');
     });
 
@@ -96,11 +118,11 @@ describe('Gateway Routing', () => {
   });
 
   describe('Error Handling', () => {
-    test('should return 404 for unknown endpoints', async () => {
-      const response = await request(app).get('/unknown/endpoint').expect(404);
+    test('should require auth before revealing whether an endpoint exists', async () => {
+      const response = await request(app).get('/unknown/endpoint').expect(401);
 
       expect(response.body.success).toBe(false);
-      expect(response.body.error.code).toBe('ENDPOINT_NOT_FOUND');
+      expect(response.body.error.code).toBe('AUTHENTICATION_REQUIRED');
     });
 
     test('should return 404 for unmapped API paths', async () => {
@@ -115,8 +137,8 @@ describe('Gateway Routing', () => {
   });
 
   describe('Response Format', () => {
-    test('should include standard metadata in all responses', async () => {
-      const response = await request(app).get('/health').expect(200);
+    test('should include standard metadata in error responses', async () => {
+      const response = await request(app).get('/api/v1/hotels').expect(401);
 
       expect(response.body.metadata).toBeDefined();
       expect(response.body.metadata.timestamp).toBeDefined();
@@ -134,11 +156,12 @@ describe('Gateway Routing', () => {
     test('should apply rate limiting to requests', async () => {
       // This test would need to make many requests to trigger rate limiting
       // For now, just verify the middleware is applied
-      const response = await request(app).get('/health').expect(200);
+      // /health is exempt, so probe an API path. The limiter sends the standard
+      // RateLimit-* headers (standardHeaders: true, legacyHeaders: false).
+      const response = await request(app).get('/api/v1/hotels').expect(401);
 
-      // Rate limit headers should be present
-      expect(response.headers['x-ratelimit-limit']).toBeDefined();
-      expect(response.headers['x-ratelimit-remaining']).toBeDefined();
+      expect(response.headers['ratelimit-limit']).toBeDefined();
+      expect(response.headers['ratelimit-remaining']).toBeDefined();
     });
   });
 });

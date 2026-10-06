@@ -56,8 +56,6 @@ describe('Property-Based Tests: Authentication Context Forwarding', () => {
             json: jest.fn(),
           };
 
-          const mockNext = jest.fn();
-
           // Test 1: Token validation should be consistent
           if (tokenValid && !tokenExpired) {
             // Valid token should result in user context being added
@@ -148,13 +146,16 @@ describe('Property-Based Tests: Authentication Context Forwarding', () => {
           const allUserRoles = [userRole, ...userRoles];
           const hasRequiredRole = requiredRoles.some(role => allUserRoles.includes(role));
 
-          // Mock the middleware execution
+          // Run the real middleware: it previously was built but never called,
+          // so this property asserted only its own arithmetic.
+          middleware(mockReq, mockRes, mockNext);
+
           if (hasRequiredRole) {
-            // Should allow access
-            expect(allUserRoles.some(role => requiredRoles.includes(role))).toBe(true);
+            expect(mockNext).toHaveBeenCalledTimes(1);
+            expect(mockRes.status).not.toHaveBeenCalled();
           } else {
-            // Should deny access
-            expect(allUserRoles.some(role => requiredRoles.includes(role))).toBe(false);
+            expect(mockNext).not.toHaveBeenCalled();
+            expect(mockRes.status).toHaveBeenCalledWith(403);
           }
 
           // Test consistency - same input should always produce same result
@@ -202,8 +203,10 @@ describe('Property-Based Tests: Authentication Context Forwarding', () => {
           }
 
           // Test header validation logic
-          const isValidFormat =
-            authHeader && authHeader.startsWith('Bearer ') && authHeader.length > 7;
+          // Boolean(): `'' && …` is '' (not false), which failed toBe(false) for empty tokens.
+          const isValidFormat = Boolean(
+            authHeader && authHeader.startsWith('Bearer ') && authHeader.length > 7
+          );
 
           if (format === 'valid') {
             expect(isValidFormat).toBe(true);

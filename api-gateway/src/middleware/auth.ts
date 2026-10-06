@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import type { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
@@ -5,6 +7,7 @@ import NodeCache from 'node-cache';
 
 import { config } from '../config/index.js';
 import type { ApiResponse, AuthenticatedRequest, UserContext } from '../types/index.js';
+import { isAccountDeactivated } from '../utils/accountStatus.js';
 import { logger } from '../utils/logger.js';
 
 // Token validation cache (5 minute TTL)
@@ -126,8 +129,11 @@ export const authMiddleware = async (
 
     const token = authHeader.substring(7);
 
-    // Check token cache first
-    const cacheKey = `token_${token.substring(0, 20)}`;
+    // Check token cache first.
+    // Key on a hash of the WHOLE token: the first chars of a JWT are the base64
+    // header, identical for every user, so a prefix key shared one cache slot
+    // across all users and could authenticate a request as someone else.
+    const cacheKey = `token_${createHash('sha256').update(token).digest('hex')}`;
     const cachedUser = tokenCache.get<UserContext>(cacheKey);
 
     let user: UserContext;
@@ -196,21 +202,28 @@ export const authMiddleware = async (
       // forwarded X-User-Role header saw a non-admin (notifications-service returned
       // 403 "Admin privileges required" for real DOP admins). The signed token does
       // carry it — qa.admin's claims contain app_metadata.role = "ADMIN".
-      const userMetadata = tokenClaims.user_metadata as Record<string, unknown> | undefined;
+      // Never read roles from user_metadata: any user can rewrite it themselves
+      // (PUT /auth/v1/user { data: { role: 'ADMIN' } }), which made self-promotion
+      // to admin possible. app_metadata is only writable with the service role.
       const claimsAppMetadata = tokenClaims.app_metadata as Record<string, unknown> | undefined;
       const appMetadata = (supabaseUser.app_metadata ?? {}) as Record<string, unknown>;
-      const userRoles = (userMetadata?.roles ??
-        claimsAppMetadata?.roles ??
-        appMetadata?.roles ??
-        []) as string[];
+      const userRoles = (claimsAppMetadata?.roles ?? appMetadata?.roles ?? []) as string[];
+
+      // A banned user can't log in or refresh, but tokens issued before the ban
+      // still verify until they expire — reject deactivated profiles here too.
+      if (await isAccountDeactivated(supabaseUser.id)) {
+        res
+          .status(403)
+          .json(
+            createErrorResponse('ACCOUNT_DEACTIVATED', 'This account has been deleted', req.id)
+          );
+        return;
+      }
 
       user = {
         id: supabaseUser.id,
         email: supabaseUser.email ?? '',
-        role: (claimsAppMetadata?.role ??
-          appMetadata?.role ??
-          userMetadata?.role ??
-          'user') as string,
+        role: (claimsAppMetadata?.role ?? appMetadata?.role ?? 'user') as string,
         roles: Array.isArray(userRoles) ? userRoles : [],
         claims: tokenClaims,
         raw: supabaseUser,
@@ -321,6 +334,16 @@ export const optionalAuth = async (
       error: error instanceof Error ? error.message : 'Unknown error',
     });
     next();
+  }
+};
+
+/**
+ * Drop every cached token belonging to a user (e.g. right after they delete
+ * their account) so the deactivation check runs on their next request.
+ */
+export const invalidateUserTokens = (userId: string): void => {
+  for (const key of tokenCache.keys()) {
+    if (tokenCache.get<UserContext>(key)?.id === userId) tokenCache.del(key);
   }
 };
 

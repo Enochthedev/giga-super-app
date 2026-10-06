@@ -1,6 +1,7 @@
 import type { NextFunction, Response } from 'express';
 import { Options, createProxyMiddleware } from 'http-proxy-middleware';
 
+import { config } from '../config/index.js';
 import { serviceRegistry } from '../services/serviceRegistry.js';
 import type { ApiResponse, AuthenticatedRequest } from '../types/index.js';
 import { logger } from '../utils/logger.js';
@@ -310,6 +311,14 @@ export const routingMiddleware = (
     onProxyReq: (proxyReq, clientReq) => {
       const authReq = clientReq as AuthenticatedRequest;
 
+      // Downstream services trust X-User-* as gateway-asserted identity. Drop any
+      // the client sent: otherwise e.g. X-User-Roles: ADMIN passed straight through
+      // whenever the token carried no roles (the header below is only set if it does).
+      for (const header of Object.keys(proxyReq.getHeaders())) {
+        const h = header.toLowerCase();
+        if (h.startsWith('x-user-') || h === 'x-gateway-secret') proxyReq.removeHeader(header);
+      }
+
       // Add service headers
       if (service.headers) {
         Object.entries(service.headers).forEach(([key, value]) => {
@@ -323,6 +332,10 @@ export const routingMiddleware = (
       }
 
       // Forward user context for Railway services
+      if (service.platform === 'railway' && config.serviceJwtSecret) {
+        proxyReq.setHeader('X-Gateway-Secret', config.serviceJwtSecret);
+      }
+
       if (service.platform === 'railway' && authReq.user) {
         proxyReq.setHeader('X-User-ID', authReq.user.id);
         proxyReq.setHeader('X-User-Email', authReq.user.email);

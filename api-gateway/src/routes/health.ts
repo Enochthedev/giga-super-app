@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 import { getAuthStats } from '../middleware/auth.js';
 import { serviceRegistry } from '../services/serviceRegistry.js';
 
-const router = Router();
+const router: Router = Router();
 
 /**
  * @openapi
@@ -184,4 +184,4 @@ router.get('/stats', async (_req: Request, res: Response) => {
   }
 });
 
-export const healthRouter = router;
+export const healthRouter: Router = router;

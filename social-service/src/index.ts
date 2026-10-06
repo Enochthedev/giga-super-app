@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'crypto';
 import { createServer } from 'http';
 
 import { createClient } from '@supabase/supabase-js';
@@ -89,6 +90,21 @@ app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// X-User-* headers are only trustworthy when set by the API gateway. This service
+// also has a public Railway domain, so require the shared gateway secret before
+// believing them — otherwise anyone could send X-User-ID/X-User-Role directly.
+const GATEWAY_SECRET = process.env.SERVICE_JWT_SECRET ?? '';
+if (!GATEWAY_SECRET) {
+  console.warn('SERVICE_JWT_SECRET is not set: X-User-* headers will be ignored');
+}
+const isFromGateway = (req: { headers: Record<string, unknown> }): boolean => {
+  const given = req.headers['x-gateway-secret'];
+  if (!GATEWAY_SECRET || typeof given !== 'string') return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(GATEWAY_SECRET);
+  return a.length === b.length && timingSafeEqual(a, b);
+};
+
 // Request logging and user context
 app.use((req: Request, _res: Response, next: NextFunction) => {
   req.requestId =
@@ -96,7 +112,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
     `req_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
 
   const userId = req.headers['x-user-id'] as string;
-  if (userId) {
+  if (userId && isFromGateway(req)) {
     req.user = {
       id: userId,
       email: (req.headers['x-user-email'] as string) ?? '',

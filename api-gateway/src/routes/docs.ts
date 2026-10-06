@@ -4,7 +4,7 @@ import { Request, Response, Router } from 'express';
 import { config } from '../config/index.js';
 import { logger } from '../utils/logger.js';
 
-const router = Router();
+const router: Router = Router();
 
 // Service documentation registry
 const serviceDocsRegistry: Record<string, { name: string; url: string; description: string }> = {
@@ -351,4 +351,4 @@ router.get('/:service/', (req: Request, res: Response) => {
   proxyServiceDocs(req, res, serviceKey);
 });
 
-export const docsRouter = router;
+export const docsRouter: Router = router;

@@ -1,6 +1,6 @@
 import compression from 'compression';
 import cors from 'cors';
-import express from 'express';
+import express, { type Express } from 'express';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
 
@@ -23,7 +23,7 @@ import { healthRouter } from './routes/health.js';
 import { serviceRegistry } from './services/serviceRegistry.js';
 import { logger } from './utils/logger.js';
 
-const app = express();
+const app: Express = express();
 
 // Initialize observability (Sentry, metrics, tracing) - MUST BE FIRST
 initializeObservability(app);
@@ -169,6 +169,9 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-startServer();
+// Tests import the app for supertest; listening there collides on the port.
+if (process.env.NODE_ENV !== 'test') {
+  startServer();
+}
 
 export default app;

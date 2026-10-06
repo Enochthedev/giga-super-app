@@ -1,5 +1,6 @@
 import { Response, Router } from 'express';
 import winston from 'winston';
+
 import { createAudit, createFailedAudit } from '../middleware/audit';
 import {
   AuthRequest,
@@ -21,6 +22,10 @@ import {
 } from '../utils/regionScope';
 
 const router = Router();
+
+// Supabase Auth has no "permanent" ban; ~100 years is the conventional stand-in.
+const PERMANENT_BAN = '876000h';
+
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
@@ -647,6 +652,40 @@ router.delete(
       const { userId } = req.params;
       const { reason } = req.body;
 
+      if (userId === req.user!.id) {
+        return res.status(400).json({ error: 'You cannot delete your own admin account' });
+      }
+
+      const { data: existing, error: lookupError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (lookupError) throw lookupError;
+      if (!existing) return res.status(404).json({ error: 'User not found' });
+
+      // Open rides/orders/bookings/deliveries would be orphaned. Admins can
+      // override with { force: true } (e.g. fraud) and clean up via ops.
+      const { data: blockers, error: blockersError } = await supabase.rpc(
+        'account_deletion_blockers',
+        { p_user_id: userId }
+      );
+      if (blockersError) throw blockersError;
+      if (blockers?.length && req.body?.force !== true) {
+        return res.status(409).json({
+          error: 'User has open commitments; pass force: true to delete anyway',
+          blockers,
+        });
+      }
+
+      // Ban in Supabase Auth first — that's what actually blocks login and token
+      // refresh. Marking only the profile left "deleted" users able to sign in.
+      const { error: banError } = await supabase.auth.admin.updateUserById(userId, {
+        ban_duration: PERMANENT_BAN,
+      });
+      if (banError) throw banError;
+
       // Soft delete - set deleted_at timestamp
       const { data: user, error } = await supabase
         .from('user_profiles')
@@ -669,6 +708,58 @@ router.delete(
       logger.error('Failed to delete user', { error: error.message });
       await createFailedAudit(req, 'delete_user', 'user_profile', error.message, req.params.userId);
       res.status(500).json({ error: 'Failed to delete user' });
+    }
+  }
+);
+
+/**
+ * POST /api/admin/users/:userId/restore
+ * Undo a soft delete: lift the auth ban and reactivate the profile
+ */
+router.post(
+  '/:userId/restore',
+  authenticate,
+  requireNationalAccess,
+  async (req: AuthRequest, res: Response) => {
+    try {
+      const { userId } = req.params;
+
+      const { data: existing, error: lookupError } = await supabase
+        .from('user_profiles')
+        .select('id')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (lookupError) throw lookupError;
+      if (!existing) return res.status(404).json({ error: 'User not found' });
+
+      const { error: unbanError } = await supabase.auth.admin.updateUserById(userId, {
+        ban_duration: 'none',
+      });
+      if (unbanError) throw unbanError;
+
+      const { data: user, error } = await supabase
+        .from('user_profiles')
+        .update({
+          deleted_at: null,
+          deleted_by: null,
+          deletion_reason: null,
+          is_active: true,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', userId)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      await createAudit(req, 'restore_user', 'user_profile', userId);
+
+      res.json({ success: true, message: 'User restored successfully', data: user });
+    } catch (error: any) {
+      logger.error('Failed to restore user', { error: error.message });
+      await createFailedAudit(req, 'restore_user', 'user_profile', error.message, req.params.userId);
+      res.status(500).json({ error: 'Failed to restore user' });
     }
   }
 );

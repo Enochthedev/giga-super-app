@@ -12,6 +12,7 @@
  * - POST /auth/refresh - Refresh access token
  * - POST /auth/forgot-password - Request password reset
  * - POST /auth/reset-password - Reset password with token
+ * - DELETE /auth/account - Delete (deactivate) the current account
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -20,9 +21,11 @@ import { Request, Response, Router } from 'express';
 import { Options, createProxyMiddleware } from 'http-proxy-middleware';
 
 import { config } from '../config/index.js';
+import { invalidateUserTokens } from '../middleware/auth.js';
+import { deactivateAccount, getDeletionBlockers } from '../utils/accountStatus.js';
 import { logger } from '../utils/logger.js';
 
-const router = Router();
+const router: Router = Router();
 
 // Validate configuration
 if (!config.supabaseUrl || !config.supabaseAnonKey) {
@@ -468,6 +471,15 @@ router.get('/me', async (req: Request, res: Response) => {
       .eq('id', user.id)
       .maybeSingle();
 
+    // /auth is mounted ahead of authMiddleware, so enforce deactivation here too
+    // (a token issued before the account was deleted still verifies until expiry).
+    if (profile && (profile.deleted_at || profile.is_active === false)) {
+      return res.status(403).json({
+        success: false,
+        error: { code: 'ACCOUNT_DEACTIVATED', message: 'This account has been deleted' },
+      });
+    }
+
     // Fetch roles
     const { data: rolesData } = await supabase
       .from('user_roles')
@@ -754,6 +766,151 @@ router.post('/change-password', async (req: Request, res: Response) => {
 });
 
 // =====================================================
+// ACCOUNT DELETION
+// =====================================================
+
+/**
+ * @openapi
+ * /auth/account:
+ *   delete:
+ *     tags: [Authentication]
+ *     summary: Delete (deactivate) the current user's account
+ *     description: |
+ *       Soft-deletes the account: the profile is marked deleted and the user is
+ *       banned in Supabase Auth, so they can no longer log in or refresh a session.
+ *       No data is erased; an admin can restore the account. Requires the user's
+ *       current password. Also available as POST /auth/delete-account.
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [password]
+ *             properties:
+ *               password:
+ *                 type: string
+ *               reason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Account deleted
+ *       400:
+ *         description: Missing or incorrect password
+ *       401:
+ *         description: Missing or invalid token
+ *       409:
+ *         description: |
+ *           Blocked by open commitments. error.blockers lists them: active_ride,
+ *           open_paid_order, upcoming_booking, vendor_open_orders,
+ *           host_upcoming_bookings, active_delivery.
+ */
+const deleteAccount = async (req: Request, res: Response) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith('Bearer ')) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'AUTHENTICATION_REQUIRED', message: 'Authorization header required' },
+      });
+    }
+
+    const { password, reason } = req.body || {};
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'VALIDATION_ERROR', message: 'password is required to delete your account' },
+      });
+    }
+
+    const authHeaders = {
+      apikey: config.supabaseAnonKey,
+      'Content-Type': 'application/json',
+    };
+
+    const meResp = await axios.get(`${authApiUrl}/user`, {
+      headers: { ...authHeaders, Authorization: authHeader },
+      validateStatus: () => true,
+    });
+
+    if (meResp.status >= 400 || !meResp.data?.id) {
+      return res.status(401).json({
+        success: false,
+        error: { code: 'INVALID_TOKEN', message: 'Invalid or expired session' },
+      });
+    }
+
+    const { id: userId, email, phone } = meResp.data;
+
+    // Re-authenticate: a stolen or left-open session alone must not be enough.
+    const credentials = email ? { email, password } : { phone, password };
+    const loginResp = await axios.post(`${authApiUrl}/token?grant_type=password`, credentials, {
+      headers: authHeaders,
+      validateStatus: () => true,
+    });
+
+    if (loginResp.status >= 400) {
+      return res.status(400).json({
+        success: false,
+        error: { code: 'INVALID_PASSWORD', message: 'Password is incorrect' },
+      });
+    }
+
+    const blockers = await getDeletionBlockers(userId);
+    if (blockers.length > 0) {
+      return res.status(409).json({
+        success: false,
+        error: {
+          code: 'ACCOUNT_DELETION_BLOCKED',
+          message: 'Finish or cancel your active rides, orders, bookings or deliveries first',
+          blockers,
+        },
+      });
+    }
+
+    const { deleted_at } = await deactivateAccount(userId, {
+      deletedBy: userId,
+      reason: typeof reason === 'string' && reason.trim() ? reason.trim() : 'user_request',
+    });
+
+    // Revoke every refresh token (all devices). The ban already blocks refresh,
+    // so a failure here is logged, not surfaced.
+    const logoutResp = await axios.post(
+      `${authApiUrl}/logout?scope=global`,
+      {},
+      { headers: { ...authHeaders, Authorization: authHeader }, validateStatus: () => true }
+    );
+    if (logoutResp.status >= 400) {
+      logger.warn('Global logout after account deletion failed', {
+        userId,
+        status: logoutResp.status,
+      });
+    }
+
+    invalidateUserTokens(userId);
+    logger.info('Account deleted by user', { userId });
+
+    return res.json({
+      success: true,
+      message: 'Your account has been deleted',
+      data: { id: userId, deleted_at },
+    });
+  } catch (error: any) {
+    logger.error('Account deletion error', { error: error.message });
+    return res.status(500).json({
+      success: false,
+      error: { code: 'INTERNAL_ERROR', message: 'Account deletion failed' },
+    });
+  }
+};
+
+router.delete('/account', deleteAccount);
+// Some mobile HTTP clients drop bodies on DELETE — offer a POST alias.
+router.post('/delete-account', deleteAccount);
+
+// =====================================================
 // PROXY MIDDLEWARE
 // =====================================================
 // Note: All route transformations are handled directly in the proxy middleware
@@ -871,5 +1028,5 @@ const proxyOptions: Options = {
 // Apply proxy to all remaining auth routes
 router.use('/', createProxyMiddleware(proxyOptions));
 
-export const authRouter = router;
+export const authRouter: Router = router;
 export default router;

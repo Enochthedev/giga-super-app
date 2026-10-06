@@ -1,3 +1,5 @@
+import { timingSafeEqual } from 'crypto';
+
 import { createClient } from '@supabase/supabase-js';
 import { Job, Queue, Worker } from 'bullmq';
 import cors from 'cors';
@@ -14,6 +16,12 @@ import { v4 as uuidv4 } from 'uuid';
 import winston from 'winston';
 
 import { swaggerSpec } from './config/swagger';
+import analyticsRouter from './routes/analytics';
+import campaignsRouter from './routes/campaigns';
+import notificationsRouter from './routes/notifications';
+import preferencesRouter from './routes/preferences';
+import templatesRouter from './routes/templates';
+import trackingRouter from './routes/tracking';
 
 dotenv.config();
 
@@ -80,6 +88,7 @@ const logger = winston.createLogger({
 // Redis connection with connection pooling and error handling
 // Optimized for Upstash free tier limits - only create if Redis is enabled
 let connection: IORedis | null = null;
+let lastRedisError: string | null = null;
 
 if (useRedis) {
   connection = new IORedis(REDIS_URL, {
@@ -108,15 +117,15 @@ if (useRedis) {
 
   connection.on('error', err => {
     // Only log once per error type to avoid log spam
-    if (!connection?.lastErrorLogged || connection.lastErrorLogged !== err.message) {
+    if (lastRedisError !== err.message) {
       logger.error('Redis connection error', { error: err.message });
-      (connection as any).lastErrorLogged = err.message;
+      lastRedisError = err.message;
     }
   });
 
   connection.on('connect', () => {
     logger.info('Redis connected');
-    (connection as any).lastErrorLogged = null;
+    lastRedisError = null;
   });
 
   connection.on('ready', () => {
@@ -174,18 +183,6 @@ const twilioClient =
 let notificationQueue: Queue | null = null;
 
 if (useRedis && connection) {
-  // Test Redis connection before creating queue
-  const testConnection = async () => {
-    try {
-      await connection!.ping();
-      logger.info('Redis connection verified');
-      return true;
-    } catch (error: any) {
-      logger.error('Redis connection test failed', { error: error.message });
-      return false;
-    }
-  };
-
   // Create queue with connection
   notificationQueue = new Queue('notifications', {
     connection: connection as any,
@@ -259,7 +256,10 @@ class TemplateEngine {
   static renderTemplate(template: string, variables: Record<string, any>): string {
     let rendered = template;
     Object.entries(variables || {}).forEach(([key, value]) => {
-      const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+      // Escape the key: a name like "price.usd" or "a+b" must match literally.
+      const safeKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // eslint-disable-next-line security/detect-non-literal-regexp
+      const regex = new RegExp(`{{\\s*${safeKey}\\s*}}`, 'g');
       rendered = rendered.replace(regex, String(value || ''));
     });
     return rendered;
@@ -406,9 +406,12 @@ async function updateNotificationHistory(id: string, updates: any): Promise<void
 
 // Enhanced Email Worker with template support
 // Only create workers if Redis is enabled
-let enhancedEmailWorker: Worker | null = null;
-let enhancedSmsWorker: Worker | null = null;
-let bulkWorker: Worker | null = null;
+// One worker for the consolidated queue. Three workers used to share it, each
+// "completing" any job that wasn't its own type as skipped — so whichever worker
+// grabbed a job first decided whether it was sent, and emails/SMS were silently
+// dropped. The bulk worker also matched on campaignId, which its own fan-out emails
+// carry, so it could re-run an entire campaign.
+let notificationWorker: Worker | null = null;
 
 // Worker options with better error handling
 const workerOptions = {
@@ -425,13 +428,7 @@ const workerOptions = {
 };
 
 if (useRedis && connection) {
-  enhancedEmailWorker = new Worker(
-    'notifications', // Use consolidated queue name
-    async (job: Job<NotificationJob>) => {
-      // Only process email jobs
-      if (job.name !== 'send-email' && job.data.type !== 'email') {
-        return { success: true, skipped: true };
-      }
+  const processEmailJob = async (job: Job<NotificationJob>) => {
 
       const { userId, templateId, recipient, subject, body, variables, id } = job.data;
 
@@ -525,18 +522,9 @@ if (useRedis && connection) {
 
         throw error;
       }
-    },
-    { connection: connection as any, concurrency: 5, lockDuration: 30000 }
-  );
+  };
 
-  // Enhanced SMS Worker
-  enhancedSmsWorker = new Worker(
-    'notifications', // Use consolidated queue name
-    async (job: Job<NotificationJob>) => {
-      // Only process SMS jobs
-      if (job.name !== 'send-sms' && job.data.type !== 'sms') {
-        return { success: true, skipped: true };
-      }
+  const processSmsJob = async (job: Job<NotificationJob>) => {
 
       const { userId, templateId, recipient, body, variables, id } = job.data;
 
@@ -620,18 +608,9 @@ if (useRedis && connection) {
 
         throw error;
       }
-    },
-    { connection: connection as any, concurrency: 10, lockDuration: 30000 }
-  );
+  };
 
-  // Bulk notification worker
-  bulkWorker = new Worker(
-    'notifications', // Use consolidated queue name
-    async (job: Job) => {
-      // Only process bulk jobs
-      if (job.name !== 'bulk-send' && !job.data.campaignId) {
-        return { success: true, skipped: true };
-      }
+  const processBulkJob = async (job: Job) => {
 
       const { campaignId, templateId, recipients, variables } = job.data;
 
@@ -734,8 +713,23 @@ if (useRedis && connection) {
 
         throw error;
       }
+  };
+
+  // Route by job name first: fan-out emails carry campaignId, so checking that
+  // before the name would send them back through the bulk processor.
+  notificationWorker = new Worker(
+    'notifications',
+    async (job: Job) => {
+      if (job.name === 'send-email') return processEmailJob(job);
+      if (job.name === 'send-sms') return processSmsJob(job);
+      if (job.name === 'bulk-send') return processBulkJob(job);
+      if (job.data?.type === 'email') return processEmailJob(job);
+      if (job.data?.type === 'sms') return processSmsJob(job);
+      if (job.data?.campaignId) return processBulkJob(job);
+      // No processor (e.g. push): fail visibly instead of reporting success.
+      throw new Error(`No processor for job "${job.name}"`);
     },
-    { connection: connection as any, concurrency: 2, lockDuration: 60000 }
+    { ...workerOptions, lockDuration: 60000 }
   );
 
   logger.info('BullMQ workers initialized');
@@ -833,12 +827,21 @@ app.get('/api-docs.json', (req, res) => {
 });
 
 // Import route modules
-import analyticsRouter from './routes/analytics';
-import campaignsRouter from './routes/campaigns';
-import notificationsRouter from './routes/notifications';
-import preferencesRouter from './routes/preferences';
-import templatesRouter from './routes/templates';
-import trackingRouter from './routes/tracking';
+
+// X-User-* headers are only trustworthy when set by the API gateway. This service
+// also has a public Railway domain, so require the shared gateway secret before
+// believing them — otherwise anyone could send X-User-ID/X-User-Role directly.
+const GATEWAY_SECRET = process.env.SERVICE_JWT_SECRET ?? '';
+if (!GATEWAY_SECRET) {
+  console.warn('SERVICE_JWT_SECRET is not set: X-User-* headers will be ignored');
+}
+const isFromGateway = (req: { headers: Record<string, unknown> }): boolean => {
+  const given = req.headers['x-gateway-secret'];
+  if (!GATEWAY_SECRET || typeof given !== 'string') return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(GATEWAY_SECRET);
+  return a.length === b.length && timingSafeEqual(a, b);
+};
 
 // Authentication middleware.
 // Requests reach this service only through the API gateway, which verifies the
@@ -846,7 +849,7 @@ import trackingRouter from './routes/tracking';
 // Trust those headers to populate req.user (consumed by requireAuth/requireAdmin).
 app.use((req, res, next) => {
   const userId = req.headers['x-user-id'] as string | undefined;
-  if (userId) {
+  if (userId && isFromGateway(req)) {
     (req as any).user = {
       id: userId,
       email: (req.headers['x-user-email'] as string) || '',
@@ -1016,7 +1019,7 @@ app.post('/api/v1/notifications/send', async (req, res) => {
 });
 
 // Worker event listeners - only if workers exist
-const workers = [enhancedEmailWorker, enhancedSmsWorker, bulkWorker].filter(Boolean) as Worker[];
+const workers = [notificationWorker].filter(Boolean) as Worker[];
 workers.forEach(worker => {
   worker.on('completed', job => {
     logger.info(`${worker.name} job completed`, { jobId: job.id });
@@ -1060,9 +1063,7 @@ process.on('SIGTERM', async () => {
   logger.info('Shutting down notifications service...');
 
   // Close workers if they exist
-  if (enhancedEmailWorker) await enhancedEmailWorker.close();
-  if (enhancedSmsWorker) await enhancedSmsWorker.close();
-  if (bulkWorker) await bulkWorker.close();
+  if (notificationWorker) await notificationWorker.close();
   if (connection) await connection.quit();
 
   logger.info('Notifications service shutdown complete');
