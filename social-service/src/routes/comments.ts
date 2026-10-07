@@ -2,6 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
 
+import { getHiddenUserIds, inList, isBlockedEitherWay } from '../utils/blocks';
 import { logger } from '../utils/logger';
 import {
   ErrorCodes,
@@ -70,15 +71,22 @@ router.get('/', async (req: Request, res: Response) => {
     const offset = (page - 1) * limit;
     const supabase = getSupabase(req);
 
+    let query = supabase
+      .from('post_comments_with_profiles')
+      .select('*', { count: 'exact' })
+      .eq('post_id', postId)
+      .is('deleted_at', null);
+
+    const hiddenUserIds = await getHiddenUserIds(supabase, req.user?.id);
+    if (hiddenUserIds.length) {
+      query = query.not('user_id', 'in', inList(hiddenUserIds));
+    }
+
     const {
       data: comments,
       count,
       error,
-    } = await supabase
-      .from('post_comments_with_profiles')
-      .select('*', { count: 'exact' })
-      .eq('post_id', postId)
-      .is('deleted_at', null)
+    } = await query
       .order('created_at', { ascending: true })
       .range(offset, offset + limit - 1);
 
@@ -153,12 +161,16 @@ router.post('/', async (req: Request, res: Response) => {
     // Verify post exists
     const { data: post, error: postError } = await supabase
       .from('social_posts')
-      .select('id')
+      .select('id, user_id')
       .eq('id', postId)
       .is('deleted_at', null)
       .single();
 
-    if (postError || !post) {
+    if (
+      postError ||
+      !post ||
+      (await isBlockedEitherWay(supabase, req.user.id, post.user_id))
+    ) {
       sendNotFound(res, ErrorCodes.POST_NOT_FOUND, 'Post not found', req.requestId);
       return;
     }

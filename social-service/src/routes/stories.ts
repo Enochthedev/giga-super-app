@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
+import { getHiddenUserIds } from '../utils/blocks';
 import { logger } from '../utils/logger';
 import {
   ErrorCodes,
@@ -70,7 +71,11 @@ router.get('/', async (req: Request, res: Response) => {
       .eq('user_id', req.user.id)
       .eq('status', 'accepted');
 
-    const userIds = [req.user.id, ...(connections?.map(c => c.connected_user_id) ?? [])];
+    const hiddenUserIds = new Set(await getHiddenUserIds(supabase, req.user.id));
+    const userIds = [
+      req.user.id,
+      ...(connections?.map(c => c.connected_user_id) ?? []).filter(id => !hiddenUserIds.has(id)),
+    ];
 
     // Get active stories (not expired)
     const { data: stories, error } = await supabase

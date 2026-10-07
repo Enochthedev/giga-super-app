@@ -20,6 +20,7 @@ import { supabaseProxy } from './middleware/supabaseProxy.js';
 import { authRouter } from './routes/auth.js';
 import { docsRouter } from './routes/docs.js';
 import { healthRouter } from './routes/health.js';
+import { legalRouter } from './routes/legal.js';
 import { serviceRegistry } from './services/serviceRegistry.js';
 import { logger } from './utils/logger.js';
 
@@ -95,6 +96,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, swaggerOption
 
 // Service documentation hub (no auth required)
 app.use('/docs', docsRouter);
+
+// Privacy, terms, support and email-confirmed pages (store listings; no auth)
+app.use(legalRouter);
 
 // Auth routes (no auth required - proxies to Supabase Auth)
 app.use('/auth', authRouter);

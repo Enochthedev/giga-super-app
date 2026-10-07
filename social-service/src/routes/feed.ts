@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
+import { getHiddenUserIds, inList } from '../utils/blocks';
 import { logger } from '../utils/logger';
 import {
   calculatePagination,
@@ -72,6 +73,11 @@ router.get('/', async (req: Request, res: Response) => {
       query = query.or(`visibility.eq.public,user_id.eq.${req.user.id}`);
     } else {
       query = query.eq('visibility', 'public');
+    }
+
+    const hiddenUserIds = await getHiddenUserIds(supabase, req.user?.id);
+    if (hiddenUserIds.length) {
+      query = query.not('user_id', 'in', inList(hiddenUserIds));
     }
 
     const { data: posts, count, error } = await query.range(offset, offset + limit - 1);
@@ -148,16 +154,23 @@ router.get('/trending', async (req: Request, res: Response) => {
         dateThreshold = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     }
 
-    const {
-      data: posts,
-      count,
-      error,
-    } = await supabase
+    let query = supabase
       .from('social_posts_with_profiles')
       .select('*', { count: 'exact' })
       .is('deleted_at', null)
       .eq('visibility', 'public')
-      .gte('created_at', dateThreshold.toISOString())
+      .gte('created_at', dateThreshold.toISOString());
+
+    const hiddenUserIds = await getHiddenUserIds(supabase, req.user?.id);
+    if (hiddenUserIds.length) {
+      query = query.not('user_id', 'in', inList(hiddenUserIds));
+    }
+
+    const {
+      data: posts,
+      count,
+      error,
+    } = await query
       .order('like_count', { ascending: false })
       .order('comment_count', { ascending: false })
       .range(offset, offset + limit - 1);
@@ -230,7 +243,10 @@ router.get('/following', async (req: Request, res: Response) => {
       .eq('user_id', req.user.id)
       .eq('status', 'accepted');
 
-    const followingIds = connections?.map(c => c.connected_user_id) ?? [];
+    const hiddenUserIds = new Set(await getHiddenUserIds(supabase, req.user.id));
+    const followingIds = (connections?.map(c => c.connected_user_id) ?? []).filter(
+      id => !hiddenUserIds.has(id)
+    );
 
     if (followingIds.length === 0) {
       sendSuccess(res, {

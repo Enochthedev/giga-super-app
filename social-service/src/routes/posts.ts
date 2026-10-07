@@ -1,7 +1,9 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
+import { getHiddenUserIds, inList, isBlockedEitherWay } from '../utils/blocks';
 import { logger } from '../utils/logger';
+import { createReport } from '../utils/reports';
 import {
   ErrorCodes,
   calculatePagination,
@@ -110,6 +112,11 @@ router.get('/', async (req: Request, res: Response) => {
       dbQuery = dbQuery.eq('visibility', 'public');
     }
 
+    const hiddenUserIds = await getHiddenUserIds(supabase, req.user?.id);
+    if (hiddenUserIds.length) {
+      dbQuery = dbQuery.not('user_id', 'in', inList(hiddenUserIds));
+    }
+
     // Apply pagination
     dbQuery = dbQuery.range(offset, offset + limit - 1);
 
@@ -184,7 +191,12 @@ router.get('/:postId', async (req: Request, res: Response) => {
       .is('deleted_at', null)
       .single();
 
-    if (error || !post) {
+    // Blocked either way: behave as if the post does not exist.
+    if (
+      error ||
+      !post ||
+      (req.user && (await isBlockedEitherWay(supabase, req.user.id, post.user_id)))
+    ) {
       sendNotFound(res, ErrorCodes.POST_NOT_FOUND, 'Post not found', req.requestId);
       return;
     }
@@ -551,31 +563,22 @@ router.post('/:postId/report', async (req: Request, res: Response) => {
 
     const { postId } = req.params;
     const input = reportPostSchema.parse(req.body);
-    const supabase = getSupabase(req);
 
-    // Verify post exists
-    const { data: post, error: fetchError } = await supabase
-      .from('social_posts')
-      .select('id')
-      .eq('id', postId)
-      .is('deleted_at', null)
-      .single();
-
-    if (fetchError || !post) {
-      sendNotFound(res, ErrorCodes.POST_NOT_FOUND, 'Post not found', req.requestId);
-      return;
-    }
-
-    // Log the report (in production, this would go to a reports table)
-    logger.info('Post reported', {
-      postId,
-      reportedBy: req.user.id,
+    const result = await createReport(getSupabase(req), {
+      reporterId: req.user.id,
+      targetType: 'post',
+      targetId: postId,
       reason: input.reason,
       description: input.description,
     });
 
+    if (result.status === 'not_found') {
+      sendNotFound(res, ErrorCodes.POST_NOT_FOUND, 'Post not found', req.requestId);
+      return;
+    }
+
     sendSuccess(res, {
-      data: { reported: true, message: 'Thank you for your report. We will review it shortly.' },
+      data: { reported: true, message: 'Thank you for your report. We will review it within 24 hours.' },
       requestId: req.requestId,
     });
   } catch (error) {

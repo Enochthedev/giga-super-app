@@ -2,6 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { Request, Response, Router } from 'express';
 import { ZodError } from 'zod';
 
+import { isBlockedEitherWay } from '../utils/blocks';
 import { logger } from '../utils/logger';
 import {
   ErrorCodes,
@@ -240,6 +241,11 @@ router.post('/', async (req: Request, res: Response) => {
 
     const input = createConnectionSchema.parse(req.body);
     const supabase = getSupabase(req);
+
+    if (await isBlockedEitherWay(supabase, req.user.id, input.connected_user_id)) {
+      sendForbidden(res, 'You cannot connect with this user', req.requestId);
+      return;
+    }
 
     // Check if connection already exists
     const { data: existing } = await supabase

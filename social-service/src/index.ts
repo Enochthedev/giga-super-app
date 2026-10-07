@@ -12,12 +12,14 @@ import swaggerUi from 'swagger-ui-express';
 
 import { swaggerSpec } from './config/swagger';
 import { tenantAuthMiddleware } from './middleware/tenant-auth';
+import blocksRouter from './routes/blocks';
 import commentsRouter from './routes/comments';
 import connectionsRouter from './routes/connections';
 import feedRouter from './routes/feed';
 import healthRouter from './routes/health';
 import likesRouter from './routes/likes';
 import postsRouter from './routes/posts';
+import reportsRouter from './routes/reports';
 import storiesRouter from './routes/stories';
 import tenantPostsRouter from './routes/tenant-posts';
 import { logger } from './utils/logger';
@@ -152,6 +154,8 @@ app.use('/api/v1/posts/:postId/likes', likesRouter);
 app.use('/api/v1/feed', feedRouter);
 app.use('/api/v1/stories', storiesRouter);
 app.use('/api/v1/connections', connectionsRouter);
+app.use('/api/v1/blocks', blocksRouter);
+app.use('/api/v1/reports', reportsRouter);
 app.use('/api/v1/tenant', tenantAuthMiddleware, tenantPostsRouter);
 
 // 404 handler
