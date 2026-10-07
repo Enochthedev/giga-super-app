@@ -66,6 +66,17 @@ logger.info('Auth proxy configured', { authApiUrl, projectRef });
  *       - User wallet (if trigger is configured)
  *     tags:
  *       - Authentication
+ *     parameters:
+ *       - in: query
+ *         name: redirect_to
+ *         required: false
+ *         schema:
+ *           type: string
+ *           example: https://giga-giga-production.up.railway.app/email-confirmed
+ *         description: |
+ *           Where the confirmation email link lands after confirming (app deep link
+ *           or web page). Must be listed under Supabase Auth → URL Configuration →
+ *           Redirect URLs. Defaults to the Supabase Site URL.
  *     requestBody:
  *       required: true
  *       content:

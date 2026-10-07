@@ -62,6 +62,8 @@ All responses follow a consistent format:
       { name: 'Feed', description: 'Feed generation and retrieval' },
       { name: 'Stories', description: 'Ephemeral story content' },
       { name: 'Connections', description: 'User connections and relationships' },
+      { name: 'Blocks', description: 'Block users (hides content both ways)' },
+      { name: 'Reports', description: 'Report posts, comments and users for moderation' },
     ],
     components: {
       securitySchemes: {

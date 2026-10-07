@@ -101,7 +101,7 @@ router.get('/', async (req: Request, res: Response) => {
  *       201:
  *         description: User blocked
  *       400:
- *         $ref: '#/components/responses/ValidationError'
+ *         $ref: '#/components/responses/BadRequest'
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */

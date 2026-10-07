@@ -77,6 +77,8 @@ Most list endpoints support:
       { name: 'Manager Operations', description: 'Post office manager specific endpoints' },
       { name: 'Advertisement Management', description: 'Ad review and approval workflow' },
       { name: 'Admin Panel', description: 'Administrative categories and settings' },
+      { name: 'User Management', description: 'Users: list, create, delete (ban) and restore' },
+      { name: 'Moderation', description: 'Review user reports of posts, comments and users' },
       { name: 'NIPOST Admin', description: 'Legacy NIPOST administrative endpoints' },
       { name: 'Health', description: 'Service health checks' },
     ],

@@ -58,7 +58,7 @@ const createReportSchema = reportPostSchema.extend({
  *       200:
  *         description: Report received
  *       400:
- *         $ref: '#/components/responses/ValidationError'
+ *         $ref: '#/components/responses/BadRequest'
  *       404:
  *         $ref: '#/components/responses/NotFound'
  */

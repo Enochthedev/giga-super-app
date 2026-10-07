@@ -640,8 +640,43 @@ router.patch(
 );
 
 /**
- * DELETE /api/admin/users/:userId
- * Soft delete a user
+ * @swagger
+ * /api/admin/users/{userId}:
+ *   delete:
+ *     tags: [User Management]
+ *     summary: Delete (deactivate) a user
+ *     description: |
+ *       Bans the user in Supabase Auth (blocks login and token refresh) and
+ *       soft-deletes the profile; the deletion cascade hides their listings and
+ *       posts and locks their wallet. Restorable for 30 days, after which the
+ *       account's personal data is permanently anonymised. National access required.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema: { type: string, format: uuid }
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reason:
+ *                 type: string
+ *               force:
+ *                 type: boolean
+ *                 description: Delete even with open rides/orders/bookings/deliveries
+ *     responses:
+ *       200:
+ *         description: User deleted
+ *       400:
+ *         description: Attempted to delete your own admin account
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: User has open commitments (listed in `blockers`); retry with force true
  */
 router.delete(
   '/:userId',
@@ -713,8 +748,29 @@ router.delete(
 );
 
 /**
- * POST /api/admin/users/:userId/restore
- * Undo a soft delete: lift the auth ban and reactivate the profile
+ * @swagger
+ * /api/admin/users/{userId}/restore:
+ *   post:
+ *     tags: [User Management]
+ *     summary: Restore a deleted user
+ *     description: |
+ *       Lifts the auth ban and reactivates the profile; the deletion cascade
+ *       restores what it hid. Only possible within 30 days of deletion, before
+ *       the account's data is anonymised. National access required.
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema: { type: string, format: uuid }
+ *     responses:
+ *       200:
+ *         description: User restored
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: Account data has already been permanently erased
  */
 router.post(
   '/:userId/restore',
@@ -726,12 +782,16 @@ router.post(
 
       const { data: existing, error: lookupError } = await supabase
         .from('user_profiles')
-        .select('id')
+        .select('id, anonymized_at')
         .eq('id', userId)
         .maybeSingle();
 
       if (lookupError) throw lookupError;
       if (!existing) return res.status(404).json({ error: 'User not found' });
+      if (existing.anonymized_at) {
+        // purge_deleted_accounts() erased this account's data 30 days after deletion.
+        return res.status(409).json({ error: 'Account data has been permanently erased' });
+      }
 
       const { error: unbanError } = await supabase.auth.admin.updateUserById(userId, {
         ban_duration: 'none',
