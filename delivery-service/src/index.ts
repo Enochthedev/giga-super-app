@@ -18,9 +18,13 @@ import websocketRoutes from './routes/websocket';
 import { webSocketService } from './services/websocket';
 import logger from './utils/logger';
 import { schedulerService } from './utils/scheduler';
+import { initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry';
+
+initSentry('delivery-service');
 
 // Create Express application
 const app = express();
+app.use(sentryFailedResponses);
 const server = createServer(app);
 
 // Initialize WebSocket server
@@ -114,6 +118,7 @@ app.use((_req, res) => {
 });
 
 // Global error handler
+app.use(sentryErrorHandler);
 app.use(
   (error: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
     logger.error('Request error', { error: error.message });

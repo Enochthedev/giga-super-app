@@ -13,8 +13,12 @@ import { healthRouter } from './routes/health.js';
 import { hotelsRouter } from './routes/hotels.js';
 import { managementRouter } from './routes/management.js';
 import { reviewsRouter } from './routes/reviews.js';
+import { initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry.js';
+
+initSentry('hotels-service');
 
 const app = express();
+app.use(sentryFailedResponses);
 const PORT = process.env.PORT || 3008;
 
 // Middleware
@@ -42,6 +46,7 @@ app.use((_req, res) => {
 });
 
 // Error handler
+app.use(sentryErrorHandler);
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ success: false, error: 'Internal server error' });

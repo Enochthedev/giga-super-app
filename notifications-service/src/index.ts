@@ -22,8 +22,10 @@ import notificationsRouter from './routes/notifications';
 import preferencesRouter from './routes/preferences';
 import templatesRouter from './routes/templates';
 import trackingRouter from './routes/tracking';
+import { captureError, initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry';
 
 dotenv.config();
+initSentry('notifications-service');
 
 const PORT = parseInt(process.env.PORT || '3007', 10);
 const REDIS_URL = process.env.REDIS_URL || process.env.RAILWAY_REDIS_URL || '';
@@ -739,6 +741,7 @@ if (useRedis && connection) {
 
 // Express app setup
 const app = express();
+app.use(sentryFailedResponses);
 
 // Every request reaches this service through the API gateway, so without this the
 // rate limiter below keys on the GATEWAY's IP and the whole platform shares a single
@@ -1030,6 +1033,7 @@ workers.forEach(worker => {
       jobId: job?.id,
       error: error.message,
     });
+    captureError(error, { queue: 'notifications', jobName: job?.name, jobId: job?.id });
   });
 
   worker.on('error', error => {
@@ -1045,6 +1049,8 @@ workers.forEach(worker => {
     logger.warn(`${worker.name} job stalled`, { jobId });
   });
 });
+
+app.use(sentryErrorHandler);
 
 // Start server
 app.listen(PORT, () => {

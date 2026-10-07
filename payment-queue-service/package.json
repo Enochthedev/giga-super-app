@@ -19,6 +19,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@sentry/node": "^7.120.0",
     "@supabase/supabase-js": "^2.39.0",
     "axios": "^1.6.0",
     "bullmq": "^5.1.0",

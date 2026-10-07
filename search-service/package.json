@@ -30,6 +30,7 @@
   "author": "Giga Platform Team",
   "license": "MIT",
   "dependencies": {
+    "@sentry/node": "^7.120.0",
     "@supabase/supabase-js": "^2.39.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

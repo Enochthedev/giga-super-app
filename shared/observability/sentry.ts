@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/node';
-import { Express } from 'express';
+import { Express, NextFunction, Request, Response } from 'express';
 
 interface SentryConfig {
   dsn: string;
@@ -70,12 +70,49 @@ export const setupSentryMiddleware = (app: Express): void => {
 
   // TracingHandler creates a trace for every incoming request
   app.use(Sentry.Handlers.tracingHandler());
+
+  app.use(captureFailedResponses);
+};
+
+/**
+ * Collapse ids in a URL path so one failing route groups into one Sentry issue.
+ */
+const normalizePath = (url: string): string =>
+  (url.split('?')[0] ?? '')
+    .replace(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, ':id')
+    .replace(/\/\d+(?=\/|$)/g, '/:n');
+
+/**
+ * Report failed responses (5xx and 429), not just thrown errors. A failure that
+ * is handled or proxied (e.g. Supabase Auth answering signup with 429) never
+ * throws, so crash-only reporting stays silent while users are locked out.
+ */
+export const captureFailedResponses = (req: Request, res: Response, next: NextFunction): void => {
+  res.on('finish', () => {
+    const status = res.statusCode;
+    if ((status < 500 && status !== 429) || res.locals.sentryReported) return;
+    const path = normalizePath(req.originalUrl);
+    Sentry.withScope(scope => {
+      scope.setLevel(status >= 500 ? 'error' : 'warning');
+      scope.setTags({ status_code: String(status), method: req.method, path });
+      scope.setExtras({ url: req.originalUrl, requestId: req.headers['x-request-id'] });
+      scope.setFingerprint([req.method, path, String(status)]);
+      Sentry.captureMessage(`${req.method} ${path} -> ${status}`);
+    });
+  });
+  next();
 };
 
 /**
  * Setup Sentry error handler (must be after all routes)
  */
 export const setupSentryErrorHandler = (app: Express): void => {
+  // The exception itself is reported below; don't report its 500 response twice.
+  app.use((err: unknown, _req: Request, res: Response, next: NextFunction) => {
+    res.locals.sentryReported = true;
+    next(err);
+  });
+
   // Error handler must be before any other error middleware
   app.use(
     Sentry.Handlers.errorHandler({

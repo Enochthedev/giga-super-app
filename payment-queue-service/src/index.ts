@@ -13,11 +13,15 @@ import metricsRoutes from './routes/metrics';
 import v1Routes from './routes/v1';
 import { testConnection } from './utils/database';
 import logger from './utils/logger';
+import { initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry';
 
 // Import workers to initialize all queues
 import './queues/workers';
 
+initSentry('payment-queue-service');
+
 const app: Application = express();
+app.use(sentryFailedResponses);
 
 // Requests arrive via the API gateway, so without this the rate limiter below keys on
 // the GATEWAY's IP and every client shares one bucket (100 req / 15 min platform-wide).
@@ -104,6 +108,7 @@ app.use((req, res) => {
 });
 
 // Error handler
+app.use(sentryErrorHandler);
 app.use(errorHandler);
 
 // Start server

@@ -959,7 +959,7 @@ const proxyOptions: Options = {
     // Transform request body for specific endpoints
     // Strip the query: /signup?redirect_to=<app deep link> must still get the
     // metadata transform (the query itself is forwarded to Supabase untouched).
-    const originalPath = req.originalUrl?.split('?')[0].replace(/^\/auth/, '') || req.path;
+    const originalPath = req.originalUrl?.split('?')[0]?.replace(/^\/auth/, '') || req.path;
 
     if (originalPath === '/signup' && req.body) {
       // Transform signup body to include user metadata

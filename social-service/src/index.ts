@@ -21,10 +21,13 @@ import postsRouter from './routes/posts';
 import storiesRouter from './routes/stories';
 import tenantPostsRouter from './routes/tenant-posts';
 import { logger } from './utils/logger';
+import { initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry';
 
 dotenv.config();
+initSentry('social-service');
 
 const app: Application = express();
+app.use(sentryFailedResponses);
 const PORT = parseInt(process.env.PORT ?? process.env.SOCIAL_SERVICE_PORT ?? '3001', 10);
 
 logger.info('Service initializing', {
@@ -160,6 +163,7 @@ app.use((_req: Request, res: Response) => {
 });
 
 // Error handler
+app.use(sentryErrorHandler);
 app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
   logger.error('Unhandled error', {
     requestId: req.requestId,

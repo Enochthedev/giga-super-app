@@ -30,6 +30,9 @@ import productRoutes from './routes/products.js';
 import searchRoutes from './routes/search.js';
 import { CacheService } from './utils/cache.js';
 import { logger } from './utils/logger.js';
+import { initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry.js';
+
+initSentry('search-service');
 
 // Environment configuration
 const PORT = SERVICE_PORTS.SEARCH_SERVICE;
@@ -38,6 +41,7 @@ const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
 // Initialize Express app
 const app: Application = express();
+app.use(sentryFailedResponses);
 
 // Trust proxy for accurate IP addresses
 app.set('trust proxy', 1);
@@ -112,6 +116,7 @@ app.use('/api/search', (req, res) => {
 app.use(notFoundHandler);
 
 // Error handling middleware (must be last)
+app.use(sentryErrorHandler);
 app.use(errorHandler);
 
 // Initialize cache service

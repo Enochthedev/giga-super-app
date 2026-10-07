@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.3.42",
+    "@sentry/node": "^7.120.0",
     "@supabase/supabase-js": "^2.39.0",
     "@types/ws": "^8.18.1",
     "compression": "^1.7.4",

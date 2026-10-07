@@ -17,8 +17,10 @@ import { authMiddleware } from './middleware/auth';
 import driversRouter from './routes/drivers';
 import ridesRouter from './routes/rides';
 import { NotificationService } from './services/notificationService';
+import { initSentry, sentryErrorHandler, sentryFailedResponses } from './utils/sentry';
 
 dotenv.config();
+initSentry('taxi-realtime-service');
 
 // Configuration
 const PORT = parseInt(process.env.PORT ?? process.env.TAXI_REALTIME_SERVICE_PORT ?? '3006', 10);
@@ -213,6 +215,7 @@ const initRedis = async (): Promise<boolean> => {
 
 // Express app
 const app: Application = express();
+app.use(sentryFailedResponses);
 const httpServer = createServer(app);
 
 // Socket.IO server - adapter will be set after Redis connects
@@ -285,6 +288,7 @@ app.get('/api-docs.json', (req, res) => {
 app.use('/api/drivers', authMiddleware, driversRouter);
 // Rides routes - use ridesRouter which handles auth per-route
 app.use('/api/rides', ridesRouter);
+app.use(sentryErrorHandler);
 
 // Active connections tracking
 const activeDrivers = new Map<string, string>(); // driverId -> socketId

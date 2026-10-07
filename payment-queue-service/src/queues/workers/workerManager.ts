@@ -2,6 +2,7 @@ import { ConnectionOptions, Job, QueueEvents, Worker } from 'bullmq';
 
 import logger from '../../utils/logger';
 import { getRedisConnection, REDIS_CONNECTIONS } from '../../utils/redis';
+import { captureError } from '../../utils/sentry';
 
 // Queue configurations (mutable for processor registration)
 const queueProcessors: Record<string, ((job: Job) => Promise<unknown>) | null> = {
@@ -61,6 +62,7 @@ function activateWorker(queueName: string): Worker | null {
 
   worker.on('failed', (job, error) => {
     logger.error(`Job ${job?.id} failed on ${queueName}`, { error: error.message });
+    captureError(error, { queue: queueName, jobName: job?.name, jobId: job?.id });
     scheduleDeactivation(queueName);
   });
 
