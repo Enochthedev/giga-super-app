@@ -3,7 +3,7 @@ import request from 'supertest';
 import app from '../index.js';
 import { serviceRegistry } from '../services/serviceRegistry.js';
 
-// 'test-token' authenticates; any other token is rejected. Profiles are active.
+// 'test.token.ok' authenticates; any other token is rejected. Profiles are active.
 jest.mock('@supabase/supabase-js', () => ({
   createClient: jest.fn(() => {
     const q = {};
@@ -13,7 +13,7 @@ jest.mock('@supabase/supabase-js', () => ({
     return {
       auth: {
         getUser: jest.fn(async token =>
-          token === 'test-token'
+          token === 'test.token.ok'
             ? { data: { user: { id: 'u1', email: 'u1@test.dev', app_metadata: {} } }, error: null }
             : { data: { user: null }, error: { message: 'invalid JWT' } }
         ),
@@ -110,10 +110,19 @@ describe('Gateway Routing', () => {
       // This would need a valid test token in a real test
       const response = await request(app)
         .get('/api/v1/hotels')
-        .set('Authorization', 'Bearer invalid-token')
+        .set('Authorization', 'Bearer invalid.token.value')
         .expect(401); // Will fail auth validation, but passes format check
 
       expect(response.body.error.code).toBe('INVALID_TOKEN');
+    });
+
+    test('should reject a token that is not a JWT (e.g. "Bearer null")', async () => {
+      const response = await request(app)
+        .get('/api/v1/hotels')
+        .set('Authorization', 'Bearer null')
+        .expect(401);
+
+      expect(response.body.error.code).toBe('MALFORMED_TOKEN');
     });
   });
 
@@ -128,7 +137,7 @@ describe('Gateway Routing', () => {
     test('should return 404 for unmapped API paths', async () => {
       const response = await request(app)
         .get('/api/v1/unmapped/service')
-        .set('Authorization', 'Bearer test-token')
+        .set('Authorization', 'Bearer test.token.ok')
         .expect(404);
 
       expect(response.body.success).toBe(false);

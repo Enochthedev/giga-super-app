@@ -5,6 +5,7 @@ import type { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import NodeCache from 'node-cache';
 
+import { captureMessage } from '../../../shared/observability/sentry.js';
 import { config } from '../config/index.js';
 import type { ApiResponse, AuthenticatedRequest, UserContext } from '../types/index.js';
 import { isAccountDeactivated } from '../utils/accountStatus.js';
@@ -128,6 +129,27 @@ export const authMiddleware = async (
     }
 
     const token = authHeader.substring(7);
+
+    // Expired tokens are routine 401s, but a token that isn't a JWT at all
+    // ("Bearer null", "Bearer undefined") is always a client bug — e.g. the app
+    // continuing after a signup that returned no session. Report those.
+    if (token.split('.').length !== 3) {
+      captureMessage(`Malformed bearer token on ${req.method} ${req.path}`, 'warning', {
+        requestId: req.id,
+        tokenPreview: token.slice(0, 12),
+        userAgent: req.headers['user-agent'],
+      });
+      res
+        .status(401)
+        .json(
+          createErrorResponse(
+            'MALFORMED_TOKEN',
+            'Authorization token is not a valid JWT; sign in again',
+            req.id
+          )
+        );
+      return;
+    }
 
     // Check token cache first.
     // Key on a hash of the WHOLE token: the first chars of a JWT are the base64

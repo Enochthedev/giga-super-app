@@ -574,6 +574,65 @@ router.get('/me', async (req: Request, res: Response) => {
  *   1. POST /verify (type=recovery) -> session
  *   2. PUT /user with the session's access token -> set new password
  */
+/**
+ * POST /auth/signup — explicit (not proxied) so two ambiguous Supabase answers
+ * become explicit ones the app can act on:
+ *  - Email already registered: with email confirmation on, Supabase hides this
+ *    (anti-enumeration) and returns 200 with a fake user (empty identities) and
+ *    no session. Clients then continued to the phone step with no token and got
+ *    401. Returned as 409 user_already_exists, in Supabase's error shape.
+ *  - New user but confirmation required: 200 with no session. Passed through
+ *    unchanged plus email_confirmation_required: true so the client shows
+ *    "check your email" instead of continuing.
+ * OpenAPI docs for this route are on the /auth/signup block above.
+ */
+router.post('/signup', async (req: Request, res: Response) => {
+  try {
+    const { email, password, phone, first_name, last_name } = req.body || {};
+    const redirectTo = typeof req.query.redirect_to === 'string' ? req.query.redirect_to : undefined;
+
+    const signupResp = await axios.post(
+      `${authApiUrl}/signup`,
+      {
+        email,
+        password,
+        data: { first_name: first_name || '', last_name: last_name || '', phone: phone || '' },
+      },
+      {
+        headers: { apikey: config.supabaseAnonKey, 'Content-Type': 'application/json' },
+        params: redirectTo ? { redirect_to: redirectTo } : undefined,
+        validateStatus: () => true,
+      }
+    );
+
+    const body = signupResp.data ?? {};
+    if (signupResp.status >= 400) {
+      return res.status(signupResp.status).json(body);
+    }
+
+    const user = body.user ?? body;
+    if (Array.isArray(user?.identities) && user.identities.length === 0) {
+      return res.status(409).json({
+        code: 409,
+        error_code: 'user_already_exists',
+        msg: 'An account with this email already exists. Please log in instead.',
+      });
+    }
+
+    if (!body.access_token) {
+      return res.json({ ...body, email_confirmation_required: true });
+    }
+    return res.json(body);
+  } catch (error: any) {
+    logger.error('Signup error', { error: error.message });
+    return res.status(502).json({
+      code: 502,
+      error_code: 'auth_unavailable',
+      msg: 'Sign up is temporarily unavailable. Please try again.',
+    });
+  }
+});
+
 router.post('/reset-password', async (req: Request, res: Response) => {
   try {
     const { token, token_hash, access_token, email, password, new_password } = req.body || {};
@@ -967,24 +1026,10 @@ const proxyOptions: Options = {
       proxyReq.setHeader('Authorization', req.headers.authorization);
     }
 
-    // Transform request body for specific endpoints
-    // Strip the query: /signup?redirect_to=<app deep link> must still get the
-    // metadata transform (the query itself is forwarded to Supabase untouched).
+    // Transform request body for specific endpoints (signup has its own route above)
     const originalPath = req.originalUrl?.split('?')[0]?.replace(/^\/auth/, '') || req.path;
 
-    if (originalPath === '/signup' && req.body) {
-      // Transform signup body to include user metadata
-      const { email, password, first_name, last_name, phone } = req.body;
-      req.body = {
-        email,
-        password,
-        data: {
-          first_name: first_name || '',
-          last_name: last_name || '',
-          phone: phone || '',
-        },
-      };
-    } else if (originalPath === '/login' && req.body) {
+    if (originalPath === '/login' && req.body) {
       // Transform login body to include grant_type
       const { email, password } = req.body;
       req.body = { email, password, grant_type: 'password' };

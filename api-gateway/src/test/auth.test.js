@@ -8,8 +8,8 @@ import { authMiddleware, optionalAuth, requireRole } from '../middleware/auth.js
 // rejected like GoTrue does. user_profiles lookups report 'deleted-user' as deleted.
 jest.mock('@supabase/supabase-js', () => {
   const users = {
-    'valid-test-token': { id: 'user123', email: 'user@test.dev', app_metadata: {} },
-    'deleted-user-token': { id: 'deleted-user', email: 'gone@test.dev', app_metadata: {} },
+    'valid.test.token': { id: 'user123', email: 'user@test.dev', app_metadata: {} },
+    'deleted.user.token': { id: 'deleted-user', email: 'gone@test.dev', app_metadata: {} },
   };
   return {
     createClient: jest.fn(() => ({
@@ -114,7 +114,7 @@ describe('Authentication Middleware', () => {
 
   describe('Account deactivation', () => {
     test('rejects tokens belonging to a deleted account', async () => {
-      const { res, next } = await runAuth('deleted-user-token');
+      const { res, next } = await runAuth('deleted.user.token');
 
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json.mock.calls[0][0].error.code).toBe('ACCOUNT_DEACTIVATED');
@@ -122,7 +122,7 @@ describe('Authentication Middleware', () => {
     });
 
     test('lets active accounts through', async () => {
-      const { req, next } = await runAuth('valid-test-token');
+      const { req, next } = await runAuth('valid.test.token');
 
       expect(next).toHaveBeenCalled();
       expect(req.user.id).toBe('user123');
