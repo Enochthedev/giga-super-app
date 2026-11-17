@@ -1,0 +1,17 @@
+{
+	admin off
+	auto_https off
+}
+
+# Keeps the legacy Railway URL (giga-giga-production.up.railway.app) alive by
+# forwarding everything to the real stack on Coolify. Delete this service once
+# no client uses the Railway URL any more.
+:{$PORT:8080} {
+	reverse_proxy https://giga-api.wavedidwhat.com {
+		header_up Host giga-api.wavedidwhat.com
+		transport http {
+			dial_timeout 10s
+			response_header_timeout 120s
+		}
+	}
+}
