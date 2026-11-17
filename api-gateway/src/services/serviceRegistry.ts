@@ -25,7 +25,7 @@ class ServiceRegistry {
       id: 'supabase-auth',
       name: 'Authentication Service',
       baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
+      healthEndpoint: '/auth/v1/health',
       platform: 'supabase',
       patterns: [
         '/api/v1/auth*',
@@ -45,7 +45,7 @@ class ServiceRegistry {
       id: 'supabase-hotels',
       name: 'Hotel Core Service (Legacy)',
       baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
+      healthEndpoint: '/auth/v1/health',
       platform: 'supabase',
       patterns: ['/api/v1/hotel-legacy*', '/api/v1/room*'],
       headers: {
@@ -62,7 +62,7 @@ class ServiceRegistry {
       id: 'supabase-payments',
       name: 'Wallet Core Service',
       baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
+      healthEndpoint: '/auth/v1/health',
       platform: 'supabase',
       patterns: ['/api/v1/wallet*'],
       headers: {
@@ -75,7 +75,7 @@ class ServiceRegistry {
       id: 'supabase-ecommerce',
       name: 'Ecommerce Core Service',
       baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
+      healthEndpoint: '/auth/v1/health',
       platform: 'supabase',
       patterns: ['/api/v1/product*', '/api/v1/cart*', '/api/v1/order*'],
       headers: {
@@ -90,7 +90,7 @@ class ServiceRegistry {
       id: 'supabase-taxi',
       name: 'Taxi Core Service (Legacy)',
       baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
+      healthEndpoint: '/auth/v1/health',
       platform: 'supabase',
       patterns: ['/api/v1/taxi-legacy*'],
       headers: {
@@ -108,7 +108,7 @@ class ServiceRegistry {
       id: 'supabase-ads',
       name: 'Ads Service',
       baseUrl: config.supabaseUrl,
-      healthEndpoint: '/rest/v1/',
+      healthEndpoint: '/auth/v1/health',
       platform: 'supabase',
       // V6: '/api/v1/campaigns*' removed — that prefix belongs to notifications-service
       // campaigns; ad campaigns live under '/api/v1/ads/campaigns'.
